@@ -1,0 +1,129 @@
+[
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "locks",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "name": "_controllerCreator",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "_avatar",
+        "type": "address"
+      }
+    ],
+    "name": "NewOrg",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "_avatar",
+        "type": "address"
+      }
+    ],
+    "name": "InitialSchemesSet",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_orgName",
+        "type": "bytes32"
+      },
+      {
+        "name": "_tokenName",
+        "type": "string"
+      },
+      {
+        "name": "_tokenSymbol",
+        "type": "string"
+      },
+      {
+        "name": "_founders",
+        "type": "address[]"
+      },
+      {
+        "name": "_foundersTokenAmount",
+        "type": "uint256[]"
+      },
+      {
+        "name": "_foundersReputationAmount",
+        "type": "uint256[]"
+      },
+      {
+        "name": "_uController",
+        "type": "address"
+      },
+      {
+        "name": "_cap",
+        "type": "uint256"
+      }
+    ],
+    "name": "forgeOrg",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_avatar",
+        "type": "address"
+      },
+      {
+        "name": "_schemes",
+        "type": "address[]"
+      },
+      {
+        "name": "_params",
+        "type": "bytes32[]"
+      },
+      {
+        "name": "_permissions",
+        "type": "bytes4[]"
+      }
+    ],
+    "name": "setSchemes",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

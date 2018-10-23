@@ -2,21 +2,126 @@ specVersion: 0.0.1
 schema:
   file: ./schema.graphql
 dataSources:
-  - kind: ethereum/contract
-    name: GP
-    source:
-      address: '0x8940442e7f54e875c8c1c80213a4aee7eee4781c' # GenesisProtocol address
-      abi: GenesisProtocol
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.1
-      language: wasm/assemblyscript
-      file: ./src/genesisProtocol.ts
-      entities:
-        - Proposal
-      abis:
-        - name: GenesisProtocol
-          file: ./abis/GenesisProtocol.json
-      eventHandlers:
-        - event: NewProposal(bytes32,address,uint256,address,bytes32)
-          handler: newProposal
+
+- kind: ethereum/contract
+  name: GenesisProtocol
+  source:
+    address: "0x8940442e7f54e875c8c1c80213a4aee7eee4781c"
+    abi: GenesisProtocol
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    file: ./src/mappings/GenesisProtocol.ts
+    entities:
+    - Proposal
+    abis:
+    - name: GenesisProtocol
+      file: ./abis/GenesisProtocol.json
+    eventHandlers:
+    - event: NewProposal(bytes32,address,uint256,address,bytes32)
+      handler: handleNewProposal
+    - event: Redeem(bytes32, address, address, uint256)
+      handler: handleRedeem
+    - event: RedeemDaoBounty(bytes32, address, address, uint256)
+      handler: handleRedeemDaoBounty
+    - event: RedeemReputation(bytes32, address, address, uint256)
+      handler: handleRedeemReputation
+    - event: VoteProposal(bytes32,address,address,uint256,uint256)
+      handler: handleVoteProposal
+    - event: Stake(bytes32,address,address,uint256,uint256)
+      handler: handleStake
+    - event: GPExecuteProposal(bytes32, uint8)
+      handler: handleGPExecuteProposal
+    - event: ExecuteProposal(bytes32, address, uint256, uint256)
+      handler: handleExecuteProposal
+
+- kind: ethereum/contract
+  name: DaoCreator
+  source:
+    address: "0x87ac6d6874c998f0f645f7db76b500d265c1856d"
+    abi: DaoCreator
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    file: ./src/mappings/DaoCreator.ts
+    entities:
+    - DAO
+    abis:
+    - name: DaoCreator
+      file: ./abis/DaoCreator.json
+    eventHandlers:
+    - event: NewOrg(address)
+      handler: handleNewOrg
+
+- kind: ethereum/contract
+  name: UController
+  source:
+    address: "0xa50c298118e89e0cc465f2a1705c7579f67b6f26"
+    abi: UController
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    file: ./src/mappings/UController
+    entities:
+    - DAO
+    abis:
+    - name: UController
+      file: ./abis/UController.json
+    eventHandlers:
+    - event: MintReputation(address, address, uint256, address)
+      handler: handleMintReputation
+    - event: BurnReputation(address, address, uint256, address)
+      handler: handleBurnReputation
+
+- kind: ethereum/contract
+  name: Reputation
+  source:
+    address: "0x13ad61aa8f695ce64711a51a6feccb48a275aaf8"
+    abi: Reputation
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    file: ./src/mappings/Reputation
+    entities:
+    - DAO
+    abis:
+    - name: Reputation
+      file: ./abis/Reputation.json
+    eventHandlers:
+    - event: Mint(address, uint256)
+      handler: handleMint
+    - event: Burn(address, uint256)
+      handler: handleBurn
+
+- kind: ethereum/contract
+  name: ContributionReward
+  source:
+    address: "0xc282f494a0619592a2410166dcc749155804f548"
+    abi: ContributionReward
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    file: ./src/mappings/ContributionReward
+    entities:
+    - DAO
+    abis:
+    - name: ContributionReward
+      file: ./abis/ContributionReward.json
+    eventHandlers:
+    - event: NewContributionProposal(address, bytes32, address, bytes32, int256, uint256[5], address, address)
+      handler: handleNewContributionProposal
+    - event: RedeemReputation(address, bytes32, address, int256)
+      handler: handleRedeemReputation
+    - event: RedeemNativeToken(address, bytes32, address, uint256)
+      handler: handleRedeemNativeToken
+    - event: RedeemEther(address, bytes32, address, uint256)
+      handler: handleRedeemEther
+    - event: RedeemNativeToken(address, bytes32, address, uint256)
+      handler: handleRedeemNativeToken
+    - event: RedeemExternalToken(address, bytes32, address, uint256)
+      handler: handleRedeemExternalToken

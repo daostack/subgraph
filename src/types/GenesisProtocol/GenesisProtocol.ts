@@ -14,6 +14,28 @@ import {
   H256
 } from "@graphprotocol/graph-ts";
 
+export class GPExecuteProposal extends EthereumEvent {
+  get params(): GPExecuteProposalParams {
+    return new GPExecuteProposalParams(this);
+  }
+}
+
+export class GPExecuteProposalParams {
+  _event: GPExecuteProposal;
+
+  constructor(event: GPExecuteProposal) {
+    this._event = event;
+  }
+
+  get _proposalId(): Bytes {
+    return this._event.parameters[0].value.toBytes();
+  }
+
+  get _executionState(): u8 {
+    return this._event.parameters[1].value.toU8();
+  }
+}
+
 export class Stake extends EthereumEvent {
   get params(): StakeParams {
     return new StakeParams(this);
@@ -31,7 +53,7 @@ export class StakeParams {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get _organization(): Address {
+  get _avatar(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -65,7 +87,7 @@ export class RedeemParams {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get _organization(): Address {
+  get _avatar(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -95,7 +117,7 @@ export class RedeemDaoBountyParams {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get _organization(): Address {
+  get _avatar(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -125,7 +147,7 @@ export class RedeemReputationParams {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get _organization(): Address {
+  get _avatar(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -138,25 +160,43 @@ export class RedeemReputationParams {
   }
 }
 
-export class GPExecuteProposal extends EthereumEvent {
-  get params(): GPExecuteProposalParams {
-    return new GPExecuteProposalParams(this);
+export class OwnershipRenounced extends EthereumEvent {
+  get params(): OwnershipRenouncedParams {
+    return new OwnershipRenouncedParams(this);
   }
 }
 
-export class GPExecuteProposalParams {
-  _event: GPExecuteProposal;
+export class OwnershipRenouncedParams {
+  _event: OwnershipRenounced;
 
-  constructor(event: GPExecuteProposal) {
+  constructor(event: OwnershipRenounced) {
     this._event = event;
   }
 
-  get _proposalId(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get previousOwner(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class OwnershipTransferred extends EthereumEvent {
+  get params(): OwnershipTransferredParams {
+    return new OwnershipTransferredParams(this);
+  }
+}
+
+export class OwnershipTransferredParams {
+  _event: OwnershipTransferred;
+
+  constructor(event: OwnershipTransferred) {
+    this._event = event;
   }
 
-  get _executionState(): u8 {
-    return this._event.parameters[1].value.toU8();
+  get previousOwner(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get newOwner(): Address {
+    return this._event.parameters[1].value.toAddress();
   }
 }
 
@@ -177,7 +217,7 @@ export class NewProposalParams {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get _organization(): Address {
+  get _avatar(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -211,7 +251,7 @@ export class ExecuteProposalParams {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get _organization(): Address {
+  get _avatar(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -241,7 +281,7 @@ export class VoteProposalParams {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get _organization(): Address {
+  get _avatar(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -275,7 +315,7 @@ export class CancelProposalParams {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get _organization(): Address {
+  get _avatar(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 }
@@ -297,7 +337,7 @@ export class CancelVotingParams {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get _organization(): Address {
+  get _avatar(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -319,7 +359,8 @@ export class GenesisProtocol__parametersResult {
   value9: U256;
   value10: U256;
   value11: U256;
-  value12: Address;
+  value12: U256;
+  value13: U256;
 
   constructor(
     value0: U256,
@@ -334,7 +375,8 @@ export class GenesisProtocol__parametersResult {
     value9: U256,
     value10: U256,
     value11: U256,
-    value12: Address
+    value12: U256,
+    value13: U256
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -349,6 +391,7 @@ export class GenesisProtocol__parametersResult {
     this.value10 = value10;
     this.value11 = value11;
     this.value12 = value12;
+    this.value13 = value13;
   }
 
   toMap(): TypedMap<string, EthereumValue> {
@@ -365,15 +408,16 @@ export class GenesisProtocol__parametersResult {
     map.set("value9", EthereumValue.fromU256(this.value9));
     map.set("value10", EthereumValue.fromU256(this.value10));
     map.set("value11", EthereumValue.fromU256(this.value11));
-    map.set("value12", EthereumValue.fromAddress(this.value12));
+    map.set("value12", EthereumValue.fromU256(this.value12));
+    map.set("value13", EthereumValue.fromU256(this.value13));
     return map;
   }
 }
 
 export class GenesisProtocol__proposalsResult {
-  value0: Bytes;
-  value1: Address;
-  value2: U256;
+  value0: Address;
+  value1: U256;
+  value2: Address;
   value3: U256;
   value4: U256;
   value5: U256;
@@ -385,9 +429,9 @@ export class GenesisProtocol__proposalsResult {
   value11: U256;
 
   constructor(
-    value0: Bytes,
-    value1: Address,
-    value2: U256,
+    value0: Address,
+    value1: U256,
+    value2: Address,
     value3: U256,
     value4: U256,
     value5: U256,
@@ -414,9 +458,9 @@ export class GenesisProtocol__proposalsResult {
 
   toMap(): TypedMap<string, EthereumValue> {
     let map = new TypedMap<string, EthereumValue>();
-    map.set("value0", EthereumValue.fromFixedBytes(this.value0));
-    map.set("value1", EthereumValue.fromAddress(this.value1));
-    map.set("value2", EthereumValue.fromU256(this.value2));
+    map.set("value0", EthereumValue.fromAddress(this.value0));
+    map.set("value1", EthereumValue.fromU256(this.value1));
+    map.set("value2", EthereumValue.fromAddress(this.value2));
     map.set("value3", EthereumValue.fromU256(this.value3));
     map.set("value4", EthereumValue.fromU256(this.value4));
     map.set("value5", EthereumValue.fromU256(this.value5));
@@ -483,6 +527,23 @@ export class GenesisProtocol__proposalStatusResult {
   }
 }
 
+export class GenesisProtocol__scoreThresholdParamsResult {
+  value0: U256;
+  value1: U256;
+
+  constructor(value0: U256, value1: U256) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, EthereumValue> {
+    let map = new TypedMap<string, EthereumValue>();
+    map.set("value0", EthereumValue.fromU256(this.value0));
+    map.set("value1", EthereumValue.fromU256(this.value1));
+    return map;
+  }
+}
+
 export class GenesisProtocol__getStakerResult {
   value0: U256;
   value1: U256;
@@ -539,7 +600,8 @@ export class GenesisProtocol extends SmartContract {
       result[9].toU256(),
       result[10].toU256(),
       result[11].toU256(),
-      result[12].toAddress()
+      result[12].toU256(),
+      result[13].toU256()
     );
   }
 
@@ -563,9 +625,9 @@ export class GenesisProtocol extends SmartContract {
       EthereumValue.fromFixedBytes(param0)
     ]);
     return new GenesisProtocol__proposalsResult(
-      result[0].toBytes(),
-      result[1].toAddress(),
-      result[2].toU256(),
+      result[0].toAddress(),
+      result[1].toU256(),
+      result[2].toAddress(),
       result[3].toU256(),
       result[4].toU256(),
       result[5].toU256(),
@@ -588,6 +650,11 @@ export class GenesisProtocol extends SmartContract {
     return result[0].toString();
   }
 
+  owner(): Address {
+    let result = super.call("owner", []);
+    return result[0].toAddress();
+  }
+
   NUM_OF_CHOICES(): U256 {
     let result = super.call("NUM_OF_CHOICES", []);
     return result[0].toU256();
@@ -598,18 +665,9 @@ export class GenesisProtocol extends SmartContract {
     return result[0].toU256();
   }
 
-  organizations(param0: Bytes): Address {
-    let result = super.call("organizations", [
-      EthereumValue.fromFixedBytes(param0)
-    ]);
-    return result[0].toAddress();
-  }
-
-  orgBoostedProposalsCnt(param0: Bytes): U256 {
-    let result = super.call("orgBoostedProposalsCnt", [
-      EthereumValue.fromFixedBytes(param0)
-    ]);
-    return result[0].toU256();
+  hashedParameters(): Bytes {
+    let result = super.call("hashedParameters", []);
+    return result[0].toBytes();
   }
 
   getNumberOfChoices(_proposalId: Bytes): U256 {
@@ -662,11 +720,23 @@ export class GenesisProtocol extends SmartContract {
     );
   }
 
-  getProposalOrganization(_proposalId: Bytes): Bytes {
-    let result = super.call("getProposalOrganization", [
+  proposalAvatar(_proposalId: Bytes): Address {
+    let result = super.call("proposalAvatar", [
       EthereumValue.fromFixedBytes(_proposalId)
     ]);
-    return result[0].toBytes();
+    return result[0].toAddress();
+  }
+
+  scoreThresholdParams(
+    _avatar: Address
+  ): GenesisProtocol__scoreThresholdParamsResult {
+    let result = super.call("scoreThresholdParams", [
+      EthereumValue.fromAddress(_avatar)
+    ]);
+    return new GenesisProtocol__scoreThresholdParamsResult(
+      result[0].toU256(),
+      result[1].toU256()
+    );
   }
 
   getStaker(
@@ -683,12 +753,11 @@ export class GenesisProtocol extends SmartContract {
     );
   }
 
-  voteStake(_proposalId: Bytes, _vote: U256): U256 {
-    let result = super.call("voteStake", [
-      EthereumValue.fromFixedBytes(_proposalId),
-      EthereumValue.fromU256(_vote)
+  state(_proposalId: Bytes): u8 {
+    let result = super.call("state", [
+      EthereumValue.fromFixedBytes(_proposalId)
     ]);
-    return result[0].toU256();
+    return result[0].toU8();
   }
 
   winningVote(_proposalId: Bytes): U256 {
@@ -696,13 +765,6 @@ export class GenesisProtocol extends SmartContract {
       EthereumValue.fromFixedBytes(_proposalId)
     ]);
     return result[0].toU256();
-  }
-
-  state(_proposalId: Bytes): u8 {
-    let result = super.call("state", [
-      EthereumValue.fromFixedBytes(_proposalId)
-    ]);
-    return result[0].toU8();
   }
 
   isAbstainAllow(): boolean {
@@ -732,25 +794,24 @@ export class GenesisProtocol extends SmartContract {
     return result[0].toI256();
   }
 
-  getBoostedProposalsCount(_organizationId: Bytes): U256 {
+  getBoostedProposalsCount(_avatar: Address): U256 {
     let result = super.call("getBoostedProposalsCount", [
-      EthereumValue.fromFixedBytes(_organizationId)
+      EthereumValue.fromAddress(_avatar)
     ]);
     return result[0].toU256();
   }
 
-  threshold(_paramsHash: Bytes, _organizationId: Bytes): I256 {
+  threshold(_paramsHash: Bytes, _avatar: Address): I256 {
     let result = super.call("threshold", [
       EthereumValue.fromFixedBytes(_paramsHash),
-      EthereumValue.fromFixedBytes(_organizationId)
+      EthereumValue.fromAddress(_avatar)
     ]);
     return result[0].toI256();
   }
 
-  getParametersHash(_params: Array<U256>, _voteOnBehalf: Address): Bytes {
+  getParametersHash(_params: Array<U256>): Bytes {
     let result = super.call("getParametersHash", [
-      EthereumValue.fromI256(_params),
-      EthereumValue.fromAddress(_voteOnBehalf)
+      EthereumValue.fromI256(_params)
     ]);
     return result[0].toBytes();
   }

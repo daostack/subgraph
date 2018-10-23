@@ -58,8 +58,12 @@
         "type": "uint256"
       },
       {
-        "name": "voteOnBehalf",
-        "type": "address"
+        "name": "daoBountyConst",
+        "type": "uint256"
+      },
+      {
+        "name": "daoBountyLimit",
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -95,6 +99,20 @@
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_hashedParameters",
+        "type": "bytes32"
+      }
+    ],
+    "name": "updateParameters",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "DELEGATION_HASH_EIP712",
@@ -119,16 +137,16 @@
     "name": "proposals",
     "outputs": [
       {
-        "name": "organizationId",
-        "type": "bytes32"
-      },
-      {
-        "name": "callbacks",
+        "name": "avatar",
         "type": "address"
       },
       {
         "name": "numOfChoices",
         "type": "uint256"
+      },
+      {
+        "name": "executable",
+        "type": "address"
       },
       {
         "name": "votersStakes",
@@ -172,6 +190,15 @@
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "stakingToken",
@@ -193,6 +220,20 @@
       {
         "name": "",
         "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
       }
     ],
     "payable": false,
@@ -228,37 +269,27 @@
     "type": "function"
   },
   {
-    "constant": true,
+    "constant": false,
     "inputs": [
       {
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "organizations",
-    "outputs": [
-      {
-        "name": "",
+        "name": "_newOwner",
         "type": "address"
       }
     ],
+    "name": "transferOwnership",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "orgBoostedProposalsCnt",
+    "inputs": [],
+    "name": "hashedParameters",
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "bytes32"
       }
     ],
     "payable": false,
@@ -285,8 +316,25 @@
         "type": "bytes32"
       },
       {
+        "indexed": false,
+        "name": "_executionState",
+        "type": "uint8"
+      }
+    ],
+    "name": "GPExecuteProposal",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
-        "name": "_organization",
+        "name": "_proposalId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "name": "_avatar",
         "type": "address"
       },
       {
@@ -318,7 +366,7 @@
       },
       {
         "indexed": true,
-        "name": "_organization",
+        "name": "_avatar",
         "type": "address"
       },
       {
@@ -345,7 +393,7 @@
       },
       {
         "indexed": true,
-        "name": "_organization",
+        "name": "_avatar",
         "type": "address"
       },
       {
@@ -372,7 +420,7 @@
       },
       {
         "indexed": true,
-        "name": "_organization",
+        "name": "_avatar",
         "type": "address"
       },
       {
@@ -394,16 +442,28 @@
     "inputs": [
       {
         "indexed": true,
-        "name": "_proposalId",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "_executionState",
-        "type": "uint8"
+        "name": "previousOwner",
+        "type": "address"
       }
     ],
-    "name": "GPExecuteProposal",
+    "name": "OwnershipRenounced",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
     "type": "event"
   },
   {
@@ -416,7 +476,7 @@
       },
       {
         "indexed": true,
-        "name": "_organization",
+        "name": "_avatar",
         "type": "address"
       },
       {
@@ -448,7 +508,7 @@
       },
       {
         "indexed": true,
-        "name": "_organization",
+        "name": "_avatar",
         "type": "address"
       },
       {
@@ -475,7 +535,7 @@
       },
       {
         "indexed": true,
-        "name": "_organization",
+        "name": "_avatar",
         "type": "address"
       },
       {
@@ -507,7 +567,7 @@
       },
       {
         "indexed": true,
-        "name": "_organization",
+        "name": "_avatar",
         "type": "address"
       }
     ],
@@ -524,7 +584,7 @@
       },
       {
         "indexed": true,
-        "name": "_organization",
+        "name": "_avatar",
         "type": "address"
       },
       {
@@ -544,15 +604,19 @@
         "type": "uint256"
       },
       {
-        "name": "_paramsHash",
+        "name": "",
         "type": "bytes32"
       },
       {
-        "name": "_proposer",
+        "name": "_avatar",
         "type": "address"
       },
       {
-        "name": "_organization",
+        "name": "_executable",
+        "type": "address"
+      },
+      {
+        "name": "_proposer",
         "type": "address"
       }
     ],
@@ -662,10 +726,6 @@
       {
         "name": "_vote",
         "type": "uint256"
-      },
-      {
-        "name": "_voter",
-        "type": "address"
       }
     ],
     "name": "vote",
@@ -724,10 +784,6 @@
       {
         "name": "",
         "type": "uint256"
-      },
-      {
-        "name": "_voter",
-        "type": "address"
       }
     ],
     "name": "voteWithSpecifiedAmounts",
@@ -890,11 +946,34 @@
         "type": "bytes32"
       }
     ],
-    "name": "getProposalOrganization",
+    "name": "proposalAvatar",
     "outputs": [
       {
         "name": "",
-        "type": "bytes32"
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_avatar",
+        "type": "address"
+      }
+    ],
+    "name": "scoreThresholdParams",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -934,17 +1013,13 @@
       {
         "name": "_proposalId",
         "type": "bytes32"
-      },
-      {
-        "name": "_vote",
-        "type": "uint256"
       }
     ],
-    "name": "voteStake",
+    "name": "state",
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "uint8"
       }
     ],
     "payable": false,
@@ -964,25 +1039,6 @@
       {
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "_proposalId",
-        "type": "bytes32"
-      }
-    ],
-    "name": "state",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint8"
       }
     ],
     "payable": false,
@@ -1132,8 +1188,8 @@
     "constant": true,
     "inputs": [
       {
-        "name": "_organizationId",
-        "type": "bytes32"
+        "name": "_avatar",
+        "type": "address"
       }
     ],
     "name": "getBoostedProposalsCount",
@@ -1155,8 +1211,8 @@
         "type": "bytes32"
       },
       {
-        "name": "_organizationId",
-        "type": "bytes32"
+        "name": "_avatar",
+        "type": "address"
       }
     ],
     "name": "threshold",
@@ -1176,10 +1232,6 @@
       {
         "name": "_params",
         "type": "uint256[14]"
-      },
-      {
-        "name": "_voteOnBehalf",
-        "type": "address"
       }
     ],
     "name": "setParameters",
@@ -1199,10 +1251,6 @@
       {
         "name": "_params",
         "type": "uint256[14]"
-      },
-      {
-        "name": "_voteOnBehalf",
-        "type": "address"
       }
     ],
     "name": "getParametersHash",

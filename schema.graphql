@@ -1,8 +1,95 @@
+type Account @entity {
+    accountId: ID!
+    address: ID!
+    daoAvatarAddress: ID!
+    reputation: BigInt
+    tokens: BigInt
+    stakes: [Stake!] @derivedFrom(field: "accountId")
+    votes: [Vote!] @derivedFrom(field: "accountId")
+    proposals: [Proposal!] @derivedFrom(field: "proposer")
+    redemptions: [Redemption] @derivedFrom(field: "accountId")
+}
+
+type DAO @entity {
+    avatarAddress: ID!
+    controllerAddress: Bytes
+    members: [Account!] @derivedFrom(field: "daoAvatarAddress")
+    proposals: [Proposal!] @derivedFrom(field: "daoAvatarAddress")
+    reputationCount: BigInt!
+    reputationAddress: Bytes
+#tokenCount: BigInt
+#currentThresholdToBoost: BigInt
+#ethCount: BigInt!
+#genCount: BigInt!
+#name: String
+#promotedAmount: BigInt
+#tokenAddress: Bytes
+#tokenName: String
+#tokenSymbol: String
+}
+
 type Proposal @entity {
-  id: ID!
-  address: Bytes!
-  nChoices: Int!
-  organization: Bytes!
-  paramsHash: Bytes!
-  proposer: Bytes!
+    submittedTime: BigInt!
+    proposalId: ID!
+    proposer: Bytes!
+    beneficiaryAddress: Bytes!
+    daoAvatarAddress: Bytes!
+    reputationChange: BigInt
+    contributionDescriptionHash: Bytes!
+    externalToken: Bytes
+    numOfChoices: BigInt
+#periodLength: BigInt
+#numberOfPeriods: BigInt
+
+    state: Int
+    decision: BigInt
+    executionTime: BigInt
+    redemptions: [Redemption] @derivedFrom(field: "proposalId")
+    votes: [Vote!] @derivedFrom(field: "proposalId")
+    stakes: [Stake!] @derivedFrom(field: "proposalId")
+#reputationWhenExecuted: BigInt
+
+#boostedTime: BigInt
+#boostedVotePeriodLimit: BigInt
+#preBoostedVotePeriodLimit: BigInt
+}
+
+type Vote @entity{
+    accountId: Bytes!
+    avatarAddress: Bytes!
+    reputation:	Bytes!
+    voterAddress: Bytes!
+    voteOption: BigInt!
+    proposalId: Proposal!
+}
+
+type Stake @entity {
+    accountId: Bytes!
+    avatarAddress: Bytes!
+    stakerAddress: Bytes!
+    prediction: BigInt!
+    stakeAmount: BigInt!
+    proposalId: Proposal!
+}
+
+type Redemption @entity{
+    rewardId: Reward!
+    proposalId: ID!
+    accountId: ID!
+}
+
+type Reward @entity{
+    id: ID!
+    type: RewardType
+    amount: BigInt!
+}
+
+enum RewardType @entity{
+    beneficiaryEth
+    beneficiaryNativeToken
+    beneficiaryReputation
+    beneficiaryExternalToken
+    gpRep
+    gpGen
+    gpBounty
 }

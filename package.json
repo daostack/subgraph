@@ -12,7 +12,10 @@
     "deploy:watch": "graph deploy -w --ipfs ${ipfs-/ip4/127.0.0.1/tcp/5001} --node ${node_rpc-http://127.0.0.1:8020/} -n daostack subgraph.yaml",
     "test": "node ops/index.js migrate && npm run deploy && jest"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^0.18.0"
+  },
   "dependencies": {
     "@daostack/arc": "0.0.0-alpha.56",
     "@graphprotocol/graph-cli": "^0.3.1",

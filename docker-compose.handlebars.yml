@@ -11,7 +11,7 @@ services:
     environment:
       ethereum: {{#if development}}http://ganache:8545{{else}}{{ethereumProvider}}{{/if}}
       test_mnemonic: {{test_mnemonic}}
-      node_http: http://graph-node:8000/
+      node_http: http://graph-node:8000/daostack/graphql
       node_ws: http://graph-node:8001/
       node_rpc: http://graph-node:8020/
       ipfs_host: ipfs
@@ -46,7 +46,10 @@ services:
       POSTGRES_PASSWORD: '{{postgresPassword}}'
   {{#if development}}
   ganache:
-    image: trufflesuite/ganache-cli
+    # image: trufflesuite/ganache-cli
+    build: 
+      dockerfile: ganache.dockerfile
+      context: .
     ports:
       - 8545:8545
     command: >

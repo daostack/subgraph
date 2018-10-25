@@ -8,18 +8,30 @@ process.env = {
 };
 
 import * as Web3 from "web3";
-import { GraphQLClient } from "graphql-request";
-import { migrate } from "../ops";
-import * as shell from "shell-exec";
+import axios from "axios";
 import * as HDWallet from "hdwallet-accounts";
+
+const { ethereum, node_http, test_mnemonic } = process.env;
 
 const GenesisProtocol = require("@daostack/arc/build/contracts/GenesisProtocol.json");
 
-describe("Integration test", () => {
-  let web3, gql, addresses;
+const nullAddress = "0x0000000000000000000000000000000000000000";
+
+async function query(q, maxDelay = 500) {
+  await new Promise((res, rej) => setTimeout(res, maxDelay));
+  const {
+    data: { data }
+  } = await axios.post(process.env.node_http, {
+    query: q
+  });
+
+  return data;
+}
+
+describe("GenesisProtocol", () => {
+  let web3, addresses;
   beforeAll(async () => {
-    const { ethereum, node_http, test_mnemonic } = process.env;
-    const config = require("../config.json");
+    const config = require("../../config.json");
     addresses = config.addresses;
     web3 = new Web3(ethereum);
     const hdwallet = HDWallet(10, test_mnemonic);
@@ -32,13 +44,11 @@ describe("Integration test", () => {
         web3.eth.accounts.wallet.add(account);
       });
     web3.eth.defaultAccount = web3.eth.accounts.wallet[0].address;
-    gql = new GraphQLClient(node_http);
   });
 
   it(
-    "test",
+    "newProposal",
     async () => {
-      console.log(addresses);
       const gp = new web3.eth.Contract(
         GenesisProtocol.abi,
         addresses.GenesisProtocol,
@@ -73,27 +83,23 @@ describe("Integration test", () => {
         2,
         paramsHash,
         web3.eth.defaultAccount,
-        "0x0000000000000000000000000000000000000000"
+        nullAddress
       );
       const proposalId = await propose.call();
       await propose.send();
 
-      await new Promise((res, rej) => setTimeout(res, 9000));
-
-      const response = await gql.request(
-        `{
-          proposals(where: {id: "${proposalId}"}) {
-            id,
-            address,
-            numOfChoices,
-            organization,
-            paramsHash,
-            proposer
-          }
-        }`
+      const data = await query(
+        `{ proposal(id: "${proposalId}") { id, address, organization, numOfChoices, paramsHash, proposer } }`
       );
 
-      // TODO: CHECK RESPONSE
+      expect(data.proposal).toMatchObject({
+        id: proposalId,
+        address: gp.options.address.toLowerCase(),
+        organization: web3.eth.defaultAccount.toLowerCase(),
+        numOfChoices: "2",
+        paramsHash,
+        proposer: web3.eth.defaultAccount.toLowerCase()
+      });
     },
     10000
   );

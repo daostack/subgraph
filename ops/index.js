@@ -35,7 +35,7 @@ async function configure({ env, ...rest }) {
   );
 
   const subgraph = handlebars.compile(
-    fs.readFileSync("subgraph.yaml.handlebars", "utf-8")
+    fs.readFileSync("subgraph.handlebars.yaml", "utf-8")
   );
   fs.writeFileSync("subgraph.yaml", subgraph(config), "utf-8");
 

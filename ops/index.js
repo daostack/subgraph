@@ -91,6 +91,9 @@ async function migrate(web3) {
 
 async function generateAbis() {
   const base = "./node_modules/@daostack/arc/build/contracts";
+  if (!fs.existsSync("./abis/")) {
+    fs.mkdirSync("./abis/");
+  }
   const files = fs.readdirSync(base);
   files.forEach(file => {
     const abi = JSON.parse(fs.readFileSync(path.join(base, file), "utf-8")).abi;

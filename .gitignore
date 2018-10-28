@@ -1,6 +1,5 @@
 node_modules
 dist
-.env
 *.log
 subgraph.yaml
 docker-compose.yml

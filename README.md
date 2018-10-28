@@ -1,51 +1,60 @@
 # DAOstack subgraph
 
-The DAOstack caching layer built on top of [TheGraph](https://thegraph.com/)
+DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 
-# Get started
+## Getting started
 
-## Configure the project
+1 `git clone https://github.com/daostack/subgraph.git && cd subgraph`
 
-### .env variables
+2. `npm install`
+3. `npm run configure:<development|mainnet>` - configure the project to use ganache or mainnet via infura.
 
-Secret variables can be configured in a `.env` file with the following variables:
+All npm scripts can be called within a container using `docker-compose` with all dependencies and services set up:
 
-- `daostack_mainnet__postgresPassword` (e.g `123`)
-- `daostack_mainnet__ethereumProvider` (e.g `https://mainnet.infura.io/v3/<infura key>`)
+`docker-compose run subgraph -v $(pwd):/usr/app -v /usr/app/node_modules subgraph <command>`
 
-Non-secret variables:
+## Commands
 
-- `ethereum` - (default: `http://127.0.0.1:8545`) - ethereum rpc provider.
-- `test_mnemonic` - (default: `behave pipe turkey animal voyage dial relief menu blush match jeans general`) - mnemonic used for test account generation.
-- `node_http`: - (default: `http://127.0.0.1:8000/`) - graph-node http endpoint.
-- `node_ws`: - (default: `http://127.0.0.1:8001/`) - graph-node websockets endpoint.
-- `node_rpc`: - (default: `http://127.0.0.1:8020/`) - graph-node rpc endpoint.
-- `ipfs_host`: - (default: `127.0.0.1`) - ipfs host.
-- `ipfs_port`: - (default: `5001`) - ipfs port.
+1. `configure:mainnet` - configure the project to run against mainnet.
+2. `configure:development` - configure the project to run against ganache.
+3. `migrate:development` - migrate contracts to ganache and update project configuration.
+4. `codegen` - automatically generate abi & type definitions for required contracts.
+5. `test` - run integration tests.
+6. `deploy` - deploy subgraph.
+7. `deploy:watch` - redeploy on file change.
 
-### Configurations
+Example: `docker-compose run subgraph -v $(pwd):/usr/app -v /usr/app/node_modules subgraph test` (run intergation tests)
 
-1. `npm run configure:mainnet` - Use mainnet contract addresses and infura (requires `.env` configuration)
-2. `npm run configure:development` - Use ganache as ethereum provider.
-3. `npm run migrate:development` - Deploy required contracts to ganache and update contract addresses.
+To stop all services: `docker-compose down`
 
-## Run locally
+## Exposed endpoints
 
-1. Using docker-compose: `docker-compose run -v $(pwd):/usr/app -v /usr/app/node_modules subgraph <command>`
-2. Without docker:
-   1. `ipfs daemon`
-   2. (if using `development` configuration): `ganache-cli --deterministic --gasLimit 8000000 --mnemonic "behave pipe turkey animal voyage dial relief menu blush match jeans general"`
-   3. Make sure [`postgres`](https://www.postgresql.org/) is running on port `5432`
-   4. Start [`graph-node`](https://github.com/graphprotocol/graph-node#running-a-local-graph-node)
-   5. `npm install`
-   6. `npm run codegen`
-   7. `npm run <command>`
+After running a command with docker-compose, the following endpoints will be exposed on your local machine:
 
-### Commands
+- `http://localhost:8000/daostack` - GraphiQL graphical user interface.
+- `http://localhost:8000/daostack/graphql` - GraphQL api endpoint.
+- `http://localhost:8001/daostack` - graph-node's websockets endpoint
+- `http://localhost:8020` - graph-node's RPC endpoint
+- `http://localhost:5001` - ipfs endpoint.
+- (if using development) `http://localhost:8545` - ganache RPC endpoint.
+- `http://localhost:5432` - postgresql connection endpoint.
 
-- `test` - run integration tests.
-- `deploy` - deploy the subgraph
-- `deploy:watch` - deploy the subgraph on file change.
-- `codegen` - generate ABI definitions (in `abis`) and typescript type definitions (in `src/types`)
-- `configure:<mainnet|development>` - Configure the project to target a chain.
-- `migrate:development` - Deploy required contracts to local
+## Configuration
+
+This project automatically generates `.yaml` files used by `docker-compose` & `graph-node` based on configuration.
+Project configuration lives under: `ops/config.yaml` (public configration), `.env` (secret configuration).
+
+The following `.env` variables can be configured:
+
+- `daostack_mainnet__postgresPassword` - postgres password when running on mainnet (e.g `123`).
+- `daostack_mainnet__ethereumProvider` - mainnet web3 provider (e.g `https://mainnet.infura.io/v3/<api key>`)
+
+## Add a new contract tracker
+
+In order to add support for a new contract follow these steps:
+
+1. Create a mapping file at `src/<contract name>.ts`.
+2. Create a test file at `test/integration/<contract name>.spec.ts`.
+3. Configure the contract's mainnet address at `ops/config.yaml` under `addresses.<contract name>`.
+4. Add the contract to the migration script at the `migrate` function in `ops/index.js`.
+5. Add an additional datasource for the new contract at `subgraph.handlebars.yaml`, use `{{addresses.<contract name>}}` in place of the contract address.

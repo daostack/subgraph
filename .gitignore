@@ -6,3 +6,4 @@ subgraph.yaml
 docker-compose.yml
 config.json
 abis
+src/types

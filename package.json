@@ -1,6 +1,7 @@
 {
   "name": "@daostack/subgraph",
   "scripts": {
+    "postinstall": "npm run codegen",
     "configure:mainnet": "node ops/index.js configure -e mainnet",
     "configure:development": "node ops/index.js configure -e development",
     "migrate:development": "node ops/index.js migrate",

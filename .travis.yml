@@ -1,0 +1,13 @@
+language: nodejs
+
+sudo: required
+
+services:
+  - docker
+
+install:
+  - npm run configure:development
+  - docker-compose build
+
+script:
+  - docker-compose run subgraph test

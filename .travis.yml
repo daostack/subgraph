@@ -1,13 +1,25 @@
-language: nodejs
+language: node_js
+node_js:
+  - "8"
 
 sudo: required
 
 services:
   - docker
+addons:
+  apt:
+    packages:
+      - docker-ce
 
 install:
+  - docker --version
+  - docker-compose --version
+  - sudo service postgresql stop
+  - while sudo lsof -Pi :5432 -sTCP:LISTEN -t; do sleep 1; done
+  - npm install
   - npm run configure:development
-  - docker-compose build
+  - npm run codegen
 
 script:
-  - docker-compose run subgraph test
+  - cat subgraph.yaml
+  - sudo docker-compose run subgraph test

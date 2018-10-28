@@ -1,4 +1,4 @@
-FROM node
+FROM node:8
 
 # install the 'host' command used to get ip of ipfs container
 RUN apt-get update -y && apt-get install dnsutils -y
@@ -12,6 +12,7 @@ RUN chmod +x /wait /entry
 WORKDIR /usr/app
 COPY . .
 RUN npm install
+RUN npm run codegen
 
 ENTRYPOINT [ "/entry" ]
 CMD [ "deploy" ]

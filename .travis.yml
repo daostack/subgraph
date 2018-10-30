@@ -32,6 +32,7 @@ install:
   - npm run codegen
 
 script:
+  - sudo docker-compose build subgraph
   - sudo docker-compose run subgraph test
 
 after_script:

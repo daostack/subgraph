@@ -15,7 +15,9 @@ dataSources:
     language: wasm/assemblyscript
     file: ./src/mappings/Reputation
     entities:
-    - DAO
+    - ReputationHolder
+    - ReputationMint
+    - ReputationBurn
     abis:
     - name: Reputation
       file: ./abis/Reputation.json

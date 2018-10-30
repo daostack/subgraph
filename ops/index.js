@@ -69,42 +69,6 @@ async function migrate(web3) {
     gas: (await web3.eth.getBlock("latest")).gasLimit - 100000
   };
 
-  const GEN = new web3.eth.Contract(DAOToken.abi, undefined, opts);
-  const gen = await GEN.deploy({
-    data: DAOToken.bytecode,
-    arguments: ["GEN", "GEN", "1000000000000000000000000000"]
-  }).send();
-
-  const GP = new web3.eth.Contract(GenesisProtocol.abi, undefined, opts);
-  const gp = await GP.deploy({
-    data: GenesisProtocol.bytecode,
-    arguments: [gen.options.address]
-  }).send();
-
-  const CC = new web3.eth.Contract(ControllerCreator.abi, undefined, opts);
-  const cc = await CC.deploy({
-    data: ControllerCreator.bytecode,
-    arguments: []
-  }).send();
-
-  const DC = new web3.eth.Contract(DaoCreator.abi, undefined, opts);
-  const dc = await DC.deploy({
-    data: DaoCreator.bytecode,
-    arguments: [cc.options.address]
-  }).send();
-
-  const UC = new web3.eth.Contract(UController.abi, undefined, opts);
-  const uc = await UC.deploy({
-    data: UController.bytecode,
-    arguments: []
-  }).send();
-
-  const CR = new web3.eth.Contract(ContributionReward.abi, undefined, opts);
-  const cr = await CR.deploy({
-    data: ContributionReward.bytecode,
-    arguments: []
-  }).send();
-
   const Rep = new web3.eth.Contract(Reputation.abi, undefined, opts);
   const rep = await Rep.deploy({
     data: Reputation.bytecode,
@@ -112,11 +76,6 @@ async function migrate(web3) {
   }).send();
 
   const addresses = {
-    DAOToken: gen.options.address,
-    GenesisProtocol: gp.options.address,
-    DaoCreator: dc.options.address,
-    UController: uc.options.address,
-    ContributionReward: cr.options.address,
     Reputation: rep.options.address
   };
 

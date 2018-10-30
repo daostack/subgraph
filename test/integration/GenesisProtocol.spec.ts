@@ -89,11 +89,11 @@ describe("GenesisProtocol", () => {
       await propose.send();
 
       const data = await query(
-        `{ proposal(id: "${proposalId}") { id } }`
+        `{ proposal(id: "${proposalId}") { proposalId } }`
       );
 
       expect(data.proposal).toMatchObject({
-        id: proposalId
+        proposalId
       });
     },
     10000

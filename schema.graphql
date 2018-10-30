@@ -1,5 +1,3 @@
-
-# START Reputation
 type ReputationHolder @entity {
     contract: ID!
     address: ID!
@@ -18,67 +16,4 @@ type ReputationBurn @entity {
     contract: ID!
     address: ID!
     amount: BigInt!
-}
-# END Reputation
-
-type DAO @entity {
-    avatarAddress: ID!
-    controllerAddress: Bytes
-    reputationCount: BigInt!
-    reputationAddress: Bytes
-}
-
-type Proposal @entity {
-    submittedTime: BigInt!
-    proposalId: ID!
-    proposer: Bytes!
-    beneficiaryAddress: Bytes!
-    daoAvatarAddress: Bytes!
-    reputationChange: BigInt
-    contributionDescriptionHash: Bytes!
-    externalToken: Bytes
-    numOfChoices: BigInt
-    state: Int
-    decision: BigInt
-    executionTime: BigInt
-}
-
-type Vote @entity{
-    accountId: Bytes!
-    avatarAddress: Bytes!
-    reputation:	Bytes!
-    voterAddress: Bytes!
-    voteOption: BigInt!
-    proposalId: Proposal!
-}
-
-type Stake @entity {
-    accountId: Bytes!
-    avatarAddress: Bytes!
-    stakerAddress: Bytes!
-    prediction: BigInt!
-    stakeAmount: BigInt!
-    proposalId: Proposal!
-}
-
-type Redemption @entity{
-    rewardId: Reward!
-    proposalId: ID!
-    accountId: ID!
-}
-
-type Reward @entity{
-    id: ID!
-    type: RewardType
-    amount: BigInt!
-}
-
-enum RewardType @entity{
-    beneficiaryEth
-    beneficiaryNativeToken
-    beneficiaryReputation
-    beneficiaryExternalToken
-    gpRep
-    gpGen
-    gpBounty
 }

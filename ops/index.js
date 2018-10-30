@@ -13,12 +13,6 @@ const yaml = require("js-yaml");
 const Web3 = require("web3");
 const HDWallet = require("hdwallet-accounts");
 
-const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
-const GenesisProtocol = require("@daostack/arc/build/contracts/GenesisProtocol.json");
-const ControllerCreator = require("@daostack/arc/build/contracts/ControllerCreator.json");
-const DaoCreator = require("@daostack/arc/build/contracts/DaoCreator.json");
-const UController = require("@daostack/arc/build/contracts/UController.json");
-const ContributionReward = require("@daostack/arc/build/contracts/ContributionReward.json");
 const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
 
 async function configure({ env, ...rest }) {

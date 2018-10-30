@@ -104,5 +104,5 @@ describe('Reputation', () => {
       address: accounts[2].address.toLowerCase(),
       amount: '1'
     });
-  })
+  }, 10000)
 })

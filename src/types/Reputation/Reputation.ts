@@ -103,19 +103,14 @@ export class Reputation extends SmartContract {
     return new Reputation("Reputation", address);
   }
 
-  totalSupply(): U256 {
-    let result = super.call("totalSupply", []);
+  creationBlock(): U256 {
+    let result = super.call("creationBlock", []);
     return result[0].toU256();
   }
 
-  balances(param0: Address): U256 {
-    let result = super.call("balances", [EthereumValue.fromAddress(param0)]);
-    return result[0].toU256();
-  }
-
-  decimals(): U256 {
+  decimals(): u8 {
     let result = super.call("decimals", []);
-    return result[0].toU256();
+    return result[0].toU8();
   }
 
   owner(): Address {
@@ -123,9 +118,27 @@ export class Reputation extends SmartContract {
     return result[0].toAddress();
   }
 
-  reputationOf(_owner: Address): U256 {
-    let result = super.call("reputationOf", [
-      EthereumValue.fromAddress(_owner)
+  totalSupply(): U256 {
+    let result = super.call("totalSupply", []);
+    return result[0].toU256();
+  }
+
+  balanceOf(_owner: Address): U256 {
+    let result = super.call("balanceOf", [EthereumValue.fromAddress(_owner)]);
+    return result[0].toU256();
+  }
+
+  balanceOfAt(_owner: Address, _blockNumber: U256): U256 {
+    let result = super.call("balanceOfAt", [
+      EthereumValue.fromAddress(_owner),
+      EthereumValue.fromU256(_blockNumber)
+    ]);
+    return result[0].toU256();
+  }
+
+  totalSupplyAt(_blockNumber: U256): U256 {
+    let result = super.call("totalSupplyAt", [
+      EthereumValue.fromU256(_blockNumber)
     ]);
     return result[0].toU256();
   }

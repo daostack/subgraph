@@ -15,6 +15,11 @@ const HDWallet = require("hdwallet-accounts");
 
 const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
 const GenesisProtocol = require("@daostack/arc/build/contracts/GenesisProtocol.json");
+const ControllerCreator = require("@daostack/arc/build/contracts/ControllerCreator.json");
+const DaoCreator = require("@daostack/arc/build/contracts/DaoCreator.json");
+const UController = require("@daostack/arc/build/contracts/UController.json");
+const ContributionReward = require("@daostack/arc/build/contracts/ContributionReward.json");
+const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
 
 async function configure({ env, ...rest }) {
   const { [env]: publicConfig } = yaml.safeLoad(
@@ -76,9 +81,43 @@ async function migrate(web3) {
     arguments: [gen.options.address]
   }).send();
 
+  const CC = new web3.eth.Contract(ControllerCreator.abi, undefined, opts);
+  const cc = await CC.deploy({
+    data: ControllerCreator.bytecode,
+    arguments: []
+  }).send();
+
+  const DC = new web3.eth.Contract(DaoCreator.abi, undefined, opts);
+  const dc = await DC.deploy({
+    data: DaoCreator.bytecode,
+    arguments: [cc.options.address]
+  }).send();
+
+  const UC = new web3.eth.Contract(UController.abi, undefined, opts);
+  const uc = await UC.deploy({
+    data: UController.bytecode,
+    arguments: []
+  }).send();
+
+  const CR = new web3.eth.Contract(ContributionReward.abi, undefined, opts);
+  const cr = await CR.deploy({
+    data: ContributionReward.bytecode,
+    arguments: []
+  }).send();
+
+  const Rep = new web3.eth.Contract(Reputation.abi, undefined, opts);
+  const rep = await Rep.deploy({
+    data: Reputation.bytecode,
+    arguments: []
+  }).send();
+
   const addresses = {
     DAOToken: gen.options.address,
-    GenesisProtocol: gp.options.address
+    GenesisProtocol: gp.options.address,
+    DaoCreator: dc.options.address,
+    UController: uc.options.address,
+    ContributionReward: cr.options.address,
+    Reputation: rep.options.address
   };
 
   await configure({

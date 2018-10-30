@@ -4,6 +4,10 @@ mainnet:
   <<: *common
   addresses:
     GenesisProtocol: "0x8940442e7f54e875c8c1c80213a4aee7eee4781c"
+    DaoCreator: "0x87ac6d6874c998f0f645f7db76b500d265c1856d"
+    UController: "0xa50c298118e89e0cc465f2a1705c7579f67b6f26"
+    Reputation: "0x13ad61aa8f695ce64711a51a6feccb48a275aaf8"
+    ContributionReward: "0xc282f494a0619592a2410166dcc749155804f548"
 development:
   <<: *common
   postgresPassword: "letmein"

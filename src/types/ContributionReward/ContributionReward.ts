@@ -356,9 +356,32 @@ export class ContributionReward extends SmartContract {
     );
   }
 
+  balanceOfStakingToken(_stakingToken: Address, _proposalId: Bytes): U256 {
+    let result = super.call("balanceOfStakingToken", [
+      EthereumValue.fromAddress(_stakingToken),
+      EthereumValue.fromFixedBytes(_proposalId)
+    ]);
+    return result[0].toU256();
+  }
+
   owner(): Address {
     let result = super.call("owner", []);
     return result[0].toAddress();
+  }
+
+  reputationOf(_owner: Address, _proposalId: Bytes): U256 {
+    let result = super.call("reputationOf", [
+      EthereumValue.fromAddress(_owner),
+      EthereumValue.fromFixedBytes(_proposalId)
+    ]);
+    return result[0].toU256();
+  }
+
+  getTotalReputationSupply(_proposalId: Bytes): U256 {
+    let result = super.call("getTotalReputationSupply", [
+      EthereumValue.fromFixedBytes(_proposalId)
+    ]);
+    return result[0].toU256();
   }
 
   hashedParameters(): Bytes {

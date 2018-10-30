@@ -213,158 +213,6 @@
     "inputs": [
       {
         "indexed": true,
-        "name": "_sender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "_params",
-        "type": "bytes32[]"
-      }
-    ],
-    "name": "GenericAction",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "_sender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "_amountInWei",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "name": "_to",
-        "type": "address"
-      }
-    ],
-    "name": "SendEther",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "_sender",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "_externalToken",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "ExternalTokenTransfer",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "_sender",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "_externalToken",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "_from",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "ExternalTokenTransferFrom",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "_sender",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "_externalToken",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "_spender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "ExternalTokenIncreaseApproval",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "_sender",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "name": "_externalToken",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "_spender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "ExternalTokenDecreaseApproval",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "name": "_oldController",
         "type": "address"
       },
@@ -380,28 +228,6 @@
       }
     ],
     "name": "UpgradeController",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "_contract",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "_data",
-        "type": "bytes"
-      },
-      {
-        "indexed": true,
-        "name": "_avatar",
-        "type": "address"
-      }
-    ],
-    "name": "GenericCall",
     "type": "event"
   },
   {
@@ -856,7 +682,7 @@
     "name": "genericCall",
     "outputs": [
       {
-        "name": "",
+        "name": "returnValue",
         "type": "bytes32"
       }
     ],

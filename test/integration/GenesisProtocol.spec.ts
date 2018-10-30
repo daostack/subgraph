@@ -89,16 +89,11 @@ describe("GenesisProtocol", () => {
       await propose.send();
 
       const data = await query(
-        `{ proposal(id: "${proposalId}") { id, address, organization, numOfChoices, paramsHash, proposer } }`
+        `{ proposal(id: "${proposalId}") { id } }`
       );
 
       expect(data.proposal).toMatchObject({
-        id: proposalId,
-        address: gp.options.address.toLowerCase(),
-        organization: web3.eth.defaultAccount.toLowerCase(),
-        numOfChoices: "2",
-        paramsHash,
-        proposer: web3.eth.defaultAccount.toLowerCase()
+        id: proposalId
       });
     },
     10000

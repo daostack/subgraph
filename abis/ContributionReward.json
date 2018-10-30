@@ -100,6 +100,29 @@
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_stakingToken",
+        "type": "address"
+      },
+      {
+        "name": "_proposalId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "balanceOfStakingToken",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [],
     "name": "renounceOwnership",
@@ -123,6 +146,106 @@
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "name": "_proposalId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "reputationOf",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_proposalId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getTotalReputationSupply",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_stakingToken",
+        "type": "address"
+      },
+      {
+        "name": "_beneficiary",
+        "type": "address"
+      },
+      {
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "name": "_proposalId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "stakingTokenTransfer",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "name": "_beneficiary",
+        "type": "address"
+      },
+      {
+        "name": "_proposalId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "mintReputation",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [
       {
@@ -132,6 +255,33 @@
     ],
     "name": "transferOwnership",
     "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "name": "_beneficiary",
+        "type": "address"
+      },
+      {
+        "name": "_proposalId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "burnReputation",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
@@ -360,6 +510,29 @@
     "constant": false,
     "inputs": [
       {
+        "name": "_proposalId",
+        "type": "bytes32"
+      },
+      {
+        "name": "_param",
+        "type": "int256"
+      }
+    ],
+    "name": "executeProposal",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
         "name": "_orgNativeTokenFee",
         "type": "uint256"
       },
@@ -459,40 +632,13 @@
       {
         "name": "_avatar",
         "type": "address"
-      },
-      {
-        "name": "_param",
-        "type": "int256"
-      }
-    ],
-    "name": "execute",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_proposalId",
-        "type": "bytes32"
-      },
-      {
-        "name": "_avatar",
-        "type": "address"
       }
     ],
     "name": "redeemReputation",
     "outputs": [
       {
-        "name": "",
-        "type": "bool"
+        "name": "reputation",
+        "type": "int256"
       }
     ],
     "payable": false,
@@ -514,8 +660,8 @@
     "name": "redeemNativeToken",
     "outputs": [
       {
-        "name": "",
-        "type": "bool"
+        "name": "amount",
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -537,8 +683,8 @@
     "name": "redeemEther",
     "outputs": [
       {
-        "name": "",
-        "type": "bool"
+        "name": "amount",
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -560,8 +706,8 @@
     "name": "redeemExternalToken",
     "outputs": [
       {
-        "name": "",
-        "type": "bool"
+        "name": "amount",
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -587,8 +733,20 @@
     "name": "redeem",
     "outputs": [
       {
-        "name": "result",
-        "type": "bool[4]"
+        "name": "reputationReward",
+        "type": "int256"
+      },
+      {
+        "name": "nativeTokenReward",
+        "type": "uint256"
+      },
+      {
+        "name": "etherReward",
+        "type": "uint256"
+      },
+      {
+        "name": "externalTokenReward",
+        "type": "uint256"
       }
     ],
     "payable": false,

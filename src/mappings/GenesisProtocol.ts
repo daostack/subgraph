@@ -3,25 +3,25 @@ export { allocate_memory }
 
 import { Entity, Address, U256, Bytes, Value, store, crypto, ByteArray } from '@graphprotocol/graph-ts'
 
-import { GPExecuteProposal, Stake, Redeem, RedeemDaoBounty, RedeemReputation,NewProposal, ExecuteProposal, VoteProposal } from '../types/GenesisProtocol/GenesisProtocol'
+import { GPExecuteProposal, Stake, Redeem, RedeemDaoBounty, RedeemReputation, NewProposal, ExecuteProposal, VoteProposal } from '../types/GenesisProtocol/GenesisProtocol';
 
 import { concat, updateRedemption } from '../utils'
 
 export function handleNewProposal(event: NewProposal): void {
-    let accountId = crypto.keccak256(concat(event.params._proposer, event.params._avatar)).toHex()
+    let accountId = crypto.keccak256(concat(event.params._proposer, event.params._organization)).toHex()
     let account = store.get('Account', accountId)
     if (account == null) {
         account = new Entity()
         account.setAddress('address', event.params._proposer)
         account.setString('accountId', accountId)
-        account.setAddress('daoAvatarAddress', event.params._avatar)
+        account.setAddress('daoAvatarAddress', event.params._organization)
         store.set('Account', accountId, account as Entity)
     }
 
     let proposal = new Entity()
 
     proposal.setString('proposalId', event.params._proposalId.toHex())
-    proposal.setAddress('daoAvatarAddress', event.params._avatar)
+    proposal.setAddress('daoAvatarAddress', event.params._organization)
     proposal.setU256('numOfChoices', event.params._numOfChoices)
     proposal.setAddress('proposer', event.params._proposer)
 
@@ -29,7 +29,7 @@ export function handleNewProposal(event: NewProposal): void {
 }
 
 export function handleVoteProposal(event: VoteProposal): void {
-    let accountId = crypto.keccak256(concat(event.params._voter, event.params._avatar)).toHex()
+    let accountId = crypto.keccak256(concat(event.params._voter, event.params._organization)).toHex()
 
     // Account created during mint
 
@@ -45,13 +45,13 @@ export function handleVoteProposal(event: VoteProposal): void {
 }
 
 export function handleStake(event: Stake): void {
-    let accountId = crypto.keccak256(concat(event.params._staker, event.params._avatar)).toHex()
+    let accountId = crypto.keccak256(concat(event.params._staker, event.params._organization)).toHex()
     let account = store.get('Account', accountId)
     if (account == null) {
         account = new Entity()
         account.setAddress('address', event.params._staker)
         account.setString('accountId', accountId)
-        account.setAddress('daoAvatarAddress', event.params._avatar)
+        account.setAddress('daoAvatarAddress', event.params._organization)
         store.set('Account', accountId, account as Entity)
     }
 
@@ -67,7 +67,7 @@ export function handleStake(event: Stake): void {
     store.set('Stake', uniqueId, stake as Entity)
 }
 
-export function handleGPExecuteProposal (event: GPExecuteProposal): void {
+export function handleGPExecuteProposal(event: GPExecuteProposal): void {
     let proposal = new Entity()
 
     //proposal.setInt('state', event.params._executionState as u32)
@@ -82,41 +82,41 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
     store.set('Proposal', event.params._proposalId.toHex(), proposal as Entity)
 }
 
-export function handleRedeem (event: Redeem): void {
+export function handleRedeem(event: Redeem): void {
     let rewardType = new Uint8Array(1)
     rewardType[0] = 5
     updateRedemption(
         event.params._beneficiary,
-        event.params._avatar,
+        event.params._organization,
         event.params._amount,
         event.params._proposalId,
         rewardType as ByteArray,
         'gpGen'
-        )
+    )
 }
 
-export function handleRedeemDaoBounty (event: RedeemDaoBounty): void {
+export function handleRedeemDaoBounty(event: RedeemDaoBounty): void {
     let rewardType = new Uint8Array(1)
     rewardType[0] = 6
     updateRedemption(
         event.params._beneficiary,
-        event.params._avatar,
+        event.params._organization,
         event.params._amount,
         event.params._proposalId,
         rewardType as ByteArray,
         'gpBounty'
-        )
+    )
 }
 
-export function handleRedeemReputation (event: RedeemReputation): void {
+export function handleRedeemReputation(event: RedeemReputation): void {
     let rewardType = new Uint8Array(1)
     rewardType[0] = 4
     updateRedemption(
         event.params._beneficiary,
-        event.params._avatar,
+        event.params._organization,
         event.params._amount,
         event.params._proposalId,
         rewardType as ByteArray,
         'gpRep'
-        )
+    )
 }

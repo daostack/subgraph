@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/daostack/subgraph.git"
   },
+  "engines": {
+    "node": "8"
+  },
   "scripts": {
     "postinstall": "npm run codegen",
     "configure:mainnet": "node ops/index.js configure -e mainnet",

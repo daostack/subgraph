@@ -40,64 +40,51 @@ type UControllerScheme @entity {
     canDelegateCall: Boolean!
 }
 
-enum UControllerGlobalConstraintType {
-    Pre,
-    Post,
-    Both
-}
-
 type UControllerGlobalConstraint @entity {
     avatarAddress: ID!
     address: Bytes!
     paramsHash: Bytes!
-    type: UControllerGlobalConstraintType!
-}
-
-type UControllerMintTokens @entity {
-    txHash: Bytes!
-    contract: ID!
-    avatarAddress: Bytes!
-    beneficiary: Bytes!
-    amount: BigInt!
+    type: String!
 }
 
 type UControllerRegisterScheme @entity {
-    txHash: Bytes!
-    contract: ID!
+    txHash: ID!
+    controller: Bytes!
+    contract: Bytes!
     avatarAddress: Bytes!
     scheme: Bytes!
 }
 
 type UControllerUnregisterScheme @entity {
-    txHash: Bytes!
-    contract: ID!
+    txHash: ID!
+    controller: Bytes!
+    contract: Bytes!
     avatarAddress: Bytes!
     scheme: Bytes!
 }
 
 type UControllerUpgradeController @entity {
-    txHash: Bytes!
-    contract: ID!
+    txHash: ID!
+    controller: Bytes!
     avatarAddress: Bytes!
-    oldController: Bytes!
     newController: Bytes!
 }
 
 type UControllerAddGlobalConstraint @entity {
-    txHash: Bytes!
-    contract: ID!
+    txHash: ID!
+    controller: Bytes!
     avatarAddress: Bytes!
     globalConstraint: Bytes!
-    type: UControllerGlobalConstraintType!
     paramsHash: Bytes!
+    type: String!
 }
 
 type UControllerRemoveGlobalConstraint @entity {
-    txHash: Bytes!
-    contract: ID!
+    txHash: ID!
+    controller: Bytes!
     avatarAddress: Bytes!
     globalConstraint: Bytes!
-    type: UControllerGlobalConstraintType!
+    isPre: Booleans!
 }
 
 # END UController

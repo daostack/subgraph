@@ -68,15 +68,28 @@ dataSources:
     language: wasm/assemblyscript
     file: ./src/mappings/UController
     entities:
-    - DAO
+    - UControllerOrganization
+    - UControllerScheme
+    - UControllerGlobalConstraint
+    - UControllerRegisterScheme
+    - UControllerUnregisterScheme
+    - UControllerUpgradeController
+    - UControllerAddGlobalConstraint
+    - UControllerRemoveGlobalConstraint
     abis:
     - name: UController
       file: ./abis/UController.json
     eventHandlers:
-    - event: MintReputation(address, address, uint256, address)
-      handler: handleMintReputation
-    - event: BurnReputation(address, address, uint256, address)
-      handler: handleBurnReputation
+    - event: RegisterScheme(address, address, address)
+      handler: handleRegisterScheme
+    - event: UnregisterScheme(address, address, address)
+      handler: handleUnregisterScheme
+    - event: UpgradeController(address, address, address)
+      handler: handleUpgradeController
+    - event: AddGlobalConstraint(address, bytes32, uint8, address)
+      handler: handleAddGlobalConstraint
+    - event: RemoveGlobalConstraint(address, uint256, bool, address)
+      handler: handleRemoveGlobalConstraint
 
 - kind: ethereum/contract
   name: Reputation

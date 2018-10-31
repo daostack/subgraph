@@ -8,7 +8,7 @@
     "url": "https://github.com/daostack/subgraph.git"
   },
   "engines": {
-    "node": "8"
+    "node": ">=10"
   },
   "scripts": {
     "postinstall": "npm run codegen",

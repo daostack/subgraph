@@ -12,6 +12,7 @@ const handlebars = require("handlebars");
 const yaml = require("js-yaml");
 const Web3 = require("web3");
 const HDWallet = require("hdwallet-accounts");
+const glob = require('glob')
 
 const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
 
@@ -32,6 +33,14 @@ async function configure({ env, ...rest }) {
     JSON.stringify(config, undefined, 2),
     "utf-8"
   );
+
+  const subschemas = await new Promise((res, rej) => glob('src/**/*.graphql', (err, files) => err ? rej(err) : res(files)));
+  const partials = subschemas.reduce((acc, subschema) => ({...acc, [path.basename(subschema).replace(/\.[^/.]+$/, "")]: fs.readFileSync(subschema, 'utf-8')}), {})
+
+  const schema = handlebars.compile(
+    fs.readFileSync("schema.handlebars.graphql", "utf-8")
+  );
+  fs.writeFileSync("schema.graphql", schema(config, {partials}), "utf-8");
 
   const subgraph = handlebars.compile(
     fs.readFileSync("subgraph.handlebars.yaml", "utf-8")

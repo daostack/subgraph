@@ -12,13 +12,8 @@ const handlebars = require("handlebars");
 const yaml = require("js-yaml");
 const Web3 = require("web3");
 const HDWallet = require("hdwallet-accounts");
+const glob = require('glob')
 
-const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
-const GenesisProtocol = require("@daostack/arc/build/contracts/GenesisProtocol.json");
-const ControllerCreator = require("@daostack/arc/build/contracts/ControllerCreator.json");
-const DaoCreator = require("@daostack/arc/build/contracts/DaoCreator.json");
-const UController = require("@daostack/arc/build/contracts/UController.json");
-const ContributionReward = require("@daostack/arc/build/contracts/ContributionReward.json");
 const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
 
 async function configure({ env, ...rest }) {
@@ -38,6 +33,14 @@ async function configure({ env, ...rest }) {
     JSON.stringify(config, undefined, 2),
     "utf-8"
   );
+
+  const subschemas = await new Promise((res, rej) => glob('src/**/*.graphql', (err, files) => err ? rej(err) : res(files)));
+  const partials = subschemas.reduce((acc, subschema) => ({...acc, [path.basename(subschema).replace(/\.[^/.]+$/, "")]: fs.readFileSync(subschema, 'utf-8')}), {})
+
+  const schema = handlebars.compile(
+    fs.readFileSync("schema.handlebars.graphql", "utf-8")
+  );
+  fs.writeFileSync("schema.graphql", schema(config, {partials}), "utf-8");
 
   const subgraph = handlebars.compile(
     fs.readFileSync("subgraph.handlebars.yaml", "utf-8")
@@ -69,42 +72,6 @@ async function migrate(web3) {
     gas: (await web3.eth.getBlock("latest")).gasLimit - 100000
   };
 
-  const GEN = new web3.eth.Contract(DAOToken.abi, undefined, opts);
-  const gen = await GEN.deploy({
-    data: DAOToken.bytecode,
-    arguments: ["GEN", "GEN", "1000000000000000000000000000"]
-  }).send();
-
-  const GP = new web3.eth.Contract(GenesisProtocol.abi, undefined, opts);
-  const gp = await GP.deploy({
-    data: GenesisProtocol.bytecode,
-    arguments: [gen.options.address]
-  }).send();
-
-  const CC = new web3.eth.Contract(ControllerCreator.abi, undefined, opts);
-  const cc = await CC.deploy({
-    data: ControllerCreator.bytecode,
-    arguments: []
-  }).send();
-
-  const DC = new web3.eth.Contract(DaoCreator.abi, undefined, opts);
-  const dc = await DC.deploy({
-    data: DaoCreator.bytecode,
-    arguments: [cc.options.address]
-  }).send();
-
-  const UC = new web3.eth.Contract(UController.abi, undefined, opts);
-  const uc = await UC.deploy({
-    data: UController.bytecode,
-    arguments: []
-  }).send();
-
-  const CR = new web3.eth.Contract(ContributionReward.abi, undefined, opts);
-  const cr = await CR.deploy({
-    data: ContributionReward.bytecode,
-    arguments: []
-  }).send();
-
   const Rep = new web3.eth.Contract(Reputation.abi, undefined, opts);
   const rep = await Rep.deploy({
     data: Reputation.bytecode,
@@ -112,11 +79,6 @@ async function migrate(web3) {
   }).send();
 
   const addresses = {
-    DAOToken: gen.options.address,
-    GenesisProtocol: gp.options.address,
-    DaoCreator: dc.options.address,
-    UController: uc.options.address,
-    ContributionReward: cr.options.address,
     Reputation: rep.options.address
   };
 

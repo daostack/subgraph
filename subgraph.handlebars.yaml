@@ -5,14 +5,22 @@ schema:
   file: ./schema.graphql
 dataSources:
 - kind: ethereum/contract
+<<<<<<< HEAD
   name: UController
   source:
     address: "{{addresses.UController}}"
     abi: UController
+=======
+  name: Reputation
+  source:
+    address: "{{addresses.Reputation}}"
+    abi: Reputation
+>>>>>>> reputation
   mapping:
     kind: ethereum/events
     apiVersion: 0.0.1
     language: wasm/assemblyscript
+<<<<<<< HEAD
     file: ./src/mappings/UController
     entities:
     - UControllerOrganization
@@ -37,3 +45,18 @@ dataSources:
       handler: handleAddGlobalConstraint
     - event: RemoveGlobalConstraint(address, uint256, bool, address)
       handler: handleRemoveGlobalConstraint
+=======
+    file: ./src/mappings/Reputation
+    entities:
+    - ReputationHolder
+    - ReputationMint
+    - ReputationBurn
+    abis:
+    - name: Reputation
+      file: ./abis/Reputation.json
+    eventHandlers:
+    - event: Mint(address, uint256)
+      handler: handleMint
+    - event: Burn(address, uint256)
+      handler: handleBurn
+>>>>>>> reputation

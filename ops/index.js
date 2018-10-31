@@ -14,7 +14,7 @@ const Web3 = require("web3");
 const HDWallet = require("hdwallet-accounts");
 const glob = require('glob')
 
-const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
+const UController = require("@daostack/arc/build/contracts/UController.json");
 
 async function configure({ env, ...rest }) {
   const { [env]: publicConfig } = yaml.safeLoad(
@@ -72,14 +72,14 @@ async function migrate(web3) {
     gas: (await web3.eth.getBlock("latest")).gasLimit - 100000
   };
 
-  const Rep = new web3.eth.Contract(Reputation.abi, undefined, opts);
-  const rep = await Rep.deploy({
-    data: Reputation.bytecode,
+  const UC = new web3.eth.Contract(UController.abi, undefined, opts);
+  const uc = await UC.deploy({
+    data: UController.bytecode,
     arguments: []
   }).send();
 
   const addresses = {
-    Reputation: rep.options.address
+    UController: uc.options.address
   };
 
   await configure({

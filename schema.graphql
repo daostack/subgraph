@@ -1,31 +1,31 @@
-type Account @entity {
-    accountId: ID!
+
+# START Reputation
+type ReputationHolder @entity {
+    contract: ID!
     address: ID!
-    daoAvatarAddress: ID!
-    reputation: BigInt
-    tokens: BigInt
-    stakes: [Stake!] @derivedFrom(field: "accountId")
-    votes: [Vote!] @derivedFrom(field: "accountId")
-    proposals: [Proposal!] @derivedFrom(field: "proposer")
-    redemptions: [Redemption] @derivedFrom(field: "accountId")
+    balance: BigInt!
 }
+
+type ReputationMint @entity {
+    txHash: Bytes!
+    contract: ID!
+    address: ID!
+    amount: BigInt!
+}
+
+type ReputationBurn @entity {
+    txHash: Bytes!
+    contract: ID!
+    address: ID!
+    amount: BigInt!
+}
+# END Reputation
 
 type DAO @entity {
     avatarAddress: ID!
     controllerAddress: Bytes
-    members: [Account!] @derivedFrom(field: "daoAvatarAddress")
-    proposals: [Proposal!] @derivedFrom(field: "daoAvatarAddress")
     reputationCount: BigInt!
     reputationAddress: Bytes
-#tokenCount: BigInt
-#currentThresholdToBoost: BigInt
-#ethCount: BigInt!
-#genCount: BigInt!
-#name: String
-#promotedAmount: BigInt
-#tokenAddress: Bytes
-#tokenName: String
-#tokenSymbol: String
 }
 
 type Proposal @entity {
@@ -38,20 +38,9 @@ type Proposal @entity {
     contributionDescriptionHash: Bytes!
     externalToken: Bytes
     numOfChoices: BigInt
-#periodLength: BigInt
-#numberOfPeriods: BigInt
-
     state: Int
     decision: BigInt
     executionTime: BigInt
-    redemptions: [Redemption] @derivedFrom(field: "proposalId")
-    votes: [Vote!] @derivedFrom(field: "proposalId")
-    stakes: [Stake!] @derivedFrom(field: "proposalId")
-#reputationWhenExecuted: BigInt
-
-#boostedTime: BigInt
-#boostedVotePeriodLimit: BigInt
-#preBoostedVotePeriodLimit: BigInt
 }
 
 type Vote @entity{

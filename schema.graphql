@@ -84,7 +84,7 @@ type UControllerRemoveGlobalConstraint @entity {
     controller: Bytes!
     avatarAddress: Bytes!
     globalConstraint: Bytes!
-    isPre: Booleans!
+    isPre: Boolean!
 }
 
 # END UController

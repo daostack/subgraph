@@ -150,5 +150,106 @@ describe('UController', () => {
       canDelegateCall: false,
     })
 
+    const { ucontrollerAddGlobalConstraints } = await query(`{
+      ucontrollerAddGlobalConstraints {
+        txHash,
+        controller,
+        avatarAddress,
+        globalConstraint,
+        paramsHash,
+        type
+      }
+    }`);
+
+    expect(ucontrollerAddGlobalConstraints.length).toEqual(2)
+    expect(ucontrollerAddGlobalConstraints).toContainEqual({
+      txHash: txs[2],
+      controller: uController.options.address.toLowerCase(),
+      avatarAddress: avatar.options.address.toLowerCase(),
+      globalConstraint: tokenCap1.options.address.toLowerCase(),
+      paramsHash: '0x' + padZeros('987', hashLength),
+      type: 'Post',
+    })
+    expect(ucontrollerAddGlobalConstraints).toContainEqual({
+      txHash: txs[4],
+      controller: uController.options.address.toLowerCase(),
+      avatarAddress: avatar.options.address.toLowerCase(),
+      globalConstraint: tokenCap2.options.address.toLowerCase(),
+      paramsHash: '0x' + padZeros('789', hashLength),
+      type: 'Post',
+    })
+
+    const { ucontrollerRemoveGlobalConstraints } = await query(`{
+      ucontrollerRemoveGlobalConstraints {
+        txHash,
+        controller,
+        avatarAddress,
+        globalConstraint,
+        isPre
+      }
+    }`);
+
+    expect(ucontrollerRemoveGlobalConstraints.length).toEqual(1)
+    expect(ucontrollerRemoveGlobalConstraints).toContainEqual({
+      txHash: txs[6],
+      controller: uController.options.address.toLowerCase(),
+      avatarAddress: avatar.options.address.toLowerCase(),
+      globalConstraint: tokenCap2.options.address.toLowerCase(),
+      isPre: false,
+    })
+
+    const { ucontrollerGlobalConstraints } = await query(`{
+      ucontrollerGlobalConstraints {
+        avatarAddress,
+        address,
+        paramsHash,
+        type
+      }
+    }`);
+
+    expect(ucontrollerGlobalConstraints.length).toEqual(1)
+    expect(ucontrollerGlobalConstraints).toContainEqual({
+      avatarAddress: avatar.options.address.toLowerCase(),
+      address: tokenCap1.options.address.toLowerCase(),
+      paramsHash: '0x' + padZeros('987', hashLength),
+      type: 'Post',
+    })
+
+    txs.push((await uController.methods.upgradeController(accounts[4].address, avatar.options.address).send()).transactionHash);
+
+    const { ucontrollerUpgradeControllers } = await query(`{
+      ucontrollerUpgradeControllers {
+        txHash,
+        controller,
+        avatarAddress,
+        newController
+      }
+    }`);
+
+    expect(ucontrollerUpgradeControllers.length).toEqual(1);
+    expect(ucontrollerUpgradeControllers).toContainEqual({
+      txHash: txs[7],
+      controller: uController.options.address.toLowerCase(),
+      avatarAddress: avatar.options.address.toLowerCase(),
+      newController: accounts[4].address.toLowerCase()
+    })
+
+    const { ucontrollerOrganizations: ucontrollerOrganizations2 } = await query(`{
+      ucontrollerOrganizations {
+        avatarAddress
+        nativeToken
+        nativeReputation
+        controller
+      }
+    }`);
+
+    expect(ucontrollerOrganizations2.length).toEqual(1)
+    expect(ucontrollerOrganizations2).toContainEqual({
+      avatarAddress: avatar.options.address.toLowerCase(),
+      nativeToken: daoToken.options.address.toLowerCase(),
+      nativeReputation: reputation.options.address.toLowerCase(),
+      controller: accounts[4].address.toLowerCase(),
+    })
+
   }, 10000)
 })

@@ -1,3 +1,8 @@
+type Reputation @entity {
+    address: ID!
+    totalSupply: BigInt!
+}
+
 type ReputationHolder @entity {
     contract: ID!
     address: ID!

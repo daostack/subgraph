@@ -11,15 +11,36 @@ describe('Reputation', () => {
     reputation = new web3.eth.Contract(Reputation.abi, addresses.Reputation, opts);
   });
 
+  async function checkTotalSupply(value) {
+    const { reputations } = await query(`{
+      reputations {
+        address,
+        totalSupply
+      }
+    }`);
+    expect(reputations.length).toEqual(1);
+    expect(reputations).toContainEqual({
+      address: reputation.options.address.toLowerCase(),
+      totalSupply: value
+    })
+  }
+
   it('Sanity', async () => {
+    let reputationsResponse;
     const accounts = web3.eth.accounts.wallet;
     let txs = [];
     txs.push(await reputation.methods.mint(accounts[0].address, '100').send());
+    await checkTotalSupply('100');
     txs.push(await reputation.methods.mint(accounts[1].address, '100').send());
+    await checkTotalSupply('200');
     txs.push(await reputation.methods.burn(accounts[0].address, '30').send());
+    await checkTotalSupply('170');
     txs.push(await reputation.methods.mint(accounts[2].address, '300').send());
+    await checkTotalSupply('470');
     txs.push(await reputation.methods.burn(accounts[1].address, '100').send());
+    await checkTotalSupply('370');
     txs.push(await reputation.methods.burn(accounts[2].address, '1').send());
+    await checkTotalSupply('369');
     txs = txs.map(({ transactionHash }) => transactionHash);
 
     const { reputationHolders } = await query(`{
@@ -35,11 +56,6 @@ describe('Reputation', () => {
       contract: reputation.options.address.toLowerCase(),
       address: accounts[0].address.toLowerCase(),
       balance: '70'
-    })
-    expect(reputationHolders).not.toContainEqual({
-      contract: reputation.options.address.toLowerCase(),
-      address: accounts[1].address.toLowerCase(),
-      balance: '0'
     })
     expect(reputationHolders).toContainEqual({
       contract: reputation.options.address.toLowerCase(),

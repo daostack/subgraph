@@ -22,6 +22,11 @@ function update(contract: Address, owner: Address): void {
     } else {
         store.remove('ReputationHolder', id);
     }
+
+    let repEnt = new Entity();
+    repEnt.setAddress('address', contract);
+    repEnt.setU256('totalSupply', rep.totalSupply());
+    store.set('Reputation', contract.toHex(), repEnt);
 }
 
 export function handleMint(event: Mint): void {

@@ -35,12 +35,8 @@ async function configure({ env, ...rest }) {
   );
 
   const subschemas = await new Promise((res, rej) => glob('src/**/*.graphql', (err, files) => err ? rej(err) : res(files)));
-  const partials = subschemas.reduce((acc, subschema) => ({...acc, [path.basename(subschema).replace(/\.[^/.]+$/, "")]: fs.readFileSync(subschema, 'utf-8')}), {})
-
-  const schema = handlebars.compile(
-    fs.readFileSync("schema.handlebars.graphql", "utf-8")
-  );
-  fs.writeFileSync("schema.graphql", schema(config, {partials}), "utf-8");
+  const schema = (config) => subschemas.map(subschema => handlebars.compile(fs.readFileSync(subschema, 'utf-8'))(config)).join('\n\n')
+  fs.writeFileSync("schema.graphql", schema(config), "utf-8");
 
   const subgraph = handlebars.compile(
     fs.readFileSync("subgraph.handlebars.yaml", "utf-8")

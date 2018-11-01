@@ -251,5 +251,5 @@ describe('UController', () => {
       controller: accounts[4].address.toLowerCase(),
     })
 
-  }, 10000)
+  }, 20000)
 })

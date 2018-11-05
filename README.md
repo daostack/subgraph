@@ -8,6 +8,7 @@ DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 
 2. `npm install`
 3. `npm run configure:<development|mainnet>` - configure the project to use ganache or mainnet via infura.
+4. `docker-compose build` - to rebuild docker image
 
 All npm scripts can be called within a container using `docker-compose` with all dependencies and services set up:
 

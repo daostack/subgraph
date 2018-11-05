@@ -12,7 +12,7 @@ DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 
 All npm scripts can be called within a container using `docker-compose` with all dependencies and services set up:
 
-`docker-compose run -v $(pwd):/usr/app -v /usr/app/node_modules subgraph <command>`
+`docker-compose run --rm -v $(pwd):/usr/app -v /usr/app/node_modules subgraph <command>`
 
 ## Commands
 
@@ -54,7 +54,7 @@ The following `.env` variables can be configured:
 
 In order to add support for a new contract follow these steps:
 
-1. Create a mapping file at `src/mappings/<contract name>.ts`.
+1. Create a mapping file at `src/mappings/<contract name>/<contract name>.ts`.
 2. Create a test file at `test/integration/<contract name>.spec.ts`.
 3. Configure the contract's mainnet address at `ops/config.yaml` under `addresses.<contract name>`.
 4. Add the contract to the migration script at the `migrate` function in `ops/index.js`.

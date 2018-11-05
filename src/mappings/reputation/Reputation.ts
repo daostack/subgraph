@@ -27,10 +27,10 @@ function update(contract: Address, owner: Address): void {
         store.remove('ReputationHolder', id);
     }
 
-    let repEnt = new ReputationContract();
-    repEnt.address  = contract;
-    repEnt.totalSupply =  rep.totalSupply();
-    store.set('ReputationContract', contract.toHex(), repEnt);
+    let reputationContract = new ReputationContract();
+    reputationContract.address  = contract;
+    reputationContract.totalSupply =  rep.totalSupply();
+    store.set('ReputationContract', contract.toHex(), reputationContract);
 }
 
 export function handleMint(event: Mint): void {
@@ -49,7 +49,7 @@ export function handleMint(event: Mint): void {
 }
 
 export function handleBurn(event: Burn): void {
-    update(event.address, event.params._from);
+    update(event.address, event.params._from as Address);
 
     let ent = new ReputationBurn();
     // TODO: txHash is not unique

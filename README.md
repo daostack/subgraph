@@ -24,7 +24,7 @@ All npm scripts can be called within a container using `docker-compose` with all
 6. `deploy` - deploy subgraph.
 7. `deploy:watch` - redeploy on file change.
 
-Example: `docker-compose run -v $(pwd):/usr/app -v /usr/app/node_modules subgraph test` (run intergation tests)
+Example: `docker-compose run --rm -v $(pwd):/usr/app -v /usr/app/node_modules subgraph test` (run intergation tests)
 
 To stop all services: `docker-compose down`
 

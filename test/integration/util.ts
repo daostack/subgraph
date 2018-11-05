@@ -19,7 +19,7 @@ import * as HDWallet from "hdwallet-accounts";
 
 const { node_http, ethereum, test_mnemonic } = process.env;
 
-export async function query(q: string, maxDelay = 500) {
+export async function query(q: string, maxDelay = 3000) {
     await new Promise((res, rej) => setTimeout(res, maxDelay));
     const {
         data: { data }

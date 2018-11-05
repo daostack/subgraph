@@ -37,7 +37,6 @@ describe('Reputation', () => {
     await checkTotalSupply('200');
     txs.push(await reputation.methods.burn(accounts[0].address, '30').send());
     await checkTotalSupply('170');
-
     txs.push(await reputation.methods.mint(accounts[2].address, '300').send());
     await checkTotalSupply('470');
     txs.push(await reputation.methods.burn(accounts[1].address, '100').send());
@@ -125,5 +124,5 @@ describe('Reputation', () => {
       address: accounts[2].address.toLowerCase(),
       amount: '1'
     });
-  }, 10000)
+  }, 100000)
 })

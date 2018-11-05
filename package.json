@@ -68,6 +68,7 @@
         "tsConfig": "./test/tsconfig.json"
       }
     },
+    "testEnvironment": "node",
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)?$",
     "moduleFileExtensions": [
       "ts",

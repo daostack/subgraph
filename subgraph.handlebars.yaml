@@ -13,7 +13,7 @@ dataSources:
     kind: ethereum/events
     apiVersion: 0.0.1
     language: wasm/assemblyscript
-    file: ./src/mappings/UController
+    file: ./src/mappings/uController/UController.ts
     entities:
     - UControllerOrganization
     - UControllerScheme
@@ -37,3 +37,25 @@ dataSources:
       handler: handleAddGlobalConstraint
     - event: RemoveGlobalConstraint(address, uint256, bool, address)
       handler: handleRemoveGlobalConstraint
+- kind: ethereum/contract
+  name: Reputation
+  source:
+    address: "{{addresses.Reputation}}"
+    abi: Reputation
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    file: ./src/mappings/reputation/Reputation.ts
+    entities:
+    - ReputationHolder
+    - ReputationMint
+    - ReputationBurn
+    abis:
+    - name: Reputation
+      file: ./abis/Reputation.json
+    eventHandlers:
+    - event: Mint(address, uint256)
+      handler: handleMint
+    - event: Burn(address, uint256)
+      handler: handleBurn

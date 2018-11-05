@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 require("dotenv").config();
 process.env = {
     ethereum: "http://127.0.0.1:8545",
@@ -12,10 +15,11 @@ import adapter from 'axios/lib/adapters/http';
 import * as Web3 from "web3";
 import * as HDWallet from "hdwallet-accounts";
 
+
+
 const { node_http, ethereum, test_mnemonic } = process.env;
 
 export async function query(q: string, maxDelay = 500) {
-    console.log(123)
     await new Promise((res, rej) => setTimeout(res, maxDelay));
     const {
         data: { data }

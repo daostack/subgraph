@@ -32,9 +32,9 @@ To stop all services: `docker-compose down`
 
 After running a command with docker-compose, the following endpoints will be exposed on your local machine:
 
-- `http://localhost:8000/daostack` - GraphiQL graphical user interface.
-- `http://localhost:8000/daostack/graphql` - GraphQL api endpoint.
-- `http://localhost:8001/daostack` - graph-node's websockets endpoint
+- `http://localhost:8000/by-name/daostack` - GraphiQL graphical user interface.
+- `http://localhost:8000/by-name/daostack/graphql` - GraphQL api endpoint.
+- `http://localhost:8001/by-name/daostack` - graph-node's websockets endpoint
 - `http://localhost:8020` - graph-node's RPC endpoint
 - `http://localhost:5001` - ipfs endpoint.
 - (if using development) `http://localhost:8545` - ganache RPC endpoint.

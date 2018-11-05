@@ -8,6 +8,7 @@ process.env = {
 };
 
 import axios from "axios";
+import adapter from 'axios/lib/adapters/http';
 import * as Web3 from "web3";
 import * as HDWallet from "hdwallet-accounts";
 
@@ -18,7 +19,7 @@ export async function query(q: string, maxDelay = 500) {
     const {
         data: { data }
     } = await axios.post(node_http, {
-        query: q
+        query: q , adapter
     });
 
     return data;

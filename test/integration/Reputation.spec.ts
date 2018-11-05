@@ -47,7 +47,6 @@ describe('Reputation', () => {
 
 
     txs = txs.map(({ transactionHash }) => transactionHash);
-    console.log(2);
 
     const { reputationHolders } = await query(`{
       reputationHolders {

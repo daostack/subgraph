@@ -15,13 +15,13 @@ import * as HDWallet from "hdwallet-accounts";
 const { node_http, ethereum, test_mnemonic } = process.env;
 
 export async function query(q: string, maxDelay = 500) {
+    console.log(123)
     await new Promise((res, rej) => setTimeout(res, maxDelay));
     const {
         data: { data }
     } = await axios.post(node_http, {
-        query: q , adapter
-    });
-
+        query: q },
+        adapter);
     return data;
 }
 

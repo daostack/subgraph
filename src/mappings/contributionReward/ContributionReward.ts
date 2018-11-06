@@ -92,7 +92,7 @@ function insertNewProposal(event: NewContributionProposal): void {
     store.set('ContributionRewardProposal', ent.proposalId, ent);
 }
 
-function updateProposalafterRedemption(contributionRewardAddress: Address, proposalId: Bytes) {
+function updateProposalafterRedemption(contributionRewardAddress: Address, proposalId: Bytes): void {
     let ent = store.get('ContributionRewardProposal', proposalId.toHex()) as ContributionRewardProposal;
     if (ent != null) {
         let cr = ContributionReward.bind(contributionRewardAddress);

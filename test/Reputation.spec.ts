@@ -8,8 +8,7 @@ describe('Reputation', () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
     const opts = await getOptions(web3);
-    reputation = new web3.eth.Contract(Reputation.abi, addresses.Reputation, opts);
-
+    reputation = new web3.eth.Contract(Reputation.abi, addresses.Reputation[0], opts);
   });
 
   async function checkTotalSupply(value) {

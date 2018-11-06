@@ -30,8 +30,8 @@ install:
   - npm install
 
 script:
-  - sudo npm run docker:rebuild
-  - sudo npm run docker test
+  - npm run docker:rebuild
+  - npm run docker test
 
 after_script:
   - npm run docker:stop

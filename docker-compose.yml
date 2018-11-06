@@ -32,6 +32,7 @@ services:
       postgres_db: postgres
       ipfs: ipfs:5001
       ethereum: development:http://ganache:8545
+      GRAPH_LOG: debug
   ipfs:
     image: ipfs/go-ipfs
     ports:

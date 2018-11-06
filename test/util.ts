@@ -43,7 +43,7 @@ export async function getWeb3() {
 }
 
 export function getContractAddresses() {
-    return require("../../config.json");
+    return require("../config.json");
 }
 
 export async function getOptions(web3: Web3) {

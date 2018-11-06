@@ -1,7 +1,7 @@
 import 'allocator/arena'
 export { allocate_memory }
 
-import { Entity, Address, Value, store, crypto, ByteArray, BigInt, Bytes } from '@graphprotocol/graph-ts'
+import { Address, store, BigInt, Bytes } from '@graphprotocol/graph-ts'
 
 // Import event types from the Reputation contract ABI
 import {
@@ -84,11 +84,11 @@ function insertNewProposal(event: NewContributionProposal): void {
     ent.externalToken = event.params._externalToken;
     ent.votingMachine = event.params._intVoteInterface;
     ent.reputationReward = event.params._reputationChange;
-    ent.nativeTokenReward = event.params._rewards[0]; // native tokens
-    ent.ethReward = event.params._rewards[1]; // eth
-    ent.externalTokenReward = event.params._rewards[2]; // external tokens
-    ent.periodLength = event.params._rewards[3]; // period length
-    ent.periods = event.params._rewards[4]; // number of periods
+    ent.nativeTokenReward = event.params._rewards.shift(); // native tokens
+    ent.ethReward = event.params._rewards.shift(); // eth
+    ent.externalTokenReward = event.params._rewards.shift(); // external tokens
+    ent.periodLength = event.params._rewards.shift(); // period length
+    ent.periods = event.params._rewards.shift(); // number of periods
     store.set('ContributionRewardProposal', ent.proposalId, ent);
 }
 
@@ -96,10 +96,10 @@ function updateProposalafterRedemption(contributionRewardAddress: Address, propo
     let ent = store.get('ContributionRewardProposal', proposalId.toHex()) as ContributionRewardProposal;
     if (ent != null) {
         let cr = ContributionReward.bind(contributionRewardAddress);
-        ent.alreadyRedeemedReputationPeriods = cr.getRedeemedPeriods(proposalId, ent.avatar, BigInt.fromI32(0))
-        ent.alreadyRedeemedNativeTokenPeriods = cr.getRedeemedPeriods(proposalId, ent.avatar, BigInt.fromI32(1))
-        ent.alreadyRedeemedEthPeriods = cr.getRedeemedPeriods(proposalId, ent.avatar, BigInt.fromI32(2))
-        ent.alreadyRedeemedExternalTokenPeriods = cr.getRedeemedPeriods(proposalId, ent.avatar, BigInt.fromI32(3))
+        ent.alreadyRedeemedReputationPeriods = cr.getRedeemedPeriods(proposalId, Address.fromString(ent.avatar.toHex()), BigInt.fromI32(0))
+        ent.alreadyRedeemedNativeTokenPeriods = cr.getRedeemedPeriods(proposalId, Address.fromString(ent.avatar.toHex()), BigInt.fromI32(1))
+        ent.alreadyRedeemedEthPeriods = cr.getRedeemedPeriods(proposalId, Address.fromString(ent.avatar.toHex()), BigInt.fromI32(2))
+        ent.alreadyRedeemedExternalTokenPeriods = cr.getRedeemedPeriods(proposalId, Address.fromString(ent.avatar.toHex()), BigInt.fromI32(3))
     }
 }
 
@@ -117,7 +117,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
     ent.txHash = event.transaction.hash.toHex();
     ent.contract = event.address;
     ent.avatar = event.params._avatar;
-    ent.paramsHash = event.params._param;
+    ent.paramsHash = event.params._param as Bytes;
     ent.proposalId = event.params._proposalId;
     store.set('ContributionRewardProposalExecuted', ent.txHash, ent);
 }
@@ -134,11 +134,11 @@ export function handleNewContributionProposal(event: NewContributionProposal): v
     ent.votingMachine = event.params._intVoteInterface;
     ent.proposalId = event.params._proposalId;
     ent.reputationReward = event.params._reputationChange;
-    ent.nativeTokenReward = event.params._rewards[0]; // native tokens
-    ent.ethReward = event.params._rewards[1]; // eth
-    ent.externalTokenReward = event.params._rewards[2]; // external tokens
-    ent.periodLength = event.params._rewards[3]; // period length
-    ent.periods = event.params._rewards[4]; // number of periods
+    ent.nativeTokenReward = event.params._rewards.shift(); // native tokens
+    ent.ethReward = event.params._rewards.shift(); // eth
+    ent.externalTokenReward = event.params._rewards.shift(); // external tokens
+    ent.periodLength = event.params._rewards.shift(); // period length
+    ent.periods = event.params._rewards.shift(); // number of periods
     store.set('ContributionRewardNewContributionProposal', ent.txHash, ent);
 }
 

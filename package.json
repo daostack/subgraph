@@ -22,7 +22,7 @@
     "docker": "docker-compose run --rm -v $(pwd):/usr/app -v /usr/app/node_modules subgraph \"$@\"",
     "docker:stop": "docker-compose down -v",
     "docker:rebuild": "docker-compose build",
-    "docker:logs": "docker-compose logs"
+    "docker:logs": "docker-compose logs --follow"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

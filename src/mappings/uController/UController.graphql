@@ -1,7 +1,7 @@
 type UControllerOrganization @entity {
     avatarAddress: ID!
     nativeToken: Bytes!
-    nativeReputation: Bytes!
+    nativeReputation: ReputationContract!
     controller: Bytes!
 }
 

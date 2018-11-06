@@ -34,7 +34,7 @@ function insertOrganization(uControllerAddress: Address, avatarAddress: Address)
     let ent = new UControllerOrganization();
     ent.avatarAddress = avatarAddress.toHex();
     ent.nativeToken = org.value0;
-    ent.nativeReputation = org.value1;
+    ent.nativeReputation = org.value1.toHex();
     ent.controller = uControllerAddress;
 
     store.set('UControllerOrganization', avatarAddress.toHex(), ent);

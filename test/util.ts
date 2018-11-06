@@ -20,7 +20,8 @@ export async function query(q: string, maxDelay = 1000) {
     const {
         data: { data }
     } = await axios.post(node_http, {
-        query: q });
+        query: q
+    });
     return data;
 }
 
@@ -42,7 +43,7 @@ export async function getWeb3() {
 }
 
 export function getContractAddresses() {
-    return require("../../config.json").addresses;
+    return require("../../config.json");
 }
 
 export async function getOptions(web3: Web3) {

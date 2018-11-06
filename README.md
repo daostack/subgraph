@@ -4,11 +4,8 @@ DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 
 ## Getting started
 
-1 `git clone https://github.com/daostack/subgraph.git && cd subgraph`
-
+1. `git clone https://github.com/daostack/subgraph.git && cd subgraph`
 2. `npm install`
-3. `npm run configure:<development|mainnet>` - configure the project to use ganache or mainnet (requires `.env` [configuration](#configuration)) via infura.
-4. `npm run codegen` - automatically generate abi and AssemblyScript type definitions required by the project.
 
 All npm scripts can be called within a container using `docker-compose` with all dependencies and services set up:
 
@@ -16,13 +13,11 @@ All npm scripts can be called within a container using `docker-compose` with all
 
 ## Commands
 
-1. `configure:mainnet` - configure the project to run against mainnet.
-2. `configure:development` - configure the project to run against ganache.
-3. `migrate:development` - migrate contracts to ganache and update project configuration.
-4. `codegen` - automatically generate abi & type definitions for required contracts.
-5. `test` - run integration tests.
-6. `deploy` - deploy subgraph.
-7. `deploy:watch` - redeploy on file change.
+1. `gen` - automatically generate abis, migrate contracts to ganache, generate config files for graph-node & type definitions for required contracts.
+2. `gen:watch` - run `npm run gen` on file change in `src/contracts`
+3. `test` - run integration tests.
+4. `deploy` - deploy subgraph.
+5. `deploy:watch` - redeploy on file change.
 
 Docker commands (requires installing [`docker`](https://docs.docker.com/v17.12/install/) and [`docker-compose`](https://docs.docker.com/compose/install/)): 
 
@@ -43,23 +38,15 @@ After running a command with docker-compose, the following endpoints will be exp
 - (if using development) `http://localhost:8545` - ganache RPC endpoint.
 - `http://localhost:5432` - postgresql connection endpoint.
 
-## Configuration
-
-This project automatically generates `.yaml` files used by `docker-compose` & `graph-node` based on configuration.
-Project configuration lives under: `ops/config.yaml` (public configration), `.env` (secret configuration).
-
-The following `.env` variables can be configured:
-
-- `daostack_mainnet__postgresPassword` - postgres password when running on mainnet (e.g `123`).
-- `daostack_mainnet__ethereumProvider` - mainnet web3 provider (e.g `https://mainnet.infura.io/v3/<api key>`)
-
 ## Add a new contract tracker
 
-In order to add support for a new contract follow these steps:
+In order to add support for a new contract:
 
-1. Create a mapping file at `src/mappings/<contract name>/<contract name>.ts`.
-2. Create a test file at `test/integration/<contract name>.spec.ts`.
-3. Configure the contract's mainnet address at `ops/config.yaml` under `addresses.<contract name>`.
-4. Add the contract to the migration script at the `migrate` function in `ops/index.js`.
-5. Add an additional datasource for the new contract at `subgraph.handlebars.yaml`, use `{{addresses.<contract name>}}` in place of the contract address.
-6. Add the appropriate grahpql schema for your mapping in `src/mappings/<contract name>.graphql` and register it at `schema.handlebars.graphql` by adding a `{{> <contract name>}}` line.
+1. Create a directory `src/contracts/<contract name>` ([example](./src/contracts/Reputation/)), that directory must include:
+    1. `datasource.yaml` - a simple yaml config file containing the `entities` and `eventHandlers` subsections of the subgraph definition for that contract as specified [here](https://github.com/graphprotocol/graph-node/blob/master/docs/subgraph-manifest.md#1521-ethereum-events-mapping). ([example](./src/contracts/Reputation/datasource.yaml))
+    2. `mapping.ts` - the AssemblyScript mapping file that defines the event handlers specified above. ([example](./src/contracts/Reputation/mapping.ts))
+    3. `migrate.js` - A node module that exports an async `migrate` function that migrates the contract to ganache and returns an array of contract addresses. ([example](./src/contracts/Reputation/migrate.ts))
+    4. `schema.graphql` - GraphQL schema file defining the entities described in `datasource.yaml`. ([example](./src/contracts/Reputation/schema.graphql.ts))
+2. Add tests for the contract at `test/<contract name>.spec.ts`.
+
+*Note: `<contract name>` must be a valid contract name that the [@daostack/arc](https://www.npmjs.com/package/@daostack/arc) package exposes under `build/contracts`.*

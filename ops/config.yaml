@@ -1,9 +1,0 @@
-common: &common
-  test_mnemonic: behave pipe turkey animal voyage dial relief menu blush match jeans general
-mainnet:
-  <<: *common
-  addresses:
-    Reputation: "0x13ad61aa8f695ce64711a51a6feccb48a275aaf8"
-development:
-  <<: *common
-  postgresPassword: "letmein"

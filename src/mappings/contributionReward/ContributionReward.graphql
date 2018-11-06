@@ -1,29 +1,60 @@
 type ContributionRewardRedeemReputation @entity {
-    txHash: Bytes!
+    txHash: ID!
     contract: Bytes!
+    avatar: Bytes!
+    beneficiary: Bytes!
+    proposalId: Bytes!
+    amount: BigInt!
 }
 
 type ContributionRewardRedeemNativeToken @entity {
-    txHash: Bytes!
+    txHash: ID!
     contract: Bytes!
+    avatar: Bytes!
+    beneficiary: Bytes!
+    proposalId: Bytes!
+    amount: BigInt!
 }
 
 type ContributionRewardRedeemExternalToken @entity {
-    txHash: Bytes!
+    txHash: ID!
     contract: Bytes!
+    avatar: Bytes!
+    beneficiary: Bytes!
+    proposalId: Bytes!
+    amount: BigInt!
 }
 
 type ContributionRewardRedeemEther @entity {
-    txHash: Bytes!
+    txHash: ID!
     contract: Bytes!
+    avatar: Bytes!
+    beneficiary: Bytes!
+    proposalId: Bytes!
+    amount: BigInt!
 }
 
 type ContributionRewardProposalExecuted @entity {
-    txHash: Bytes!
+    txHash: ID!
     contract: Bytes!
+    avatar: Bytes!
+    paramsHash: Bytes!
+    proposalId: Bytes!
 }
 
 type ContributionRewardNewContributionProposal @entity {
-    txHash: Bytes!
+    txHash: ID!
     contract: Bytes!
+    avatar: Bytes!
+    beneficiary: Bytes!
+    descriptionHash: Bytes!
+    externalToken: Bytes!
+    votingMachine: Bytes!
+    proposalId: Bytes!
+    reputationReward: BigInt!
+    nativeTokenReward: BigInt!
+    ethReward: BigInt!
+    externalTokenReward: BigInt!
+    periods: BigInt!
+    periodLength: BigInt!
 }

@@ -15,6 +15,7 @@ const HDWallet = require("hdwallet-accounts");
 const glob = require('glob')
 
 const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
+const ContributionReward = require("@daostack/arc/build/contracts/ContributionReward.json");
 
 async function configure({ env, ...rest }) {
   const { [env]: publicConfig } = yaml.safeLoad(
@@ -74,8 +75,15 @@ async function migrate(web3) {
     arguments: []
   }).send();
 
+  const CR = new web3.eth.Contract(ContributionReward.abi, undefined, opts);
+  const cr = await CR.deploy({
+    data: ContributionReward.bytecode,
+    arguments: []
+  }).send();
+
   const addresses = {
-    Reputation: rep.options.address
+    Reputation: rep.options.address,
+    ContributionReward: cr.options.address,
   };
 
   await configure({

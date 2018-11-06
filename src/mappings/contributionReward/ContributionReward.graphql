@@ -1,0 +1,29 @@
+type ContributionRewardRedeemReputation @entity {
+    txHash: Bytes!
+    contract: Bytes!
+}
+
+type ContributionRewardRedeemNativeToken @entity {
+    txHash: Bytes!
+    contract: Bytes!
+}
+
+type ContributionRewardRedeemExternalToken @entity {
+    txHash: Bytes!
+    contract: Bytes!
+}
+
+type ContributionRewardRedeemEther @entity {
+    txHash: Bytes!
+    contract: Bytes!
+}
+
+type ContributionRewardProposalExecuted @entity {
+    txHash: Bytes!
+    contract: Bytes!
+}
+
+type ContributionRewardNewContributionProposal @entity {
+    txHash: Bytes!
+    contract: Bytes!
+}

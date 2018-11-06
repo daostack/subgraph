@@ -1,9 +1,9 @@
-node_modules
-dist
+/node_modules
+/dist
 *.log
-subgraph.yaml
-config.json
-abis
-yarn.lock
-src/types
-schema.graphql
+/subgraph.yaml
+/config.json
+/abis
+/yarn.lock
+/src/types
+/schema.graphql

@@ -58,3 +58,24 @@ type ContributionRewardNewContributionProposal @entity {
     periods: BigInt!
     periodLength: BigInt!
 }
+
+type ContributionRewardProposal @entity {
+    proposalId: ID!
+    contract: Bytes!
+    avatar: Bytes!
+    beneficiary: Bytes!
+    descriptionHash: Bytes!
+    externalToken: Bytes!
+    votingMachine: Bytes!
+    reputationReward: BigInt!
+    nativeTokenReward: BigInt!
+    ethReward: BigInt!
+    externalTokenReward: BigInt!
+    periods: BigInt!
+    periodLength: BigInt!
+    executedAt: BigInt
+    alreadyRedeemedReputationPeriods: BigInt
+    alreadyRedeemedNativeTokenPeriods: BigInt
+    alreadyRedeemedEthPeriods: BigInt
+    alreadyRedeemedExternalTokenPeriods: BigInt
+}

@@ -27,7 +27,7 @@ import {
 import { equals } from '../../utils';
 
 export function handleRedeemReputation(event: RedeemReputation): void {
-    updateProposalafterRedemption(event.address, event.params._proposalId);
+    updateProposalafterRedemption(event.address, event.params._proposalId, 0);
     let ent = new ContributionRewardRedeemReputation();
     ent.txHash = event.transaction.hash.toHex();
     ent.contract = event.address;
@@ -39,7 +39,7 @@ export function handleRedeemReputation(event: RedeemReputation): void {
 }
 
 export function handleRedeemNativeToken(event: RedeemNativeToken): void {
-    updateProposalafterRedemption(event.address, event.params._proposalId);
+    updateProposalafterRedemption(event.address, event.params._proposalId, 1);
     let ent = new ContributionRewardRedeemNativeToken();
     ent.txHash = event.transaction.hash.toHex();
     ent.contract = event.address;
@@ -50,20 +50,8 @@ export function handleRedeemNativeToken(event: RedeemNativeToken): void {
     store.set('ContributionRewardRedeemNativeToken', ent.txHash, ent);
 }
 
-export function handleRedeemExternalToken(event: RedeemExternalToken): void {
-    updateProposalafterRedemption(event.address, event.params._proposalId);
-    let ent = new ContributionRewardRedeemExternalToken();
-    ent.txHash = event.transaction.hash.toHex();
-    ent.contract = event.address;
-    ent.amount = event.params._amount;
-    ent.avatar = event.params._avatar;
-    ent.beneficiary = event.params._beneficiary;
-    ent.proposalId = event.params._proposalId;
-    store.set('ContributionRewardRedeemExternalToken', ent.txHash, ent);
-}
-
 export function handleRedeemEther(event: RedeemEther): void {
-    updateProposalafterRedemption(event.address, event.params._proposalId);
+    updateProposalafterRedemption(event.address, event.params._proposalId, 2);
     let ent = new ContributionRewardRedeemEther();
     ent.txHash = event.transaction.hash.toHex();
     ent.contract = event.address;
@@ -74,8 +62,19 @@ export function handleRedeemEther(event: RedeemEther): void {
     store.set('ContributionRewardRedeemEther', ent.txHash, ent);
 }
 
+export function handleRedeemExternalToken(event: RedeemExternalToken): void {
+    updateProposalafterRedemption(event.address, event.params._proposalId, 3);
+    let ent = new ContributionRewardRedeemExternalToken();
+    ent.txHash = event.transaction.hash.toHex();
+    ent.contract = event.address;
+    ent.amount = event.params._amount;
+    ent.avatar = event.params._avatar;
+    ent.beneficiary = event.params._beneficiary;
+    ent.proposalId = event.params._proposalId;
+    store.set('ContributionRewardRedeemExternalToken', ent.txHash, ent);
+}
+
 function insertNewProposal(event: NewContributionProposal): void {
-    updateProposalafterRedemption(event.address, event.params._proposalId);
     let ent = new ContributionRewardProposal();
     ent.proposalId = event.params._proposalId.toHex();
     ent.contract = event.address;
@@ -94,14 +93,20 @@ function insertNewProposal(event: NewContributionProposal): void {
     store.set('ContributionRewardProposal', ent.proposalId, ent);
 }
 
-function updateProposalafterRedemption(contributionRewardAddress: Address, proposalId: Bytes): void {
+function updateProposalafterRedemption(contributionRewardAddress: Address, proposalId: Bytes, type: number): void {
     let ent = store.get('ContributionRewardProposal', proposalId.toHex()) as ContributionRewardProposal;
     if (ent != null) {
         let cr = ContributionReward.bind(contributionRewardAddress);
-        ent.alreadyRedeemedReputationPeriods = cr.getRedeemedPeriods(proposalId, Address.fromString(ent.avatar.toHex()), BigInt.fromI32(0))
-        ent.alreadyRedeemedNativeTokenPeriods = cr.getRedeemedPeriods(proposalId, Address.fromString(ent.avatar.toHex()), BigInt.fromI32(1))
-        ent.alreadyRedeemedEthPeriods = cr.getRedeemedPeriods(proposalId, Address.fromString(ent.avatar.toHex()), BigInt.fromI32(2))
-        ent.alreadyRedeemedExternalTokenPeriods = cr.getRedeemedPeriods(proposalId, Address.fromString(ent.avatar.toHex()), BigInt.fromI32(3))
+        if (type == 0) {
+            ent.alreadyRedeemedReputationPeriods = cr.getRedeemedPeriods(proposalId, ent.avatar as Address, BigInt.fromI32(0));
+        } else if (type == 1) {
+            ent.alreadyRedeemedNativeTokenPeriods = cr.getRedeemedPeriods(proposalId, ent.avatar as Address, BigInt.fromI32(1))
+        } else if (type == 2) {
+            ent.alreadyRedeemedEthPeriods = cr.getRedeemedPeriods(proposalId, ent.avatar as Address, BigInt.fromI32(2))
+        } else if (type == 3) {
+            ent.alreadyRedeemedExternalTokenPeriods = cr.getRedeemedPeriods(proposalId, ent.avatar as Address, BigInt.fromI32(3));
+        }
+        store.set('ContributionRewardProposal', proposalId.toHex(), ent)
     }
 }
 

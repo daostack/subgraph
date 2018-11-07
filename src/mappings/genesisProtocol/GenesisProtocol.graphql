@@ -1,0 +1,49 @@
+type Proposal @entity {
+  proposalId: ID!
+  submittedTime: BigInt!
+  proposer: Bytes!
+  daoAvatarAddress: Bytes!
+  numOfChoices: BigInt
+  state: Int
+  decision: BigInt
+  executionTime: BigInt
+  totalReputation: BigInt
+}
+
+type Vote @entity {
+  avatarAddress: Bytes!
+  voterAddress: Bytes!
+  reputation: BigInt!
+  voteOption: BigInt!
+  proposalId: Proposal!
+}
+
+type GPStake @entity {
+  avatarAddress: Bytes!
+  stakerAddress: Bytes!
+  prediction: BigInt!
+  stakeAmount: BigInt!
+  proposalId: Proposal!
+}
+
+type Redemption @entity {
+  rewardId: Reward!
+  proposalId: ID!
+  redeemer: Bytes!
+}
+
+type Reward @entity {
+  id: ID!
+  type: RewardType
+  amount: BigInt!
+}
+
+enum RewardType @entity {
+  beneficiaryEth
+  beneficiaryNativeToken
+  beneficiaryReputation
+  beneficiaryExternalToken
+  gpRep
+  gpGen
+  gpBounty
+}

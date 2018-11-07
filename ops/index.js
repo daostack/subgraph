@@ -12,8 +12,9 @@ const handlebars = require("handlebars");
 const yaml = require("js-yaml");
 const Web3 = require("web3");
 const HDWallet = require("hdwallet-accounts");
-const glob = require('glob')
+const glob = require("glob");
 
+const GenesisProtocol = require("@daostack/arc/build/contracts/GenesisProtocol.json");
 const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
 
 async function configure({ env, ...rest }) {
@@ -34,8 +35,15 @@ async function configure({ env, ...rest }) {
     "utf-8"
   );
 
-  const subschemas = await new Promise((res, rej) => glob('src/**/*.graphql', (err, files) => err ? rej(err) : res(files)));
-  const schema = (config) => subschemas.map(subschema => handlebars.compile(fs.readFileSync(subschema, 'utf-8'))(config)).join('\n\n')
+  const subschemas = await new Promise((res, rej) =>
+    glob("src/**/*.graphql", (err, files) => (err ? rej(err) : res(files)))
+  );
+  const schema = config =>
+    subschemas
+      .map(subschema =>
+        handlebars.compile(fs.readFileSync(subschema, "utf-8"))(config)
+      )
+      .join("\n\n");
   fs.writeFileSync("schema.graphql", schema(config), "utf-8");
 
   const subgraph = handlebars.compile(
@@ -68,6 +76,12 @@ async function migrate(web3) {
     gas: (await web3.eth.getBlock("latest")).gasLimit - 100000
   };
 
+  const GP = new web3.eth.Contract(GenesisProtocol.abi, undefined, opts);
+  const gp = await GP.deploy({
+    data: GenesisProtocol.bytecode,
+    arguments: []
+  }).send();
+
   const Rep = new web3.eth.Contract(Reputation.abi, undefined, opts);
   const rep = await Rep.deploy({
     data: Reputation.bytecode,
@@ -75,6 +89,7 @@ async function migrate(web3) {
   }).send();
 
   const addresses = {
+    GenesisProtocol: gp.options.address,
     Reputation: rep.options.address
   };
 

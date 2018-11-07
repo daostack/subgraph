@@ -7,12 +7,12 @@ DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 1 `git clone https://github.com/daostack/subgraph.git && cd subgraph`
 
 2. `npm install`
-3. `npm run configure:<development|mainnet>` - configure the project to use ganache or mainnet via infura.
-4. `docker-compose build` - to rebuild docker changes after adding/removing packages
+3. `npm run configure:<development|mainnet>` - configure the project to use ganache or mainnet (requires `.env` [configuration](#configuration)) via infura.
+4. `npm run codegen` - automatically generate abi and AssemblyScript type definitions required by the project.
 
 All npm scripts can be called within a container using `docker-compose` with all dependencies and services set up:
 
-`docker-compose run --rm -v $(pwd):/usr/app -v /usr/app/node_modules subgraph <command>`
+`npm run docker <command>`
 
 ## Commands
 
@@ -24,9 +24,12 @@ All npm scripts can be called within a container using `docker-compose` with all
 6. `deploy` - deploy subgraph.
 7. `deploy:watch` - redeploy on file change.
 
-Example: `docker-compose run --rm -v $(pwd):/usr/app -v /usr/app/node_modules subgraph test` (run intergation tests)
+Docker commands (requires installing [`docker`](https://docs.docker.com/v17.12/install/) and [`docker-compose`](https://docs.docker.com/compose/install/)): 
 
-To stop all services: `docker-compose down`
+1. `docker <command>` - start a command running inside the docker container. Example: `npm run docker test` (run intergation tests).
+2. `docker:stop` - stop all running docker services.
+3.  `docker:rebuild <command>` - rebuild the docker container after changes to `package.json`.
+4.  `docker:logs <subgraph|graph-node|ganache|ipfs|postgres>` - display logs from a running docker service. 
 
 ## Exposed endpoints
 

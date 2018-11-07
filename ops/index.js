@@ -15,6 +15,7 @@ const HDWallet = require("hdwallet-accounts");
 const glob = require("glob");
 
 const GenesisProtocol = require("@daostack/arc/build/contracts/GenesisProtocol.json");
+const UController = require("@daostack/arc/build/contracts/UController.json");
 const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
 
 async function configure({ env, ...rest }) {
@@ -38,6 +39,17 @@ async function configure({ env, ...rest }) {
   const subschemas = await new Promise((res, rej) =>
     glob("src/**/*.graphql", (err, files) => (err ? rej(err) : res(files)))
   );
+  const partials = subschemas.reduce(
+    (acc, subschema) => ({
+      ...acc,
+      [path.basename(subschema).replace(/\.[^/.]+$/, "")]: fs.readFileSync(
+        subschema,
+        "utf-8"
+      )
+    }),
+    {}
+  );
+
   const schema = config =>
     subschemas
       .map(subschema =>
@@ -82,6 +94,11 @@ async function migrate(web3) {
     arguments: []
   }).send();
 
+  const UC = new web3.eth.Contract(UController.abi, undefined, opts);
+  const uc = await UC.deploy({
+    data: UController.bytecode,
+    arguments: []
+  }).send();
   const Rep = new web3.eth.Contract(Reputation.abi, undefined, opts);
   const rep = await Rep.deploy({
     data: Reputation.bytecode,
@@ -90,6 +107,7 @@ async function migrate(web3) {
 
   const addresses = {
     GenesisProtocol: gp.options.address,
+    UController: uc.options.address,
     Reputation: rep.options.address
   };
 

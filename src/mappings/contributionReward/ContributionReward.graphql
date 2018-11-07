@@ -34,12 +34,12 @@ type ContributionRewardRedeemEther @entity {
     amount: BigInt!
 }
 
-type ContributionRewardProposalExecuted @entity {
+type ContributionRewardProposalResolved @entity {
     txHash: ID!
     contract: Bytes!
     avatar: Bytes!
-    paramsHash: Bytes!
     proposalId: Bytes!
+    passed: Boolean
 }
 
 type ContributionRewardNewContributionProposal @entity {

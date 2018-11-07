@@ -17,13 +17,14 @@ import {
 // Import entity types generated from the GraphQL schema
 import {
     ContributionRewardNewContributionProposal,
-    ContributionRewardProposalExecuted,
+    ContributionRewardProposalResolved,
     ContributionRewardRedeemReputation,
     ContributionRewardRedeemEther,
     ContributionRewardRedeemExternalToken,
     ContributionRewardRedeemNativeToken,
     ContributionRewardProposal,
 } from '../../types/schema';
+import { equals } from '../../utils';
 
 export function handleRedeemReputation(event: RedeemReputation): void {
     updateProposalafterRedemption(event.address, event.params._proposalId);
@@ -84,11 +85,12 @@ function insertNewProposal(event: NewContributionProposal): void {
     ent.externalToken = event.params._externalToken;
     ent.votingMachine = event.params._intVoteInterface;
     ent.reputationReward = event.params._reputationChange;
-    ent.nativeTokenReward = event.params._rewards.shift(); // native tokens
-    ent.ethReward = event.params._rewards.shift(); // eth
-    ent.externalTokenReward = event.params._rewards.shift(); // external tokens
-    ent.periodLength = event.params._rewards.shift(); // period length
-    ent.periods = event.params._rewards.shift(); // number of periods
+    let rewards = event.params._rewards;
+    ent.nativeTokenReward = rewards.shift(); // native tokens
+    ent.ethReward = rewards.shift(); // eth
+    ent.externalTokenReward = rewards.shift(); // external tokens
+    ent.periodLength = rewards.shift(); // period length
+    ent.periods = rewards.shift(); // number of periods
     store.set('ContributionRewardProposal', ent.proposalId, ent);
 }
 
@@ -113,13 +115,13 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
         store.set('ContributionRewardProposal', proposalId.toHex(), proposalEnt);
     }
 
-    let ent = new ContributionRewardProposalExecuted();
+    let ent = new ContributionRewardProposalResolved();
     ent.txHash = event.transaction.hash.toHex();
     ent.contract = event.address;
     ent.avatar = event.params._avatar;
-    ent.paramsHash = event.params._param as Bytes;
+    ent.passed = equals(event.params._param, BigInt.fromI32(1));
     ent.proposalId = event.params._proposalId;
-    store.set('ContributionRewardProposalExecuted', ent.txHash, ent);
+    store.set('ContributionRewardProposalResolved', ent.txHash, ent);
 }
 
 export function handleNewContributionProposal(event: NewContributionProposal): void {
@@ -134,11 +136,12 @@ export function handleNewContributionProposal(event: NewContributionProposal): v
     ent.votingMachine = event.params._intVoteInterface;
     ent.proposalId = event.params._proposalId;
     ent.reputationReward = event.params._reputationChange;
-    ent.nativeTokenReward = event.params._rewards.shift(); // native tokens
-    ent.ethReward = event.params._rewards.shift(); // eth
-    ent.externalTokenReward = event.params._rewards.shift(); // external tokens
-    ent.periodLength = event.params._rewards.shift(); // period length
-    ent.periods = event.params._rewards.shift(); // number of periods
+    let rewards = event.params._rewards;
+    ent.nativeTokenReward = rewards.shift(); // native tokens
+    ent.ethReward = rewards.shift(); // eth
+    ent.externalTokenReward = rewards.shift(); // external tokens
+    ent.periodLength = rewards.shift(); // period length
+    ent.periods = rewards.shift(); // number of periods
     store.set('ContributionRewardNewContributionProposal', ent.txHash, ent);
 }
 

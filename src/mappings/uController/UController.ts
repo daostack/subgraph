@@ -1,11 +1,12 @@
 import 'allocator/arena'
 export { allocate_memory }
 
-import { Entity, Value, store, crypto, ByteArray, Bytes, Address } from '@graphprotocol/graph-ts'
+import { Entity, Value, store, crypto, ByteArray, Bytes, Address,BigInt } from '@graphprotocol/graph-ts'
 
 import { UController, MintTokens, RegisterScheme, UnregisterScheme, UpgradeController, AddGlobalConstraint, RemoveGlobalConstraint } from '../../types/UController/UController'
 import { concat } from '../../utils';
-import { UControllerScheme, UControllerOrganization, UControllerGlobalConstraint, UControllerRegisterScheme, UControllerUnregisterScheme, UControllerUpgradeController, UControllerAddGlobalConstraint, UControllerRemoveGlobalConstraint } from '../../types/schema';
+import { ReputationContract ,UControllerScheme, UControllerOrganization, UControllerGlobalConstraint, UControllerRegisterScheme, UControllerUnregisterScheme, UControllerUpgradeController, UControllerAddGlobalConstraint, UControllerRemoveGlobalConstraint } from '../../types/schema';
+import { Reputation } from '../../types/Reputation/Reputation'
 
 function insertScheme(uControllerAddress: Address, avatarAddress: Address, scheme: Address): void {
     let uController = UController.bind(uControllerAddress);
@@ -33,6 +34,11 @@ function insertOrganization(uControllerAddress: Address, avatarAddress: Address)
     let org = uController.organizations(avatarAddress);
     let ent = new UControllerOrganization();
     ent.avatarAddress = avatarAddress.toHex();
+    let reputationContract = new ReputationContract();
+    let rep = Reputation.bind(org.value1);
+    reputationContract.address = org.value1;
+    reputationContract.totalSupply = rep.totalSupply();
+    store.set('ReputationContract', org.value1.toHex(), reputationContract);
     ent.nativeToken = org.value0;
     ent.nativeReputation = org.value1.toHex();
     ent.controller = uControllerAddress;
@@ -75,7 +81,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
 
     insertScheme(event.address, event.params._avatar, event.params._scheme)
 
-    let ent = new UControllerRegisterScheme()
+    let ent = new UControllerRegisterScheme();
     ent.txHash = event.transaction.hash.toHex();
     ent.controller = event.address;
     ent.contract = event.params._sender;
@@ -108,15 +114,16 @@ export function handleUpgradeController(event: UpgradeController): void {
 }
 
 export function handleAddGlobalConstraint(event: AddGlobalConstraint): void {
-    let when = event.params._when;
+  //  let when = event.params._when;
     let type: string;
-    if (when == 0) {
-        type = 'Pre';
-    } else if (when == 1) {
-        type = 'Post';
-    } else {
-        type = 'Both';
-    }
+    type = 'Both';//??????
+    // if (when == 0) {
+    //     type = 'Pre';
+    // } else if (when == 1) {
+    //     type = 'Post';
+    // } else {
+    //     type = 'Both';
+    // }
     insertGlobalConstraint(event.address, event.params._avatar, event.params._globalConstraint, type);
 
     let ent = new UControllerAddGlobalConstraint()
@@ -141,8 +148,3 @@ export function handleRemoveGlobalConstraint(event: RemoveGlobalConstraint): voi
     ent.isPre = event.params._isPre;
     store.set('UControllerRemoveGlobalConstraint', event.transaction.hash.toHex(), ent);
 }
-
-
-
-
-

@@ -26,6 +26,8 @@ dataSources:
     abis:
     - name: UController
       file: ./abis/UController.json
+    - name: Reputation
+      file: ./abis/Reputation.json
     eventHandlers:
     - event: RegisterScheme(address, address, address)
       handler: handleRegisterScheme

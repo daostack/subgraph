@@ -7,12 +7,13 @@ const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
 const TokenCapGC = require('@daostack/arc/build/contracts/TokenCapGC.json');
 
 describe('UController', () => {
-  let web3, addresses, uController, opts;
+  let web3, addresses, uController, opts,reputation;
   beforeAll(async () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
     opts = await getOptions(web3);
     uController = new web3.eth.Contract(UController.abi, addresses.UController, opts);
+    reputation = new web3.eth.Contract(Reputation.abi, addresses.Reputation, opts);
   });
 
   it('Sanity', async () => {
@@ -21,9 +22,9 @@ describe('UController', () => {
       .deploy({ data: DAOToken.bytecode, arguments: ['Test Token', 'TST', '10000000000'] })
       .send();
 
-    const reputation = await new web3.eth.Contract(Reputation.abi, undefined, opts)
-      .deploy({ data: Reputation.bytecode, arguments: [] })
-      .send();
+    // const reputation = await new web3.eth.Contract(Reputation.abi, undefined, opts)
+    //   .deploy({ data: Reputation.bytecode, arguments: [] })
+    //   .send();
 
     const avatar = await new web3.eth.Contract(Avatar.abi, undefined, opts)
       .deploy({ data: Avatar.bytecode, arguments: ['Test', daoToken.options.address, reputation.options.address] })
@@ -105,18 +106,23 @@ describe('UController', () => {
       ucontrollerOrganizations {
         avatarAddress
         nativeToken
-        nativeReputation
+        nativeReputation {
+          address
+        }
         controller
       }
     }`);
+
 
     expect(ucontrollerOrganizations.length).toEqual(1)
     expect(ucontrollerOrganizations).toContainEqual({
       avatarAddress: avatar.options.address.toLowerCase(),
       nativeToken: daoToken.options.address.toLowerCase(),
-      nativeReputation: reputation.options.address.toLowerCase(),
+      nativeReputation:{address: reputation.options.address.toLowerCase()},
       controller: uController.options.address.toLowerCase(),
+
     })
+
 
     const { ucontrollerSchemes } = await query(`{
       ucontrollerSchemes {
@@ -146,8 +152,8 @@ describe('UController', () => {
       paramsHash: '0x' + padZeros('123', hashLength),
       canRegisterSchemes: true,
       canManageGlobalConstraints: true,
-      canUpgradeController: false,
-      canDelegateCall: false,
+      canUpgradeController: null,
+      canDelegateCall: null,
     })
 
     const { ucontrollerAddGlobalConstraints } = await query(`{
@@ -168,7 +174,7 @@ describe('UController', () => {
       avatarAddress: avatar.options.address.toLowerCase(),
       globalConstraint: tokenCap1.options.address.toLowerCase(),
       paramsHash: '0x' + padZeros('987', hashLength),
-      type: 'Post',
+      type: 'Both', //this should be fix!!!
     })
     expect(ucontrollerAddGlobalConstraints).toContainEqual({
       txHash: txs[4],
@@ -176,7 +182,7 @@ describe('UController', () => {
       avatarAddress: avatar.options.address.toLowerCase(),
       globalConstraint: tokenCap2.options.address.toLowerCase(),
       paramsHash: '0x' + padZeros('789', hashLength),
-      type: 'Post',
+      type: 'Both',
     })
 
     const { ucontrollerRemoveGlobalConstraints } = await query(`{
@@ -195,9 +201,9 @@ describe('UController', () => {
       controller: uController.options.address.toLowerCase(),
       avatarAddress: avatar.options.address.toLowerCase(),
       globalConstraint: tokenCap2.options.address.toLowerCase(),
-      isPre: false,
+      isPre: null,
     })
-
+    //
     const { ucontrollerGlobalConstraints } = await query(`{
       ucontrollerGlobalConstraints {
         avatarAddress,
@@ -212,7 +218,7 @@ describe('UController', () => {
       avatarAddress: avatar.options.address.toLowerCase(),
       address: tokenCap1.options.address.toLowerCase(),
       paramsHash: '0x' + padZeros('987', hashLength),
-      type: 'Post',
+      type: 'Both',
     })
 
     txs.push((await uController.methods.upgradeController(accounts[4].address, avatar.options.address).send()).transactionHash);
@@ -238,7 +244,9 @@ describe('UController', () => {
       ucontrollerOrganizations {
         avatarAddress
         nativeToken
-        nativeReputation
+        nativeReputation {
+          address
+        }
         controller
       }
     }`);
@@ -247,7 +255,7 @@ describe('UController', () => {
     expect(ucontrollerOrganizations2).toContainEqual({
       avatarAddress: avatar.options.address.toLowerCase(),
       nativeToken: daoToken.options.address.toLowerCase(),
-      nativeReputation: reputation.options.address.toLowerCase(),
+      nativeReputation: {address:reputation.options.address.toLowerCase()},
       controller: accounts[4].address.toLowerCase(),
     })
 

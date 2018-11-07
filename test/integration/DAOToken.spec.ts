@@ -3,7 +3,7 @@ import { getWeb3, getContractAddresses, getOptions, query, nullParamsHash, padZe
 const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
 
 
-describe('UController', () => {
+describe('DAOToken', () => {
   let web3, addresses, daotoken, opts;
   beforeAll(async () => {
     web3 = await getWeb3();

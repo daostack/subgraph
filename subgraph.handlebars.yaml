@@ -5,6 +5,41 @@ schema:
   file: ./schema.graphql
 dataSources:
 - kind: ethereum/contract
+  name: UController
+  source:
+    address: "{{addresses.UController}}"
+    abi: UController
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    file: ./src/mappings/uController/UController.ts
+    entities:
+    - UControllerOrganization
+    - UControllerScheme
+    - UControllerGlobalConstraint
+    - UControllerRegisterScheme
+    - UControllerUnregisterScheme
+    - UControllerUpgradeController
+    - UControllerAddGlobalConstraint
+    - UControllerRemoveGlobalConstraint
+    abis:
+    - name: UController
+      file: ./abis/UController.json
+    - name: Reputation
+      file: ./abis/Reputation.json
+    eventHandlers:
+    - event: RegisterScheme(address, address, address)
+      handler: handleRegisterScheme
+    - event: UnregisterScheme(address, address, address)
+      handler: handleUnregisterScheme
+    - event: UpgradeController(address, address, address)
+      handler: handleUpgradeController
+    - event: AddGlobalConstraint(address, bytes32, uint8, address)
+      handler: handleAddGlobalConstraint
+    - event: RemoveGlobalConstraint(address, uint256, bool, address)
+      handler: handleRemoveGlobalConstraint
+- kind: ethereum/contract
   name: Reputation
   source:
     address: "{{addresses.Reputation}}"
@@ -60,3 +95,37 @@ dataSources:
       handler: handleProposalExecuted
     - event: NewContributionProposal(address, bytes32, address, bytes32, int256, uint256[5], address, address)
       handler: handleNewContributionProposal
+      
+- kind: ethereum/contract
+  name: DAOToken
+  source:
+    address: "{{addresses.DAOToken}}"
+    abi: DAOToken
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    file: ./src/mappings/daotoken/DAOToken.ts
+    entities:
+    - TokenHolder
+    - TokenMint
+    - TokenMintFinished
+    - TokenTransfer
+    - TokenApproval
+    - TokenBurn
+    abis:
+    - name: DAOToken
+      file: ./abis/DAOToken.json
+    eventHandlers:
+    - event: Mint(address, uint256)
+      handler: handleMint
+    - event: Burn(address, uint256)
+      handler: handleBurn
+    - event: Approval(address, uint256)
+      handler: handleApproval
+    - event: MintFinished()
+      handler: handleMintFinished
+    - event: Transfer(address, address, uint256)
+      handler: handleTransfer
+    - event: OwnershipTransferred(address, address)
+      handler: handleOwnershipTransferred

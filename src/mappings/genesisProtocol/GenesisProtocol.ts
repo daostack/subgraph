@@ -2,8 +2,7 @@ import "allocator/arena";
 export { allocate_memory };
 
 import {
-  Entity,
-  Value,
+  BigInt,
   store,
   crypto,
   ByteArray,
@@ -22,7 +21,7 @@ import {
   VoteProposal
 } from "../../types/GenesisProtocol/GenesisProtocol";
 
-import { concat, updateRedemption, addition } from "../../utils";
+import { concat, addition } from "../../utils";
 
 import {
   Proposal,
@@ -145,4 +144,40 @@ export function handleRedeemReputation(event: RedeemReputation): void {
     rewardType as ByteArray,
     "gpRep"
   );
+}
+
+function updateRedemption(
+  beneficiary: Address,
+  avatar: Address,
+  amount: BigInt,
+  proposalId: Bytes,
+  rewardType: ByteArray,
+  rewardString: String
+): void {
+  let accountId = crypto.keccak256(concat(beneficiary, avatar));
+
+  let rewardId = crypto.keccak256(concat(rewardType, amount as ByteArray));
+
+  let uniqueId = crypto
+    .keccak256(concat(proposalId, concat(accountId, rewardId)))
+    .toHex();
+
+  let redemption = store.get("Redemption", uniqueId) as Redemption;
+  if (redemption == null) {
+    redemption = new Redemption();
+    redemption.redeemer = beneficiary;
+    redemption.proposalId = proposalId.toHex();
+    redemption.rewardId = rewardId.toHex();
+    store.set("Redemption", uniqueId, redemption);
+  }
+
+  let reward = store.get("Reward", rewardId.toHex()) as Reward;
+  if (reward == null) {
+    reward = new Reward();
+    reward.id = rewardId.toHex();
+    reward.type = rewardString.toString();
+    reward.amount = amount;
+
+    store.set("Reward", rewardId.toHex(), reward);
+  }
 }

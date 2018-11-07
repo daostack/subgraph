@@ -115,6 +115,7 @@ async function migrate(web3) {
   const addresses = {
     GenesisProtocol: gp.options.address,
     UController: uc.options.address,
+    DAOToken: daoToken.options.address,
     Reputation: rep.options.address
   };
 

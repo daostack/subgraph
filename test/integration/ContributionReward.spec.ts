@@ -312,7 +312,10 @@ describe('ContributionReward', () => {
             alreadyRedeemedExternalTokenPeriods: '2'
         });
 
-        // TODO: This is failing for some reason probably due to bug in ganache or graph-node
+        // TODO: This is failing for some reason probably due to bug in ganache or graph - node
+        // from graph-node logs: 
+        // Trying again after block polling failed: could not get block from Ethereum: Decoder error: Error("invalid type: null, expected a 0x-prefixed hex-encoded vector of bytes", line: 0, column: 0)
+
         // await web3.eth.sendTransaction({ from: accounts[0].address, to: avatar.options.address, value: 10, gas: 50000 });
 
         // const { transactionHash: redeemEtherTxHash } = await contributionReward.methods.redeemEther(proposalId, avatar.options.address).send();

@@ -58,7 +58,6 @@ describe('ContributionReward', () => {
         ).send();
         // END setup
 
-        let txs = [];
         const descHash = '0x0000000000000000000000000000000000000000000000000000000000000123';
         const rewards = {
             rep: 1,
@@ -234,6 +233,11 @@ describe('ContributionReward', () => {
             alreadyRedeemedEthPeriods: null,
             alreadyRedeemedExternalTokenPeriods: null
         });
+
+        // wait 2 periods
+        await new Promise(res => setTimeout(res, rewards.periodLength * 2 * 1000))
+        expect(await contributionReward.methods.getPeriodsToPay(proposalId, avatar.options.address, 0).call()).toEqual('2');
+        await contributionReward.methods.redeemReputation(proposalId, avatar.options.address).send();
 
     }, 100000)
 })

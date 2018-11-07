@@ -75,8 +75,8 @@ export function equals(a: BigInt, b: BigInt): boolean {
 }
 
 export function addition(a: BigInt, b: BigInt): BigInt {
-  let first = Number(a);
-  let second = Number(b);
+  let first = a.toI32();
+  let second = b.toI32();
   let total = first + second;
   return total as BigInt;
 }

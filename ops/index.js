@@ -103,7 +103,6 @@ async function migrate(web3) {
   const token = await Token.deploy({
     data: DAOToken.bytecode,
     arguments: ["TEST","TST",1000000000]
-  }).send();
 
   const addresses = {
     UController: uc.options.address,

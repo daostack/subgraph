@@ -14,7 +14,8 @@ const Web3 = require("web3");
 const HDWallet = require("hdwallet-accounts");
 const glob = require("glob");
 
-const GenesisProtocol = require("@daostack/arc/build/contracts/GenesisProtocol.json");
+const GenesisProtocol = require("@daostack/infra/build/contracts/GenesisProtocol.json");
+const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
 const UController = require("@daostack/arc/build/contracts/UController.json");
 const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
 
@@ -88,12 +89,6 @@ async function migrate(web3) {
     gas: (await web3.eth.getBlock("latest")).gasLimit - 100000
   };
 
-  const GP = new web3.eth.Contract(GenesisProtocol.abi, undefined, opts);
-  const gp = await GP.deploy({
-    data: GenesisProtocol.bytecode,
-    arguments: []
-  }).send();
-
   const UC = new web3.eth.Contract(UController.abi, undefined, opts);
   const uc = await UC.deploy({
     data: UController.bytecode,
@@ -103,6 +98,18 @@ async function migrate(web3) {
   const rep = await Rep.deploy({
     data: Reputation.bytecode,
     arguments: []
+  }).send();
+
+  const daoToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
+    .deploy({
+      data: DAOToken.bytecode,
+      arguments: ["Test Token", "TST", "10000000000"]
+    })
+    .send();
+  const GP = new web3.eth.Contract(GenesisProtocol.abi, undefined, opts);
+  const gp = await GP.deploy({
+    data: GenesisProtocol.bytecode,
+    arguments: [daoToken.address]
   }).send();
 
   const addresses = {

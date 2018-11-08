@@ -92,20 +92,28 @@ describe("GenesisProtocol", () => {
         .call();
 
       txs.push(
-        await genesisProtocolCallbacks.methods.propose(
-          2,
-          paramsHash,
-          genesisProtocolCallbacks.options.address,
-          nullAddress,
-          nullAddress
-        )
+        await genesisProtocolCallbacks.methods
+          .propose(
+            2,
+            paramsHash,
+            genesisProtocolCallbacks.options.address,
+            nullAddress,
+            nullAddress
+          )
+          .send()
       );
 
-      txs.push(await genesisProtocol.methods.stake(proposalID, 0, 20));
-      txs.push(await genesisProtocol.methods.vote(proposalID, 0, accounts[0]));
-      txs.push(await genesisProtocol.methods.stake(proposalID, 0, 20));
-      txs.push(await genesisProtocol.methods.execute(proposalID));
-      txs.push(await genesisProtocol.methods.redeem(proposalID, accounts[0]));
+      txs.push(await genesisProtocol.methods.stake(proposalID, 1, 20).send());
+      txs.push(
+        await genesisProtocol.methods.vote(proposalID, 2, nullAddress).send()
+      );
+      txs.push(await genesisProtocol.methods.stake(proposalID, 1, 20).send());
+      txs.push(await genesisProtocol.methods.execute(proposalID).send());
+      txs.push(
+        await genesisProtocol.methods
+          .redeem(proposalID, accounts[0].address)
+          .send()
+      );
 
       txs = txs.map(({ transactionHash }) => transactionHash);
 
@@ -120,7 +128,7 @@ describe("GenesisProtocol", () => {
       expect(proposals.length).toEqual(1);
       expect(proposals).toContainEqual({
         proposalId: proposalID,
-        submittedTime: await web3.eth.getBlock(txs[5].blockNumber).timestamp,
+        submittedTime: (await web3.eth.getBlock(txs[5].blockNumber)).timestamp,
         proposer: nullAddress
       });
     },

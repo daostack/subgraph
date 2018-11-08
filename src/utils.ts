@@ -1,12 +1,7 @@
 import {
-  Address,
   BigInt,
-  Bytes,
-  ByteArray,
-  crypto,
-  store
+  ByteArray
 } from "@graphprotocol/graph-ts";
-import { Redemption, Reward } from "./types/schema";
 
 
 export function concat(a: ByteArray, b: ByteArray): ByteArray {

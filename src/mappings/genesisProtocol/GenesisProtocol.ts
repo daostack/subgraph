@@ -24,29 +24,29 @@ import {
 import { concat, addition } from "../../utils";
 
 import {
-  Proposal,
-  Vote,
-  GPStake,
-  Redemption,
-  Reward
+  GenesisProtocolProposal,
+  GenesisProtocolVote,
+  GenesisProtocolStake,
+  GenesisProtocolRedemption,
+  GenesisProtocolReward
 } from "../../types/schema";
 
 export function handleNewProposal(event: NewProposal): void {
-  let ent = new Proposal();
+  let ent = new GenesisProtocolProposal();
   ent.proposalId = event.params._proposalId.toHex();
   ent.submittedTime = event.block.timestamp;
   ent.proposer = event.params._proposer;
   ent.daoAvatarAddress = event.params._organization;
   ent.numOfChoices = event.params._numOfChoices;
 
-  store.set("Proposal", event.params._proposalId.toHex(), ent);
+  store.set("GenesisProtocolProposal", event.params._proposalId.toHex(), ent);
 }
 
 export function handleVoteProposal(event: VoteProposal): void {
-  let ent = new Vote();
+  let ent = new GenesisProtocolVote();
   let uniqueId = concat(event.params._proposalId, event.params._voter).toHex();
 
-  let vote = store.get("Vote", uniqueId) as Vote;
+  let vote = store.get("GenesisProtocolVote", uniqueId) as GenesisProtocolVote;
   if (vote == null) {
     ent.avatarAddress = event.params._organization;
     ent.reputation = event.params._reputation;
@@ -56,18 +56,18 @@ export function handleVoteProposal(event: VoteProposal): void {
   } else {
     // Is it possible someone will use 50% for one voteOption and rest for the other
     vote.reputation = addition(vote.reputation, event.params._reputation);
-    store.set("Vote", uniqueId, vote);
+    store.set("GenesisProtocolVote", uniqueId, vote);
     return;
   }
 
-  store.set("Vote", uniqueId, ent);
+  store.set("GenesisProtocolVote", uniqueId, ent);
 }
 
 export function handleStake(event: Stake): void {
-  let ent = new GPStake();
+  let ent = new GenesisProtocolStake();
   let uniqueId = concat(event.params._proposalId, event.params._staker).toHex();
 
-  let stake = store.get("GPStake", uniqueId) as GPStake;
+  let stake = store.get("GenesisProtocolStake", uniqueId) as GenesisProtocolStake;
 
   if (stake == null) {
     ent.avatarAddress = event.params._organization;
@@ -78,7 +78,7 @@ export function handleStake(event: Stake): void {
   } else {
     // Is it possible someone will use 50% for one voteOption and rest for the other
     stake.stakeAmount = addition(stake.stakeAmount, event.params._amount);
-    store.set("GPStake", uniqueId, stake);
+    store.set("GenesisProtocolStake", uniqueId, stake);
     return;
   }
 
@@ -87,24 +87,24 @@ export function handleStake(event: Stake): void {
 
 export function handleGPExecuteProposal(event: GPExecuteProposal): void {
   let proposal = store.get(
-    "Proposal",
+    "GenesisProtocolProposal",
     event.params._proposalId.toHex()
-  ) as Proposal;
+  ) as GenesisProtocolProposal;
 
   proposal.state = event.params._executionState;
-  store.set("Proposal", event.params._proposalId.toHex(), proposal);
+  store.set("GenesisProtocolProposal", event.params._proposalId.toHex(), proposal);
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
   let proposal = store.get(
-    "Proposal",
+    "GenesisProtocolProposal",
     event.params._proposalId.toHex()
-  ) as Proposal;
+  ) as GenesisProtocolProposal;
 
   proposal.executionTime = event.block.timestamp;
   proposal.decision = event.params._decision;
   proposal.totalReputation = event.params._totalReputation;
-  store.set("Proposal", event.params._proposalId.toHex(), proposal);
+  store.set("GenesisProtocolProposal", event.params._proposalId.toHex(), proposal);
 }
 
 export function handleRedeem(event: Redeem): void {
@@ -162,22 +162,22 @@ function updateRedemption(
     .keccak256(concat(proposalId, concat(accountId, rewardId)))
     .toHex();
 
-  let redemption = store.get("Redemption", uniqueId) as Redemption;
+  let redemption = store.get("GenesisProtocolRedemption", uniqueId) as GenesisProtocolRedemption;
   if (redemption == null) {
-    redemption = new Redemption();
+    redemption = new GenesisProtocolRedemption();
     redemption.redeemer = beneficiary;
     redemption.proposalId = proposalId.toHex();
     redemption.rewardId = rewardId.toHex();
-    store.set("Redemption", uniqueId, redemption);
+    store.set("GenesisProtocolRedemption", uniqueId, redemption);
   }
 
-  let reward = store.get("Reward", rewardId.toHex()) as Reward;
+  let reward = store.get("GenesisProtocolReward", rewardId.toHex()) as GenesisProtocolReward;
   if (reward == null) {
-    reward = new Reward();
+    reward = new GenesisProtocolReward();
     reward.id = rewardId.toHex();
     reward.type = rewardString.toString();
     reward.amount = amount;
 
-    store.set("Reward", rewardId.toHex(), reward);
+    store.set("GenesisProtocolReward", rewardId.toHex(), reward);
   }
 }

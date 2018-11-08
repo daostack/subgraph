@@ -6,6 +6,7 @@ const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
 const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
 const UController = require('@daostack/arc/build/contracts/UController.json');
 const AbsoluteVote = require('@daostack/arc/build/contracts/AbsoluteVote.json');
+const EthTransferHelper = require('./helpers/EthTransferHelper.json');
 
 describe('ContributionReward', () => {
     let web3, addresses, opts, contributionReward;
@@ -46,6 +47,11 @@ describe('ContributionReward', () => {
         const absVote = await new web3.eth.Contract(AbsoluteVote.abi, undefined, opts)
             .deploy({ data: AbsoluteVote.bytecode, arguments: [] })
             .send();
+
+        //use this till the sendTransaction issue will be solved :)
+        const ethTransferHelper = await new web3.eth.Contract(EthTransferHelper.abi, undefined, opts)
+                .deploy({ data: EthTransferHelper.bytecode, arguments: [] })
+                .send();
 
         const setParams = absVote.methods.setParameters(20, true);
         const absVoteParamsHash = await setParams.call()
@@ -174,7 +180,7 @@ describe('ContributionReward', () => {
             alreadyRedeemedExternalTokenPeriods: null
         });
 
-        // pass the proposal
+        //pass the proposal
         const { transactionHash: executeTxHash, blockNumber } = await absVote.methods.vote(proposalId, 1, accounts[0].address /* unused by the contract */).send({ from: accounts[1].address });
         const block = await web3.eth.getBlock(blockNumber);
 
@@ -208,7 +214,7 @@ describe('ContributionReward', () => {
             executedAt: block.timestamp.toString()
         });
 
-        // wait 2 periods
+        //wait 2 periods
         await new Promise(res => setTimeout(res, rewards.periodLength * 2 * 1000))
         const { transactionHash: redeemReputationTxHash } = await contributionReward.methods.redeemReputation(proposalId, avatar.options.address).send();
 
@@ -244,7 +250,7 @@ describe('ContributionReward', () => {
             alreadyRedeemedReputationPeriods: '2'
         });
 
-        const { transactionHash: redeemNativeTokenTxHash } = await contributionReward.methods.redeemNativeToken(proposalId, avatar.options.address).send();
+       const { transactionHash: redeemNativeTokenTxHash } = await contributionReward.methods.redeemNativeToken(proposalId, avatar.options.address).send();
 
         const { contributionRewardRedeemNativeTokens } = await query(`{
             contributionRewardRedeemNativeTokens {
@@ -278,7 +284,7 @@ describe('ContributionReward', () => {
             alreadyRedeemedNativeTokenPeriods: '2'
         });
 
-        const { transactionHash: redeemExternalTokenTxHash } = await contributionReward.methods.redeemExternalToken(proposalId, avatar.options.address).send();
+       const { transactionHash: redeemExternalTokenTxHash } = await contributionReward.methods.redeemExternalToken(proposalId, avatar.options.address).send();
 
         const { contributionRewardRedeemExternalTokens } = await query(`{
             contributionRewardRedeemExternalTokens {
@@ -313,44 +319,45 @@ describe('ContributionReward', () => {
         });
 
         // TODO: This is failing for some reason probably due to bug in ganache or graph - node
-        // from graph-node logs: 
+        // from graph-node logs:
         // Trying again after block polling failed: could not get block from Ethereum: Decoder error: Error("invalid type: null, expected a 0x-prefixed hex-encoded vector of bytes", line: 0, column: 0)
+        //await web3.eth.sendTransaction({ from: accounts[0].address, to: avatar.options.address, value: web3.utils.toWei('10', "ether"),gas:50000});
+        await ethTransferHelper.methods.transfer(avatar.options.address).send({ value: web3.utils.toWei('10', "ether")});
+        //
+        var amountRedeemed = await contributionReward.methods.redeemEther(proposalId, avatar.options.address).call();
+        const { transactionHash: redeemEtherTxHash } = await contributionReward.methods.redeemEther(proposalId, avatar.options.address).send({gas:1000000});
 
-        // await web3.eth.sendTransaction({ from: accounts[0].address, to: avatar.options.address, value: 10, gas: 50000 });
+        const { contributionRewardRedeemEthers } = await query(`{
+            contributionRewardRedeemEthers {
+              txHash,
+              contract,
+              avatar,
+              beneficiary,
+              proposalId,
+              amount
+            }
+        }`);
 
-        // const { transactionHash: redeemEtherTxHash } = await contributionReward.methods.redeemEther(proposalId, avatar.options.address).send();
+        expect(contributionRewardRedeemEthers.length).toEqual(1);
+        expect(contributionRewardRedeemEthers).toContainEqual({
+            txHash: redeemEtherTxHash,
+            contract: contributionReward.options.address.toLowerCase(),
+            avatar: avatar.options.address.toLowerCase(),
+            beneficiary: accounts[1].address.toLowerCase(),
+            proposalId,
+            amount: (amountRedeemed).toString()
+        })
 
-        // const { contributionRewardRedeemEther } = await query(`{
-        //     contributionRewardRedeemEther {
-        //       txHash,
-        //       contract,
-        //       avatar,
-        //       beneficiary,
-        //       proposalId,
-        //       amount
-        //     }
-        // }`);
+        contributionRewardProposals = (await query(`{
+            contributionRewardProposals {
+                alreadyRedeemedEthPeriods
+            }
+        }`)).contributionRewardProposals;
 
-        // expect(contributionRewardRedeemEther.length).toEqual(1);
-        // expect(contributionRewardRedeemEther).toContainEqual({
-        //     txHash: redeemEtherTxHash,
-        //     contract: contributionReward.options.address.toLowerCase(),
-        //     avatar: avatar.options.address.toLowerCase(),
-        //     beneficiary: accounts[1].address.toLowerCase(),
-        //     proposalId,
-        //     amount: (rewards.eth * 2).toString()
-        // })
-
-        // contributionRewardProposals = (await query(`{
-        //     contributionRewardProposals {
-        //         alreadyRedeemedExternalTokenPeriods
-        //     }
-        // }`)).contributionRewardProposals;
-
-        // expect(contributionRewardProposals.length).toEqual(1);
-        // expect(contributionRewardProposals).toContainEqual({
-        //     alreadyRedeemedEthPeriods: '2'
-        // });
+        expect(contributionRewardProposals.length).toEqual(1);
+        expect(contributionRewardProposals).toContainEqual({
+            alreadyRedeemedEthPeriods: '3'
+        });
 
     }, 100000)
 })

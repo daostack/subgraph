@@ -108,6 +108,21 @@ describe("GenesisProtocol", () => {
       txs.push(await genesisProtocol.methods.redeem(proposalID, accounts[0]));
 
       txs = txs.map(({ transactionHash }) => transactionHash);
+
+      const { proposals } = await query(`{
+        proposals {
+          proposalId,
+          submittedTime,
+          proposer
+        }
+      }`);
+
+      expect(proposals.length).toEqual(1);
+      expect(proposals).toContainEqual({
+        proposalId: proposalID,
+        submittedTime: await web3.eth.getBlock(txs[5].blockNumber).timestamp,
+        proposer: nullAddress
+      });
     },
     20000
   );

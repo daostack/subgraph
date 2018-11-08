@@ -106,17 +106,24 @@ async function migrate(web3) {
     arguments: ["TEST", "TST", 1000000000]
   }).send();
 
+  const GPToken = new web3.eth.Contract(DAOToken.abi, undefined, opts);
+  const gpToken = await GPToken.deploy({
+    data: DAOToken.bytecode,
+    arguments: ["TEST", "TST", 1000000000]
+  }).send();
+
   const GP = new web3.eth.Contract(GenesisProtocol.abi, undefined, opts);
   const gp = await GP.deploy({
     data: GenesisProtocol.bytecode,
-    arguments: [token.address]
+    arguments: [gpToken.options.address]
   }).send();
 
   const addresses = {
     GenesisProtocol: gp.options.address,
     UController: uc.options.address,
     Reputation: rep.options.address,
-    DAOToken: token.options.address
+    DAOToken: token.options.address,
+    GPToken: gpToken.options.address
   };
 
   await configure({

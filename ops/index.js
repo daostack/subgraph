@@ -18,6 +18,7 @@ const GenesisProtocol = require("@daostack/infra/build/contracts/GenesisProtocol
 const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
 const UController = require("@daostack/arc/build/contracts/UController.json");
 const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
+const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
 
 async function configure({ env, ...rest }) {
   const { [env]: publicConfig } = yaml.safeLoad(
@@ -100,23 +101,25 @@ async function migrate(web3) {
     arguments: []
   }).send();
 
-  const daoToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-    .deploy({
-      data: DAOToken.bytecode,
-      arguments: ["Test Token", "TST", "10000000000"]
-    })
-    .send();
+  
+
+  const Token = new web3.eth.Contract(DAOToken.abi, undefined, opts);
+  const token = await Token.deploy({
+    data: DAOToken.bytecode,
+    arguments: ["TEST","TST",1000000000]
+  }).send();
+
   const GP = new web3.eth.Contract(GenesisProtocol.abi, undefined, opts);
   const gp = await GP.deploy({
-    data: GenesisProtocol.bytecode,
-    arguments: [daoToken.address]
-  }).send();
+  data: GenesisProtocol.bytecode,
+  arguments: [token.address]
+  
 
   const addresses = {
     GenesisProtocol: gp.options.address,
     UController: uc.options.address,
-    DAOToken: daoToken.options.address,
-    Reputation: rep.options.address
+    Reputation: rep.options.address,
+    DAOToken: token.options.address
   };
 
   await configure({

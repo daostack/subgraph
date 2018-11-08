@@ -324,8 +324,19 @@ describe('ContributionReward', () => {
         //await web3.eth.sendTransaction({ from: accounts[0].address, to: avatar.options.address, value: web3.utils.toWei('10', "ether"),gas:50000});
         await ethTransferHelper.methods.transfer(avatar.options.address).send({ value: web3.utils.toWei('10', "ether")});
         //
-        var amountRedeemed = await contributionReward.methods.redeemEther(proposalId, avatar.options.address).call();
         const { transactionHash: redeemEtherTxHash } = await contributionReward.methods.redeemEther(proposalId, avatar.options.address).send({gas:1000000});
+
+        var receipt = await web3.eth.getTransactionReceipt(redeemEtherTxHash);
+
+        var amountRedeemed =0;
+        await contributionReward.getPastEvents('RedeemEther', {
+              fromBlock: receipt.blockNumber,
+              toBlock: 'latest'
+          })
+          .then(function(events){
+              console.log(events[0].returnValues._amount);
+              amountRedeemed = events[0].returnValues._amount;
+          });
 
         const { contributionRewardRedeemEthers } = await query(`{
             contributionRewardRedeemEthers {

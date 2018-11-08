@@ -41,13 +41,16 @@ describe("GenesisProtocol", () => {
 
     daoToken = new web3.eth.Contract(DAOToken.abi, addresses.DAOToken, opts);
 
-    genesisProtocolCallbacks = new web3.eth.Contract(
+    const GenesisProtocolCallbacksContract = new web3.eth.Contract(
       GenesisProtocolCallbacks.abi,
-      reputation.address,
-      daoToken.address,
-      genesisProtocol.address,
+      undefined,
       opts
     );
+
+    genesisProtocolCallbacks = await GenesisProtocolCallbacksContract.deploy({
+      data: GenesisProtocolCallbacks.bytecode,
+      arguments: [reputation.address, daoToken.address, genesisProtocol.address]
+    }).send();
   });
 
   it(
@@ -67,21 +70,28 @@ describe("GenesisProtocol", () => {
       txs.push(await reputation.methods.mint(accounts[0].address, "60").send());
       txs.push(await reputation.methods.mint(accounts[1].address, "40").send());
       txs.push(
-        await genesisProtocol.methods.setParameters(
+        await genesisProtocolCallbacks.methods.setParameters(
           [0, 50, 60, 60, 1, 1, 0, 0, 60, 1, 10, 10, 80, 15, 10],
           nullAddress
         )
       );
 
-      let proposalID = await genesisProtocol.methods
-        .propose(2, paramsHash, genesisProtocolCallbacks.address, nullAddress)
-        .call();
-
-      txs.push(
-        await genesisProtocol.methods.propose(
+      let proposalID = await genesisProtocolCallbacks.methods
+        .propose(
           2,
           paramsHash,
           genesisProtocolCallbacks.address,
+          nullAddress,
+          nullAddress
+        )
+        .call();
+
+      txs.push(
+        await genesisProtocolCallbacks.methods.propose(
+          2,
+          paramsHash,
+          genesisProtocolCallbacks.address,
+          nullAddress,
           nullAddress
         )
       );

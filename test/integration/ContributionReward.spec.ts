@@ -334,7 +334,6 @@ describe('ContributionReward', () => {
               toBlock: 'latest'
           })
           .then(function(events){
-              console.log(events[0].returnValues._amount);
               amountRedeemed = events[0].returnValues._amount;
           });
 

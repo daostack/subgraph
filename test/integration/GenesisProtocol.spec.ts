@@ -66,17 +66,19 @@ describe("GenesisProtocol", () => {
           nullAddress
         )
         .call();
-      console.log(paramsHash);
+
       let txs = [];
       txs.push(await daoToken.methods.mint(accounts[0].address, "100").send());
       txs.push(await daoToken.methods.mint(accounts[1].address, "100").send());
       txs.push(await reputation.methods.mint(accounts[0].address, "60").send());
       txs.push(await reputation.methods.mint(accounts[1].address, "40").send());
       txs.push(
-        await genesisProtocolCallbacks.methods.setParameters(
-          [50, 60, 60, 1, 1, 0, 0, 60, 1, 10, 10, 80, 15, 10],
-          nullAddress
-        )
+        await genesisProtocolCallbacks.methods
+          .setParameters(
+            [50, 60, 60, 1, 1, 0, 0, 60, 1, 10, 10, 80, 15, 10],
+            nullAddress
+          )
+          .send()
       );
 
       let proposalID = await genesisProtocolCallbacks.methods
@@ -84,17 +86,17 @@ describe("GenesisProtocol", () => {
           2,
           paramsHash,
           genesisProtocolCallbacks.options.address,
-          accounts[0].address,
+          nullAddress,
           nullAddress
         )
         .call();
-      console.log(proposalID);
+
       txs.push(
         await genesisProtocolCallbacks.methods.propose(
           2,
           paramsHash,
           genesisProtocolCallbacks.options.address,
-          accounts[0].address,
+          nullAddress,
           nullAddress
         )
       );

@@ -15,7 +15,6 @@ const HDWallet = require("hdwallet-accounts");
 const glob = require("glob");
 
 const GenesisProtocol = require("@daostack/infra/build/contracts/GenesisProtocol.json");
-const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
 const UController = require("@daostack/arc/build/contracts/UController.json");
 const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
 const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
@@ -101,19 +100,17 @@ async function migrate(web3) {
     arguments: []
   }).send();
 
-  
-
   const Token = new web3.eth.Contract(DAOToken.abi, undefined, opts);
   const token = await Token.deploy({
     data: DAOToken.bytecode,
-    arguments: ["TEST","TST",1000000000]
+    arguments: ["TEST", "TST", 1000000000]
   }).send();
 
   const GP = new web3.eth.Contract(GenesisProtocol.abi, undefined, opts);
   const gp = await GP.deploy({
-  data: GenesisProtocol.bytecode,
-  arguments: [token.address]
-  
+    data: GenesisProtocol.bytecode,
+    arguments: [token.address]
+  }).send();
 
   const addresses = {
     GenesisProtocol: gp.options.address,

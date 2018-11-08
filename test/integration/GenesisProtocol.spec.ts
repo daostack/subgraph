@@ -56,82 +56,85 @@ describe("GenesisProtocol", () => {
     }).send();
   });
 
-  it(
-    "Sanity",
-    async () => {
-      const accounts = web3.eth.accounts.wallet;
-      let paramsHash = await genesisProtocol.methods
-        .getParametersHash(
-          [50, 60, 60, 1, 1, 0, 0, 60, 1, 10, 10, 80, 15, 10],
-          nullAddress
-        )
-        .call();
+  it('Sanity', async () => {
+    const accounts = web3.eth.accounts.wallet;
+    const params = [
+      50, //preBoostedVoteRequiredPercentage
+      60, //preBoostedVotePeriodLimit
+      5, //boostedVotePeriodLimit
+      1,  //thresholdConstA
+      1,  //thresholdConstB
+      0,  //minimumStakingFee
+      0,  //quietEndingPeriod
+      60, //proposingRepRewardConstA
+      1,  //proposingRepRewardConstB
+      10, //stakerFeeRatioForVoters
+      10, //votersReputationLossRatio
+      80, //votersGainRepRatioFromLostRep
+      15, //_daoBountyConst
+      10  //_daoBountyLimit
+    ];
+    const setParams = genesisProtocol.methods.setParameters(params, nullAddress);
+    const paramsHash = await setParams.call();
+    await setParams.send();
 
-      let txs = [];
-      txs.push(await daoToken.methods.mint(accounts[0].address, "100").send());
-      txs.push(await daoToken.methods.mint(accounts[1].address, "100").send());
-      txs.push(await reputation.methods.mint(accounts[0].address, "60").send());
-      txs.push(await reputation.methods.mint(accounts[1].address, "40").send());
-      txs.push(
-        await genesisProtocolCallbacks.methods
-          .setParameters(
-            [50, 60, 60, 1, 1, 0, 0, 60, 1, 10, 10, 80, 15, 10],
-            nullAddress
-          )
-          .send()
-      );
+    await daoToken.methods.mint(accounts[0].address, "100").send();
+    await daoToken.methods.mint(accounts[1].address, "100").send();
+    await daoToken.methods.approve(genesisProtocol.options.address, '100').send();
+    await reputation.methods.mint(accounts[0].address, "100").send()
+    await reputation.methods.mint(accounts[1].address, "100").send();
 
-      let proposalID = await genesisProtocolCallbacks.methods
-        .propose(
-          2,
-          paramsHash,
-          genesisProtocolCallbacks.options.address,
-          nullAddress,
-          nullAddress
-        )
-        .call();
+    const propose = await genesisProtocolCallbacks.methods.propose(
+      2,
+      paramsHash,
+      genesisProtocolCallbacks.options.address,
+      nullAddress,
+      nullAddress
+    );
 
-      txs.push(
-        await genesisProtocolCallbacks.methods
-          .propose(
-            2,
-            paramsHash,
-            genesisProtocolCallbacks.options.address,
-            nullAddress,
-            nullAddress
-          )
-          .send()
-      );
+    const proposalId = await propose.call();
 
-      txs.push(await genesisProtocol.methods.stake(proposalID, 1, 20).send());
-      txs.push(
-        await genesisProtocol.methods.vote(proposalID, 2, nullAddress).send()
-      );
-      txs.push(await genesisProtocol.methods.stake(proposalID, 1, 20).send());
-      txs.push(await genesisProtocol.methods.execute(proposalID).send());
-      txs.push(
-        await genesisProtocol.methods
-          .redeem(proposalID, accounts[0].address)
-          .send()
-      );
+    let txs = []
+    txs.push(await propose.send());
+    // boost the proposal
+    txs.push(await genesisProtocol.methods.stake(proposalId, 1 /* YES */, 20).send());
+    txs.push(await genesisProtocol.methods.stake(proposalId, 1 /* YES */, 20).send({ from: accounts[1].address }));
 
-      txs = txs.map(({ transactionHash }) => transactionHash);
+    // vote for it to pass
+    txs.push(await genesisProtocol.methods.vote(proposalId, 1 /* YES */, nullAddress).send());
 
-      const { proposals } = await query(`{
-        proposals {
-          proposalId,
-          submittedTime,
-          proposer
-        }
-      }`);
+    // wait for proposal it pass
+    await new Promise(res => setTimeout(res, params[2] * 1000))
+    txs.push(await genesisProtocol.methods.execute(proposalId).send());
+    txs.push(await genesisProtocol.methods.redeem(proposalId, accounts[0].address).send());
 
-      expect(proposals.length).toEqual(1);
-      expect(proposals).toContainEqual({
-        proposalId: proposalID,
-        submittedTime: (await web3.eth.getBlock(txs[5].blockNumber)).timestamp,
-        proposer: nullAddress
-      });
-    },
-    20000
-  );
+    const { genesisProtocolProposals } = await query(`{
+      genesisProtocolProposals {
+        proposalId
+        submittedTime
+        proposer
+        daoAvatarAddress
+        numOfChoices
+        state
+        decision
+        executionTime
+        totalReputation
+      }
+    }`);
+
+
+    //TODO: This assert fails
+    expect(genesisProtocolProposals.length).toEqual(1);
+    expect(genesisProtocolProposals).toContainEqual({
+      proposalId,
+      submittedTime: (await web3.eth.getBlock(txs[0].blockNumber)).timestamp,
+      proposer: nullAddress,
+      daoAvatarAddress: genesisProtocolCallbacks.options.address.toLowerCase(),
+      numOfChoices: '2',
+      state: '2',/* Executed */
+      decision: '1', /* YES */
+      executionTime: (await web3.eth.getBlock(txs[4].blockNumber)).timestamp,
+      totalReputation: txs[4].events.ExecuteProposal.returnValues._totalReputation,
+    })
+  }, 15000)
 });

@@ -11,7 +11,6 @@ import {
 
 const GenesisProtocol = require("@daostack/arc/build/contracts/GenesisProtocol.json");
 const GenesisProtocolCallbacks = require("@daostack/arc/build/contracts/GenesisProtocolCallbacksMock.json");
-const Avatar = require("@daostack/arc/build/contracts/Avatar.json");
 const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
 const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
 
@@ -39,7 +38,7 @@ describe("GenesisProtocol", () => {
       opts
     );
 
-    daoToken = new web3.eth.Contract(DAOToken.abi, addresses.DAOToken, opts);
+    daoToken = new web3.eth.Contract(DAOToken.abi, addresses.GPToken, opts);
 
     const GenesisProtocolCallbacksContract = new web3.eth.Contract(
       GenesisProtocolCallbacks.abi,
@@ -49,7 +48,11 @@ describe("GenesisProtocol", () => {
 
     genesisProtocolCallbacks = await GenesisProtocolCallbacksContract.deploy({
       data: GenesisProtocolCallbacks.bytecode,
-      arguments: [reputation.address, daoToken.address, genesisProtocol.address]
+      arguments: [
+        addresses.Reputation,
+        addresses.GPToken,
+        addresses.GenesisProtocol
+      ]
     }).send();
   });
 
@@ -59,11 +62,11 @@ describe("GenesisProtocol", () => {
       const accounts = web3.eth.accounts.wallet;
       let paramsHash = await genesisProtocol.methods
         .getParametersHash(
-          [0, 50, 60, 60, 1, 1, 0, 0, 60, 1, 10, 10, 80, 15, 10],
+          [50, 60, 60, 1, 1, 0, 0, 60, 1, 10, 10, 80, 15, 10],
           nullAddress
         )
         .call();
-
+      console.log(paramsHash);
       let txs = [];
       txs.push(await daoToken.methods.mint(accounts[0].address, "100").send());
       txs.push(await daoToken.methods.mint(accounts[1].address, "100").send());
@@ -71,7 +74,7 @@ describe("GenesisProtocol", () => {
       txs.push(await reputation.methods.mint(accounts[1].address, "40").send());
       txs.push(
         await genesisProtocolCallbacks.methods.setParameters(
-          [0, 50, 60, 60, 1, 1, 0, 0, 60, 1, 10, 10, 80, 15, 10],
+          [50, 60, 60, 1, 1, 0, 0, 60, 1, 10, 10, 80, 15, 10],
           nullAddress
         )
       );
@@ -80,18 +83,18 @@ describe("GenesisProtocol", () => {
         .propose(
           2,
           paramsHash,
-          genesisProtocolCallbacks.address,
-          nullAddress,
+          genesisProtocolCallbacks.options.address,
+          accounts[0].address,
           nullAddress
         )
         .call();
-
+      console.log(proposalID);
       txs.push(
         await genesisProtocolCallbacks.methods.propose(
           2,
           paramsHash,
-          genesisProtocolCallbacks.address,
-          nullAddress,
+          genesisProtocolCallbacks.options.address,
+          accounts[0].address,
           nullAddress
         )
       );

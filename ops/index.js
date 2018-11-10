@@ -81,10 +81,17 @@ async function migrate(web3) {
     data: UController.bytecode,
     arguments: []
   }).send();
+
+  const Token = new web3.eth.Contract(DAOToken.abi, undefined, opts);
+  const token = await Token.deploy({
+    data: DAOToken.bytecode,
+    arguments: ["TEST","TST",1000000000]
+    }).send();
+
   const GP = new web3.eth.Contract(GenesisProtocol.abi, undefined, opts);
   const gp = await GP.deploy({
     data: GenesisProtocol.bytecode,
-    arguments: []
+    arguments: [token.options.address]
   }).send();
 
   const Rep = new web3.eth.Contract(Reputation.abi, undefined, opts);
@@ -99,10 +106,7 @@ async function migrate(web3) {
     arguments: []
   }).send();
 
-  const Token = new web3.eth.Contract(DAOToken.abi, undefined, opts);
-  const token = await Token.deploy({
-    data: DAOToken.bytecode,
-    arguments: ["TEST","TST",1000000000]
+
 
   const addresses = {
     UController: uc.options.address,
@@ -141,7 +145,7 @@ if (require.main === module) {
   yargs
     .command(
       "migrate",
-      "Migrate contracts to ganache and configure the project appropriatly",
+      "Migrate contracts to ganache and configure the project appropriately",
       yargs => yargs,
       () => migrate()
     )

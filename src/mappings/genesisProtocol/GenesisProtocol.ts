@@ -18,7 +18,8 @@ import {
   RedeemReputation,
   NewProposal,
   ExecuteProposal,
-  VoteProposal
+  VoteProposal,
+  GenesisProtocol
 } from "../../types/GenesisProtocol/GenesisProtocol";
 
 import { concat, addition } from "../../utils";
@@ -91,8 +92,11 @@ export function handleGPExecuteProposal(event: GPExecuteProposal): void {
     event.params._proposalId.toHex()
   ) as GenesisProtocolProposal;
 
-  proposal.state = event.params._executionState;
+  //todo: figure out why reading uint8 event param does not work .
+  //proposal.executionState = event.params._executionState
+  //https://github.com/graphprotocol/graph-node/issues/569
   store.set("GenesisProtocolProposal", event.params._proposalId.toHex(), proposal);
+
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
@@ -104,6 +108,10 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
   proposal.executionTime = event.block.timestamp;
   proposal.decision = event.params._decision;
   proposal.totalReputation = event.params._totalReputation;
+  let genesisProtocol = GenesisProtocol.bind(event.address);
+  //todo L figure out why reading uint8 param does not work .
+  //https://github.com/graphprotocol/graph-node/issues/569
+  //proposal.state = genesisProtocol.state(event.params._proposalId);
   store.set("GenesisProtocolProposal", event.params._proposalId.toHex(), proposal);
 }
 

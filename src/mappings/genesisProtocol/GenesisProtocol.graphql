@@ -4,6 +4,7 @@ type GenesisProtocolProposal @entity {
   proposer: Bytes!
   daoAvatarAddress: Bytes!
   numOfChoices: BigInt
+  executionState: Int
   state: Int
   decision: BigInt
   executionTime: BigInt

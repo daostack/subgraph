@@ -38,7 +38,7 @@ describe("GenesisProtocol", () => {
       opts
     );
 
-    daoToken = new web3.eth.Contract(DAOToken.abi, addresses.GPToken, opts);
+    daoToken = new web3.eth.Contract(DAOToken.abi, addresses.DAOToken, opts);
 
     const GenesisProtocolCallbacksContract = new web3.eth.Contract(
       GenesisProtocolCallbacks.abi,
@@ -88,7 +88,7 @@ describe("GenesisProtocol", () => {
       2,
       paramsHash,
       genesisProtocolCallbacks.options.address,
-      nullAddress,
+      accounts[1].address,
       nullAddress
     );
 
@@ -115,26 +115,59 @@ describe("GenesisProtocol", () => {
         proposer
         daoAvatarAddress
         numOfChoices
-        state
         decision
         executionTime
+        totalReputation
+        executionState
+        state
+      }
+    }`);
+
+    expect(genesisProtocolProposals.length).toEqual(1);
+    expect(genesisProtocolProposals).toContainEqual({
+      proposalId,
+      submittedTime: (await web3.eth.getBlock(txs[0].blockNumber)).timestamp.toString(),
+      proposer: accounts[1].address.toLowerCase(),
+      daoAvatarAddress: genesisProtocolCallbacks.options.address.toLowerCase(),
+      numOfChoices: '2',
+      state: 2,/* Executed */
+      decision: '1', /* YES */
+      executionState : 3,//    enum ExecutionState { None, PreBoostedTimeOut, PreBoostedBarCrossed, BoostedTimeOut,BoostedBarCrossed }
+      executionTime: (await web3.eth.getBlock(txs[4].blockNumber)).timestamp.toString(),
+      totalReputation: txs[4].events.ExecuteProposal.returnValues._totalReputation,
+    })
+
+    console.log("-0-",await genesisProtocol.methods.organizations(proposalId).call());
+
+    const { genesisProtocolExecuteProposals } = await query(`{
+      genesisProtocolExecuteProposals {
+        proposalId
+        decision
+        organization
         totalReputation
       }
     }`);
 
-
-    //TODO: This assert fails
-    expect(genesisProtocolProposals.length).toEqual(1);
-    expect(genesisProtocolProposals).toContainEqual({
+    expect(genesisProtocolExecuteProposals.length).toEqual(1);
+    expect(genesisProtocolExecuteProposals).toContainEqual({
       proposalId,
-      submittedTime: (await web3.eth.getBlock(txs[0].blockNumber)).timestamp,
-      proposer: nullAddress,
-      daoAvatarAddress: genesisProtocolCallbacks.options.address.toLowerCase(),
-      numOfChoices: '2',
-      state: '2',/* Executed */
       decision: '1', /* YES */
-      executionTime: (await web3.eth.getBlock(txs[4].blockNumber)).timestamp,
+      organization : genesisProtocolCallbacks.options.address.toLowerCase(),
       totalReputation: txs[4].events.ExecuteProposal.returnValues._totalReputation,
     })
+
+    const { genesisProtocolGPExecuteProposals } = await query(`{
+      genesisProtocolGPExecuteProposals {
+        proposalId
+        executionState
+      }
+    }`);
+
+    expect(genesisProtocolGPExecuteProposals.length).toEqual(1);
+    expect(genesisProtocolGPExecuteProposals).toContainEqual({
+      proposalId,
+      executionState : 3,//    enum ExecutionState { None, PreBoostedTimeOut, PreBoostedBarCrossed, BoostedTimeOut,BoostedBarCrossed }
+    })
+
   }, 15000)
 });

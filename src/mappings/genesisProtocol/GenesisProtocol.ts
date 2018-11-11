@@ -7,7 +7,9 @@ import {
   crypto,
   ByteArray,
   Bytes,
-  Address
+  Address,
+  SmartContract,
+  EthereumValue
 } from "@graphprotocol/graph-ts";
 
 import {
@@ -29,7 +31,9 @@ import {
   GenesisProtocolVote,
   GenesisProtocolStake,
   GenesisProtocolRedemption,
-  GenesisProtocolReward
+  GenesisProtocolReward,
+  GenesisProtocolExecuteProposal,
+  GenesisProtocolGPExecuteProposal
 } from "../../types/schema";
 
 export function handleNewProposal(event: NewProposal): void {
@@ -91,12 +95,17 @@ export function handleGPExecuteProposal(event: GPExecuteProposal): void {
     "GenesisProtocolProposal",
     event.params._proposalId.toHex()
   ) as GenesisProtocolProposal;
-
   //todo: figure out why reading uint8 event param does not work .
-  //proposal.executionState = event.params._executionState
-  //https://github.com/graphprotocol/graph-node/issues/569
+  //this is a workaround to by pass the auto generated getter.
+  proposal.executionState = event.parameters[1].value.toBigInt().toI32();
   store.set("GenesisProtocolProposal", event.params._proposalId.toHex(), proposal);
 
+  let genesisProtocolGPExecuteProposal = new GenesisProtocolGPExecuteProposal();
+  genesisProtocolGPExecuteProposal.executionState = event.parameters[1].value.toBigInt().toI32();
+  genesisProtocolGPExecuteProposal.contract = event.address;
+  genesisProtocolGPExecuteProposal.proposalId = event.params._proposalId;
+  genesisProtocolGPExecuteProposal.txHash = event.transaction.hash.toHex();
+  store.set("GenesisProtocolGPExecuteProposal", event.transaction.hash.toHex(), genesisProtocolGPExecuteProposal);
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
@@ -108,11 +117,20 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
   proposal.executionTime = event.block.timestamp;
   proposal.decision = event.params._decision;
   proposal.totalReputation = event.params._totalReputation;
-  let genesisProtocol = GenesisProtocol.bind(event.address);
-  //todo L figure out why reading uint8 param does not work .
+  //todo:figure out why reading uint8 param does not work .
+  //for now use a workaround.
   //https://github.com/graphprotocol/graph-node/issues/569
-  //proposal.state = genesisProtocol.state(event.params._proposalId);
+  proposal.state = state(event.params._proposalId,event.address).toI32();
   store.set("GenesisProtocolProposal", event.params._proposalId.toHex(), proposal);
+
+  let genesisProtocolExecuteProposal = new GenesisProtocolExecuteProposal();
+  genesisProtocolExecuteProposal.decision = event.params._decision;
+  genesisProtocolExecuteProposal.contract = event.address;
+  genesisProtocolExecuteProposal.organization = event.params._organization;
+  genesisProtocolExecuteProposal.proposalId = event.params._proposalId;
+  genesisProtocolExecuteProposal.totalReputation = event.params._totalReputation;
+  genesisProtocolExecuteProposal.txHash = event.transaction.hash.toHex();
+  store.set("GenesisProtocolExecuteProposal", event.transaction.hash.toHex(), genesisProtocolExecuteProposal);
 }
 
 export function handleRedeem(event: Redeem): void {
@@ -189,3 +207,11 @@ function updateRedemption(
     store.set("GenesisProtocolReward", rewardId.toHex(), reward);
   }
 }
+
+  function state(_proposalId:Bytes,address:Address) : BigInt {
+      let genesisProtocol = new SmartContract("GenesisProtocol", address);
+      let result = genesisProtocol.call("state", [
+        EthereumValue.fromFixedBytes(_proposalId)
+      ]);
+      return result[0].toBigInt();
+  }

@@ -14,7 +14,6 @@ const Web3 = require("web3");
 const HDWallet = require("hdwallet-accounts");
 const glob = require("glob");
 
-
 const UController = require("@daostack/arc/build/contracts/UController.json");
 const GenesisProtocol = require("@daostack/arc/build/contracts/GenesisProtocol.json");
 const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
@@ -39,10 +38,26 @@ async function configure({ env, ...rest }) {
     "utf-8"
   );
 
-  const subschemas = await new Promise((res, rej) => glob('src/**/*.graphql', (err, files) => err ? rej(err) : res(files)));
-  const partials = subschemas.reduce((acc, subschema) => ({...acc, [path.basename(subschema).replace(/\.[^/.]+$/, "")]: fs.readFileSync(subschema, 'utf-8')}), {})
+  const subschemas = await new Promise((res, rej) =>
+    glob("src/**/*.graphql", (err, files) => (err ? rej(err) : res(files)))
+  );
+  const partials = subschemas.reduce(
+    (acc, subschema) => ({
+      ...acc,
+      [path.basename(subschema).replace(/\.[^/.]+$/, "")]: fs.readFileSync(
+        subschema,
+        "utf-8"
+      )
+    }),
+    {}
+  );
 
-  const schema = (config) => subschemas.map(subschema => handlebars.compile(fs.readFileSync(subschema, 'utf-8'))(config)).join('\n\n')
+  const schema = config =>
+    subschemas
+      .map(subschema =>
+        handlebars.compile(fs.readFileSync(subschema, "utf-8"))(config)
+      )
+      .join("\n\n");
 
   fs.writeFileSync("schema.graphql", schema(config), "utf-8");
 
@@ -85,13 +100,18 @@ async function migrate(web3) {
   const Token = new web3.eth.Contract(DAOToken.abi, undefined, opts);
   const token = await Token.deploy({
     data: DAOToken.bytecode,
-    arguments: ["TEST","TST",1000000000]
-    }).send();
+    arguments: ["TEST", "TST", 1000000000]
+  }).send();
+
+  const gpToken = await Token.deploy({
+    data: DAOToken.bytecode,
+    arguments: ["TEST", "TST", 1000000000]
+  }).send();
 
   const GP = new web3.eth.Contract(GenesisProtocol.abi, undefined, opts);
   const gp = await GP.deploy({
     data: GenesisProtocol.bytecode,
-    arguments: [token.options.address]
+    arguments: [gpToken.options.address]
   }).send();
 
   const Rep = new web3.eth.Contract(Reputation.abi, undefined, opts);
@@ -106,12 +126,11 @@ async function migrate(web3) {
     arguments: []
   }).send();
 
-
-
   const addresses = {
     UController: uc.options.address,
     Reputation: rep.options.address,
     DAOToken: token.options.address,
+    GPToken: gpToken.options.address,
     ContributionReward: cr.options.address,
     GenesisProtocol: gp.options.address
   };

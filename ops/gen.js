@@ -107,7 +107,9 @@ async function gen() {
             from: web3.eth.defaultAccount,
             gas: (await web3.eth.getBlock("latest")).gasLimit - 100000
         };
-        const all = await Promise.all(contracts.map(async contract => {
+        const all = [];
+        for(let i in contracts) {
+            const contract = contracts[i];
             spinner.start(`Packaging '${contract}'...`);
             const dir = path.join(indir, contract);
             const dataSource = yaml.safeLoad(fs.readFileSync(path.join(dir, 'datasource.yaml'), 'utf-8'));
@@ -116,14 +118,14 @@ async function gen() {
             spinner.start(`Migrating '${contract}'...`);
             addresses = await migrate(web3, opts);
             spinner.info(`${contract} -> ${JSON.stringify(addresses.length > 1 ? addresses : addresses[0], undefined, 2)}.`);
-            return {
+            all.push({
                 addresses,
                 dataSource,
                 schema,
                 contract,
                 mappingPath: path.join(dir, 'mapping.ts')
-            }
-        }));
+            })
+        }
         
         await generateSubgraph(all);
         await generateSchema(all);
@@ -136,7 +138,7 @@ async function gen() {
 }
 
 if(require.main = module) {
-    gen();
+    gen().catch(e => process.exit(1));
 } else {
     module.exports = {
         gen

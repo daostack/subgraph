@@ -29,16 +29,16 @@ describe("GenesisProtocol", () => {
 
     genesisProtocol = new web3.eth.Contract(
       GenesisProtocol.abi,
-      addresses.GenesisProtocol,
+      addresses.GenesisProtocol[0],
       opts
     );
     reputation = new web3.eth.Contract(
       Reputation.abi,
-      addresses.Reputation,
+      addresses.Reputation[0],
       opts
     );
 
-    daoToken = new web3.eth.Contract(DAOToken.abi, addresses.GPToken, opts);
+    daoToken = new web3.eth.Contract(DAOToken.abi, addresses.GenesisProtocol[0], opts);
 
     const GenesisProtocolCallbacksContract = new web3.eth.Contract(
       GenesisProtocolCallbacks.abi,
@@ -49,9 +49,9 @@ describe("GenesisProtocol", () => {
     genesisProtocolCallbacks = await GenesisProtocolCallbacksContract.deploy({
       data: GenesisProtocolCallbacks.bytecode,
       arguments: [
-        addresses.Reputation,
-        addresses.GPToken,
-        addresses.GenesisProtocol
+        addresses.Reputation[0],
+        addresses.GenesisProtocol[0],
+        addresses.GenesisProtocol[0]
       ]
     }).send();
   });

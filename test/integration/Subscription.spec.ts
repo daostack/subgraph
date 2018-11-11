@@ -1,25 +1,12 @@
-import { getWeb3, getContractAddresses, getOptions, query } from "./util";
+import { getWeb3,
+         getContractAddresses,
+         getOptions,
+         createSubscriptionObservable
+       } from "./util";
 
 const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
 
-const { execute } = require('apollo-link');
-const { WebSocketLink } = require('apollo-link-ws');
-const { SubscriptionClient } = require('subscriptions-transport-ws');
-const ws = require('ws');
-
-const getWsClient = function(wsurl) {
-  const client = new SubscriptionClient(
-    wsurl, {reconnect: true}, ws
-  );
-  return client;
-};
-
-const createSubscriptionObservable = (wsurl, query, variables) => {
-  const link = new WebSocketLink(getWsClient(wsurl));
-  return execute(link, {query: query, variables: variables});
-};
-
-//const gql = require('graphql-tag');
+const gql = require('graphql-tag');
 
 describe('Subscriptions', () => {
     let web3, addresses, opts, reputation;
@@ -31,7 +18,7 @@ describe('Subscriptions', () => {
     });
     it('Reputation Mint', async () => {
         const accounts = web3.eth.accounts.wallet;
-        const SUBSCRIBE_QUERY = `
+        const SUBSCRIBE_QUERY = gql`
         subscription  {
           reputationMints {
             contract
@@ -41,15 +28,14 @@ describe('Subscriptions', () => {
         }
         `;
 
-      const subscriptionClient =await  createSubscriptionObservable(
-          'http://graph-node:8001/by-name/daostack', // GraphQL endpoint
-          SUBSCRIBE_QUERY,                                       // Subscription query
-          {address: accounts[0].address.toLowerCase()}                                                // Query variables
+      const subscriptionClient =await createSubscriptionObservable(
+          SUBSCRIBE_QUERY                              // Subscription query
+          //{address: accounts[0].address.toLowerCase()} // Query variables
         );
 
       let event;
 
-      var consumer =await subscriptionClient.subscribe(eventData => {
+      var consumer = await subscriptionClient.subscribe(eventData => {
         // Do something on receipt of the event
         event = eventData.data.reputationMints[0];
       }, (err) => {

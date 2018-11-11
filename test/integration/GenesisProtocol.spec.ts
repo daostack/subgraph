@@ -137,8 +137,6 @@ describe("GenesisProtocol", () => {
       totalReputation: txs[4].events.ExecuteProposal.returnValues._totalReputation,
     })
 
-    console.log("-0-",await genesisProtocol.methods.organizations(proposalId).call());
-
     const { genesisProtocolExecuteProposals } = await query(`{
       genesisProtocolExecuteProposals {
         proposalId

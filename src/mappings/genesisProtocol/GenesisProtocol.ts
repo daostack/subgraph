@@ -2,42 +2,42 @@ import "allocator/arena";
 export { allocate_memory };
 
 import {
+  Address,
   BigInt,
-  store,
-  crypto,
   ByteArray,
   Bytes,
-  Address,
+  crypto,
+  EthereumValue,
   SmartContract,
-  EthereumValue
+  store,
 } from "@graphprotocol/graph-ts";
 
 import {
+  ExecuteProposal,
+  GenesisProtocol,
   GPExecuteProposal,
-  Stake,
+  NewProposal,
   Redeem,
   RedeemDaoBounty,
   RedeemReputation,
-  NewProposal,
-  ExecuteProposal,
+  Stake,
   VoteProposal,
-  GenesisProtocol
 } from "../../types/GenesisProtocol/GenesisProtocol";
 
-import { concat, addition } from "../../utils";
+import { addition, concat } from "../../utils";
 
 import {
+  GenesisProtocolExecuteProposal,
+  GenesisProtocolGPExecuteProposal,
   GenesisProtocolProposal,
-  GenesisProtocolVote,
-  GenesisProtocolStake,
   GenesisProtocolRedemption,
   GenesisProtocolReward,
-  GenesisProtocolExecuteProposal,
-  GenesisProtocolGPExecuteProposal
+  GenesisProtocolStake,
+  GenesisProtocolVote,
 } from "../../types/schema";
 
 export function handleNewProposal(event: NewProposal): void {
-  let ent = new GenesisProtocolProposal();
+  const ent = new GenesisProtocolProposal();
   ent.proposalId = event.params._proposalId.toHex();
   ent.submittedTime = event.block.timestamp;
   ent.proposer = event.params._proposer;
@@ -48,10 +48,10 @@ export function handleNewProposal(event: NewProposal): void {
 }
 
 export function handleVoteProposal(event: VoteProposal): void {
-  let ent = new GenesisProtocolVote();
-  let uniqueId = concat(event.params._proposalId, event.params._voter).toHex();
+  const ent = new GenesisProtocolVote();
+  const uniqueId = concat(event.params._proposalId, event.params._voter).toHex();
 
-  let vote = store.get("GenesisProtocolVote", uniqueId) as GenesisProtocolVote;
+  const vote = store.get("GenesisProtocolVote", uniqueId) as GenesisProtocolVote;
   if (vote == null) {
     ent.avatarAddress = event.params._organization;
     ent.reputation = event.params._reputation;
@@ -69,12 +69,12 @@ export function handleVoteProposal(event: VoteProposal): void {
 }
 
 export function handleStake(event: Stake): void {
-  let ent = new GenesisProtocolStake();
-  let uniqueId = concat(event.params._proposalId, event.params._staker).toHex();
+  const ent = new GenesisProtocolStake();
+  const uniqueId = concat(event.params._proposalId, event.params._staker).toHex();
 
-  let stake = store.get(
+  const stake = store.get(
     "GenesisProtocolStake",
-    uniqueId
+    uniqueId,
   ) as GenesisProtocolStake;
 
   if (stake == null) {
@@ -90,9 +90,9 @@ export function handleStake(event: Stake): void {
     return;
   }
 
-  let proposal = store.get(
+  const proposal = store.get(
     "GenesisProtocolProposal",
-    event.params._proposalId.toHex()
+    event.params._proposalId.toHex(),
   ) as GenesisProtocolProposal;
 
   proposal.state = state(event.params._proposalId, event.address).toI32();
@@ -100,27 +100,27 @@ export function handleStake(event: Stake): void {
   store.set(
     "GenesisProtocolProposal",
     event.params._proposalId.toHex(),
-    proposal
+    proposal,
   );
 
   store.set("GPStake", uniqueId, ent);
 }
 
 export function handleGPExecuteProposal(event: GPExecuteProposal): void {
-  let proposal = store.get(
+  const proposal = store.get(
     "GenesisProtocolProposal",
-    event.params._proposalId.toHex()
+    event.params._proposalId.toHex(),
   ) as GenesisProtocolProposal;
-  //todo: figure out why reading uint8 event param does not work .
-  //this is a workaround to by pass the auto generated getter.
+  // todo: figure out why reading uint8 event param does not work .
+  // this is a workaround to by pass the auto generated getter.
   proposal.executionState = event.parameters[1].value.toBigInt().toI32();
   store.set(
     "GenesisProtocolProposal",
     event.params._proposalId.toHex(),
-    proposal
+    proposal,
   );
 
-  let genesisProtocolGPExecuteProposal = new GenesisProtocolGPExecuteProposal();
+  const genesisProtocolGPExecuteProposal = new GenesisProtocolGPExecuteProposal();
   genesisProtocolGPExecuteProposal.executionState = event.parameters[1].value
     .toBigInt()
     .toI32();
@@ -130,30 +130,30 @@ export function handleGPExecuteProposal(event: GPExecuteProposal): void {
   store.set(
     "GenesisProtocolGPExecuteProposal",
     event.transaction.hash.toHex(),
-    genesisProtocolGPExecuteProposal
+    genesisProtocolGPExecuteProposal,
   );
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
-  let proposal = store.get(
+  const proposal = store.get(
     "GenesisProtocolProposal",
-    event.params._proposalId.toHex()
+    event.params._proposalId.toHex(),
   ) as GenesisProtocolProposal;
 
   proposal.executionTime = event.block.timestamp;
   proposal.decision = event.params._decision;
   proposal.totalReputation = event.params._totalReputation;
-  //todo:figure out why reading uint8 param does not work .
-  //for now use a workaround.
-  //https://github.com/graphprotocol/graph-node/issues/569
+  // todo:figure out why reading uint8 param does not work .
+  // for now use a workaround.
+  // https://github.com/graphprotocol/graph-node/issues/569
   proposal.state = state(event.params._proposalId, event.address).toI32();
   store.set(
     "GenesisProtocolProposal",
     event.params._proposalId.toHex(),
-    proposal
+    proposal,
   );
 
-  let genesisProtocolExecuteProposal = new GenesisProtocolExecuteProposal();
+  const genesisProtocolExecuteProposal = new GenesisProtocolExecuteProposal();
   genesisProtocolExecuteProposal.decision = event.params._decision;
   genesisProtocolExecuteProposal.contract = event.address;
   genesisProtocolExecuteProposal.organization = event.params._organization;
@@ -164,12 +164,12 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
   store.set(
     "GenesisProtocolExecuteProposal",
     event.transaction.hash.toHex(),
-    genesisProtocolExecuteProposal
+    genesisProtocolExecuteProposal,
   );
 }
 
 export function handleRedeem(event: Redeem): void {
-  let rewardType = new Uint8Array(1);
+  const rewardType = new Uint8Array(1);
   rewardType[0] = 5;
   updateRedemption(
     event.params._beneficiary,
@@ -177,12 +177,12 @@ export function handleRedeem(event: Redeem): void {
     event.params._amount,
     event.params._proposalId,
     rewardType as ByteArray,
-    "gpGen"
+    "gpGen",
   );
 }
 
 export function handleRedeemDaoBounty(event: RedeemDaoBounty): void {
-  let rewardType = new Uint8Array(1);
+  const rewardType = new Uint8Array(1);
   rewardType[0] = 6;
   updateRedemption(
     event.params._beneficiary,
@@ -190,12 +190,12 @@ export function handleRedeemDaoBounty(event: RedeemDaoBounty): void {
     event.params._amount,
     event.params._proposalId,
     rewardType as ByteArray,
-    "gpBounty"
+    "gpBounty",
   );
 }
 
 export function handleRedeemReputation(event: RedeemReputation): void {
-  let rewardType = new Uint8Array(1);
+  const rewardType = new Uint8Array(1);
   rewardType[0] = 4;
   updateRedemption(
     event.params._beneficiary,
@@ -203,7 +203,7 @@ export function handleRedeemReputation(event: RedeemReputation): void {
     event.params._amount,
     event.params._proposalId,
     rewardType as ByteArray,
-    "gpRep"
+    "gpRep",
   );
 }
 
@@ -213,19 +213,19 @@ function updateRedemption(
   amount: BigInt,
   proposalId: Bytes,
   rewardType: ByteArray,
-  rewardString: String
+  rewardString: string,
 ): void {
-  let accountId = crypto.keccak256(concat(beneficiary, avatar));
+  const accountId = crypto.keccak256(concat(beneficiary, avatar));
 
-  let rewardId = crypto.keccak256(concat(rewardType, amount as ByteArray));
+  const rewardId = crypto.keccak256(concat(rewardType, amount as ByteArray));
 
-  let uniqueId = crypto
+  const uniqueId = crypto
     .keccak256(concat(proposalId, concat(accountId, rewardId)))
     .toHex();
 
   let redemption = store.get(
     "GenesisProtocolRedemption",
-    uniqueId
+    uniqueId,
   ) as GenesisProtocolRedemption;
   if (redemption == null) {
     redemption = new GenesisProtocolRedemption();
@@ -237,7 +237,7 @@ function updateRedemption(
 
   let reward = store.get(
     "GenesisProtocolReward",
-    rewardId.toHex()
+    rewardId.toHex(),
   ) as GenesisProtocolReward;
   if (reward == null) {
     reward = new GenesisProtocolReward();
@@ -249,10 +249,10 @@ function updateRedemption(
   }
 }
 
-function state(_proposalId: Bytes, address: Address): BigInt {
-  let genesisProtocol = new SmartContract("GenesisProtocol", address);
-  let result = genesisProtocol.call("state", [
-    EthereumValue.fromFixedBytes(_proposalId)
+function state(proposalId: Bytes, address: Address): BigInt {
+  const genesisProtocol = new SmartContract("GenesisProtocol", address);
+  const result = genesisProtocol.call("state", [
+    EthereumValue.fromFixedBytes(proposalId),
   ]);
   return result[0].toBigInt();
 }

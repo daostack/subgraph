@@ -57,6 +57,7 @@
     "typescript": "^3.1.3",
     "web3": "1.0.0-beta.35",
     "winston": "^3.1.0",
+    "yaeti": "^1.0.2",
     "yargs": "^12.0.2"
   },
   "jest": {

@@ -25,13 +25,13 @@ import { TokenApproval,
        } from "../../types/schema";
 
 function update(contract: Address, owner: Address): void {
-    const token = DAOToken.bind(contract);
-    const ent = new TokenHolder();
-    const id = crypto.keccak256(concat(contract, owner)).toHex();
+    let token = DAOToken.bind(contract);
+    let ent = new TokenHolder();
+    let id = crypto.keccak256(concat(contract, owner)).toHex();
     //  ent.id = id;
     ent.contract = contract;
     ent.address = owner;
-    const balance = token.balanceOf(owner);
+    let balance = token.balanceOf(owner);
     ent.balance = balance;
 
     if (!isZero(balance)) {
@@ -46,7 +46,7 @@ function update(contract: Address, owner: Address): void {
 export function handleMint(event: Mint): void {
     update(event.address, event.params.to as Address);
 
-    const ent = new TokenMint();
+    let ent = new TokenMint();
     ent.txHash = event.transaction.hash;
     ent.contract = event.address;
     ent.to = event.params.to;
@@ -59,7 +59,7 @@ export function handleMint(event: Mint): void {
 export function handleBurn(event: Burn): void {
     update(event.address, event.params.burner as Address);
 
-    const ent = new TokenBurn();
+    let ent = new TokenBurn();
     // TODO: txHash is not unique
     ent.txHash = event.transaction.hash;
     ent.contract = event.address;
@@ -71,7 +71,7 @@ export function handleBurn(event: Burn): void {
 
 export function handleMintFinished(event: MintFinished): void {
 
-    const ent = new TokenMintFinished();
+    let ent = new TokenMintFinished();
     // TODO: txHash is not unique
     ent.txHash = event.transaction.hash;
     ent.contract = event.address;
@@ -83,7 +83,7 @@ export function handleTransfer(event: Transfer): void {
 
     update(event.address, event.params.to as Address);
     update(event.address, event.params.from as Address);
-    const ent = new TokenTransfer();
+    let ent = new TokenTransfer();
     // TODO: txHash is not unique
     ent.txHash = event.transaction.hash;
     ent.contract = event.address;
@@ -96,7 +96,7 @@ export function handleTransfer(event: Transfer): void {
 
 export function handleApproval(event: Approval): void {
 
-    const ent = new TokenApproval();
+    let ent = new TokenApproval();
     // TODO: txHash is not unique
     ent.txHash = event.transaction.hash;
     ent.contract = event.address;
@@ -112,8 +112,8 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 }
 
 function updateTokenContract(contract: Address): void {
-    const token = DAOToken.bind(contract);
-    const tokenContract = new TokenContract();
+    let token = DAOToken.bind(contract);
+    let tokenContract = new TokenContract();
     tokenContract.address = contract;
     tokenContract.totalSupply = token.totalSupply();
     tokenContract.owner = token.owner();

@@ -25,7 +25,7 @@
     "docker:stop": "docker-compose down -v",
     "docker:rebuild": "docker-compose build",
     "docker:logs": "docker-compose logs \"$@\"",
-    "lint": "tslint -c tslint.json 'src/mappings/**/*.ts'"
+    "lint": "tslint -c tslint.json 'src/mappings/**/*.ts' && tslint -c tslint.json 'test/**/*.ts'"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

@@ -28,7 +28,7 @@ import { equals } from "../../utils";
 
 export function handleRedeemReputation(event: RedeemReputation): void {
     updateProposalafterRedemption(event.address, event.params._proposalId, 0);
-    const ent = new ContributionRewardRedeemReputation();
+    let ent = new ContributionRewardRedeemReputation();
     ent.txHash = event.transaction.hash.toHex();
     ent.contract = event.address;
     ent.amount = event.params._amount;
@@ -40,7 +40,7 @@ export function handleRedeemReputation(event: RedeemReputation): void {
 
 export function handleRedeemNativeToken(event: RedeemNativeToken): void {
     updateProposalafterRedemption(event.address, event.params._proposalId, 1);
-    const ent = new ContributionRewardRedeemNativeToken();
+    let ent = new ContributionRewardRedeemNativeToken();
     ent.txHash = event.transaction.hash.toHex();
     ent.contract = event.address;
     ent.amount = event.params._amount;
@@ -52,7 +52,7 @@ export function handleRedeemNativeToken(event: RedeemNativeToken): void {
 
 export function handleRedeemEther(event: RedeemEther): void {
     updateProposalafterRedemption(event.address, event.params._proposalId, 2);
-    const ent = new ContributionRewardRedeemEther();
+    let ent = new ContributionRewardRedeemEther();
     ent.txHash = event.transaction.hash.toHex();
     ent.contract = event.address;
     ent.amount = event.params._amount;
@@ -64,7 +64,7 @@ export function handleRedeemEther(event: RedeemEther): void {
 
 export function handleRedeemExternalToken(event: RedeemExternalToken): void {
     updateProposalafterRedemption(event.address, event.params._proposalId, 3);
-    const ent = new ContributionRewardRedeemExternalToken();
+    let ent = new ContributionRewardRedeemExternalToken();
     ent.txHash = event.transaction.hash.toHex();
     ent.contract = event.address;
     ent.amount = event.params._amount;
@@ -75,7 +75,7 @@ export function handleRedeemExternalToken(event: RedeemExternalToken): void {
 }
 
 function insertNewProposal(event: NewContributionProposal): void {
-    const ent = new ContributionRewardProposal();
+    let ent = new ContributionRewardProposal();
     ent.proposalId = event.params._proposalId.toHex();
     ent.contract = event.address;
     ent.avatar = event.params._avatar;
@@ -84,7 +84,7 @@ function insertNewProposal(event: NewContributionProposal): void {
     ent.externalToken = event.params._externalToken;
     ent.votingMachine = event.params._intVoteInterface;
     ent.reputationReward = event.params._reputationChange;
-    const rewards = event.params._rewards;
+    let rewards = event.params._rewards;
     ent.nativeTokenReward = rewards.shift(); // native tokens
     ent.ethReward = rewards.shift(); // eth
     ent.externalTokenReward = rewards.shift(); // external tokens
@@ -94,9 +94,9 @@ function insertNewProposal(event: NewContributionProposal): void {
 }
 
 function updateProposalafterRedemption(contributionRewardAddress: Address, proposalId: Bytes, type: number): void {
-    const ent = store.get("ContributionRewardProposal", proposalId.toHex()) as ContributionRewardProposal;
+    let ent = store.get("ContributionRewardProposal", proposalId.toHex()) as ContributionRewardProposal;
     if (ent != null) {
-        const cr = ContributionReward.bind(contributionRewardAddress);
+        let cr = ContributionReward.bind(contributionRewardAddress);
         if (type === 0) {
             ent.alreadyRedeemedReputationPeriods = cr.getRedeemedPeriods(
                                                       proposalId,
@@ -123,16 +123,16 @@ function updateProposalafterRedemption(contributionRewardAddress: Address, propo
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
-    const cr = ContributionReward.bind(event.address);
-    const proposalId = event.params._proposalId;
-    const proposalEnt = store.get("ContributionRewardProposal", proposalId.toHex()) as ContributionRewardProposal;
+    let cr = ContributionReward.bind(event.address);
+    let proposalId = event.params._proposalId;
+    let proposalEnt = store.get("ContributionRewardProposal", proposalId.toHex()) as ContributionRewardProposal;
     if (proposalEnt != null) {
-        const proposal = cr.organizationsProposals(event.params._avatar, proposalId);
+        let proposal = cr.organizationsProposals(event.params._avatar, proposalId);
         proposalEnt.executedAt = proposal.value9;
         store.set("ContributionRewardProposal", proposalId.toHex(), proposalEnt);
     }
 
-    const ent = new ContributionRewardProposalResolved();
+    let ent = new ContributionRewardProposalResolved();
     ent.txHash = event.transaction.hash.toHex();
     ent.contract = event.address;
     ent.avatar = event.params._avatar;
@@ -143,7 +143,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
 
 export function handleNewContributionProposal(event: NewContributionProposal): void {
     insertNewProposal(event);
-    const ent = new ContributionRewardNewContributionProposal();
+    let ent = new ContributionRewardNewContributionProposal();
     ent.txHash = event.transaction.hash.toHex();
     ent.contract = event.address;
     ent.avatar = event.params._avatar;
@@ -153,7 +153,7 @@ export function handleNewContributionProposal(event: NewContributionProposal): v
     ent.votingMachine = event.params._intVoteInterface;
     ent.proposalId = event.params._proposalId;
     ent.reputationReward = event.params._reputationChange;
-    const rewards = event.params._rewards;
+    let rewards = event.params._rewards;
     ent.nativeTokenReward = rewards.shift(); // native tokens
     ent.ethReward = rewards.shift(); // eth
     ent.externalTokenReward = rewards.shift(); // external tokens

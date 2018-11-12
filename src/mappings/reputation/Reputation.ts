@@ -11,13 +11,13 @@ import { concat, isZero } from "../../utils";
 import { ReputationBurn, ReputationContract, ReputationHolder, ReputationMint } from "../../types/schema";
 
 function update(contract: Address, owner: Address): void {
-    const rep = Reputation.bind(contract);
-    const ent = new ReputationHolder();
-    const id = crypto.keccak256(concat(contract, owner)).toHex();
+    let rep = Reputation.bind(contract);
+    let ent = new ReputationHolder();
+    let id = crypto.keccak256(concat(contract, owner)).toHex();
     //  ent.id = id;
     ent.contract = contract;
     ent.address = owner;
-    const balance = rep.balanceOf(owner);
+    let balance = rep.balanceOf(owner);
     ent.balance = balance;
 
     if (!isZero(balance)) {
@@ -26,7 +26,7 @@ function update(contract: Address, owner: Address): void {
         store.remove("ReputationHolder", id);
     }
 
-    const reputationContract = new ReputationContract();
+    let reputationContract = new ReputationContract();
     reputationContract.address = contract;
     reputationContract.totalSupply = rep.totalSupply();
     store.set("ReputationContract", contract.toHex(), reputationContract);
@@ -35,7 +35,7 @@ function update(contract: Address, owner: Address): void {
 export function handleMint(event: Mint): void {
     update(event.address, event.params._to as Address);
 
-    const ent = new ReputationMint();
+    let ent = new ReputationMint();
     // TODO: txHash is not unique
     // ent.id = event.transaction.hash.toHex();
     ent.txHash = event.transaction.hash;
@@ -50,7 +50,7 @@ export function handleMint(event: Mint): void {
 export function handleBurn(event: Burn): void {
     update(event.address, event.params._from as Address);
 
-    const ent = new ReputationBurn();
+    let ent = new ReputationBurn();
     // TODO: txHash is not unique
     ent.txHash = event.transaction.hash;
     ent.contract = event.address;

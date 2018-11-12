@@ -3,8 +3,8 @@ export { allocate_memory };
 
 import { Address, BigInt, ByteArray, Bytes, crypto, Entity, store, Value } from '@graphprotocol/graph-ts';
 
-import { Reputation } from '../../types/Reputation/Reputation';
 import { DAOToken } from '../../types/DAOToken/DAOToken';
+import { Reputation } from '../../types/Reputation/Reputation';
 
 import { ReputationContract ,
          TokenContract ,
@@ -55,7 +55,6 @@ function insertOrganization(uControllerAddress: Address, avatarAddress: Address)
     let uController = UController.bind(uControllerAddress);
     let org = uController.organizations(avatarAddress);
 
-
     let reputationContract = new ReputationContract();
     let rep = Reputation.bind(org.value1);
     reputationContract.address = org.value1;
@@ -70,7 +69,7 @@ function insertOrganization(uControllerAddress: Address, avatarAddress: Address)
     store.set('TokenContract', org.value0.toHex(), tokenContract);
 
     let ent = new UControllerOrganization();
-    ent.avatarAddress = avatarAddress.toHex(); 
+    ent.avatarAddress = avatarAddress.toHex();
     ent.nativeToken = org.value0.toHex();
     ent.nativeReputation = org.value1.toHex();
     ent.controller = uControllerAddress;

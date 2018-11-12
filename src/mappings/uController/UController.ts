@@ -5,8 +5,9 @@ import { Entity, Value, store, crypto, ByteArray, Bytes, Address,BigInt } from '
 
 import { UController, MintTokens, RegisterScheme, UnregisterScheme, UpgradeController, AddGlobalConstraint, RemoveGlobalConstraint } from '../../types/UController/UController'
 import { concat } from '../../utils';
-import { ReputationContract ,UControllerScheme, UControllerOrganization, UControllerGlobalConstraint, UControllerRegisterScheme, UControllerUnregisterScheme, UControllerUpgradeController, UControllerAddGlobalConstraint, UControllerRemoveGlobalConstraint } from '../../types/schema';
+import { AvatarContract, ReputationContract ,UControllerScheme, UControllerOrganization, UControllerGlobalConstraint, UControllerRegisterScheme, UControllerUnregisterScheme, UControllerUpgradeController, UControllerAddGlobalConstraint, UControllerRemoveGlobalConstraint } from '../../types/schema';
 import { Reputation } from '../../types/Reputation/Reputation'
+import { Avatar } from "../../types/Avatar/Avatar";
 
 function insertScheme(uControllerAddress: Address, avatarAddress: Address, scheme: Address): void {
     let uController = UController.bind(uControllerAddress);
@@ -42,6 +43,16 @@ function insertOrganization(uControllerAddress: Address, avatarAddress: Address)
     ent.nativeToken = org.value0;
     ent.nativeReputation = org.value1.toHex();
     ent.controller = uControllerAddress;
+
+    let avatarSC = Avatar.bind(avatarAddress);
+    let avatar = new AvatarContract();
+    avatar.id = avatarAddress.toHex();
+    avatar.address = avatarAddress;
+    avatar.name = avatarSC.orgName();
+    avatar.nativeReputation = avatarSC.nativeReputation().toString();
+    avatar.nativeToken = avatarSC.nativeToken();
+    avatar.owner = avatarSC.owner();
+    store.set("Avatar", avatarAddress.toHex(), avatar);
 
     store.set('UControllerOrganization', avatarAddress.toHex(), ent);
 }

@@ -169,3 +169,24 @@ dataSources:
         handler: handleGPExecuteProposal
       - event: ExecuteProposal(bytes32, address, uint256, uint256)
         handler: handleExecuteProposal
+
+- kind: ethereum/contract
+  name: Avatar
+  source:
+    address: "{{addresses.Avatar}}"
+    abi: Avatar
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.1
+    language: wasm/assemblyscript
+    file: ./src/mappings/avatar/Avatar.ts
+    entities:
+      - Avatar
+    abis:
+      - name: Avatar
+        file: ./abis/Avatar.json
+    eventHandlers:
+      - event: SendEther(uint256, address)
+        handler: handleAvatarBalance
+      - event: ReceiveEther(address, uint256)
+        handler: handleAvatarBalance

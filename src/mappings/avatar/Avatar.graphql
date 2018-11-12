@@ -1,0 +1,9 @@
+type AvatarContract @entity {
+  id: ID!
+  address: Bytes!
+  name: String!
+  nativeToken: Bytes!
+  nativeReputation: ReputationContract!
+  balance: BigInt!
+  owner: Bytes!
+}

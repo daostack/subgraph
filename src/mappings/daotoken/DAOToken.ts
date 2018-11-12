@@ -1,7 +1,7 @@
-import "allocator/arena";
+import 'allocator/arena';
 export { allocate_memory };
 
-import { Address, crypto, store } from "@graphprotocol/graph-ts";
+import { Address, crypto, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Token contract ABI
 import { Approval,
@@ -11,8 +11,8 @@ import { Approval,
          MintFinished,
          OwnershipTransferred,
          Transfer,
-       } from "../../types/DAOToken/DAOToken";
-import { concat, isZero } from "../../utils";
+       } from '../../types/DAOToken/DAOToken';
+import { concat, isZero } from '../../utils';
 
 // Import entity types generated from the GraphQL schema
 import { TokenApproval,
@@ -22,7 +22,7 @@ import { TokenApproval,
          TokenMint,
          TokenMintFinished,
          TokenTransfer,
-       } from "../../types/schema";
+       } from '../../types/schema';
 
 function update(contract: Address, owner: Address): void {
     let token = DAOToken.bind(contract);
@@ -35,9 +35,9 @@ function update(contract: Address, owner: Address): void {
     ent.balance = balance;
 
     if (!isZero(balance)) {
-        store.set("TokenHolder", id, ent);
+        store.set('TokenHolder', id, ent);
     } else {
-        store.remove("TokenHolder", id);
+        store.remove('TokenHolder', id);
     }
 
     updateTokenContract(contract);
@@ -52,7 +52,7 @@ export function handleMint(event: Mint): void {
     ent.to = event.params.to;
     ent.amount = event.params.amount;
 
-    store.set("TokenMint", event.transaction.hash.toHex(), ent);
+    store.set('TokenMint', event.transaction.hash.toHex(), ent);
 
 }
 
@@ -66,7 +66,7 @@ export function handleBurn(event: Burn): void {
     ent.burner = event.params.burner;
     ent.amount = event.params.value;
 
-    store.set("TokenBurn", event.transaction.hash.toHex(), ent);
+    store.set('TokenBurn', event.transaction.hash.toHex(), ent);
 }
 
 export function handleMintFinished(event: MintFinished): void {
@@ -76,7 +76,7 @@ export function handleMintFinished(event: MintFinished): void {
     ent.txHash = event.transaction.hash;
     ent.contract = event.address;
 
-    store.set("TokenMintFinished", event.transaction.hash.toHex(), ent);
+    store.set('TokenMintFinished', event.transaction.hash.toHex(), ent);
 }
 
 export function handleTransfer(event: Transfer): void {
@@ -91,7 +91,7 @@ export function handleTransfer(event: Transfer): void {
     ent.to = event.params.to;
     ent.value = event.params.value;
 
-    store.set("TokenTransfer", event.transaction.hash.toHex(), ent);
+    store.set('TokenTransfer', event.transaction.hash.toHex(), ent);
 }
 
 export function handleApproval(event: Approval): void {
@@ -104,7 +104,7 @@ export function handleApproval(event: Approval): void {
     ent.value = event.params.value;
     ent.owner = event.params.owner;
 
-    store.set("TokenApproval", event.transaction.hash.toHex(), ent);
+    store.set('TokenApproval', event.transaction.hash.toHex(), ent);
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
@@ -117,5 +117,5 @@ function updateTokenContract(contract: Address): void {
     tokenContract.address = contract;
     tokenContract.totalSupply = token.totalSupply();
     tokenContract.owner = token.owner();
-    store.set("TokenContract", contract.toHex(), tokenContract);
+    store.set('TokenContract', contract.toHex(), tokenContract);
 }

@@ -1,9 +1,9 @@
-import "allocator/arena";
+import 'allocator/arena';
 export { allocate_memory };
 
-import { Address, BigInt, ByteArray, Bytes, crypto, Entity, store, Value } from "@graphprotocol/graph-ts";
+import { Address, BigInt, ByteArray, Bytes, crypto, Entity, store, Value } from '@graphprotocol/graph-ts';
 
-import { Reputation } from "../../types/Reputation/Reputation";
+import { Reputation } from '../../types/Reputation/Reputation';
 import { ReputationContract ,
         UControllerAddGlobalConstraint,
         UControllerGlobalConstraint,
@@ -13,7 +13,7 @@ import { ReputationContract ,
         UControllerScheme,
         UControllerUnregisterScheme,
         UControllerUpgradeController,
-      } from "../../types/schema";
+      } from '../../types/schema';
 import { AddGlobalConstraint,
          MintTokens,
          RegisterScheme,
@@ -21,8 +21,8 @@ import { AddGlobalConstraint,
          UController,
          UnregisterScheme,
          UpgradeController,
-       } from "../../types/UController/UController";
-import { concat } from "../../utils";
+       } from '../../types/UController/UController';
+import { concat } from '../../utils';
 
 function insertScheme(uControllerAddress: Address, avatarAddress: Address, scheme: Address): void {
     let uController = UController.bind(uControllerAddress);
@@ -42,11 +42,11 @@ function insertScheme(uControllerAddress: Address, avatarAddress: Address, schem
     /* tslint:disable:no-bitwise */
     ent.canDelegateCall = (perms[3] & 16) === 16;
 
-    store.set("UControllerScheme", crypto.keccak256(concat(avatarAddress, scheme)).toHex(), ent);
+    store.set('UControllerScheme', crypto.keccak256(concat(avatarAddress, scheme)).toHex(), ent);
 }
 
 function deleteScheme(avatarAddress: Address, scheme: Address): void {
-    store.remove("UControllerScheme", crypto.keccak256(concat(avatarAddress, scheme)).toHex());
+    store.remove('UControllerScheme', crypto.keccak256(concat(avatarAddress, scheme)).toHex());
 }
 
 function insertOrganization(uControllerAddress: Address, avatarAddress: Address): void {
@@ -58,19 +58,19 @@ function insertOrganization(uControllerAddress: Address, avatarAddress: Address)
     let rep = Reputation.bind(org.value1);
     reputationContract.address = org.value1;
     reputationContract.totalSupply = rep.totalSupply();
-    store.set("ReputationContract", org.value1.toHex(), reputationContract);
+    store.set('ReputationContract', org.value1.toHex(), reputationContract);
     ent.nativeToken = org.value0;
     ent.nativeReputation = org.value1.toHex();
     ent.controller = uControllerAddress;
 
-    store.set("UControllerOrganization", avatarAddress.toHex(), ent);
+    store.set('UControllerOrganization', avatarAddress.toHex(), ent);
 }
 
 function updateController(avatarAddress: Address, newController: Address): void {
-    let ent = store.get("UControllerOrganization", avatarAddress.toHex()) as UControllerOrganization;
+    let ent = store.get('UControllerOrganization', avatarAddress.toHex()) as UControllerOrganization;
     if (ent != null) {
         ent.controller = newController;
-        store.set("UControllerOrganization", avatarAddress.toHex(), ent);
+        store.set('UControllerOrganization', avatarAddress.toHex(), ent);
     }
 }
 
@@ -88,19 +88,19 @@ function insertGlobalConstraint(uControllerAddress: Address,
     ent.paramsHash = paramsHash;
     ent.type = type;
 
-    store.set("UControllerGlobalConstraint", crypto.keccak256(concat(avatarAddress, globalConstraint)).toHex(), ent);
+    store.set('UControllerGlobalConstraint', crypto.keccak256(concat(avatarAddress, globalConstraint)).toHex(), ent);
 }
 
 function deleteGlobalConstraint(avatarAddress: Address, globalConstraint: Address): void {
-    store.remove("UControllerGlobalConstraint", crypto.keccak256(concat(avatarAddress, globalConstraint)).toHex());
+    store.remove('UControllerGlobalConstraint', crypto.keccak256(concat(avatarAddress, globalConstraint)).toHex());
 }
 
 export function handleRegisterScheme(event: RegisterScheme): void {
     // Detect a new organization event by looking for the first register scheme event for that org.
-    let isFirstRegister = store.get("FirstRegisterScheme", event.params._avatar.toHex());
+    let isFirstRegister = store.get('FirstRegisterScheme', event.params._avatar.toHex());
     if (isFirstRegister == null) {
         insertOrganization(event.address, event.params._avatar);
-        store.set("FirstRegisterScheme", event.params._avatar.toHex(), new Entity());
+        store.set('FirstRegisterScheme', event.params._avatar.toHex(), new Entity());
     }
 
     insertScheme(event.address, event.params._avatar, event.params._scheme);
@@ -111,7 +111,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
     ent.contract = event.params._sender;
     ent.avatarAddress = event.params._avatar;
     ent.scheme = event.params._scheme;
-    store.set("UControllerRegisterScheme", event.transaction.hash.toHex(), ent);
+    store.set('UControllerRegisterScheme', event.transaction.hash.toHex(), ent);
 }
 
 export function handleUnregisterScheme(event: UnregisterScheme): void {
@@ -123,7 +123,7 @@ export function handleUnregisterScheme(event: UnregisterScheme): void {
     ent.contract = event.params._sender;
     ent.avatarAddress = event.params._avatar;
     ent.scheme = event.params._scheme;
-    store.set("UControllerUnregisterScheme", event.transaction.hash.toHex(), ent);
+    store.set('UControllerUnregisterScheme', event.transaction.hash.toHex(), ent);
 }
 
 export function handleUpgradeController(event: UpgradeController): void {
@@ -134,13 +134,13 @@ export function handleUpgradeController(event: UpgradeController): void {
     ent.controller = event.params._oldController;
     ent.avatarAddress = event.params._avatar;
     ent.newController = event.params._newController;
-    store.set("UControllerUpgradeController", event.transaction.hash.toHex(), ent);
+    store.set('UControllerUpgradeController', event.transaction.hash.toHex(), ent);
 }
 
 export function handleAddGlobalConstraint(event: AddGlobalConstraint): void {
   //  let when = event.params._when;
     let type: string;
-    type = "Both"; // ??????
+    type = 'Both'; // ??????
     // if (when == 0) {
     //     type = 'Pre';
     // } else if (when == 1) {
@@ -158,7 +158,7 @@ export function handleAddGlobalConstraint(event: AddGlobalConstraint): void {
     ent.paramsHash = event.params._params;
     ent.type = type;
 
-    store.set("UControllerAddGlobalConstraint", event.transaction.hash.toHex(), ent);
+    store.set('UControllerAddGlobalConstraint', event.transaction.hash.toHex(), ent);
 }
 
 export function handleRemoveGlobalConstraint(event: RemoveGlobalConstraint): void {
@@ -170,5 +170,5 @@ export function handleRemoveGlobalConstraint(event: RemoveGlobalConstraint): voi
     ent.avatarAddress = event.params._avatar;
     ent.globalConstraint = event.params._globalConstraint;
     ent.isPre = event.params._isPre;
-    store.set("UControllerRemoveGlobalConstraint", event.transaction.hash.toHex(), ent);
+    store.set('UControllerRemoveGlobalConstraint', event.transaction.hash.toHex(), ent);
 }

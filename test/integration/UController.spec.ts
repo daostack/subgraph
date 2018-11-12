@@ -116,7 +116,9 @@ describe('UController', () => {
     const { ucontrollerOrganizations } = await sendQuery(`{
       ucontrollerOrganizations {
         avatarAddress
-        nativeToken
+        nativeToken {
+          address
+        }
         nativeReputation {
           address
         }
@@ -127,7 +129,7 @@ describe('UController', () => {
     expect(ucontrollerOrganizations.length).toEqual(1);
     expect(ucontrollerOrganizations).toContainEqual({
       avatarAddress: avatar.options.address.toLowerCase(),
-      nativeToken: daoToken.options.address.toLowerCase(),
+      nativeToken: {address: daoToken.options.address.toLowerCase()},
       nativeReputation: {address: reputation.options.address.toLowerCase()},
       controller: uController.options.address.toLowerCase(),
     });
@@ -253,7 +255,9 @@ describe('UController', () => {
     const { ucontrollerOrganizations: ucontrollerOrganizations2 } = await sendQuery(`{
       ucontrollerOrganizations {
         avatarAddress
-        nativeToken
+        nativeToken {
+          address
+        }
         nativeReputation {
           address
         }
@@ -264,7 +268,7 @@ describe('UController', () => {
     expect(ucontrollerOrganizations2.length).toEqual(1);
     expect(ucontrollerOrganizations2).toContainEqual({
       avatarAddress: avatar.options.address.toLowerCase(),
-      nativeToken: daoToken.options.address.toLowerCase(),
+      nativeToken: {address: daoToken.options.address.toLowerCase()},
       nativeReputation: {address: reputation.options.address.toLowerCase()},
       controller: accounts[4].address.toLowerCase(),
     });

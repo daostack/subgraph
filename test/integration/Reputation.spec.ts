@@ -1,8 +1,8 @@
-import { getContractAddresses, getOptions, getWeb3, sendQuery } from "./util";
+import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
 
-const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
+const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
 
-describe("Reputation", () => {
+describe('Reputation', () => {
   let web3;
   let addresses;
   let reputation;
@@ -29,24 +29,24 @@ describe("Reputation", () => {
     });
   }
 
-  it("Sanity", async () => {
+  it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
     let txs = [];
-    txs.push(await reputation.methods.mint(accounts[0].address, "100").send());
+    txs.push(await reputation.methods.mint(accounts[0].address, '100').send());
 
-    await checkTotalSupply("100");
-    txs.push(await reputation.methods.mint(accounts[1].address, "100").send());
+    await checkTotalSupply('100');
+    txs.push(await reputation.methods.mint(accounts[1].address, '100').send());
 
-    await checkTotalSupply("200");
-    txs.push(await reputation.methods.burn(accounts[0].address, "30").send());
-    await checkTotalSupply("170");
+    await checkTotalSupply('200');
+    txs.push(await reputation.methods.burn(accounts[0].address, '30').send());
+    await checkTotalSupply('170');
 
-    txs.push(await reputation.methods.mint(accounts[2].address, "300").send());
-    await checkTotalSupply("470");
-    txs.push(await reputation.methods.burn(accounts[1].address, "100").send());
-    await checkTotalSupply("370");
-    txs.push(await reputation.methods.burn(accounts[2].address, "1").send());
-    await checkTotalSupply("369");
+    txs.push(await reputation.methods.mint(accounts[2].address, '300').send());
+    await checkTotalSupply('470');
+    txs.push(await reputation.methods.burn(accounts[1].address, '100').send());
+    await checkTotalSupply('370');
+    txs.push(await reputation.methods.burn(accounts[2].address, '1').send());
+    await checkTotalSupply('369');
 
     txs = txs.map(({ transactionHash }) => transactionHash);
 
@@ -62,12 +62,12 @@ describe("Reputation", () => {
     expect(reputationHolders).toContainEqual({
       contract: reputation.options.address.toLowerCase(),
       address: accounts[0].address.toLowerCase(),
-      balance: "70",
+      balance: '70',
     });
     expect(reputationHolders).toContainEqual({
       contract: reputation.options.address.toLowerCase(),
       address: accounts[2].address.toLowerCase(),
-      balance: "299",
+      balance: '299',
     });
 
     const { reputationMints } = await sendQuery(`{
@@ -84,19 +84,19 @@ describe("Reputation", () => {
       txHash: txs[0],
       contract: reputation.options.address.toLowerCase(),
       address: accounts[0].address.toLowerCase(),
-      amount: "100",
+      amount: '100',
     });
     expect(reputationMints).toContainEqual({
       txHash: txs[1],
       contract: reputation.options.address.toLowerCase(),
       address: accounts[1].address.toLowerCase(),
-      amount: "100",
+      amount: '100',
     });
     expect(reputationMints).toContainEqual({
       txHash: txs[3],
       contract: reputation.options.address.toLowerCase(),
       address: accounts[2].address.toLowerCase(),
-      amount: "300",
+      amount: '300',
     });
 
     const { reputationBurns } = await sendQuery(`{
@@ -113,19 +113,19 @@ describe("Reputation", () => {
       txHash: txs[2],
       contract: reputation.options.address.toLowerCase(),
       address: accounts[0].address.toLowerCase(),
-      amount: "30",
+      amount: '30',
     });
     expect(reputationBurns).toContainEqual({
       txHash: txs[4],
       contract: reputation.options.address.toLowerCase(),
       address: accounts[1].address.toLowerCase(),
-      amount: "100",
+      amount: '100',
     });
     expect(reputationBurns).toContainEqual({
       txHash: txs[5],
       contract: reputation.options.address.toLowerCase(),
       address: accounts[2].address.toLowerCase(),
-      amount: "1",
+      amount: '1',
     });
   }, 100000);
 });

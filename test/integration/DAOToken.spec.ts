@@ -1,8 +1,8 @@
-import { getContractAddresses, getOptions, getWeb3, hashLength, nullParamsHash, padZeros, sendQuery } from "./util";
+import { getContractAddresses, getOptions, getWeb3, hashLength, nullParamsHash, padZeros, sendQuery } from './util';
 
-const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
+const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
 
-describe("DAOToken", () => {
+describe('DAOToken', () => {
   let web3;
   let addresses;
   let opts;
@@ -14,18 +14,18 @@ describe("DAOToken", () => {
     daotoken = new web3.eth.Contract(DAOToken.abi, addresses.DAOToken, opts);
   });
 
-  it("Sanity", async () => {
+  it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
     let txs = [];
 
-    txs.push(await daotoken.methods.mint(accounts[0].address, "100").send());
-    txs.push(await daotoken.methods.mint(accounts[1].address, "100").send());
-    txs.push(await daotoken.methods.mint(accounts[1].address, "100").send());
-    txs.push(await daotoken.methods.mint(accounts[2].address, "100").send());
-    txs.push(await daotoken.methods.burn("1").send());
-    txs.push(await daotoken.methods.burn("1").send());
-    txs.push(await daotoken.methods.transfer(accounts[3].address, "50").send());
-    txs.push(await daotoken.methods.approve(accounts[3].address, "50").send());
+    txs.push(await daotoken.methods.mint(accounts[0].address, '100').send());
+    txs.push(await daotoken.methods.mint(accounts[1].address, '100').send());
+    txs.push(await daotoken.methods.mint(accounts[1].address, '100').send());
+    txs.push(await daotoken.methods.mint(accounts[2].address, '100').send());
+    txs.push(await daotoken.methods.burn('1').send());
+    txs.push(await daotoken.methods.burn('1').send());
+    txs.push(await daotoken.methods.transfer(accounts[3].address, '50').send());
+    txs.push(await daotoken.methods.approve(accounts[3].address, '50').send());
     txs.push(await daotoken.methods.transferOwnership(accounts[1].address).send());
 
     txs = txs.map(({ transactionHash }) => transactionHash);
@@ -41,7 +41,7 @@ describe("DAOToken", () => {
     expect(tokenContracts.length).toEqual(1);
     expect(tokenContracts).toContainEqual({
       address: daotoken.options.address.toLowerCase(),
-      totalSupply: "398",
+      totalSupply: '398',
       owner: accounts[1].address.toLowerCase(),
     });
 
@@ -57,7 +57,7 @@ describe("DAOToken", () => {
     expect(tokenHolders).toContainEqual({
       contract: daotoken.options.address.toLowerCase(),
       address: accounts[0].address.toLowerCase(),
-      balance: "48",
+      balance: '48',
     });
 
     const { tokenTransfers } = await sendQuery(`{
@@ -76,7 +76,7 @@ describe("DAOToken", () => {
       contract: daotoken.options.address.toLowerCase(),
       from: accounts[0].address.toLowerCase(),
       to: accounts[3].address.toLowerCase(),
-      value: "50",
+      value: '50',
     });
 
   }, 20000);

@@ -1,12 +1,12 @@
-import { getContractAddresses, getOptions, getWeb3, hashLength, nullParamsHash, padZeros, sendQuery } from "./util";
+import { getContractAddresses, getOptions, getWeb3, hashLength, nullParamsHash, padZeros, sendQuery } from './util';
 
-const Avatar = require("@daostack/arc/build/contracts/Avatar.json");
-const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
-const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
-const TokenCapGC = require("@daostack/arc/build/contracts/TokenCapGC.json");
-const UController = require("@daostack/arc/build/contracts/UController.json");
+const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
+const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
+const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
+const TokenCapGC = require('@daostack/arc/build/contracts/TokenCapGC.json');
+const UController = require('@daostack/arc/build/contracts/UController.json');
 
-describe("UController", () => {
+describe('UController', () => {
 
   let web3;
   let addresses;
@@ -21,14 +21,14 @@ describe("UController", () => {
     reputation = new web3.eth.Contract(Reputation.abi, addresses.Reputation, opts);
   });
 
-  it("Sanity", async () => {
+  it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
     const daoToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-      .deploy({ data: DAOToken.bytecode, arguments: ["Test Token", "TST", "10000000000"] })
+      .deploy({ data: DAOToken.bytecode, arguments: ['Test Token', 'TST', '10000000000'] })
       .send();
 
     const avatar = await new web3.eth.Contract(Avatar.abi, undefined, opts)
-      .deploy({ data: Avatar.bytecode, arguments: ["Test", daoToken.options.address, reputation.options.address] })
+      .deploy({ data: Avatar.bytecode, arguments: ['Test', daoToken.options.address, reputation.options.address] })
       .send();
 
     const tokenCap1 = await new web3.eth.Contract(TokenCapGC.abi, undefined, opts)
@@ -43,18 +43,18 @@ describe("UController", () => {
     let txs = [];
     txs.push(await uController.methods.newOrganization(avatar.options.address).send());
     txs.push(await uController.methods.registerScheme(accounts[2].address,
-                                                      "0x" + padZeros("123", hashLength),
-                                                      "0x" + padZeros("7", 8),
+                                                      '0x' + padZeros('123', hashLength),
+                                                      '0x' + padZeros('7', 8),
                                                       avatar.options.address).send());
     txs.push(await uController.methods.addGlobalConstraint(tokenCap1.options.address,
-                                                           "0x" + padZeros("987", hashLength),
+                                                           '0x' + padZeros('987', hashLength),
                                                            avatar.options.address).send());
     txs.push(await uController.methods.registerScheme(accounts[3].address,
-                                                      "0x" + padZeros("321", hashLength),
-                                                      "0x" + padZeros("8", 8),
+                                                      '0x' + padZeros('321', hashLength),
+                                                      '0x' + padZeros('8', 8),
                                                       avatar.options.address).send());
     txs.push(await uController.methods.addGlobalConstraint(tokenCap2.options.address,
-                                                          "0x" + padZeros("789", hashLength),
+                                                          '0x' + padZeros('789', hashLength),
                                                            avatar.options.address).send());
     txs.push(await uController.methods.unregisterScheme(accounts[3].address, avatar.options.address).send());
     txs.push(await uController.methods.removeGlobalConstraint(tokenCap2.options.address,
@@ -157,7 +157,7 @@ describe("UController", () => {
     expect(ucontrollerSchemes).toContainEqual({
       avatarAddress: avatar.options.address.toLowerCase(),
       address: accounts[2].address.toLowerCase(),
-      paramsHash: "0x" + padZeros("123", hashLength),
+      paramsHash: '0x' + padZeros('123', hashLength),
       canRegisterSchemes: true,
       canManageGlobalConstraints: true,
       canUpgradeController: null,
@@ -181,16 +181,16 @@ describe("UController", () => {
       controller: uController.options.address.toLowerCase(),
       avatarAddress: avatar.options.address.toLowerCase(),
       globalConstraint: tokenCap1.options.address.toLowerCase(),
-      paramsHash: "0x" + padZeros("987", hashLength),
-      type: "Both", // this should be fix!!!
+      paramsHash: '0x' + padZeros('987', hashLength),
+      type: 'Both', // this should be fix!!!
     });
     expect(ucontrollerAddGlobalConstraints).toContainEqual({
       txHash: txs[4],
       controller: uController.options.address.toLowerCase(),
       avatarAddress: avatar.options.address.toLowerCase(),
       globalConstraint: tokenCap2.options.address.toLowerCase(),
-      paramsHash: "0x" + padZeros("789", hashLength),
-      type: "Both",
+      paramsHash: '0x' + padZeros('789', hashLength),
+      type: 'Both',
     });
 
     const { ucontrollerRemoveGlobalConstraints } = await sendQuery(`{
@@ -225,8 +225,8 @@ describe("UController", () => {
     expect(ucontrollerGlobalConstraints).toContainEqual({
       avatarAddress: avatar.options.address.toLowerCase(),
       address: tokenCap1.options.address.toLowerCase(),
-      paramsHash: "0x" + padZeros("987", hashLength),
-      type: "Both",
+      paramsHash: '0x' + padZeros('987', hashLength),
+      type: 'Both',
     });
 
     txs.push((await uController.methods.upgradeController(accounts[4].address,

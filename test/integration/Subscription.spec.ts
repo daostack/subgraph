@@ -2,12 +2,12 @@ import { createSubscriptionObservable,
          getContractAddresses,
          getOptions,
          getWeb3,
-       } from "./util";
+       } from './util';
 
-const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
-const gql = require("graphql-tag");
+const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
+const gql = require('graphql-tag');
 
-describe("Subscriptions", () => {
+describe('Subscriptions', () => {
     let web3;
     let addresses;
     let opts;
@@ -18,7 +18,7 @@ describe("Subscriptions", () => {
         opts = await getOptions(web3);
         reputation = new web3.eth.Contract(Reputation.abi, addresses.Reputation, opts);
     });
-    it("Reputation Mint", async () => {
+    it('Reputation Mint', async () => {
         const accounts = web3.eth.accounts.wallet;
         const SUBSCRIBE_QUERY = gql`
         subscription  {
@@ -44,7 +44,7 @@ describe("Subscriptions", () => {
          expect(true).toEqual(false);
       });
 
-        await reputation.methods.mint(accounts[0].address, "100").send();
+        await reputation.methods.mint(accounts[0].address, '100').send();
       // //wait a second
         await new Promise((res) => setTimeout(res, 1000));
 
@@ -52,7 +52,7 @@ describe("Subscriptions", () => {
         expect(true).toEqual(false);
       }
 
-        if (event.amount !==  "100") {
+        if (event.amount !==  '100') {
         expect(true).toEqual(false);
       }
 

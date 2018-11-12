@@ -7,14 +7,14 @@ import {
   nullParamsHash,
   padZeros,
   sendQuery,
-} from "./util";
+} from './util';
 
-const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
-const GenesisProtocol = require("@daostack/arc/build/contracts/GenesisProtocol.json");
-const GenesisProtocolCallbacks = require("@daostack/arc/build/contracts/GenesisProtocolCallbacksMock.json");
-const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
+const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
+const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
+const GenesisProtocolCallbacks = require('@daostack/arc/build/contracts/GenesisProtocolCallbacksMock.json');
+const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
 
-describe("GenesisProtocol", () => {
+describe('GenesisProtocol', () => {
   let web3;
   let addresses;
   let genesisProtocol;
@@ -48,7 +48,7 @@ describe("GenesisProtocol", () => {
         .send();
   });
 
-  it("Sanity", async () => {
+  it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
     const params = [
       50, // preBoostedVoteRequiredPercentage
@@ -70,14 +70,14 @@ describe("GenesisProtocol", () => {
     const paramsHash = await setParams.call();
     await setParams.send();
 
-    await daoToken.methods.mint(accounts[0].address, "100").send();
+    await daoToken.methods.mint(accounts[0].address, '100').send();
 
-    await daoToken.methods.mint(accounts[1].address, "100").send();
+    await daoToken.methods.mint(accounts[1].address, '100').send();
 
-    await daoToken.methods.approve(genesisProtocol.options.address, "100").send();
+    await daoToken.methods.approve(genesisProtocol.options.address, '100').send();
 
-    await reputation.methods.mint(accounts[0].address, "100").send();
-    await reputation.methods.mint(accounts[1].address, "100").send();
+    await reputation.methods.mint(accounts[0].address, '100').send();
+    await reputation.methods.mint(accounts[1].address, '100').send();
     const propose = await genesisProtocolCallbacks.methods.propose(
       2,
       paramsHash,
@@ -128,9 +128,9 @@ describe("GenesisProtocol", () => {
       submittedTime: (await web3.eth.getBlock(txs[0].blockNumber)).timestamp.toString(),
       proposer: accounts[1].address.toLowerCase(),
       daoAvatarAddress: genesisProtocolCallbacks.options.address.toLowerCase(),
-      numOfChoices: "2",
+      numOfChoices: '2',
       state: 2, /* Executed */
-      decision: "1", /* YES */
+      decision: '1', /* YES */
       executionState : 3, // enum ExecutionState
                           // { None, PreBoostedTimeOut, PreBoostedBarCrossed, BoostedTimeOut,BoostedBarCrossed }
       executionTime: (await web3.eth.getBlock(txs[4].blockNumber)).timestamp.toString(),
@@ -149,7 +149,7 @@ describe("GenesisProtocol", () => {
     expect(genesisProtocolExecuteProposals.length).toEqual(1);
     expect(genesisProtocolExecuteProposals).toContainEqual({
       proposalId,
-      decision: "1", /* YES */
+      decision: '1', /* YES */
       organization : genesisProtocolCallbacks.options.address.toLowerCase(),
       totalReputation: txs[4].events.ExecuteProposal.returnValues._totalReputation,
     });

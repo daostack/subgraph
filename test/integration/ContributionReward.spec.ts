@@ -1,14 +1,14 @@
-import { getContractAddresses, getOptions, getWeb3, sendQuery } from "./util";
+import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
 
-const AbsoluteVote = require("@daostack/arc/build/contracts/AbsoluteVote.json");
-const Avatar = require("@daostack/arc/build/contracts/Avatar.json");
-const ContributionReward = require("@daostack/arc/build/contracts/ContributionReward.json");
-const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
-const Reputation = require("@daostack/arc/build/contracts/Reputation.json");
-const UController = require("@daostack/arc/build/contracts/UController.json");
-const EthTransferHelper = require("./helpers/EthTransferHelper.json");
+const AbsoluteVote = require('@daostack/arc/build/contracts/AbsoluteVote.json');
+const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
+const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
+const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
+const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
+const UController = require('@daostack/arc/build/contracts/UController.json');
+const EthTransferHelper = require('./helpers/EthTransferHelper.json');
 
-describe("ContributionReward", () => {
+describe('ContributionReward', () => {
     let web3;
     let addresses;
     let opts;
@@ -20,17 +20,17 @@ describe("ContributionReward", () => {
         contributionReward = new web3.eth.Contract(ContributionReward.abi, addresses.ContributionReward, opts);
     });
 
-    it("Sanity", async () => {
+    it('Sanity', async () => {
         const accounts = web3.eth.accounts.wallet;
 
         // START long setup ...
         const externalToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-            .deploy({ data: DAOToken.bytecode, arguments: ["Test Token", "TST", "10000000000"] })
+            .deploy({ data: DAOToken.bytecode, arguments: ['Test Token', 'TST', '10000000000'] })
             .send();
-        await externalToken.methods.mint(accounts[0].address, "100000").send();
+        await externalToken.methods.mint(accounts[0].address, '100000').send();
 
         const nativeToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-            .deploy({ data: DAOToken.bytecode, arguments: ["Test Token", "TST", "10000000000"] })
+            .deploy({ data: DAOToken.bytecode, arguments: ['Test Token', 'TST', '10000000000'] })
             .send();
 
         const reputation = await new web3.eth.Contract(Reputation.abi, undefined, opts)
@@ -39,11 +39,11 @@ describe("ContributionReward", () => {
         await reputation.methods.mint(accounts[1].address, 100000).send(); // to be able to pass a vote
 
         const avatar = await new web3.eth.Contract(Avatar.abi, undefined, opts)
-            .deploy({ arguments: ["Test", nativeToken.options.address, reputation.options.address],
+            .deploy({ arguments: ['Test', nativeToken.options.address, reputation.options.address],
                       data: Avatar.bytecode,
                     })
             .send();
-        await externalToken.methods.transfer(avatar.options.address, "100000").send();
+        await externalToken.methods.transfer(avatar.options.address, '100000').send();
 
         const controller = await new web3.eth.Contract(UController.abi, undefined, opts)
             .deploy({ data: UController.bytecode, arguments: [] })
@@ -71,12 +71,12 @@ describe("ContributionReward", () => {
         await controller.methods.registerScheme(
             contributionReward.options.address,
             paramsHash,
-            "0x0000001F", // full permissions,
+            '0x0000001F', // full permissions,
             avatar.options.address,
         ).send();
         // END setup
 
-        const descHash = "0x0000000000000000000000000000000000000000000000000000000000000123";
+        const descHash = '0x0000000000000000000000000000000000000000000000000000000000000123';
         const rewards = {
             eth: 4,
             externalToken: 3,
@@ -260,7 +260,7 @@ describe("ContributionReward", () => {
 
         expect(contributionRewardProposals.length).toEqual(1);
         expect(contributionRewardProposals).toContainEqual({
-            alreadyRedeemedReputationPeriods: "2",
+            alreadyRedeemedReputationPeriods: '2',
         });
 
         const { transactionHash: redeemNativeTokenTxHash } = await contributionReward
@@ -298,7 +298,7 @@ describe("ContributionReward", () => {
 
         expect(contributionRewardProposals.length).toEqual(1);
         expect(contributionRewardProposals).toContainEqual({
-            alreadyRedeemedNativeTokenPeriods: "2",
+            alreadyRedeemedNativeTokenPeriods: '2',
         });
 
         const { transactionHash: redeemExternalTokenTxHash } = await contributionReward
@@ -336,7 +336,7 @@ describe("ContributionReward", () => {
 
         expect(contributionRewardProposals.length).toEqual(1);
         expect(contributionRewardProposals).toContainEqual({
-            alreadyRedeemedExternalTokenPeriods: "2",
+            alreadyRedeemedExternalTokenPeriods: '2',
         });
 
         // TODO: This is failing for some reason probably due to bug in ganache or graph - node
@@ -349,7 +349,7 @@ describe("ContributionReward", () => {
         await ethTransferHelper
               .methods
               .transfer(avatar.options.address)
-              .send({ value: web3.utils.toWei("10", "ether") });
+              .send({ value: web3.utils.toWei('10', 'ether') });
         //
         const { transactionHash: redeemEtherTxHash } = await contributionReward
                                                              .methods
@@ -360,9 +360,9 @@ describe("ContributionReward", () => {
         const receipt = await web3.eth.getTransactionReceipt(redeemEtherTxHash);
 
         let amountRedeemed = 0;
-        await contributionReward.getPastEvents("RedeemEther", {
+        await contributionReward.getPastEvents('RedeemEther', {
               fromBlock: receipt.blockNumber,
-              toBlock: "latest",
+              toBlock: 'latest',
           })
           .then(function(events) {
               amountRedeemed = events[0].returnValues._amount;
@@ -397,7 +397,7 @@ describe("ContributionReward", () => {
 
         expect(contributionRewardProposals.length).toEqual(1);
         expect(contributionRewardProposals).toContainEqual({
-            alreadyRedeemedEthPeriods: "2",
+            alreadyRedeemedEthPeriods: '2',
         });
 
     }, 100000);

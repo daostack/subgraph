@@ -1,5 +1,6 @@
 node_modules
 dist
+build
 *.log
 subgraph.yaml
 docker-compose.yml
@@ -8,3 +9,4 @@ abis
 yarn.lock
 src/types
 schema.graphql
+*.swp

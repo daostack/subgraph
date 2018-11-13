@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@daostack/arc": "0.0.0-alpha.56",
-    "@graphprotocol/graph-cli": "./graphprotocol-graph-cli-0.4.0.tgz",
+    "@graphprotocol/graph-cli": "^0.4.0",
     "@graphprotocol/graph-ts": "^0.4.0",
     "axios": "^0.18.0",
     "chalk": "^2.4.1",

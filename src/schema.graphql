@@ -1,0 +1,84 @@
+type Account @entity {
+    accountId: ID!
+    dao: DAO!
+    address: Bytes!
+    hasReputation: Boolean
+    stakes: [Stake!] @derivedFrom(field: "staker")
+    votes: [Vote!] @derivedFrom(field: "voter")
+    proposals: [Proposal!] @derivedFrom(field: "proposer")
+    redemptions: [Redemption!] @derivedFrom(field: "account")
+}
+
+type DAO @entity {
+    avatarAddress: ID!
+    members: [Account!]
+    controllerAddress: Bytes
+    reputationAddress: Bytes
+    accounts: [Account!] @derivedFrom(field: "dao")
+    proposals: [Proposal!] @derivedFrom(field: "dao")
+}
+
+type Proposal @entity {
+    proposalId: ID!
+    dao: DAO!
+    proposer: Account!
+    submittedTime: BigInt!
+    executionTime: BigInt
+    numOfChoices: BigInt
+    paramsHash: Bytes
+    state: Int
+    decision: BigInt
+    redemptions: [Redemption!] @derivedFrom(field: "proposal")
+    votes: [Vote!] @derivedFrom(field: "proposal")
+    stakes: [Stake!] @derivedFrom(field: "proposal")
+}
+
+type ProposalType @entity {
+    proposalId: ID!
+    proposalScheme: Bytes!
+    voteInterface: Bytes!
+}
+
+type CRProposal @entity {
+    proposalId: ID!
+    beneficiary: Account!
+    contributionDescriptionHash: Bytes
+    reputationChange: BigInt
+    externalToken: Bytes
+}
+
+type Vote @entity {
+    proposal: Proposal!
+    dao: DAO!
+    voter: Account!
+    voteOption: BigInt!
+    time: BigInt!
+}
+
+type Stake @entity {
+    proposal: Proposal!
+    dao: DAO!
+    staker: Account!
+    prediction: BigInt!
+    stakeAmount: BigInt!
+    time: BigInt!
+}
+
+type Redemption @entity {
+    redemptionId: ID!
+    proposal: Proposal!
+    account: Account!
+    type: RewardType
+    amount: BigInt!
+    time: BigInt!
+}
+
+enum RewardType @entity {
+    eth
+    nativeToken
+    beneficiaryReputation
+    externalToken
+    gpRep
+    gpGen
+    gpBounty
+}

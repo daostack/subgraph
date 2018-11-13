@@ -3,7 +3,7 @@ type AvatarContract @entity {
   address: Bytes!
   name: String!
   nativeToken: Bytes!
-  nativeReputation: ReputationContract!
+  nativeReputation: Bytes!
   balance: BigInt!
   owner: Bytes!
 }

@@ -49,10 +49,10 @@ function insertOrganization(uControllerAddress: Address, avatarAddress: Address)
     avatar.id = avatarAddress.toHex();
     avatar.address = avatarAddress;
     avatar.name = avatarSC.orgName();
-    avatar.nativeReputation = avatarSC.nativeReputation().toString();
+    avatar.nativeReputation = avatarSC.nativeReputation();
     avatar.nativeToken = avatarSC.nativeToken();
     avatar.owner = avatarSC.owner();
-    store.set("Avatar", avatarAddress.toHex(), avatar);
+    store.set("AvatarContract", avatarAddress.toHex(), avatar);
 
     store.set('UControllerOrganization', avatarAddress.toHex(), ent);
 }

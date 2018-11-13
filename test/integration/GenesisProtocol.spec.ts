@@ -122,7 +122,6 @@ describe('GenesisProtocol', () => {
       }
     }`);
 
-    expect(genesisProtocolProposals.length).toEqual(1);
     expect(genesisProtocolProposals).toContainEqual({
       proposalId,
       submittedTime: (await web3.eth.getBlock(txs[0].blockNumber)).timestamp.toString(),

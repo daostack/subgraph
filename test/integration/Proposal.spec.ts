@@ -25,7 +25,6 @@ describe('Proposal', () => {
 
     it('Sanity', async () => {
         const accounts = web3.eth.accounts.wallet;
-
         // START long setup ...
         const externalToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
             .deploy({ data: DAOToken.bytecode, arguments: ['Test Token', 'TST', '10000000000'] })
@@ -138,7 +137,6 @@ describe('Proposal', () => {
             }
         }`);
 
-        expect(proposals.length).toEqual(1);
         expect(proposals).toContainEqual({
             proposalId,
             contributionReward: {beneficiary: accounts[1].address.toLowerCase()},

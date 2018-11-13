@@ -23,6 +23,7 @@ import {
     ContributionRewardRedeemExternalToken,
     ContributionRewardRedeemNativeToken,
     ContributionRewardRedeemReputation,
+    Proposal,
 } from '../../types/schema';
 import { equals } from '../../utils';
 
@@ -91,6 +92,10 @@ function insertNewProposal(event: NewContributionProposal): void {
     ent.periodLength = rewards.shift(); // period length
     ent.periods = rewards.shift(); // number of periods
     store.set('ContributionRewardProposal', ent.proposalId, ent);
+
+    let proposal = new Proposal();
+    proposal.contributionReward = ent.proposalId;
+    store.set('Proposal', ent.proposalId, ent);
 }
 
 function updateProposalafterRedemption(contributionRewardAddress: Address, proposalId: Bytes, type: number): void {

@@ -34,9 +34,11 @@ import {
   GenesisProtocolReward,
   GenesisProtocolStake,
   GenesisProtocolVote,
+  Proposal,
 } from '../../types/schema';
 
 export function handleNewProposal(event: NewProposal): void {
+
   let ent = new GenesisProtocolProposal();
   ent.proposalId = event.params._proposalId.toHex();
   ent.submittedTime = event.block.timestamp;
@@ -45,6 +47,11 @@ export function handleNewProposal(event: NewProposal): void {
   ent.numOfChoices = event.params._numOfChoices;
 
   store.set('GenesisProtocolProposal', event.params._proposalId.toHex(), ent);
+
+  let proposal = new Proposal();
+  proposal.genesisProtocol = ent.proposalId;
+  store.set('Proposal', ent.proposalId, proposal);
+
 }
 
 export function handleVoteProposal(event: VoteProposal): void {

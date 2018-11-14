@@ -1,3 +1,8 @@
+abis
 build
+dist
 node_modules
+src/types
+yarn.lock
+*.log
 *.swp

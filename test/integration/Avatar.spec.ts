@@ -18,11 +18,12 @@ describe("Avatar", () => {
       from: accounts[0].address,
       to: avatar.options.address,
       value: 1,
-      gas: 2000000
+      gas: 2000000,
+      data: "0xABCD"
     });
 
-    const { avatars } = await query(`{
-      avatars {
+    const { avatarContracts } = await query(`{
+      avatarContracts {
         id
         address
         name
@@ -33,15 +34,15 @@ describe("Avatar", () => {
       }
     }`);
 
-    expect(avatars.length).toEqual(1);
-    expect(avatars).toContainEqual({
-      id: addresses.Avatar,
-      address: addresses.Avatar,
+    expect(avatarContracts.length).toEqual(1);
+    expect(avatarContracts).toContainEqual({
+      id: addresses.Avatar.toLowerCase(),
+      address: addresses.Avatar.toLowerCase(),
       name: "TESTDAO",
-      nativeToken: addresses.DAOToken,
-      nativeReputation: addresses.Reputation,
-      balance: 1,
-      owner: accounts[0].address
+      nativeToken: addresses.DAOToken.toLowerCase(),
+      nativeReputation: addresses.Reputation.toLowerCase(),
+      balance: "1",
+      owner: accounts[0].address.toLowerCase(),
     });
   }, 20000);
 });

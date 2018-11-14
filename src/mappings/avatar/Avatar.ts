@@ -28,7 +28,7 @@ function handleAvatarBalance(address: Address, value: BigInt, received: boolean)
 
   if (received)
     avatar.balance = addition(avatar.balance, value);
-  else 
+  else
     avatar.balance = sub(avatar.balance, value);
 
   store.set("AvatarContract", address.toHex(), avatar);

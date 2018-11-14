@@ -1,4 +1,4 @@
-import { getWeb3, getContractAddresses, getOptions, query } from "./util";
+import { getContractAddresses, getOptions, getWeb3, sendQuery } from "./util";
 
 const Avatar = require("@daostack/arc/build/contracts/Avatar.json");
 
@@ -22,7 +22,7 @@ describe("Avatar", () => {
       data: "0xABCD"
     });
 
-    const { avatarContracts } = await query(`{
+    const { avatarContracts } = await sendQuery(`{
       avatarContracts {
         id
         address
@@ -34,7 +34,7 @@ describe("Avatar", () => {
       }
     }`);
 
-    expect(avatarContracts.length).toEqual(1);
+    expect(avatarContracts.length).toEqual(2);
     expect(avatarContracts).toContainEqual({
       id: addresses.Avatar.toLowerCase(),
       address: addresses.Avatar.toLowerCase(),

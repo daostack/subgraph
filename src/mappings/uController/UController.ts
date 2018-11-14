@@ -46,12 +46,13 @@ function insertOrganization(uControllerAddress: Address, avatarAddress: Address)
 
     let avatarSC = Avatar.bind(avatarAddress);
     let avatar = new AvatarContract();
-    avatar.id = avatarAddress.toHex();
+    // avatar.id = avatarAddress.toHex();
     avatar.address = avatarAddress;
     avatar.name = avatarSC.orgName();
     avatar.nativeReputation = avatarSC.nativeReputation();
     avatar.nativeToken = avatarSC.nativeToken();
     avatar.owner = avatarSC.owner();
+    avatar.balance = BigInt.fromI32(0);
     store.set("AvatarContract", avatarAddress.toHex(), avatar);
 
     store.set('UControllerOrganization', avatarAddress.toHex(), ent);

@@ -17,7 +17,7 @@ function handleAvatarBalance(address: Address, value: BigInt, received: boolean)
   let avatar = store.get("AvatarContract", address.toHex()) as AvatarContract;
   if (avatar == null) {
     avatar = new AvatarContract();
-    avatar.id = address.toHex();
+    // avatar.id = address.toHex();
     avatar.address = address;
     avatar.name = avatarSC.orgName();
     avatar.nativeReputation = avatarSC.nativeReputation();

@@ -3,11 +3,11 @@ export { allocate_memory };
 
 import { Address, BigInt, ByteArray, Bytes, crypto, Entity, store, Value } from '@graphprotocol/graph-ts';
 
+import { Avatar } from '../../types/Avatar/Avatar';
 import { DAOToken } from '../../types/DAOToken/DAOToken';
 import { Reputation } from '../../types/Reputation/Reputation';
-import { Avatar } from "../../types/Avatar/Avatar";
 
-import { 
+import {
         AvatarContract,
         ReputationContract ,
         TokenContract ,
@@ -86,7 +86,7 @@ function insertOrganization(uControllerAddress: Address, avatarAddress: Address)
     avatar.nativeToken = avatarSC.nativeToken();
     avatar.owner = avatarSC.owner();
     avatar.balance = BigInt.fromI32(0);
-    store.set("AvatarContract", avatarAddress.toHex(), avatar);
+    store.set('AvatarContract', avatarAddress.toHex(), avatar);
 
     store.set('UControllerOrganization', avatarAddress.toHex(), ent);
 }

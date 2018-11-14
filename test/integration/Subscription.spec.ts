@@ -37,7 +37,6 @@ describe('Subscriptions', () => {
 
         let event;
 
-
         const consumer = await subscriptionClient.subscribe((eventData) => {
         // Do something on receipt of the event
         event = eventData.data.reputationMints[0];
@@ -45,7 +44,7 @@ describe('Subscriptions', () => {
          expect(true).toEqual(false);
       });
 
-      await reputation.methods.mint(accounts[0].address, '100').send();
+        await reputation.methods.mint(accounts[0].address, '100').send();
 
       // //wait a second
         await new Promise((res) => setTimeout(res, 2000));

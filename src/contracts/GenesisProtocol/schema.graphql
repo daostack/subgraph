@@ -4,6 +4,7 @@ type GenesisProtocolProposal @entity {
   proposer: Bytes!
   daoAvatarAddress: Bytes!
   numOfChoices: BigInt
+  executionState: Int
   state: Int
   decision: BigInt
   executionTime: BigInt
@@ -36,6 +37,22 @@ type GenesisProtocolReward @entity {
   id: ID!
   type: GenesisProtocolRewardType
   amount: BigInt!
+}
+
+type GenesisProtocolExecuteProposal @entity {
+  txHash: ID!
+  contract: Bytes!
+  proposalId: Bytes!
+  organization: Bytes!
+  decision: BigInt!
+  totalReputation: BigInt!
+}
+
+type GenesisProtocolGPExecuteProposal @entity {
+  txHash: ID!
+  contract: Bytes!
+  proposalId: Bytes!
+  executionState: Int
 }
 
 enum GenesisProtocolRewardType @entity {

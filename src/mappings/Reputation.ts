@@ -7,9 +7,8 @@ import {
 } from '@graphprotocol/graph-ts'
 
 import {
-    Reputation,
-    Mint,
     Burn,
+    Mint,
 } from '../types/Reputation/Reputation'
 
 import {
@@ -25,6 +24,9 @@ import {
 // TODO: Don't hardcode avatar address
 let avatar = Address.fromString('a3f5411cfc9eee0dd108bf0d07433b6dd99037f1')
 
+// TODO: remove user from members on Burn event if rep = 0
+export function handleBurn(event: Burn): void {}
+
 export function handleMint(event: Mint): void {
     let accountId = createAccount(event.params._to, avatar)
     let account = new Account()
@@ -38,4 +40,3 @@ export function handleMint(event: Mint): void {
     store.set('DAO', avatar.toHex(), dao as DAO)
 }
 
-// TODO: remove user from members on Burn event

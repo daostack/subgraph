@@ -10,7 +10,7 @@ type Account @entity {
 }
 
 type DAO @entity {
-    avatarAddress: ID!
+    avatarAddress: Bytes!
     members: [Account!]
     controllerAddress: Bytes
     reputationAddress: Bytes

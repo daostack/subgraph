@@ -8,7 +8,6 @@ import {
 
 import {
     ExecuteProposal,
-    GenesisProtocol,
     GPExecuteProposal,
     NewProposal,
     Redeem,
@@ -35,42 +34,13 @@ const REWARD_TYPE_GP_REP = 4
 const REWARD_TYPE_GP_GEN = 5
 const REWARD_TYPE_GP_BOUNTY = 6
 
-export function handleNewProposal(event: NewProposal): void {
-    let accountId = createAccount(event.params._proposer, event.params._avatar)
+export function handleExecuteProposal(event: ExecuteProposal): void {
     let proposal = new Proposal()
     proposal.proposalId = event.params._proposalId.toHex()
-    proposal.dao = event.params._avatar as String
-    proposal.proposer = accountId.toHex()
-    proposal.submittedTime = event.block.timestamp
-    proposal.numOfChoices = event.params._numOfChoices
-    proposal.paramsHash = event.params._paramsHash
-    store.set('Proposal', event.params._proposalId.toHex(), proposal)
-}
-
-// TODO: add reputation of voter at time of vote? Archive node needed
-export function handleVoteProposal(event: VoteProposal): void {
-    let accountId = createAccount(event.params._voter, event.params._avatar)
-    let vote = new Vote()
-    vote.proposal = event.params._proposalId.toHex()
-    vote.dao = event.params._avatar as String
-    vote.voter = accountId.toHex()
-    vote.voteOption = event.params._vote
-    vote.time = event.block.timestamp
-    let uniqueId = concat(event.params._proposalId, event.params._voter).toHex()
-    store.set('Vote', uniqueId, vote)
-}
-
-export function handleStake(event: StakeEvent): void {
-    let accountId = createAccount(event.params._staker, event.params._avatar)
-    let stake = new Stake()
-    stake.proposal = event.params._proposalId.toHex()
-    stake.dao = event.params._avatar as String
-    stake.staker = accountId.toHex()
-    stake.prediction = event.params._vote
-    stake.stakeAmount = event.params._amount
-    stake.time = event.block.timestamp
-    let uniqueId = concat(event.params._proposalId, event.params._staker).toHex()
-    store.set('Stake', uniqueId, stake as Stake)
+    proposal.dao = event.params._avatar.toHex()
+    proposal.executionTime = event.block.timestamp
+    proposal.decision = event.params._decision
+    store.set('Proposal', event.params._proposalId.toHex(), proposal as Proposal)
 }
 
 export function handleGPExecuteProposal (event: GPExecuteProposal): void {
@@ -79,13 +49,16 @@ export function handleGPExecuteProposal (event: GPExecuteProposal): void {
     //store.set('Proposal', event.params._proposalId.toHex(), proposal as Proposal)
 }
 
-export function handleExecuteProposal(event: ExecuteProposal): void {
+export function handleNewProposal(event: NewProposal): void {
+    let accountId = createAccount(event.params._proposer, event.params._avatar)
     let proposal = new Proposal()
     proposal.proposalId = event.params._proposalId.toHex()
-    proposal.dao = event.params._avatar as String
-    proposal.executionTime = event.block.timestamp
-    proposal.decision = event.params._decision
-    store.set('Proposal', event.params._proposalId.toHex(), proposal)
+    proposal.dao = event.params._avatar.toHex()
+    proposal.proposer = accountId.toHex()
+    proposal.submittedTime = event.block.timestamp
+    proposal.numOfChoices = event.params._numOfChoices
+    proposal.paramsHash = event.params._paramsHash
+    store.set('Proposal', event.params._proposalId.toHex(), proposal as Proposal)
 }
 
 export function handleRedeem (event: Redeem): void {
@@ -131,4 +104,30 @@ export function handleRedeemReputation (event: RedeemReputation): void {
         'gpRep',
         event.block.timestamp
     )
+}
+
+export function handleStake(event: StakeEvent): void {
+    let accountId = createAccount(event.params._staker, event.params._avatar)
+    let stake = new Stake()
+    stake.proposal = event.params._proposalId.toHex()
+    stake.dao = event.params._avatar.toHex()
+    stake.staker = accountId.toHex()
+    stake.prediction = event.params._vote
+    stake.stakeAmount = event.params._amount
+    stake.time = event.block.timestamp
+    let uniqueId = concat(event.params._proposalId, event.params._staker).toHex()
+    store.set('Stake', uniqueId, stake as Stake)
+}
+
+// TODO: add reputation of voter at time of vote? Archive node needed
+export function handleVoteProposal(event: VoteProposal): void {
+    let accountId = createAccount(event.params._voter, event.params._avatar)
+    let vote = new Vote()
+    vote.proposal = event.params._proposalId.toHex()
+    vote.dao = event.params._avatar.toHex()
+    vote.voter = accountId.toHex()
+    vote.voteOption = event.params._vote
+    vote.time = event.block.timestamp
+    let uniqueId = concat(event.params._proposalId, event.params._voter).toHex()
+    store.set('Vote', uniqueId, vote as Vote)
 }

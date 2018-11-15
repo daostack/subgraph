@@ -27,9 +27,9 @@ export function concat(a: ByteArray, b: ByteArray): ByteArray {
 
 export function createDao (avatar: Address): DAO {
     let dao = store.get('DAO', avatar.toHex()) as DAO
-    if (dao === null) {
+    if (dao == null) {
         dao = new DAO()
-        dao.avatarAddress = avatar as String
+        dao.avatarAddress = avatar
         dao.members = new Array<String>()
         store.set('DAO', avatar.toHex(), dao as DAO)
     }
@@ -42,7 +42,7 @@ export function createAccount (address: Address, avatar: Address): ByteArray {
     if (account == null) {
         account = new Account()
         account.accountId = accountId.toHex()
-        account.dao = avatar as String
+        account.dao = avatar.toHex()
         account.address = address
         account.hasReputation = false
         store.set('Account', accountId.toHex(), account as Account)
@@ -79,5 +79,5 @@ export function updateRedemption(
         redemption.amount = absAmount
     }
     redemption.time = time
-    store.set('Redemption', redemptionId, redemption)
+    store.set('Redemption', redemptionId, redemption as Redemption)
 }

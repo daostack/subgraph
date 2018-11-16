@@ -65,6 +65,9 @@ async function configure({ env, ...rest }) {
   const subgraph = handlebars.compile(
     fs.readFileSync("subgraph.handlebars.yaml", "utf-8")
   );
+  console.log(config);
+  console.log(subgraph(config));
+  
   fs.writeFileSync("subgraph.yaml", subgraph(config), "utf-8");
 
   const dockerCompose = handlebars.compile(
@@ -91,6 +94,8 @@ async function migrate(web3) {
     from: web3.eth.defaultAccount,
     gas: (await web3.eth.getBlock("latest")).gasLimit - 100000
   };
+
+  console.log("accounts" ,web3.eth.defaultAccount);
 
   const UC = new web3.eth.Contract(UController.abi, undefined, opts);
   const uc = await UC.deploy({
@@ -142,6 +147,8 @@ async function migrate(web3) {
     GenesisProtocol: gp.options.address,
     Avatar: avatar.options.address
   };
+
+  console.log(addresses)
 
   await configure({
     env: "development",

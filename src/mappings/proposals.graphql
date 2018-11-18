@@ -1,5 +1,8 @@
 type Proposal @entity {
-    proposalId: ID!
+    proposalId : ID!
     genesisProtocol : GenesisProtocolProposal
     contributionReward : ContributionRewardProposal
+    createdAt : BigInt!
+    updatedAt : BigInt!
+    executedAt : BigInt 
 }

@@ -95,7 +95,9 @@ function insertNewProposal(event: NewContributionProposal): void {
 
     let proposal = new Proposal();
     proposal.contributionReward = ent.proposalId;
-    store.set('Proposal', ent.proposalId, ent);
+    proposal.createdAt = event.block.number;
+    proposal.updatedAt = event.block.number;
+    store.set('Proposal', ent.proposalId, proposal);
 }
 
 function updateProposalafterRedemption(contributionRewardAddress: Address, proposalId: Bytes, type: number): void {
@@ -130,11 +132,11 @@ function updateProposalafterRedemption(contributionRewardAddress: Address, propo
 export function handleProposalExecuted(event: ProposalExecuted): void {
     let cr = ContributionReward.bind(event.address);
     let proposalId = event.params._proposalId;
-    let proposalEnt = store.get('ContributionRewardProposal', proposalId.toHex()) as ContributionRewardProposal;
-    if (proposalEnt != null) {
-        let proposal = cr.organizationsProposals(event.params._avatar, proposalId);
-        proposalEnt.executedAt = proposal.value9;
-        store.set('ContributionRewardProposal', proposalId.toHex(), proposalEnt);
+    let crProposal = store.get('ContributionRewardProposal', proposalId.toHex()) as ContributionRewardProposal;
+    if (crProposal != null) {
+        let organizationProposal = cr.organizationsProposals(event.params._avatar, proposalId);
+        crProposal.executedAt = organizationProposal.value9;
+        store.set('ContributionRewardProposal', proposalId.toHex(), crProposal);
     }
 
     let ent = new ContributionRewardProposalResolved();
@@ -144,6 +146,11 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
     ent.passed = equals(event.params._param, BigInt.fromI32(1));
     ent.proposalId = event.params._proposalId;
     store.set('ContributionRewardProposalResolved', ent.txHash, ent);
+
+    let proposal = store.get('Proposal', event.params._proposalId.toHex()) as Proposal;
+    proposal.executedAt = event.block.number;
+    proposal.updatedAt = event.block.number;
+    store.set('Proposal', event.params._proposalId.toHex(), proposal);
 }
 
 export function handleNewContributionProposal(event: NewContributionProposal): void {

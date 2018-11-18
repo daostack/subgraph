@@ -134,6 +134,8 @@ describe('Proposal', () => {
               contributionReward {
                 beneficiary
               }
+              createdAt
+              updatedAt
             }
         }`);
 
@@ -141,6 +143,8 @@ describe('Proposal', () => {
             proposalId,
             contributionReward: {beneficiary: accounts[1].address.toLowerCase()},
             genesisProtocol: {submittedTime: (await web3.eth.getBlock(tx.blockNumber)).timestamp.toString()},
+            createdAt: tx.blockNumber.toString(),
+            updatedAt : tx.blockNumber.toString(),
         });
     }, 100000);
 });

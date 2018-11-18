@@ -3,6 +3,4 @@ type Proposal @entity {
     genesisProtocol : GenesisProtocolProposal
     contributionReward : ContributionRewardProposal
     createdAt : BigInt!
-    updatedAt : BigInt!
-    executedAt : BigInt 
 }

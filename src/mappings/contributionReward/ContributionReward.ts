@@ -96,7 +96,6 @@ function insertNewProposal(event: NewContributionProposal): void {
     let proposal = new Proposal();
     proposal.contributionReward = ent.proposalId;
     proposal.createdAt = event.block.number;
-    proposal.updatedAt = event.block.number;
     store.set('Proposal', ent.proposalId, proposal);
 }
 
@@ -146,11 +145,6 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
     ent.passed = equals(event.params._param, BigInt.fromI32(1));
     ent.proposalId = event.params._proposalId;
     store.set('ContributionRewardProposalResolved', ent.txHash, ent);
-
-    let proposal = store.get('Proposal', event.params._proposalId.toHex()) as Proposal;
-    proposal.executedAt = event.block.number;
-    proposal.updatedAt = event.block.number;
-    store.set('Proposal', event.params._proposalId.toHex(), proposal);
 }
 
 export function handleNewContributionProposal(event: NewContributionProposal): void {

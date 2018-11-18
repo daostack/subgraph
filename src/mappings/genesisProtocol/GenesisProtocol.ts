@@ -146,11 +146,6 @@ export function handleGPExecuteProposal(event: GPExecuteProposal): void {
     event.transaction.hash.toHex(),
     genesisProtocolGPExecuteProposal,
   );
-
-  let proposalEntity = store.get('Proposal', event.params._proposalId.toHex()) as Proposal;
-  proposalEntity.executedAt = event.block.number;
-  proposalEntity.updatedAt = event.block.number;
-  store.set('Proposal', event.params._proposalId.toHex(), proposalEntity);
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {

@@ -48,7 +48,13 @@ export function handleNewProposal(event: NewProposal): void {
 
   store.set('GenesisProtocolProposal', event.params._proposalId.toHex(), ent);
 
-  let proposal = new Proposal();
+  let proposal = store.get('Proposal', ent.proposalId) as Proposal;
+  {
+    if (proposal === null) {
+        proposal = new Proposal();
+        proposal.createdAt = event.block.number;
+    }
+  }
   proposal.genesisProtocol = ent.proposalId;
   proposal.updatedAt = event.block.number;
   store.set('Proposal', ent.proposalId, proposal);

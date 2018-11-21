@@ -32,7 +32,6 @@ script:
   - npm run codegen
   - sudo docker-compose run subgraph migrate:development
   - npm run migrate:development
-  - cat subgraph.yaml 
   - dbus-launch ./node_modules/.bin/graph deploy --ipfs /ip4/127.0.0.1/tcp/5001 --node http:/127.0.0.1:8020/ --subgraph-name daostack subgraph.yaml
   - npm run jest
   - sudo docker-compose run subgraph lint

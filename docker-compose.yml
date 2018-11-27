@@ -1,6 +1,4 @@
-# template file for generating docker-compose.yml based on configuration
-
-version: "3"
+version: '3'
 services:
   subgraph:
     build: .
@@ -49,6 +47,5 @@ services:
     ports:
       - 8545:8545
     command: >
-      --deterministic
-      --mnemonic "behave pipe turkey animal voyage dial relief menu blush match jeans general"
+      --deterministic --mnemonic "behave pipe turkey animal voyage dial relief menu blush match jeans general"
       --gasLimit 8000000

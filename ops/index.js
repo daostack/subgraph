@@ -21,12 +21,10 @@ const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
 const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
 
 async function configure({ env, ...rest }) {
-	const { [env]: publicConfig } = yaml.safeLoad(fs.readFileSync(__dirname + '/config.yaml', 'utf-8'));
 	const { [env]: privateConfig } = rest;
 	const config = {
 		env,
 		development: env === 'development',
-		...publicConfig,
 		...privateConfig,
 	};
 
@@ -34,13 +32,6 @@ async function configure({ env, ...rest }) {
 
 	const subschemas = await new Promise((res, rej) =>
 		glob('src/**/*.graphql', (err, files) => (err ? rej(err) : res(files)))
-	);
-	const partials = subschemas.reduce(
-		(acc, subschema) => ({
-			...acc,
-			[path.basename(subschema).replace(/\.[^/.]+$/, '')]: fs.readFileSync(subschema, 'utf-8'),
-		}),
-		{}
 	);
 
 	const schema = config =>

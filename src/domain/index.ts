@@ -16,6 +16,7 @@ import {
 import { Transfer } from '../types/NativeToken/DAOToken';
 import { Burn, Mint, Reputation } from '../types/Reputation/Reputation';
 import { RegisterScheme } from '../types/UController/UController';
+import { debug, equals, eventId, hexToAddress } from '../utils';
 import {
   getDAOByNativeReputationAddress,
   getDAOByNativeTokenAddress,
@@ -38,7 +39,6 @@ import {
 } from './reputation';
 import { insertStake } from './stake';
 import { insertToken, updateTokenTotalSupply } from './token';
-import { debug, equals, eventId, hexToAddress } from './util';
 import { insertVote } from './vote';
 
 export function handleNewProposal(event: NewProposal): void {

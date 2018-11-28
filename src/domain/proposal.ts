@@ -1,8 +1,8 @@
 import { Address, BigInt, Bytes, crypto, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
+import { concat, equals } from '../utils';
 import { getMember } from './member';
-import { concat, equals } from './util';
 
 export function parseOutcome(num: BigInt): string {
   if (equals(num, BigInt.fromI32(1))) {

@@ -2,8 +2,8 @@ import { Address, BigInt, crypto, store } from '@graphprotocol/graph-ts';
 import { DAOToken } from '../types/NativeToken/DAOToken';
 import { Reputation } from '../types/Reputation/Reputation';
 import { Member } from '../types/schema';
+import { concat, equals, hexToAddress } from '../utils';
 import { getDAO } from './dao';
-import { concat, equals, hexToAddress } from './util';
 
 export function getMember(address: Address, daoAddress: Address): Member {
   let id = crypto.keccak256(concat(address, daoAddress)).toHex();

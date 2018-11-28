@@ -14,9 +14,9 @@ import {
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Transfer } from '../types/NativeToken/DAOToken';
-import { Burn, Mint, Reputation } from '../types/Reputation/Reputation';
+import { Burn, Mint } from '../types/Reputation/Reputation';
 import { RegisterScheme } from '../types/UController/UController';
-import { debug, equals, eventId, hexToAddress } from '../utils';
+import { equals, eventId, hexToAddress } from '../utils';
 import {
   getDAOByNativeReputationAddress,
   getDAOByNativeTokenAddress,

@@ -24,7 +24,8 @@ import {
   VoteProposal,
 } from '../../types/GenesisProtocol/GenesisProtocol';
 
-import { addition, concat } from '../../utils';
+import * as domain from '../../domain';
+import { concat } from '../../utils';
 
 import {
   GenesisProtocolExecuteProposal,
@@ -45,6 +46,8 @@ export function handleNewProposal(event: NewProposal): void {
   ent.numOfChoices = event.params._numOfChoices;
 
   store.set('GenesisProtocolProposal', event.params._proposalId.toHex(), ent);
+
+  domain.handleNewProposal(event);
 }
 
 export function handleVoteProposal(event: VoteProposal): void {
@@ -60,7 +63,7 @@ export function handleVoteProposal(event: VoteProposal): void {
     ent.proposalId = event.params._proposalId.toHex();
   } else {
     // Is it possible someone will use 50% for one voteOption and rest for the other
-    vote.reputation = addition(vote.reputation, event.params._reputation);
+    vote.reputation = vote.reputation.plus(event.params._reputation);
     store.set('GenesisProtocolVote', uniqueId, vote);
     return;
   }
@@ -85,7 +88,7 @@ export function handleStake(event: Stake): void {
     ent.proposalId = event.params._proposalId.toHex();
   } else {
     // Is it possible someone will use 50% for one voteOption and rest for the other
-    stake.stakeAmount = addition(stake.stakeAmount, event.params._amount);
+    stake.stakeAmount = stake.stakeAmount.plus(event.params._amount);
     store.set('GenesisProtocolStake', uniqueId, stake);
     return;
   }
@@ -250,7 +253,7 @@ function updateRedemption(
 }
 
 function state(proposalId: Bytes, address: Address): BigInt {
-  let genesisProtocol = new SmartContract('GenesisProtocol', address);
+  let genesisProtocol = GenesisProtocol.bind(address);
   let result = genesisProtocol.call('state', [
     EthereumValue.fromFixedBytes(proposalId),
   ]);

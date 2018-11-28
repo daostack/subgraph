@@ -9,8 +9,6 @@ import { Avatar, ReceiveEther, SendEther } from '../../types/Avatar/Avatar';
 // Import entity types generated from the GraphQL schema
 import { AvatarContract } from '../../types/schema';
 
-import { addition, sub } from '../../utils';
-
 function handleAvatarBalance(
   address: Address,
   value: BigInt,
@@ -31,9 +29,9 @@ function handleAvatarBalance(
   }
 
   if (received) {
-    avatar.balance = addition(avatar.balance, value);
+    avatar.balance = avatar.balance.plus(value);
   } else {
-    avatar.balance = sub(avatar.balance, value);
+    avatar.balance = avatar.balance.minus(value);
   }
 
   store.set('AvatarContract', address.toHex(), avatar);

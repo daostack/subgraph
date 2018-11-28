@@ -9,7 +9,7 @@ async function generateSchema() {
 	const files = await new Promise((res, rej) =>
 		glob('src/mappings/**/schema.graphql', (err, files) => (err ? rej(err) : res(files)))
 	);
-	const schema = files
+	const schema = [...files, 'src/domain/schema.graphql']
 		.map(file => {
 			const name = path.basename(path.dirname(file));
 			const content = fs.readFileSync(file, 'utf-8');

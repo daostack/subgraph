@@ -2,7 +2,7 @@ node_modules
 dist
 *.log
 subgraph.yaml
-config.json
+migration.json
 abis
 yarn.lock
 src/types

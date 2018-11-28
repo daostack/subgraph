@@ -11,7 +11,11 @@ import { AvatarContract } from '../../types/schema';
 
 import { addition, sub } from '../../utils';
 
-function handleAvatarBalance(address: Address, value: BigInt, received: boolean): void {
+function handleAvatarBalance(
+  address: Address,
+  value: BigInt,
+  received: boolean,
+): void {
   let avatarSC = Avatar.bind(address);
 
   let avatar = store.get('AvatarContract', address.toHex()) as AvatarContract;

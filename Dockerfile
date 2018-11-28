@@ -16,3 +16,4 @@ RUN npm install
 RUN npm run codegen
 
 ENTRYPOINT [ "/entry" ]
+CMD [ "deploy" ]

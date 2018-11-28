@@ -20,6 +20,18 @@ export function concat(a: ByteArray, b: ByteArray): ByteArray {
   return out as ByteArray;
 }
 
+export function equals(a: BigInt, b: BigInt): boolean {
+  if (a.length !== b.length) {
+    return false;
+  }
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export function eventId(event: EthereumEvent): string {
   return crypto
     .keccak256(
@@ -32,24 +44,12 @@ export function hexToAddress(hex: string): Address {
   return Address.fromString(hex.substr(2));
 }
 
-let debugId = 0;
+let i = 0;
 export function debug(msg: string): void {
   let ent = new Entity();
-  let id = BigInt.fromI32(debugId).toHex();
+  let id = BigInt.fromI32(i).toHex();
   ent.set('id', Value.fromString(id));
   ent.set('message', Value.fromString(msg));
   store.set('Debug', id, ent);
-  debugId++;
-}
-
-export function equals(a: BigInt, b: BigInt): boolean {
-  if (a.length !== b.length) {
-    return false;
-  }
-  for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) {
-      return false;
-    }
-  }
-  return true;
+  i++;
 }

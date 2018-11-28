@@ -16,6 +16,8 @@ import { Avatar } from '../../types/UController/Avatar';
 import { DAOToken } from '../../types/UController/DAOToken';
 import { Reputation } from '../../types/UController/Reputation';
 
+import * as domain from '../../domain';
+
 import {
   AvatarContract,
   ReputationContract,
@@ -37,7 +39,7 @@ import {
   UnregisterScheme,
   UpgradeController,
 } from '../../types/UController/UController';
-import { concat } from '../../utils';
+import { concat, eventId } from '../../utils';
 
 function insertScheme(
   uControllerAddress: Address,
@@ -165,6 +167,8 @@ function deleteGlobalConstraint(
 }
 
 export function handleRegisterScheme(event: RegisterScheme): void {
+  domain.handleRegisterScheme(event);
+
   // Detect a new organization event by looking for the first register scheme event for that org.
   let isFirstRegister = store.get(
     'FirstRegisterScheme',
@@ -182,39 +186,38 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   insertScheme(event.address, event.params._avatar, event.params._scheme);
 
   let ent = new UControllerRegisterScheme();
-  ent.txHash = event.transaction.hash.toHex();
+  ent.id = eventId(event);
+  ent.txHash = event.transaction.hash;
   ent.controller = event.address;
   ent.contract = event.params._sender;
   ent.avatarAddress = event.params._avatar;
   ent.scheme = event.params._scheme;
-  store.set('UControllerRegisterScheme', event.transaction.hash.toHex(), ent);
+  store.set('UControllerRegisterScheme', ent.id, ent);
 }
 
 export function handleUnregisterScheme(event: UnregisterScheme): void {
   deleteScheme(event.params._avatar, event.params._scheme);
 
   let ent = new UControllerUnregisterScheme();
-  ent.txHash = event.transaction.hash.toHex();
+  ent.id = eventId(event);
+  ent.txHash = event.transaction.hash;
   ent.controller = event.address;
   ent.contract = event.params._sender;
   ent.avatarAddress = event.params._avatar;
   ent.scheme = event.params._scheme;
-  store.set('UControllerUnregisterScheme', event.transaction.hash.toHex(), ent);
+  store.set('UControllerUnregisterScheme', ent.id, ent);
 }
 
 export function handleUpgradeController(event: UpgradeController): void {
   updateController(event.params._avatar, event.params._newController);
 
   let ent = new UControllerUpgradeController();
-  ent.txHash = event.transaction.hash.toHex();
+  ent.id = eventId(event);
+  ent.txHash = event.transaction.hash;
   ent.controller = event.params._oldController;
   ent.avatarAddress = event.params._avatar;
   ent.newController = event.params._newController;
-  store.set(
-    'UControllerUpgradeController',
-    event.transaction.hash.toHex(),
-    ent,
-  );
+  store.set('UControllerUpgradeController', ent.id, ent);
 }
 
 export function handleAddGlobalConstraint(event: AddGlobalConstraint): void {
@@ -236,18 +239,15 @@ export function handleAddGlobalConstraint(event: AddGlobalConstraint): void {
   );
 
   let ent = new UControllerAddGlobalConstraint();
-  ent.txHash = event.transaction.hash.toHex();
+  ent.id = eventId(event);
+  ent.txHash = event.transaction.hash;
   ent.controller = event.address;
   ent.avatarAddress = event.params._avatar;
   ent.globalConstraint = event.params._globalConstraint;
   ent.paramsHash = event.params._params;
   ent.type = type;
 
-  store.set(
-    'UControllerAddGlobalConstraint',
-    event.transaction.hash.toHex(),
-    ent,
-  );
+  store.set('UControllerAddGlobalConstraint', ent.id, ent);
 }
 
 export function handleRemoveGlobalConstraint(
@@ -256,14 +256,11 @@ export function handleRemoveGlobalConstraint(
   deleteGlobalConstraint(event.params._avatar, event.params._globalConstraint);
 
   let ent = new UControllerRemoveGlobalConstraint();
-  ent.txHash = event.transaction.hash.toHex();
+  ent.id = eventId(event);
+  ent.txHash = event.transaction.hash;
   ent.controller = event.address;
   ent.avatarAddress = event.params._avatar;
   ent.globalConstraint = event.params._globalConstraint;
   ent.isPre = event.params._isPre;
-  store.set(
-    'UControllerRemoveGlobalConstraint',
-    event.transaction.hash.toHex(),
-    ent,
-  );
+  store.set('UControllerRemoveGlobalConstraint', ent.id, ent);
 }

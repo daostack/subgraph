@@ -24,8 +24,7 @@ import {
   VoteProposal,
 } from '../../types/GenesisProtocol/GenesisProtocol';
 
-import * as domain from '../../domain';
-import { concat } from '../../utils';
+import { concat, eventId } from '../../utils';
 
 import {
   GenesisProtocolExecuteProposal,
@@ -37,7 +36,11 @@ import {
   GenesisProtocolVote,
 } from '../../types/schema';
 
+import * as domain from '../../domain';
+
 export function handleNewProposal(event: NewProposal): void {
+  domain.handleNewProposal(event);
+
   let ent = new GenesisProtocolProposal();
   ent.proposalId = event.params._proposalId.toHex();
   ent.submittedTime = event.block.timestamp;
@@ -46,11 +49,11 @@ export function handleNewProposal(event: NewProposal): void {
   ent.numOfChoices = event.params._numOfChoices;
 
   store.set('GenesisProtocolProposal', event.params._proposalId.toHex(), ent);
-
-  domain.handleNewProposal(event);
 }
 
 export function handleVoteProposal(event: VoteProposal): void {
+  domain.handleVoteProposal(event);
+
   let ent = new GenesisProtocolVote();
   let uniqueId = concat(event.params._proposalId, event.params._voter).toHex();
 
@@ -72,6 +75,8 @@ export function handleVoteProposal(event: VoteProposal): void {
 }
 
 export function handleStake(event: Stake): void {
+  domain.handleStake(event);
+
   let ent = new GenesisProtocolStake();
   let uniqueId = concat(event.params._proposalId, event.params._staker).toHex();
 
@@ -129,15 +134,18 @@ export function handleGPExecuteProposal(event: GPExecuteProposal): void {
     .toI32();
   genesisProtocolGPExecuteProposal.contract = event.address;
   genesisProtocolGPExecuteProposal.proposalId = event.params._proposalId;
-  genesisProtocolGPExecuteProposal.txHash = event.transaction.hash.toHex();
+  genesisProtocolGPExecuteProposal.txHash = event.transaction.hash;
+  genesisProtocolGPExecuteProposal.id = eventId(event);
   store.set(
     'GenesisProtocolGPExecuteProposal',
-    event.transaction.hash.toHex(),
+    genesisProtocolGPExecuteProposal.id,
     genesisProtocolGPExecuteProposal,
   );
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
+  domain.handleExecuteProposal(event);
+
   let proposal = store.get(
     'GenesisProtocolProposal',
     event.params._proposalId.toHex(),
@@ -163,10 +171,11 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
   genesisProtocolExecuteProposal.proposalId = event.params._proposalId;
   genesisProtocolExecuteProposal.totalReputation =
     event.params._totalReputation;
-  genesisProtocolExecuteProposal.txHash = event.transaction.hash.toHex();
+  genesisProtocolExecuteProposal.txHash = event.transaction.hash;
+  genesisProtocolExecuteProposal.id = eventId(event);
   store.set(
     'GenesisProtocolExecuteProposal',
-    event.transaction.hash.toHex(),
+    genesisProtocolExecuteProposal.id,
     genesisProtocolExecuteProposal,
   );
 }

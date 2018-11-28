@@ -1,19 +1,19 @@
 import { Address, store } from '@graphprotocol/graph-ts';
 import { Reputation } from '../types/Reputation/Reputation';
-import { ReputationContract } from '../types/schema';
+import { Rep } from '../types/schema';
 
-export function getReputation(id: string): ReputationContract {
-  let reputation = store.get('ReputationContract', id) as ReputationContract;
+export function getReputation(id: string): Rep {
+  let reputation = store.get('Rep', id) as Rep;
   if (reputation == null) {
-    reputation = new ReputationContract();
+    reputation = new Rep();
     reputation.id = id;
   }
 
   return reputation;
 }
 
-export function saveReputation(reputation: ReputationContract): void {
-  store.set('ReputationContract', reputation.id, reputation);
+export function saveReputation(reputation: Rep): void {
+  store.set('Rep', reputation.id, reputation);
 }
 
 export function insertReputation(

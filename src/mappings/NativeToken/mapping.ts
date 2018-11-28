@@ -13,7 +13,7 @@ import {
   OwnershipTransferred,
   Transfer,
 } from '../../types/DAOToken/DAOToken';
-import { concat, equals } from '../../utils';
+import { concat, equals, eventId } from '../../utils';
 
 // Import entity types generated from the GraphQL schema
 import {
@@ -25,6 +25,8 @@ import {
   TokenMintFinished,
   TokenTransfer,
 } from '../../types/schema';
+
+import * as domain from '../../domain';
 
 function update(contract: Address, owner: Address): void {
   let token = DAOToken.bind(contract);
@@ -49,60 +51,63 @@ export function handleMint(event: Mint): void {
   update(event.address, event.params.to as Address);
 
   let ent = new TokenMint();
+  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.to = event.params.to;
   ent.amount = event.params.amount;
 
-  store.set('TokenMint', event.transaction.hash.toHex(), ent);
+  store.set('TokenMint', ent.id, ent);
 }
 
 export function handleBurn(event: Burn): void {
   update(event.address, event.params.burner as Address);
 
   let ent = new TokenBurn();
-  // TODO: txHash is not unique
+  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.burner = event.params.burner;
   ent.amount = event.params.value;
 
-  store.set('TokenBurn', event.transaction.hash.toHex(), ent);
+  store.set('TokenBurn', ent.id, ent);
 }
 
 export function handleMintFinished(event: MintFinished): void {
   let ent = new TokenMintFinished();
-  // TODO: txHash is not unique
+  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
 
-  store.set('TokenMintFinished', event.transaction.hash.toHex(), ent);
+  store.set('TokenMintFinished', ent.id, ent);
 }
 
 export function handleTransfer(event: Transfer): void {
+  domain.handleNativeTokenTransfer(event);
+
   update(event.address, event.params.to as Address);
   update(event.address, event.params.from as Address);
   let ent = new TokenTransfer();
-  // TODO: txHash is not unique
+  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.from = event.params.from;
   ent.to = event.params.to;
   ent.value = event.params.value;
 
-  store.set('TokenTransfer', event.transaction.hash.toHex(), ent);
+  store.set('TokenTransfer', ent.id, ent);
 }
 
 export function handleApproval(event: Approval): void {
   let ent = new TokenApproval();
-  // TODO: txHash is not unique
+  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.spender = event.params.spender;
   ent.value = event.params.value;
   ent.owner = event.params.owner;
 
-  store.set('TokenApproval', event.transaction.hash.toHex(), ent);
+  store.set('TokenApproval', ent.id, ent);
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {

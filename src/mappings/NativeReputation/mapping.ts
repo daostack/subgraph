@@ -5,7 +5,9 @@ import { Address, BigInt, crypto, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Reputation contract ABI
 import { Burn, Mint, Reputation } from '../../types/Reputation/Reputation';
-import { concat, equals } from '../../utils';
+import { concat, equals, eventId } from '../../utils';
+
+import * as domain from '../../domain';
 
 // Import entity types generated from the GraphQL schema
 import {
@@ -38,28 +40,29 @@ function update(contract: Address, owner: Address): void {
 }
 
 export function handleMint(event: Mint): void {
+  domain.handleMint(event);
   update(event.address, event.params._to as Address);
 
   let ent = new ReputationMint();
-  // TODO: txHash is not unique
-  // ent.id = event.transaction.hash.toHex();
+  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.address = event.params._to;
   ent.amount = event.params._amount;
 
-  store.set('ReputationMint', event.transaction.hash.toHex(), ent);
+  store.set('ReputationMint', ent.id, ent);
 }
 
 export function handleBurn(event: Burn): void {
+  domain.handleBurn(event);
   update(event.address, event.params._from as Address);
 
   let ent = new ReputationBurn();
-  // TODO: txHash is not unique
+  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.address = event.params._from;
   ent.amount = event.params._amount;
 
-  store.set('ReputationBurn', event.transaction.hash.toHex(), ent);
+  store.set('ReputationBurn', ent.id, ent);
 }

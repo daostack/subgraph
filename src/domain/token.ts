@@ -1,19 +1,19 @@
 import { Address, store } from '@graphprotocol/graph-ts';
 import { DAOToken } from '../types/DAOToken/DAOToken';
-import { TokenContract } from '../types/schema';
+import { Token } from '../types/schema';
 
-export function getToken(id: string): TokenContract {
-  let token = store.get('TokenContract', id) as TokenContract;
+export function getToken(id: string): Token {
+  let token = store.get('Token', id) as Token;
   if (token == null) {
-    token = new TokenContract();
+    token = new Token();
     token.id = id;
   }
 
   return token;
 }
 
-export function saveToken(token: TokenContract): void {
-  store.set('TokenContract', token.id, token);
+export function saveToken(token: Token): void {
+  store.set('Token', token.id, token);
 }
 
 export function insertToken(tokenAddress: Address, daoId: string): void {

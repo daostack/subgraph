@@ -66,11 +66,11 @@ In order to add support for a new contract follow these steps:
    1. `src/mappings/<contract name>/mapping.ts` - mapping code.
    2. `src/mappings/<contract name>/schema.graphql` - GraphQL schema for that contract.
    3. `src/mappings/<contract name>/datasource.yaml` - a yaml fragment with:
-   4. `abis` - optional - list of contract names that are required by the mapping.
-   5. [`entities`](https://github.com/graphprotocol/graph-node/blob/master/docs/subgraph-manifest.md#1521-ethereum-events-mapping) -
-      list of entities that are written by the the mapping.
-   6. [`eventHandlers`](https://github.com/graphprotocol/graph-node/blob/master/docs/subgraph-manifest.md#1522-eventhandler) -
-      map of solidity event signatures to event handlers in mapping code.
-   7. `test/integration/<contract name>.spec.ts`
+      1. `abis` - optional - list of contract names that are required by the mapping.
+      2. [`entities`](https://github.com/graphprotocol/graph-node/blob/master/docs/subgraph-manifest.md#1521-ethereum-events-mapping) -
+         list of entities that are written by the the mapping.
+      3. [`eventHandlers`](https://github.com/graphprotocol/graph-node/blob/master/docs/subgraph-manifest.md#1522-eventhandler) -
+         map of solidity event signatures to event handlers in mapping code.
+   4. `test/integration/<contract name>.spec.ts`
 
 3. (Optionally) add a deployment step for your contract in `ops/migrate.js` that will run before testing.

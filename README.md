@@ -6,10 +6,8 @@ DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 
 1 `git clone https://github.com/daostack/subgraph.git && cd subgraph`
 
-2. `npm install`
-3. `npm run configure:<development|mainnet>` - configure the project to use ganache or mainnet (requires `.env`
-   [configuration](#configuration)) via infura.
-4. `npm run codegen` - automatically generate abi and AssemblyScript type definitions required by the project.
+1. `npm install`
+2. `npm run codegen` - automatically generate abi and AssemblyScript type definitions required by the project.
 
 All npm scripts can be called within a container using `docker-compose` with all dependencies and services set up:
 
@@ -17,13 +15,11 @@ All npm scripts can be called within a container using `docker-compose` with all
 
 ## Commands
 
-1. `configure:mainnet` - configure the project to run against mainnet.
-2. `configure:development` - configure the project to run against ganache.
-3. `migrate:development` - migrate contracts to ganache and update project configuration.
-4. `codegen` - automatically generate abi & type definitions for required contracts.
-5. `test` - run integration test.
-6. `deploy` - deploy subgraph.
-7. `deploy:watch` - redeploy on file change.
+1. `migrate` - migrate contracts to ganache.
+2. `codegen` - automatically generate abi, subgraph, schema and type definitions for required contracts.
+3. `test` - run integration test.
+4. `deploy` - deploy subgraph.
+5. `deploy:watch` - redeploy on file change.
 
 Docker commands (requires installing [`docker`](https://docs.docker.com/v17.12/install/) and
 [`docker-compose`](https://docs.docker.com/compose/install/)):
@@ -33,6 +29,7 @@ Docker commands (requires installing [`docker`](https://docs.docker.com/v17.12/i
 2. `docker:stop` - stop all running docker services.
 3. `docker:rebuild <command>` - rebuild the docker container after changes to `package.json`.
 4. `docker:logs <subgraph|graph-node|ganache|ipfs|postgres>` - display logs from a running docker service.
+5. `docker:run` - run all services in detached mode (i.e. in the background).
 
 ## Exposed endpoints
 
@@ -45,16 +42,6 @@ After running a command with docker-compose, the following endpoints will be exp
 - `http://localhost:5001` - ipfs endpoint.
 - (if using development) `http://localhost:8545` - ganache RPC endpoint.
 - `http://localhost:5432` - postgresql connection endpoint.
-
-## Configuration
-
-This project automatically generates `.yaml` files used by `docker-compose` & `graph-node` based on configuration.
-Project configuration lives under: `ops/config.yaml` (public configration), `.env` (secret configuration).
-
-The following `.env` variables can be configured:
-
-- `daostack_mainnet__postgresPassword` - postgres password when running on mainnet (e.g `123`).
-- `daostack_mainnet__ethereumProvider` - mainnet web3 provider (e.g `https://mainnet.infura.io/v3/<api key>`)
 
 ## Add a new contract tracker
 

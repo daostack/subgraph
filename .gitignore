@@ -6,4 +6,4 @@ migration.json
 abis
 yarn.lock
 src/types
-schema.graphql
+/schema.graphql

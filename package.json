@@ -22,7 +22,7 @@
 		"docker:run": "docker-compose up -d",
 		"docker:rebuild": "docker-compose build",
 		"docker:logs": "docker-compose logs --follow",
-		"lint": "tslint -c tslint.json 'src/mappings/**/*.ts' && tslint -c tslint.json 'test/**/*.ts'"
+		"lint": "tslint -c tslint.json 'src/mappings/**/*.ts' && tslint -c tslint.json 'src/domain/**/*.ts' && tslint -c tslint.json 'test/**/*.ts'"
 	},
 	"devDependencies": {
 		"@types/axios": "^0.14.0",

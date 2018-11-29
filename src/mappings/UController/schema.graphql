@@ -1,12 +1,14 @@
 type UControllerOrganization @entity {
-	avatarAddress: ID!
+	id: ID!
+	avatarAddress: Bytes!
 	nativeToken: TokenContract!
 	nativeReputation: ReputationContract!
 	controller: Bytes!
 }
 
 type UControllerScheme @entity {
-	avatarAddress: ID!
+	id: ID!
+	avatarAddress: Bytes!
 	address: Bytes!
 	paramsHash: Bytes!
 	canRegisterSchemes: Boolean
@@ -16,7 +18,8 @@ type UControllerScheme @entity {
 }
 
 type UControllerGlobalConstraint @entity {
-	avatarAddress: ID!
+	id: ID!
+	avatarAddress: Bytes!
 	address: Bytes!
 	paramsHash: Bytes!
 	type: String!

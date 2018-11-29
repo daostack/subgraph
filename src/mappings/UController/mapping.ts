@@ -51,7 +51,8 @@ function insertScheme(
   let perms = uController.getSchemePermissions(scheme, avatarAddress);
 
   let ent = new UControllerScheme();
-  ent.avatarAddress = avatarAddress.toHex();
+  ent.id = crypto.keccak256(concat(avatarAddress, scheme)).toHex();
+  ent.avatarAddress = avatarAddress;
   ent.address = scheme;
   ent.paramsHash = paramsHash;
   /* tslint:disable:no-bitwise */
@@ -63,11 +64,7 @@ function insertScheme(
   /* tslint:disable:no-bitwise */
   ent.canDelegateCall = (perms[3] & 16) === 16;
 
-  store.set(
-    'UControllerScheme',
-    crypto.keccak256(concat(avatarAddress, scheme)).toHex(),
-    ent,
-  );
+  store.set('UControllerScheme', ent.id, ent);
 }
 
 function deleteScheme(avatarAddress: Address, scheme: Address): void {
@@ -86,35 +83,38 @@ function insertOrganization(
 
   let reputationContract = new ReputationContract();
   let rep = Reputation.bind(org.value1);
+  reputationContract.id = org.value1.toHex();
   reputationContract.address = org.value1;
   reputationContract.totalSupply = rep.totalSupply();
-  store.set('ReputationContract', org.value1.toHex(), reputationContract);
+  store.set('ReputationContract', reputationContract.id, reputationContract);
 
   let tokenContract = new TokenContract();
   let daotoken = DAOToken.bind(org.value1);
+  tokenContract.id = org.value0.toHex();
   tokenContract.address = org.value0;
   tokenContract.totalSupply = daotoken.totalSupply();
   tokenContract.owner = uControllerAddress;
-  store.set('TokenContract', org.value0.toHex(), tokenContract);
+  store.set('TokenContract', tokenContract.id, tokenContract);
 
   let ent = new UControllerOrganization();
-  ent.avatarAddress = avatarAddress.toHex();
+  ent.id = avatarAddress.toHex();
+  ent.avatarAddress = avatarAddress;
   ent.nativeToken = org.value0.toHex();
   ent.nativeReputation = org.value1.toHex();
   ent.controller = uControllerAddress;
 
   let avatarSC = Avatar.bind(avatarAddress);
   let avatar = new AvatarContract();
-  // avatar.id = avatarAddress.toHex();
+  avatar.id = avatarAddress.toHex();
   avatar.address = avatarAddress;
   avatar.name = avatarSC.orgName();
   avatar.nativeReputation = avatarSC.nativeReputation();
   avatar.nativeToken = avatarSC.nativeToken();
   avatar.owner = avatarSC.owner();
   avatar.balance = BigInt.fromI32(0);
-  store.set('AvatarContract', avatarAddress.toHex(), avatar);
+  store.set('AvatarContract', avatar.id, avatar);
 
-  store.set('UControllerOrganization', avatarAddress.toHex(), ent);
+  store.set('UControllerOrganization', ent.id, ent);
 }
 
 function updateController(
@@ -144,16 +144,13 @@ function insertGlobalConstraint(
   );
 
   let ent = new UControllerGlobalConstraint();
-  ent.avatarAddress = avatarAddress.toHex();
+  ent.id = crypto.keccak256(concat(avatarAddress, globalConstraint)).toHex();
+  ent.avatarAddress = avatarAddress;
   ent.address = globalConstraint;
   ent.paramsHash = paramsHash;
   ent.type = type;
 
-  store.set(
-    'UControllerGlobalConstraint',
-    crypto.keccak256(concat(avatarAddress, globalConstraint)).toHex(),
-    ent,
-  );
+  store.set('UControllerGlobalConstraint', ent.id, ent);
 }
 
 function deleteGlobalConstraint(
@@ -167,7 +164,7 @@ function deleteGlobalConstraint(
 }
 
 export function handleRegisterScheme(event: RegisterScheme): void {
-  domain.handleRegisterScheme(event);
+  // domain.handleRegisterScheme(event);
 
   // Detect a new organization event by looking for the first register scheme event for that org.
   let isFirstRegister = store.get(

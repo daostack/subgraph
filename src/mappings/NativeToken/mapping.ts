@@ -31,17 +31,16 @@ import * as domain from '../../domain';
 function update(contract: Address, owner: Address): void {
   let token = DAOToken.bind(contract);
   let ent = new TokenHolder();
-  let id = crypto.keccak256(concat(contract, owner)).toHex();
-  //  ent.id = id;
+  ent.id = crypto.keccak256(concat(contract, owner)).toHex();
   ent.contract = contract;
   ent.address = owner;
   let balance = token.balanceOf(owner);
   ent.balance = balance;
 
   if (!equals(balance, BigInt.fromI32(0))) {
-    store.set('TokenHolder', id, ent);
+    store.set('TokenHolder', ent.id, ent);
   } else {
-    store.remove('TokenHolder', id);
+    store.remove('TokenHolder', ent.id);
   }
 
   updateTokenContract(contract);
@@ -83,7 +82,7 @@ export function handleMintFinished(event: MintFinished): void {
 }
 
 export function handleTransfer(event: Transfer): void {
-  domain.handleNativeTokenTransfer(event);
+  // domain.handleNativeTokenTransfer(event);
 
   update(event.address, event.params.to as Address);
   update(event.address, event.params.from as Address);
@@ -117,8 +116,9 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 function updateTokenContract(contract: Address): void {
   let token = DAOToken.bind(contract);
   let tokenContract = new TokenContract();
+  tokenContract.id = contract.toHex();
   tokenContract.address = contract;
   tokenContract.totalSupply = token.totalSupply();
   tokenContract.owner = token.owner();
-  store.set('TokenContract', contract.toHex(), tokenContract);
+  store.set('TokenContract', tokenContract.id, tokenContract);
 }

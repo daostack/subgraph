@@ -6,6 +6,7 @@ type TokenContract @entity {
 }
 
 type TokenHolder @entity {
+	id: ID!
 	contract: Bytes!
 	address: Bytes!
 	balance: BigInt!

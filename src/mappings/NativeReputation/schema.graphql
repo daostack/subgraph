@@ -5,6 +5,7 @@ type ReputationContract @entity {
 }
 
 type ReputationHolder @entity {
+	id: ID!
 	contract: Bytes!
 	address: Bytes!
 	balance: BigInt!

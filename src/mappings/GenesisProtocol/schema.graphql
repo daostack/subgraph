@@ -1,5 +1,6 @@
 type GenesisProtocolProposal @entity {
-	proposalId: ID!
+	id: ID!
+	proposalId: Bytes!
 	submittedTime: BigInt!
 	proposer: Bytes!
 	daoAvatarAddress: Bytes!
@@ -12,6 +13,7 @@ type GenesisProtocolProposal @entity {
 }
 
 type GenesisProtocolVote @entity {
+	id: ID!
 	avatarAddress: Bytes!
 	voterAddress: Bytes!
 	reputation: BigInt!
@@ -20,6 +22,7 @@ type GenesisProtocolVote @entity {
 }
 
 type GenesisProtocolStake @entity {
+	id: ID!
 	avatarAddress: Bytes!
 	stakerAddress: Bytes!
 	prediction: BigInt!
@@ -28,6 +31,7 @@ type GenesisProtocolStake @entity {
 }
 
 type GenesisProtocolRedemption @entity {
+	id: ID!
 	rewardId: GenesisProtocolReward!
 	proposalId: ID!
 	redeemer: Bytes!

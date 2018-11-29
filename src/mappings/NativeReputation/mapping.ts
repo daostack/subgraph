@@ -20,27 +20,27 @@ import {
 function update(contract: Address, owner: Address): void {
   let rep = Reputation.bind(contract);
   let ent = new ReputationHolder();
-  let id = crypto.keccak256(concat(contract, owner)).toHex();
-  //  ent.id = id;
+  ent.id = crypto.keccak256(concat(contract, owner)).toHex();
   ent.contract = contract;
   ent.address = owner;
   let balance = rep.balanceOf(owner);
   ent.balance = balance;
 
   if (!equals(balance, BigInt.fromI32(0))) {
-    store.set('ReputationHolder', id, ent);
+    store.set('ReputationHolder', ent.id, ent);
   } else {
-    store.remove('ReputationHolder', id);
+    store.remove('ReputationHolder', ent.id);
   }
 
   let reputationContract = new ReputationContract();
+  reputationContract.id = contract.toHex();
   reputationContract.address = contract;
   reputationContract.totalSupply = rep.totalSupply();
-  store.set('ReputationContract', contract.toHex(), reputationContract);
+  store.set('ReputationContract', reputationContract.id, reputationContract);
 }
 
 export function handleMint(event: Mint): void {
-  domain.handleMint(event);
+  // domain.handleMint(event);
   update(event.address, event.params._to as Address);
 
   let ent = new ReputationMint();
@@ -54,7 +54,7 @@ export function handleMint(event: Mint): void {
 }
 
 export function handleBurn(event: Burn): void {
-  domain.handleBurn(event);
+  // domain.handleBurn(event);
   update(event.address, event.params._from as Address);
 
   let ent = new ReputationBurn();

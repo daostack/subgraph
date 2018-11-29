@@ -82,7 +82,8 @@ export function handleRedeemExternalToken(event: RedeemExternalToken): void {
 
 function insertNewProposal(event: NewContributionProposal): void {
   let ent = new ContributionRewardProposal();
-  ent.proposalId = event.params._proposalId.toHex();
+  ent.id = event.params._proposalId.toHex();
+  ent.proposalId = event.params._proposalId;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
   ent.beneficiary = event.params._beneficiary;
@@ -96,7 +97,7 @@ function insertNewProposal(event: NewContributionProposal): void {
   ent.externalTokenReward = rewards.shift(); // external tokens
   ent.periodLength = rewards.shift(); // period length
   ent.periods = rewards.shift(); // number of periods
-  store.set('ContributionRewardProposal', ent.proposalId, ent);
+  store.set('ContributionRewardProposal', ent.id, ent);
 }
 
 function updateProposalafterRedemption(
@@ -140,7 +141,7 @@ function updateProposalafterRedemption(
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
-  domain.handleProposalExecuted(event);
+  // domain.handleProposalExecuted(event);
 
   let cr = ContributionReward.bind(event.address);
   let proposalId = event.params._proposalId;
@@ -167,7 +168,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
 export function handleNewContributionProposal(
   event: NewContributionProposal,
 ): void {
-  domain.handleNewContributionProposal(event);
+  // domain.handleNewContributionProposal(event);
 
   insertNewProposal(event);
   let ent = new ContributionRewardNewContributionProposal();

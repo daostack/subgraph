@@ -1,6 +1,6 @@
 import { Address, BigInt, crypto, store } from '@graphprotocol/graph-ts';
+import { Reputation } from '../types/NativeReputation/Reputation';
 import { DAOToken } from '../types/NativeToken/DAOToken';
-import { Reputation } from '../types/Reputation/Reputation';
 import { Member } from '../types/schema';
 import { concat, equals, hexToAddress } from '../utils';
 import { getDAO } from './dao';

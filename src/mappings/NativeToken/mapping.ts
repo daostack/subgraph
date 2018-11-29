@@ -12,7 +12,7 @@ import {
   MintFinished,
   OwnershipTransferred,
   Transfer,
-} from '../../types/DAOToken/DAOToken';
+} from '../../types/NativeToken/DAOToken';
 import { concat, equals, eventId } from '../../utils';
 
 // Import entity types generated from the GraphQL schema

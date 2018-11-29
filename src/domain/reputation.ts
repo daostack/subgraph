@@ -1,5 +1,5 @@
 import { Address, store } from '@graphprotocol/graph-ts';
-import { Reputation } from '../types/Reputation/Reputation';
+import { Reputation } from '../types/NativeReputation/Reputation';
 import { Rep } from '../types/schema';
 
 export function getReputation(id: string): Rep {

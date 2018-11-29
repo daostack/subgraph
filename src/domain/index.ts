@@ -7,14 +7,14 @@ import {
   NewContributionProposal,
   ProposalExecuted,
 } from '../types/ContributionReward/ContributionReward';
-import { Transfer } from '../types/DAOToken/DAOToken';
 import {
   ExecuteProposal,
   NewProposal,
   Stake,
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
-import { Burn, Mint } from '../types/Reputation/Reputation';
+import { Burn, Mint } from '../types/NativeReputation/Reputation';
+import { Transfer } from '../types/NativeToken/DAOToken';
 import { RegisterScheme } from '../types/UController/UController';
 import { equals, eventId, hexToAddress } from '../utils';
 import {

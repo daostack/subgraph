@@ -4,7 +4,11 @@ export { allocate_memory };
 import { Address, BigInt, crypto, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Reputation contract ABI
-import { Burn, Mint, Reputation } from '../../types/Reputation/Reputation';
+import {
+  Burn,
+  Mint,
+  Reputation,
+} from '../../types/NativeReputation/Reputation';
 import { concat, equals, eventId } from '../../utils';
 
 import * as domain from '../../domain';

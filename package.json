@@ -14,9 +14,11 @@
 	"scripts": {
 		"migrate": "ethereum=${ethereum-http://127.0.0.1:8545} node ops/migrate.js",
 		"codegen": "node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js && graph codegen --output-dir src/types/ subgraph.yaml",
+		"codegen:watch": "watch 'npm run codegen' src/mappings src/domain",
 		"deploy": "npm run migrate && npm run codegen && graph deploy --access-token \"\" --ipfs ${ipfs-/ip4/127.0.0.1/tcp/5001} --node ${node_rpc-http://127.0.0.1:8020/} -n daostack subgraph.yaml",
 		"deploy:watch": "npm run deploy -- --watch",
 		"test": "npm run deploy && jest --runInBand --forceExit",
+		"test:watch": "npm run test -- --watch",
 		"docker": "docker-compose run --rm -v $(pwd):/usr/app -v /usr/app/node_modules subgraph",
 		"docker:stop": "docker-compose down -v",
 		"docker:run": "docker-compose up -d",
@@ -28,7 +30,8 @@
 		"@types/axios": "^0.14.0",
 		"@types/graphql": "^14.0.3",
 		"@types/jest": "^23.3.7",
-		"@types/mocha": "^5.2.5"
+		"@types/mocha": "^5.2.5",
+		"watch": "^1.0.2"
 	},
 	"dependencies": {
 		"@daostack/arc": "0.0.0-alpha.56",

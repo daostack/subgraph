@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "10.13.0"
+  - '10.13.0'
 
 sudo: required
 
@@ -22,8 +22,6 @@ install:
   - sudo service postgresql stop
   - while sudo lsof -Pi :5432 -sTCP:LISTEN -t; do sleep 1; done
   - npm install
-  - npm run configure:development
-  - npm run codegen
 
 script:
   - sudo docker-compose build subgraph

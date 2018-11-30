@@ -153,9 +153,7 @@ async function migrate(web3) {
 }
 
 async function generateAbis() {
-  // base = the direcdtory with the contract artifacts
   const base = require('path').dirname(require.resolve('@daostack/arc/build/contracts/UController.json'))
-  // const base = `@daostack/arc/build/contracts`;
   if (!fs.existsSync("./abis/")) {
     fs.mkdirSync("./abis/");
   }

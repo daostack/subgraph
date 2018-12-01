@@ -21,7 +21,6 @@ install:
   - docker-compose --version
   - sudo service postgresql stop
   - while sudo lsof -Pi :5432 -sTCP:LISTEN -t; do sleep 1; done
-  - npm install
 
 script:
   - npm run docker lint

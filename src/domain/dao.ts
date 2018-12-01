@@ -35,39 +35,5 @@ export function insertNewDAO(
   dao.nativeReputation = nativeReputationAddress.toHex();
   saveDAO(dao);
 
-  // Save reputaion => DAO mapping so we can use it later
-  let rep = new Entity();
-  rep.set('id', Value.fromString(dao.nativeReputation));
-  rep.set('dao', Value.fromBytes(avatarAddress));
-  store.set('NativeReputation2DAO', dao.nativeReputation, rep);
-
-  // Save token => DAO mapping so we can use it later
-  let tok = new Entity();
-  tok.set('id', Value.fromString(dao.nativeToken));
-  tok.set('dao', Value.fromBytes(avatarAddress));
-  store.set('NativeToken2DAO', dao.nativeToken, tok);
-
   return dao;
-}
-
-export function getDAOByNativeReputationAddress(
-  reputationAddress: Address,
-): Address | null {
-  let ent = store.get('NativeReputation2DAO', reputationAddress.toHex());
-  if (ent == null) {
-    return null;
-  } else {
-    return ent.get('dao').toAddress();
-  }
-}
-
-export function getDAOByNativeTokenAddress(
-  tokenAddress: Address,
-): Address | null {
-  let ent = store.get('NativeToken2DAO', tokenAddress.toHex());
-  if (ent == null) {
-    return null;
-  } else {
-    return ent.get('dao').toAddress();
-  }
 }

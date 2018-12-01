@@ -17,11 +17,7 @@ import { Burn, Mint } from '../types/NativeReputation/Reputation';
 import { Transfer } from '../types/NativeToken/DAOToken';
 import { RegisterScheme } from '../types/UController/UController';
 import { equals, eventId, hexToAddress } from '../utils';
-import {
-  getDAOByNativeReputationAddress,
-  getDAOByNativeTokenAddress,
-  insertNewDAO,
-} from './dao';
+import { insertNewDAO } from './dao';
 import { updateMemberReputation, updateMemberTokens } from './member';
 import {
   getProposal,
@@ -38,7 +34,7 @@ import {
   updateReputationTotalSupply,
 } from './reputation';
 import { insertStake } from './stake';
-import { insertToken, updateTokenTotalSupply } from './token';
+import { getToken, insertToken, updateTokenTotalSupply } from './token';
 import { insertVote } from './vote';
 
 export function handleNewProposal(event: NewProposal): void {
@@ -154,24 +150,24 @@ export function handleMint(event: Mint): void {
 }
 
 export function handleBurn(event: Burn): void {
-  let daoAddress = getDAOByNativeReputationAddress(event.address);
-  if (daoAddress == null) {
+  let dao = getReputation(event.address.toHex()).dao;
+  if (dao == null) {
     // reputation that's not attached to a DAO
     return;
   }
-  updateMemberReputation(event.params._from, daoAddress as Address);
+  updateMemberReputation(event.params._from, hexToAddress(dao));
   updateReputationTotalSupply(event.address);
 }
 
 export function handleNativeTokenTransfer(event: Transfer): void {
-  let daoAddress = getDAOByNativeTokenAddress(event.address);
-  if (daoAddress == null) {
+  let dao = getToken(event.address.toHex()).dao;
+  if (dao == null) {
     // reputation that's not attached to a DAO
     return;
   }
 
-  updateMemberTokens(event.params.from, daoAddress as Address);
-  updateMemberTokens(event.params.to, daoAddress as Address);
+  updateMemberTokens(event.params.from, hexToAddress(dao));
+  updateMemberTokens(event.params.to, hexToAddress(dao));
   updateTokenTotalSupply(event.address);
 }
 

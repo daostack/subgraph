@@ -9,14 +9,11 @@ export function getMember(address: Address, daoAddress: Address): Member {
   let id = crypto.keccak256(concat(address, daoAddress)).toHex();
   let member = store.get('Member', id) as Member;
   if (member == null) {
-    let dao = getDAO(daoAddress.toHex());
-    let tok = DAOToken.bind(hexToAddress(dao.nativeToken));
     member = new Member();
     member.id = id;
     member.address = address;
-    member.dao = dao.id;
+    member.dao = daoAddress.toHex();
     member.reputation = BigInt.fromI32(0);
-    member.tokens = tok.balanceOf(address);
   }
   return member;
 }

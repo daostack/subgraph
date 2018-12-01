@@ -82,7 +82,7 @@ export function handleMintFinished(event: MintFinished): void {
 }
 
 export function handleTransfer(event: Transfer): void {
-  // domain.handleNativeTokenTransfer(event);
+  domain.handleNativeTokenTransfer(event);
 
   update(event.address, event.params.to as Address);
   update(event.address, event.params.from as Address);

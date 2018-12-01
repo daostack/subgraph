@@ -164,7 +164,7 @@ function deleteGlobalConstraint(
 }
 
 export function handleRegisterScheme(event: RegisterScheme): void {
-  // domain.handleRegisterScheme(event);
+  domain.handleRegisterScheme(event);
 
   // Detect a new organization event by looking for the first register scheme event for that org.
   let isFirstRegister = store.get(

@@ -44,7 +44,7 @@ function update(contract: Address, owner: Address): void {
 }
 
 export function handleMint(event: Mint): void {
-  // domain.handleMint(event);
+  domain.handleMint(event);
   update(event.address, event.params._to as Address);
 
   let ent = new ReputationMint();
@@ -58,7 +58,7 @@ export function handleMint(event: Mint): void {
 }
 
 export function handleBurn(event: Burn): void {
-  // domain.handleBurn(event);
+  domain.handleBurn(event);
   update(event.address, event.params._from as Address);
 
   let ent = new ReputationBurn();

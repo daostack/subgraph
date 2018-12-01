@@ -39,7 +39,7 @@ import {
 import * as domain from '../../domain';
 
 export function handleNewProposal(event: NewProposal): void {
-  // domain.handleNewProposal(event);
+  domain.handleNewProposal(event);
 
   let ent = new GenesisProtocolProposal();
   ent.id = event.params._proposalId.toHex();
@@ -53,7 +53,7 @@ export function handleNewProposal(event: NewProposal): void {
 }
 
 export function handleVoteProposal(event: VoteProposal): void {
-  // domain.handleVoteProposal(event);
+  domain.handleVoteProposal(event);
 
   let ent = new GenesisProtocolVote();
   let uniqueId = concat(event.params._proposalId, event.params._voter).toHex();
@@ -77,7 +77,7 @@ export function handleVoteProposal(event: VoteProposal): void {
 }
 
 export function handleStake(event: Stake): void {
-  // domain.handleStake(event);
+  domain.handleStake(event);
 
   let ent = new GenesisProtocolStake();
   let uniqueId = concat(event.params._proposalId, event.params._staker).toHex();
@@ -147,7 +147,7 @@ export function handleGPExecuteProposal(event: GPExecuteProposal): void {
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
-  // domain.handleExecuteProposal(event);
+  domain.handleExecuteProposal(event);
 
   let proposal = store.get(
     'GenesisProtocolProposal',

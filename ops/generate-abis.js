@@ -5,7 +5,7 @@ const path = require('path');
  * Fetch all abis from @daostack/arc into the `abis` folder.
  */
 async function generateAbis() {
-	const base = './node_modules/@daostack/arc/build/contracts';
+	const base = require('path').dirname(require.resolve('@daostack/arc/build/contracts/UController.json'));
 	if (!fs.existsSync('./abis/')) {
 		fs.mkdirSync('./abis/');
 	}

@@ -7,6 +7,7 @@ sudo: required
 services:
   - docker
 
+cache: npm
 addons:
   apt:
     packages:

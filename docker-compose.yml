@@ -48,4 +48,4 @@ services:
       - 8545:8545
     command: >
       --deterministic --mnemonic "behave pipe turkey animal voyage dial relief menu blush match jeans general"
-      --gasLimit 8000000
+      --gasLimit 8000000 --networkId ganache

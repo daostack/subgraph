@@ -135,7 +135,6 @@ describe('UController', () => {
       }
     }`);
 
-    expect(ucontrollerRegisterSchemes.length).toEqual(3);
     expect(ucontrollerRegisterSchemes).toContainEqual({
       txHash: txs[0],
       controller: uController.options.address.toLowerCase(),
@@ -168,7 +167,6 @@ describe('UController', () => {
       }
     }`);
 
-    expect(ucontrollerUnregisterSchemes.length).toEqual(1);
     expect(ucontrollerUnregisterSchemes).toContainEqual({
       txHash: txs[5],
       controller: uController.options.address.toLowerCase(),
@@ -190,7 +188,6 @@ describe('UController', () => {
       }
     }`);
 
-    expect(ucontrollerOrganizations.length).toEqual(1);
     expect(ucontrollerOrganizations).toContainEqual({
       avatarAddress: avatar.options.address.toLowerCase(),
       nativeToken: { address: daoToken.options.address.toLowerCase() },
@@ -210,7 +207,6 @@ describe('UController', () => {
       }
     }`);
 
-    expect(ucontrollerSchemes.length).toEqual(2);
     expect(ucontrollerSchemes).toContainEqual({
       avatarAddress: avatar.options.address.toLowerCase(),
       address: accounts[0].address.toLowerCase(),
@@ -333,7 +329,6 @@ describe('UController', () => {
       }
     }`);
 
-    expect(ucontrollerOrganizations2.length).toEqual(1);
     expect(ucontrollerOrganizations2).toContainEqual({
       avatarAddress: avatar.options.address.toLowerCase(),
       nativeToken: { address: daoToken.options.address.toLowerCase() },

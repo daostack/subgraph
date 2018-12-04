@@ -11,7 +11,7 @@ RUN chmod +x /wait /entry
 
 WORKDIR /usr/app
 COPY . .
-RUN npm ci
+RUN npm install
 RUN npm run codegen
 
 ENTRYPOINT [ "/entry" ]

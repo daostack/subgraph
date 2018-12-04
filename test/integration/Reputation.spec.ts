@@ -25,7 +25,6 @@ describe('Reputation', () => {
         totalSupply
       }
     }`);
-    expect(reputationContracts.length).toEqual(1);
     expect(reputationContracts).toContainEqual({
       address: reputation.options.address.toLowerCase(),
       totalSupply: value,

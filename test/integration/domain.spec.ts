@@ -207,9 +207,11 @@ describe('Domain Layer', () => {
 
     const [PASS, FAIL] = [1, 2];
     async function vote({ proposalId, outcome, voter }) {
-      await genesisProtocol.methods
+      const { blockNumber } = await genesisProtocol.methods
         .vote(proposalId, outcome, voter)
         .send({ from: voter });
+      const { timestamp } = await web3.eth.getBlock(blockNumber);
+      return timestamp;
     }
 
     const { proposalId: p1, timestamp: p1Creation } = await propose({
@@ -222,7 +224,7 @@ describe('Domain Layer', () => {
       beneficiary: accounts[1].address,
     });
 
-    const { proposal } = await sendQuery(`{
+    const getProposal = `{
         proposal(id: "${p1}") {
             id
             ipfsHash
@@ -232,11 +234,20 @@ describe('Domain Layer', () => {
             overtimedAt
             executedAt
 
-            votes
+            votes {
+                createdAt
+                proposal {
+                    id
+                }
+                outcome
+                reputation
+            }
             votesFor
             votesAgainst
 
-            stakes
+            stakes {
+                id
+            }
             stakesFor
             stakesAgainst
 
@@ -246,8 +257,11 @@ describe('Domain Layer', () => {
             externalToken
             ethReward
             beneficiary
+            winningOutcome
         }
-    }`);
+    }`;
+    let proposal;
+    proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
       ipfsHash: descHash,
@@ -260,6 +274,7 @@ describe('Domain Layer', () => {
       votes: [],
       votesFor: '0',
       votesAgainst: '0',
+      winningOutcome: 'Fail',
 
       stakes: [],
       stakesFor: '0',
@@ -273,15 +288,94 @@ describe('Domain Layer', () => {
       beneficiary: accounts[1].address.toLowerCase(),
     });
 
-    await vote({
+    const v1Timestamp = await vote({
       proposalId: p1,
       outcome: FAIL,
       voter: accounts[2].address,
     });
-    await vote({
+
+    proposal = (await sendQuery(getProposal)).proposal;
+    expect(proposal).toMatchObject({
+      id: p1,
+      ipfsHash: descHash,
+      stage: 'Open',
+      createdAt: p1Creation.toString(),
+      boostedAt: null,
+      overtimedAt: null,
+      executedAt: null,
+
+      votes: [
+        {
+          createdAt: v1Timestamp.toString(),
+          outcome: 'Fail',
+          proposal: {
+            id: p1,
+          },
+          reputation: '100',
+        },
+      ],
+      votesFor: '0',
+      votesAgainst: '100',
+      winningOutcome: 'Fail',
+
+      stakes: [],
+      stakesFor: '0',
+      stakesAgainst: '0',
+
+      reputationReward: '10',
+      tokensReward: '10',
+      externalTokenReward: '10',
+      externalToken: externalToken.options.address.toLowerCase(),
+      ethReward: '10',
+      beneficiary: accounts[1].address.toLowerCase(),
+    });
+
+    const v2Timestamp = await vote({
       proposalId: p1,
       outcome: PASS,
       voter: accounts[1].address,
+    });
+
+    proposal = (await sendQuery(getProposal)).proposal;
+    expect(proposal).toMatchObject({
+      id: p1,
+      ipfsHash: descHash,
+      stage: 'Resolved',
+      createdAt: p1Creation.toString(),
+      boostedAt: null,
+      overtimedAt: null,
+      executedAt: v2Timestamp.toString(),
+
+      votesFor: '300',
+      votesAgainst: '100',
+      winningOutcome: 'Pass',
+
+      stakes: [],
+      stakesFor: '0',
+      stakesAgainst: '0',
+
+      reputationReward: '10',
+      tokensReward: '10',
+      externalTokenReward: '10',
+      externalToken: externalToken.options.address.toLowerCase(),
+      ethReward: '10',
+      beneficiary: accounts[1].address.toLowerCase(),
+    });
+    expect(proposal.votes).toContainEqual({
+      createdAt: v2Timestamp.toString(),
+      outcome: 'Pass',
+      proposal: {
+        id: p1,
+      },
+      reputation: '300',
+    });
+    expect(proposal.votes).toContainEqual({
+      createdAt: v1Timestamp.toString(),
+      outcome: 'Fail',
+      proposal: {
+        id: p1,
+      },
+      reputation: '100',
     });
   }, 100000);
 });

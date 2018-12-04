@@ -48,7 +48,6 @@ describe('DAOToken', () => {
       }
     }`);
 
-    expect(tokenContracts.length).toEqual(1);
     expect(tokenContracts).toContainEqual({
       address: daotoken.options.address.toLowerCase(),
       totalSupply: '398',

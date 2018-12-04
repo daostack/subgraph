@@ -1,4 +1,5 @@
-# A workaround for debugging.
+# WORKAROUND: there's no `console.log` functionality in mapping.
+# so we use `debug(..)` which writes a `Debug` entity to the store so you can see them in graphiql.
 type Debug @entity {
 	id: ID!
 	message: String!

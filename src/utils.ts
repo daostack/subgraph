@@ -32,6 +32,10 @@ export function hexToAddress(hex: string): Address {
   return Address.fromString(hex.substr(2));
 }
 
+/**
+ * WORKAROUND: there's no `console.log` functionality in mapping.
+ * so we use `debug(..)` which writes a `Debug` entity to the store so you can see them in graphiql.
+ */
 let debugId = 0;
 export function debug(msg: string): void {
   let ent = new Entity();

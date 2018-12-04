@@ -193,7 +193,6 @@ describe('GenesisProtocol', () => {
       }
     }`);
 
-    expect(genesisProtocolGPExecuteProposals.length).toEqual(1);
     expect(genesisProtocolGPExecuteProposals).toContainEqual({
       proposalId,
       executionState: 3, //    enum ExecutionState

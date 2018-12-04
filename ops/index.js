@@ -22,6 +22,7 @@ const DAOToken = require("@daostack/arc/build/contracts/DAOToken.json");
 const Avatar = require("@daostack/arc/build/contracts/Avatar.json");
 
 async function configure({ env, ...rest }) {
+  const packageDir = `${__dirname}/..`
   const { [env]: publicConfig } = yaml.safeLoad(
     fs.readFileSync(__dirname + "/config.yaml", "utf-8")
   );
@@ -30,12 +31,12 @@ async function configure({ env, ...rest }) {
     env,
     development: env === "development",
     // ...rest,
-    subgraphOutputFile: rest.subgraphOutputFile,
+    outputDir: rest.outputDir || packageDir,
     ...publicConfig,
     ...privateConfig
   };
 
-  const packageDir = `${__dirname}/..`
+
   fs.writeFileSync(
     `${packageDir}/config.json`,
     JSON.stringify(config, undefined, 2),
@@ -63,18 +64,17 @@ async function configure({ env, ...rest }) {
       )
       .join("\n\n");
 
-  fs.writeFileSync(`${packageDir}/schema.graphql`, schema(config), "utf-8");
+  fs.writeFileSync(`${config.outputDir}/schema.graphql`, schema(config), "utf-8");
 
   const subgraph = handlebars.compile(
     fs.readFileSync(`${packageDir}/subgraph.handlebars.yaml`, "utf-8")
   );
 
-  config.subgraphOutputFile = config.subgraphOutputFile || `${packageDir}/subgraph.yml`
-  fs.writeFileSync(config.subgraphOutputFile, subgraph(config), "utf-8");
+  fs.writeFileSync(`${config.outputDir}/subgraph.yaml`, subgraph(config), "utf-8");
   const dockerCompose = handlebars.compile(
     fs.readFileSync(`${packageDir}/docker-compose.handlebars.yml`, "utf-8")
   );
-  fs.writeFileSync(`${packageDir}/docker-compose.yml`, dockerCompose(config), "utf-8");
+  fs.writeFileSync(`${config.outputDir}/docker-compose.yml`, dockerCompose(config), "utf-8");
   return config
 }
 

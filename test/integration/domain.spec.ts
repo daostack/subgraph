@@ -179,6 +179,57 @@ describe('Domain Layer', () => {
     const NativeReputation = await avatar.methods.nativeReputation().call();
     // END setup
 
+    const getDAO = `{
+      dao(id: "${avatarAddress.toLowerCase()}") {
+        id
+        name
+        nativeToken {
+          id
+          dao {
+            id
+          }
+          name
+          symbol
+          totalSupply
+        }
+        nativeReputation {
+          id
+          dao {
+            id
+          }
+          totalSupply
+        }
+      }
+    }`;
+    let dao;
+    dao = (await sendQuery(getDAO)).dao;
+    expect(dao).toMatchObject({
+      id: avatarAddress.toLowerCase(),
+      name: orgName,
+      nativeToken: {
+        id: NativeToken.toLowerCase(),
+        dao: {
+          id: avatarAddress.toLowerCase(),
+        },
+        name: tokenName,
+        symbol: tokenSymbol,
+        totalSupply: founders
+          .map(({ tokens }) => tokens)
+          .reduce((x, y) => x + y)
+          .toString(),
+      },
+      nativeReputation: {
+        id: NativeReputation.toLowerCase(),
+        dao: {
+          id: avatarAddress.toLowerCase(),
+        },
+        totalSupply: founders
+          .map(({ reputation }) => reputation)
+          .reduce((x, y) => x + y)
+          .toString(),
+      },
+    });
+
     const descHash =
       '0x000000000000000000000000000000000000000000000000000000000000abcd';
     async function propose({

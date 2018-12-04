@@ -231,7 +231,7 @@ describe('Domain Layer', () => {
             stage
             createdAt
             boostedAt
-            overtimedAt
+            quietEndingPeriodBeganAt
             executedAt
 
             votes {
@@ -268,7 +268,7 @@ describe('Domain Layer', () => {
       stage: 'Open',
       createdAt: p1Creation.toString(),
       boostedAt: null,
-      overtimedAt: null,
+      quietEndingPeriodBeganAt: null,
       executedAt: null,
 
       votes: [],
@@ -301,7 +301,7 @@ describe('Domain Layer', () => {
       stage: 'Open',
       createdAt: p1Creation.toString(),
       boostedAt: null,
-      overtimedAt: null,
+      quietEndingPeriodBeganAt: null,
       executedAt: null,
 
       votes: [
@@ -343,7 +343,7 @@ describe('Domain Layer', () => {
       stage: 'Resolved',
       createdAt: p1Creation.toString(),
       boostedAt: null,
-      overtimedAt: null,
+      quietEndingPeriodBeganAt: null,
       executedAt: v2Timestamp.toString(),
 
       votesFor: '300',

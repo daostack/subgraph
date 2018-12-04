@@ -13,7 +13,7 @@ enum Outcome {
 enum Stage {
 	Open
 	Boosted
-	Overtime
+	QuietEndingPeriod
 	Resolved
 }
 
@@ -48,7 +48,7 @@ type Proposal @entity {
 	stage: Stage!
 	createdAt: BigInt!
 	boostedAt: BigInt
-	overtimedAt: BigInt
+	quietEndingPeriodBeganAt: BigInt
 	executedAt: BigInt
 
 	ipfsHash: Bytes!

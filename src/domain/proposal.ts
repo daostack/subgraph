@@ -50,7 +50,7 @@ export function updateProposal(
     if (proposal.boostedAt == null) {
       proposal.boostedAt = gpProposal.value5;
     } else if (!equals(proposal.boostedAt as BigInt, gpProposal.value5)) {
-      proposal.overtimedAt = gpProposal.value5;
+      proposal.quietEndingPeriodBeganAt = gpProposal.value5;
     }
   }
 
@@ -73,7 +73,7 @@ export function updateProposal(
     proposal.stage = 'Boosted';
   } else if (state === 5) {
     // QuietEndingPeriod
-    proposal.stage = 'Overtime';
+    proposal.stage = 'QuietEndingPeriod';
   }
 }
 

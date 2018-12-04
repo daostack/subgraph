@@ -29,18 +29,21 @@ async function configure({ env, ...rest }) {
   const config = {
     env,
     development: env === "development",
+    // ...rest,
+    subgraphOutputFile: rest.subgraphOutputFile,
     ...publicConfig,
     ...privateConfig
   };
 
+  const packageDir = `${__dirname}/..`
   fs.writeFileSync(
-    "config.json",
+    `${packageDir}/config.json`,
     JSON.stringify(config, undefined, 2),
     "utf-8"
   );
 
   const subschemas = await new Promise((res, rej) =>
-    glob("src/**/*.graphql", (err, files) => (err ? rej(err) : res(files)))
+    glob(`${packageDir}/src/**/*.graphql`, (err, files) => (err ? rej(err) : res(files)))
   );
   const partials = subschemas.reduce(
     (acc, subschema) => ({
@@ -60,18 +63,19 @@ async function configure({ env, ...rest }) {
       )
       .join("\n\n");
 
-  fs.writeFileSync("schema.graphql", schema(config), "utf-8");
+  fs.writeFileSync(`${packageDir}/schema.graphql`, schema(config), "utf-8");
 
   const subgraph = handlebars.compile(
-    fs.readFileSync("subgraph.handlebars.yaml", "utf-8")
+    fs.readFileSync(`${packageDir}/subgraph.handlebars.yaml`, "utf-8")
   );
 
-  fs.writeFileSync("subgraph.yaml", subgraph(config), "utf-8");
-
+  config.subgraphOutputFile = config.subgraphOutputFile || `${packageDir}/subgraph.yml`
+  fs.writeFileSync(config.subgraphOutputFile, subgraph(config), "utf-8");
   const dockerCompose = handlebars.compile(
-    fs.readFileSync("docker-compose.handlebars.yml", "utf-8")
+    fs.readFileSync(`${packageDir}/docker-compose.handlebars.yml`, "utf-8")
   );
-  fs.writeFileSync("docker-compose.yml", dockerCompose(config), "utf-8");
+  fs.writeFileSync(`${packageDir}/docker-compose.yml`, dockerCompose(config), "utf-8");
+  return config
 }
 
 async function migrate(web3) {

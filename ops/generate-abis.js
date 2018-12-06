@@ -16,7 +16,7 @@ async function generateAbis() {
 	});
 }
 
-if (require.main == module) {
+if (require.main === module) {
 	generateAbis();
 } else {
 	module.exports = generateAbis;

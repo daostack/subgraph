@@ -44,7 +44,7 @@ async function generateSubgraph() {
 	fs.writeFileSync('subgraph.yaml', yaml.safeDump(subgraph, { noRefs: true }), 'utf-8');
 }
 
-if (require.main == module) {
+if (require.main === module) {
 	generateSubgraph();
 } else {
 	module.exports = generateSubgraph;

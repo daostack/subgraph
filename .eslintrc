@@ -3,7 +3,7 @@
     "env": {
       "amd": true,
       "node": true,
-      "es6": true
+      "es6"
     },
     "parser": "babel-eslint",
     "parserOptions": {
@@ -16,6 +16,6 @@
     "rules": {
         "semi": 2,
         "eol-last": 2,
-        "eqeqeq": "error"
-    }
+        "eqeqeq": "error",
+        "no-console": 0 }
 }

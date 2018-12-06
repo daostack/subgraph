@@ -20,7 +20,7 @@ async function generateSchema() {
 	fs.writeFileSync('schema.graphql', schema, 'utf-8');
 }
 
-if ((require.main = module)) {
+if ((require.main == module)) {
 	generateSchema();
 } else {
 	module.exports = generateSchema;

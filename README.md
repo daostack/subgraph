@@ -22,6 +22,11 @@ docker-compose up subgraph
 npm run test # in a new terminal
 docker-compose down -v
 ```
+The tests are run with jest, which takes a number of options that may be useful when developing:
+```sh
+npm run test -- --watch # re-run the tests after each change
+npm run test -- test/integration/Avatar.spec.js # run a single test file
+```
 
 
 ## Commands

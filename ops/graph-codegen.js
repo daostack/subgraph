@@ -1,5 +1,4 @@
-const { runGraphCli } = require('./graph-cli.js');
-const subgraphLocation = `./subgraph.yaml`;
+const { runGraphCli, subgraphLocation } = require('./graph-cli.js');
 
 async function codegen(cwd) {
   const result = await runGraphCli([

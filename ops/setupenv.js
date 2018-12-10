@@ -17,16 +17,15 @@ async function main () {
   await require(`${subgraphRepo}/ops/generate-schema`)();
 
   console.log(`Generating subgraph`);
-  const generateSubgraph = require(`${subgraphRepo}/ops/generate-subgraph`);
-  await generateSubgraph();
+  await require(`${subgraphRepo}/ops/generate-subgraph`)();
 
   const cwd = subgraphRepo;
   console.log('CodeGen');
-  const result = await graphCli.codegen(cwd);
+  const result = await require(`${subgraphRepo}/ops/graph-codegen`)(cwd);
   console.log(result);
 
   console.log('Deploying subgraph configuration');
-  const deploymentResult = await graphCli.deploy(cwd);
+  const deploymentResult = await require(`${subgraphRepo}/ops/graph-deploy`)(cwd);
   // deploymentResult[0] is the status code
   // but it is not very helpful, because it returns 0 also on some errors
   // console.log(deploymentResult[0])

@@ -7,8 +7,12 @@ DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 1 `git clone https://github.com/daostack/subgraph.git && cd subgraph`
 1. `npm install`
 
-
 ## Testing
+
+If you have changed `package.json` (or pulled a new version from github), you need to rebuild the containers:
+```sh
+docker-compose up build
+```
 
 Run tests in the docker container:
 ```sh
@@ -18,7 +22,7 @@ npm run docker test
 Or, more explicitly, you can run the tests in the host container:
 
 ```sh
-docker-compose up subgraph
+docker-compose up graph-node
 npm run test # in a new terminal
 docker-compose down -v
 ```

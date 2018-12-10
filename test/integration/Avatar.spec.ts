@@ -39,11 +39,12 @@ describe('Avatar', () => {
     expect(avatarContracts).toContainEqual({
       id: addresses.Avatar.toLowerCase(),
       address: addresses.Avatar.toLowerCase(),
-      name: 'TESTDAO',
+      name: 'Genesis Test',
       nativeToken: addresses.NativeToken.toLowerCase(),
       nativeReputation: addresses.NativeReputation.toLowerCase(),
       balance: '1',
-      owner: accounts[0].address.toLowerCase(),
+      // owner: accounts[0].address.toLowerCase(),
+      owner: '0x254dffcd3277c0b1660f6d42efbb754edababc2b',
     });
   }, 20000);
 });

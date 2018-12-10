@@ -1,3 +1,4 @@
+const path = require('path');
 require('dotenv').config();
 process.env = {
   ethereum: 'http://127.0.0.1:8545',
@@ -50,7 +51,8 @@ export async function getWeb3() {
 }
 
 export function getContractAddresses() {
-  return require('../../migration.json');
+  const addresses = require(`${__dirname}/../../migration.json`);
+  return {...addresses.private.dao, ...addresses.private.base};
 }
 
 export async function getOptions(web3) {

@@ -19,25 +19,14 @@ async function main () {
   await require(`${subgraphRepo}/ops/generate-subgraph`)();
 
   const cwd = subgraphRepo;
-  console.log('CodeGen');
-  const result = await require(`${subgraphRepo}/ops/graph-codegen`)(cwd);
-  console.log(result);
+  console.log('Calling graph codegen');
+  await require(`${subgraphRepo}/ops/graph-codegen`)(cwd);
 
   console.log('Deploying subgraph configuration');
-  const deploymentResult = await require(`${subgraphRepo}/ops/graph-deploy`)();
+  await require(`${subgraphRepo}/ops/graph-deploy`)();
   // deploymentResult[0] is the status code
   // but it is not very helpful, because it returns 0 also on some errors
   // console.log(deploymentResult[0])
-  const msg = deploymentResult[1];
-  if (msg.toLowerCase().indexOf('error') > 0) {
-    console.log(msg);
-    throw Error(msg);
-  } else {
-    console.log(msg);
-    console.log(`All done!`);
-  }
 }
 
-main().catch(error => {
-  console.log(error);
-});
+main();

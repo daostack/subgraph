@@ -43,7 +43,7 @@ describe('Avatar', () => {
       nativeToken: addresses.NativeToken.toLowerCase(),
       nativeReputation: addresses.NativeReputation.toLowerCase(),
       balance: '1',
-      owner: accounts[0].address.toLowerCase(),
+      owner: addresses.UController.toLowerCase(),
     });
   }, 20000);
 });

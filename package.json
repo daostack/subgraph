@@ -21,8 +21,9 @@
 		"docker:run": "docker-compose up -d",
 		"docker:rebuild": "docker-compose build",
 		"docker:logs": "docker-compose logs --follow",
+		"jest": "jest --runInBand --forceExit",
 		"lint": "tslint -c tslint.json 'src//*.ts' -e 'src/types//.ts' && tslint -c tslint.json 'test/**/.ts'",
-		"migrate": "node ops/deployDaoStack.js",
+		"migrate": "ethereum=${ethereum-http://127.0.0.1:8545}  node ops/deployDaoStack.js",
 		"test": "npm run deploy && jest --runInBand --forceExit",
 		"test:watch": "npm run test -- --watch"
 	},

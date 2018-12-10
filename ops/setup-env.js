@@ -3,9 +3,9 @@ const deployDaoStack = require('./deployDaoStack').deployDaoStack;
 const subgraphRepo = path.resolve(`${__dirname}/..`);
 
 async function main () {
-  const provider = 'http://localhost:8545';
-  console.log(`Deploying Daostack contracts to ${provider}`);
-  let { options, migrationResult } = await deployDaoStack({ provider });
+  // const provider = 'http://ganach:8545';
+  console.log(`Deploying Daostack contracts`);
+  let { options, migrationResult } = await deployDaoStack();
   console.log(`Deployed Daostack contracts, information written to ${options.output}`);
 
   console.log(`Generating ABI files`);

@@ -1,5 +1,4 @@
 const spawn = require('spawn-command');
-const fs = require('fs');
 const path = require('path');
 
 const runGraphCli = async (args = [], cwd = process.cwd()) => {
@@ -34,39 +33,10 @@ const runGraphCli = async (args = [], cwd = process.cwd()) => {
   });
 };
 
+
 const subgraphLocation = `./subgraph.yaml`;
 
-async function codegen(cwd) {
-  const result = await runGraphCli([
-    'codegen',
-    '--output-dir src/types/',
-    subgraphLocation
-  ], cwd);
-  if (result[0] === 1) {
-    throw Error(`Deployment failed! ${result}`);
-  }
-  return result;
-}
-
-async function deploy(cwd) {
-  const result = await runGraphCli([
-    'deploy',
-    '--access-token \"\"',
-    '--ipfs ${ipfs-/ip4/127.0.0.1/tcp/5001}',
-    '--node ${node_rpc-http://127.0.0.1:8020/}',
-    '-n daostack',
-    subgraphLocation
-  ], cwd);
-  if (result[0] === 1) {
-    throw Error(`Deployment failed! ${result[1]}`);
-  }
-  return result;
-}
-
-
-
 module.exports = {
-  codegen,
-  deploy,
-  runGraphCli
+  runGraphCli,
+  subgraphLocation
 };

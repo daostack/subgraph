@@ -1,4 +1,3 @@
-const path = require('path');
 const deployDaoStack = require('./deployDaoStack').deployDaoStack;
 const subgraphRepo = '..';
 const graphCli = require(`./graph-cli`);

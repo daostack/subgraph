@@ -1,8 +1,6 @@
 const DAOstackMigration = require('@daostack/migration');
 
 async function deployDaoStack (options) {
-  // console.log(DAOstackMigration.migration('private'))
-
   options = {
     // web3 provider url
     provider: 'http://localhost:8545',
@@ -34,13 +32,15 @@ async function deployDaoStack (options) {
   };
 
   // migrate both base and an example DAO
-  console.log(DAOstackMigration);
-
   const migrationResult = await DAOstackMigration.migrate(options); // migrate
   console.log(migrationResult);
   return { options, migrationResult };
 }
 
-module.exports = {
-  deployDaoStack
-};
+if (require.main === module) {
+  deployDaoStack();
+} else {
+  module.exports = {
+    deployDaoStack
+  };
+}

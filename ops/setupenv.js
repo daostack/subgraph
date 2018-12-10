@@ -12,12 +12,10 @@ async function main () {
 
   console.log(`Generating ABI files`);
   // node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js
-  const generateAbis = require(`${subgraphRepo}/ops/generate-abis`);
-  await generateAbis();
+  await require(`${subgraphRepo}/ops/generate-abis`)();
 
   console.log(`Generating schemas`);
-  const generateSchema = require(`${subgraphRepo}/ops/generate-schema`);
-  await generateSchema();
+  await require(`${subgraphRepo}/ops/generate-schema`)();
 
   console.log(`Generating subgraph`);
   const generateSubgraph = require(`${subgraphRepo}/ops/generate-subgraph`);

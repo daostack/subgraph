@@ -48,4 +48,5 @@ services:
       - 8545:8545
     command: >
       --deterministic
-      --gasLimit 8000000 --networkId ganache
+      --gasLimit 8000000
+      --networkId ganache

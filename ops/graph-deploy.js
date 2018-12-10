@@ -1,7 +1,12 @@
+const path = require('path');
 const { runGraphCli, subgraphLocation } = require('./graph-cli.js');
 
 
 async function deploy(cwd) {
+  if (cwd === undefined) {
+    cwd = path.resolve(`${__dirname}/..`);
+  }
+  console.log(`using ${cwd} and ${subgraphLocation}`);
   const result = await runGraphCli([
     'deploy',
     '--access-token ""',
@@ -10,8 +15,12 @@ async function deploy(cwd) {
     '-n daostack',
     subgraphLocation
   ], cwd);
+  const msg = result[1];
   if (result[0] === 1) {
-    throw Error(`Deployment failed! ${result[1]}`);
+    throw Error(`Deployment failed! ${msg}`);
+  }
+  if (msg.toLowerCase().indexOf('error') > 0) {
+    throw Error(`Deployment failed! ${msg}`);
   }
   return result;
 }

@@ -6,14 +6,29 @@ DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 
 1 `git clone https://github.com/daostack/subgraph.git && cd subgraph`
 1. `npm install`
-1. `docker-compose up graph-node`
 
+
+## Testing
+
+Run tests in the docker container:
+```sh
+npm run docker test
+```
+
+Or, more explicitly, you can run the tests in the host container:
+
+```sh
+docker-compose up subgraph
+npm run test # in a new terminal
+docker-compose down -v
+```
+
+
+## Commands
 
 All npm scripts can be called within a container using `docker-compose` with all dependencies and services set up:
 
 `npm run docker <command>`
-
-## Commands
 
 1. `migrate` - migrate contracts to ganache and write result to `migration.json`.
 2. `codegen` - (requires `migration.json`) automatically generate abi, subgraph, schema and type definitions for

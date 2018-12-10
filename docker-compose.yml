@@ -14,7 +14,8 @@ services:
       node_rpc: http://graph-node:8020
       ipfs_host: ipfs
       ipfs_port: 5001
-      WAIT_HOSTS: ipfs:5001, graph-node:8020
+      WAIT_HOSTS: ipfs:5001, graph-node:8020, ganache:8545
+
   graph-node:
     image: graphprotocol/graph-node:v0.4.1
     ports:
@@ -32,6 +33,7 @@ services:
       postgres_db: postgres
       ipfs: ipfs:5001
       ethereum: development:http://ganache:8545
+
   ipfs:
     image: ipfs/go-ipfs
     ports:

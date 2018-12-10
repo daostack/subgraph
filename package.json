@@ -14,7 +14,7 @@
 	"scripts": {
 		"codegen": "node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js && node ops/graph-codegen.js",
 		"codegen:watch": "watch 'npm run codegen' src/mappings src/domain",
-		"deploy": "npm run migrate && npm run codegen && node ops/graph-deploy",
+		"deploy": "node ops/setup-env.js",
 		"deploy:watch": "npm run deploy -- --watch",
 		"docker": "docker-compose run --rm -v $(pwd):/usr/app -v /usr/app/node_modules subgraph",
 		"docker:stop": "docker-compose down -v",

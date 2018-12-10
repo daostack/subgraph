@@ -1,10 +1,9 @@
+const path = require('path');
 const deployDaoStack = require('./deployDaoStack').deployDaoStack;
-const subgraphRepo = '..';
-const graphCli = require(`./graph-cli`);
+const subgraphRepo = path.resolve(`${__dirname}/..`);
 
 async function main () {
   const provider = 'http://localhost:8545';
-  // const subgraphRepo = require.resolve('@daostack/subgraph');
   console.log(`Deploying Daostack contracts to ${provider}`);
   let { options, migrationResult } = await deployDaoStack({ provider });
   console.log(`Deployed Daostack contracts, information written to ${options.output}`);
@@ -25,7 +24,7 @@ async function main () {
   console.log(result);
 
   console.log('Deploying subgraph configuration');
-  const deploymentResult = await require(`${subgraphRepo}/ops/graph-deploy`)(cwd);
+  const deploymentResult = await require(`${subgraphRepo}/ops/graph-deploy`)();
   // deploymentResult[0] is the status code
   // but it is not very helpful, because it returns 0 also on some errors
   // console.log(deploymentResult[0])

@@ -19,13 +19,14 @@ describe('DAOToken', () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
     opts = await getOptions(web3);
-    daotoken = new web3.eth.Contract(DAOToken.abi, addresses.NativeToken, opts);
+    daotoken = new web3.eth.Contract(DAOToken.abi, addresses.DAOToken, opts);
   });
 
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
     let txs = [];
 
+    const initialSupply = await daotoken.methods.totalSupply().call()
     txs.push(await daotoken.methods.mint(accounts[0].address, '100').send());
     txs.push(await daotoken.methods.mint(accounts[1].address, '100').send());
     txs.push(await daotoken.methods.mint(accounts[1].address, '100').send());
@@ -50,7 +51,7 @@ describe('DAOToken', () => {
 
     expect(tokenContracts).toContainEqual({
       address: daotoken.options.address.toLowerCase(),
-      totalSupply: '398',
+      totalSupply: `${initialSupply + 398}`,
       owner: accounts[1].address.toLowerCase(),
     });
 

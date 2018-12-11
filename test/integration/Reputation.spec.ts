@@ -1,19 +1,25 @@
 import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
 
 const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
+const UController = require('@daostack/arc/build/contracts/UController.json');
 
 describe('Reputation', () => {
   let web3;
   let addresses;
   let reputation;
-
+  let uController;
   beforeAll(async () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
     const opts = await getOptions(web3);
     reputation = new web3.eth.Contract(
       Reputation.abi,
-      addresses.NativeReputation,
+      addresses.Reputation,
+      opts,
+    );
+    uController = new web3.eth.Contract(
+      UController.abi,
+      addresses.UController,
       opts,
     );
   });

@@ -2,7 +2,7 @@ const path = require('path');
 const deployDaoStack = require('./deployDaoStack').deployDaoStack;
 const subgraphRepo = path.resolve(`${__dirname}/..`);
 
-async function main () {
+async function setupenv () {
   // const provider = 'http://ganach:8545';
   console.log(`Deploying Daostack contracts`);
   let { options, migrationResult } = await deployDaoStack();
@@ -29,4 +29,9 @@ async function main () {
   // console.log(deploymentResult[0])
 }
 
-main();
+
+if (require.main === module) {
+  setupenv();
+} else {
+  module.exports = setupenv;
+}

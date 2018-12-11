@@ -2,12 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
 const yaml = require('js-yaml');
+const { migrationFileLocation } = require('./settings');
 
 /**
  * Generate a `subgraph.yaml` file from `datasource.yaml` fragments in `mappings` directory and `migration.json`
  */
 async function generateSubgraph() {
-	const migrationFile = './migration.json';
+	const migrationFile = migrationFileLocation;
 	const addresses = JSON.parse(fs.readFileSync(migrationFile, 'utf-8'));
 
 	const files = await new Promise((res, rej) =>

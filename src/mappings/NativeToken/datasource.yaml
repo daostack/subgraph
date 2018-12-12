@@ -8,15 +8,15 @@ entities:
   - TokenApproval
   - TokenBurn
 eventHandlers:
-  - event: Mint(address, uint256)
+  - event: Mint(address,uint256)
     handler: handleMint
-  - event: Burn(address, uint256)
+  - event: Burn(address,uint256)
     handler: handleBurn
-  - event: Approval(address, uint256)
+  - event: Approval(address,address,uint256)
     handler: handleApproval
   - event: MintFinished()
     handler: handleMintFinished
-  - event: Transfer(address, address, uint256)
+  - event: Transfer(address,address,uint256)
     handler: handleTransfer
-  - event: OwnershipTransferred(address, address)
+  - event: OwnershipTransferred(address,address)
     handler: handleOwnershipTransferred

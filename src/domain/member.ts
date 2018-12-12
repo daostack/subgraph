@@ -9,7 +9,7 @@ export function getMember(address: Address, daoAddress: Address): Member {
   let id = crypto.keccak256(concat(address, daoAddress)).toHex();
   let member = store.get('Member', id) as Member;
   if (member == null) {
-    member = new Member();
+    member = new Member(id);
     member.id = id;
     member.address = address;
     member.dao = daoAddress.toHex();

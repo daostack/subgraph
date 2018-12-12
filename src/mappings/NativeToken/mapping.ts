@@ -1,5 +1,5 @@
 import 'allocator/arena';
-export { allocate_memory };
+// export { allocate_memory };
 
 import { Address, BigInt, crypto, store } from '@graphprotocol/graph-ts';
 
@@ -30,7 +30,7 @@ import * as domain from '../../domain';
 
 function update(contract: Address, owner: Address): void {
   let token = DAOToken.bind(contract);
-  let ent = new TokenHolder();
+  let ent = new TokenHolder(crypto.keccak256(concat(contract, owner)).toHex());
   ent.id = crypto.keccak256(concat(contract, owner)).toHex();
   ent.contract = contract;
   ent.address = owner;
@@ -49,7 +49,7 @@ function update(contract: Address, owner: Address): void {
 export function handleMint(event: Mint): void {
   update(event.address, event.params.to as Address);
 
-  let ent = new TokenMint();
+  let ent = new TokenMint(eventId(event));
   ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -62,7 +62,7 @@ export function handleMint(event: Mint): void {
 export function handleBurn(event: Burn): void {
   update(event.address, event.params.burner as Address);
 
-  let ent = new TokenBurn();
+  let ent = new TokenBurn(eventId(event));
   ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -73,7 +73,7 @@ export function handleBurn(event: Burn): void {
 }
 
 export function handleMintFinished(event: MintFinished): void {
-  let ent = new TokenMintFinished();
+  let ent = new TokenMintFinished(eventId(event));
   ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -86,7 +86,7 @@ export function handleTransfer(event: Transfer): void {
 
   update(event.address, event.params.to as Address);
   update(event.address, event.params.from as Address);
-  let ent = new TokenTransfer();
+  let ent = new TokenTransfer(eventId(event));
   ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -98,7 +98,7 @@ export function handleTransfer(event: Transfer): void {
 }
 
 export function handleApproval(event: Approval): void {
-  let ent = new TokenApproval();
+  let ent = new TokenApproval(eventId(event));
   ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -115,7 +115,7 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 
 function updateTokenContract(contract: Address): void {
   let token = DAOToken.bind(contract);
-  let tokenContract = new TokenContract();
+  let tokenContract = new TokenContract(contract.toHex());
   tokenContract.id = contract.toHex();
   tokenContract.address = contract;
   tokenContract.totalSupply = token.totalSupply();

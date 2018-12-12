@@ -60,9 +60,9 @@ Docker commands (requires installing [`docker`](https://docs.docker.com/v17.12/i
 
 After running a command with docker-compose, the following endpoints will be exposed on your local machine:
 
-- `http://localhost:8000/by-name/daostack` - GraphiQL graphical user interface.
-- `http://localhost:8000/by-name/daostack/graphql` - GraphQL api endpoint.
-- `http://localhost:8001/by-name/daostack` - graph-node's websockets endpoint
+- `http://localhost:8000/subgraphs/name/daostack` - GraphiQL graphical user interface.
+- `http://localhost:8000/subgraphs/name/daostack/graphql` - GraphQL api endpoint.
+- `http://localhost:8001/subgraphs/name/daostack` - graph-node's websockets endpoint
 - `http://localhost:8020` - graph-node's RPC endpoint
 - `http://localhost:5001` - ipfs endpoint.
 - (if using development) `http://localhost:8545` - ganache RPC endpoint.

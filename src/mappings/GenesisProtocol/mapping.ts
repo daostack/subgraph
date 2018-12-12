@@ -1,5 +1,5 @@
 import 'allocator/arena';
-export { allocate_memory };
+// export { allocate_memory };
 
 import {
   Address,
@@ -41,7 +41,7 @@ import * as domain from '../../domain';
 export function handleNewProposal(event: NewProposal): void {
   domain.handleNewProposal(event);
 
-  let ent = new GenesisProtocolProposal();
+  let ent = new GenesisProtocolProposal(event.params._proposalId.toHex());
   ent.id = event.params._proposalId.toHex();
   ent.proposalId = event.params._proposalId;
   ent.submittedTime = event.block.timestamp;
@@ -54,9 +54,9 @@ export function handleNewProposal(event: NewProposal): void {
 
 export function handleVoteProposal(event: VoteProposal): void {
   domain.handleVoteProposal(event);
-
-  let ent = new GenesisProtocolVote();
   let uniqueId = concat(event.params._proposalId, event.params._voter).toHex();
+  let ent = new GenesisProtocolVote(uniqueId);
+  
 
   let vote = store.get('GenesisProtocolVote', uniqueId) as GenesisProtocolVote;
   if (vote == null) {
@@ -78,9 +78,9 @@ export function handleVoteProposal(event: VoteProposal): void {
 
 export function handleStake(event: Stake): void {
   domain.handleStake(event);
-
-  let ent = new GenesisProtocolStake();
   let uniqueId = concat(event.params._proposalId, event.params._staker).toHex();
+
+  let ent = new GenesisProtocolStake(uniqueId);
 
   let stake = store.get(
     'GenesisProtocolStake',
@@ -131,7 +131,7 @@ export function handleGPExecuteProposal(event: GPExecuteProposal): void {
     proposal,
   );
 
-  let genesisProtocolGPExecuteProposal = new GenesisProtocolGPExecuteProposal();
+  let genesisProtocolGPExecuteProposal = new GenesisProtocolGPExecuteProposal(eventId(event));
   genesisProtocolGPExecuteProposal.executionState = event.parameters[1].value
     .toBigInt()
     .toI32();
@@ -167,7 +167,7 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
     proposal,
   );
 
-  let genesisProtocolExecuteProposal = new GenesisProtocolExecuteProposal();
+  let genesisProtocolExecuteProposal = new GenesisProtocolExecuteProposal(eventId(event));
   genesisProtocolExecuteProposal.decision = event.params._decision;
   genesisProtocolExecuteProposal.contract = event.address;
   genesisProtocolExecuteProposal.organization = event.params._organization;
@@ -243,7 +243,7 @@ function updateRedemption(
     uniqueId,
   ) as GenesisProtocolRedemption;
   if (redemption == null) {
-    redemption = new GenesisProtocolRedemption();
+    redemption = new GenesisProtocolRedemption(uniqueId);
     redemption.id = uniqueId;
     redemption.redeemer = beneficiary;
     redemption.proposalId = proposalId.toHex();
@@ -256,7 +256,7 @@ function updateRedemption(
     rewardId.toHex(),
   ) as GenesisProtocolReward;
   if (reward == null) {
-    reward = new GenesisProtocolReward();
+    reward = new GenesisProtocolReward(rewardId.toHex());
     reward.id = rewardId.toHex();
     reward.type = rewardString.toString();
     reward.amount = amount;

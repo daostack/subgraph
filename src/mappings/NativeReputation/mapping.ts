@@ -1,5 +1,5 @@
 import 'allocator/arena';
-export { allocate_memory };
+// export { allocate_memory };
 
 import { Address, BigInt, crypto, store } from '@graphprotocol/graph-ts';
 
@@ -23,7 +23,7 @@ import {
 
 function update(contract: Address, owner: Address): void {
   let rep = Reputation.bind(contract);
-  let ent = new ReputationHolder();
+  let ent = new ReputationHolder(crypto.keccak256(concat(contract, owner)).toHex());
   ent.id = crypto.keccak256(concat(contract, owner)).toHex();
   ent.contract = contract;
   ent.address = owner;
@@ -36,7 +36,7 @@ function update(contract: Address, owner: Address): void {
     store.remove('ReputationHolder', ent.id);
   }
 
-  let reputationContract = new ReputationContract();
+  let reputationContract = new ReputationContract(contract.toHex());
   reputationContract.id = contract.toHex();
   reputationContract.address = contract;
   reputationContract.totalSupply = rep.totalSupply();
@@ -47,7 +47,7 @@ export function handleMint(event: Mint): void {
   domain.handleMint(event);
   update(event.address, event.params._to as Address);
 
-  let ent = new ReputationMint();
+  let ent = new ReputationMint(eventId(event));
   ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -61,7 +61,7 @@ export function handleBurn(event: Burn): void {
   domain.handleBurn(event);
   update(event.address, event.params._from as Address);
 
-  let ent = new ReputationBurn();
+  let ent = new ReputationBurn(eventId(event));
   ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;

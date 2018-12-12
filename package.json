@@ -28,7 +28,7 @@
 		"test:watch": "npm run test -- --watch"
 	},
 	"devDependencies": {
-		"@daostack/migration": "0.0.0-alpha.58-v4",
+		"@daostack/migration": "0.0.0-alpha.58-v31",
 		"@types/axios": "^0.14.0",
 		"@types/graphql": "^14.0.3",
 		"@types/jest": "^23.3.7",
@@ -39,9 +39,9 @@
 		"watch": "^1.0.2"
 	},
 	"dependencies": {
-		"@daostack/arc": "0.0.0-alpha.56",
-		"@graphprotocol/graph-cli": "0.4.1",
-		"@graphprotocol/graph-ts": "0.4.2",
+		"@daostack/arc": "0.0.0-alpha.58",
+		"@graphprotocol/graph-cli": "0.5.0",
+		"@graphprotocol/graph-ts": "0.5.0",
 		"apollo-client": "^2.4.5",
 		"apollo-link-ws": "^1.0.9",
 		"axios": "^0.18.0",
@@ -49,7 +49,7 @@
 		"docker-compose": "^0.9.1",
 		"dotenv": "^6.1.0",
 		"ethereumjs-wallet": "^0.6.0",
-		"ganache-cli": "6.2.1",
+		"ganache-cli": "6.2.3",
 		"glob": "^7.1.3",
 		"graphql": "^14.0.2",
 		"graphql-request": "^1.8.2",

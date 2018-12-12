@@ -17,7 +17,7 @@ export function parseOutcome(num: BigInt): string {
 export function getProposal(id: string): Proposal {
   let proposal = store.get('Proposal', id) as Proposal;
   if (proposal == null) {
-    proposal = new Proposal();
+    proposal = new Proposal(id);
     proposal.id = id;
 
     proposal.stage = 'Open';

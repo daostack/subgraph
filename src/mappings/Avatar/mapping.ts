@@ -1,5 +1,5 @@
 import 'allocator/arena';
-export { allocate_memory };
+//// export { allocate_memory };
 
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 
@@ -18,7 +18,7 @@ function handleAvatarBalance(
 
   let avatar = store.get('AvatarContract', address.toHex()) as AvatarContract;
   if (avatar == null) {
-    avatar = new AvatarContract();
+    avatar = new AvatarContract(address.toHex());
     avatar.id = address.toHex();
     avatar.address = address;
     avatar.name = avatarSC.orgName();

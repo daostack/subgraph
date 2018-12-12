@@ -6,7 +6,7 @@ entities:
   - ReputationMint
   - ReputationBurn
 eventHandlers:
-  - event: Mint(address, uint256)
+  - event: Mint(address,uint256)
     handler: handleMint
-  - event: Burn(address, uint256)
+  - event: Burn(address,uint256)
     handler: handleBurn

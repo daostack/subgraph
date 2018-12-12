@@ -24,6 +24,8 @@ async function setupenv () {
 
   console.log('Deploying subgraph configuration');
   await require(`${subgraphRepo}/ops/graph-deploy`)();
+
+  console.log('Deploy Success');
   // deploymentResult[0] is the status code
   // but it is not very helpful, because it returns 0 also on some errors
   // console.log(deploymentResult[0])

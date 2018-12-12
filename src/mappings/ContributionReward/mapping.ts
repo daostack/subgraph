@@ -1,5 +1,4 @@
 import 'allocator/arena';
-// // export { allocate_memory };
 
 import { Address, BigInt, Bytes, store } from '@graphprotocol/graph-ts';
 

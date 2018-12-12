@@ -37,16 +37,12 @@ async function deployDaoStack (options) {
   };
 
   // migrate both base and an example DAO
-  console.log(options);
   const migrationResult = await DAOstackMigration.migrate(options); // migrate
-  console.log(migrationResult);
   return { options, migrationResult };
 }
 
 if (require.main === module) {
-  deployDaoStack();
+  deployDaoStack().catch((err)  => { console.log(err); process.exit(1) })
 } else {
-  module.exports = {
-    deployDaoStack
-  };
+  module.exports = deployDaoStack
 }

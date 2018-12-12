@@ -6,7 +6,6 @@ export function getReputation(id: string): Rep {
   let reputation = store.get('Rep', id) as Rep;
   if (reputation == null) {
     reputation = new Rep(id);
-    reputation.id = id;
   }
 
   return reputation;

@@ -30,7 +30,6 @@ import { equals, eventId } from '../../utils';
 export function handleRedeemReputation(event: RedeemReputation): void {
   updateProposalafterRedemption(event.address, event.params._proposalId, 0);
   let ent = new ContributionRewardRedeemReputation(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.amount = event.params._amount;
@@ -43,7 +42,6 @@ export function handleRedeemReputation(event: RedeemReputation): void {
 export function handleRedeemNativeToken(event: RedeemNativeToken): void {
   updateProposalafterRedemption(event.address, event.params._proposalId, 1);
   let ent = new ContributionRewardRedeemNativeToken(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.amount = event.params._amount;
@@ -56,7 +54,6 @@ export function handleRedeemNativeToken(event: RedeemNativeToken): void {
 export function handleRedeemEther(event: RedeemEther): void {
   updateProposalafterRedemption(event.address, event.params._proposalId, 2);
   let ent = new ContributionRewardRedeemEther(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.amount = event.params._amount;
@@ -69,7 +66,6 @@ export function handleRedeemEther(event: RedeemEther): void {
 export function handleRedeemExternalToken(event: RedeemExternalToken): void {
   updateProposalafterRedemption(event.address, event.params._proposalId, 3);
   let ent = new ContributionRewardRedeemExternalToken(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.amount = event.params._amount;
@@ -81,7 +77,6 @@ export function handleRedeemExternalToken(event: RedeemExternalToken): void {
 
 function insertNewProposal(event: NewContributionProposal): void {
   let ent = new ContributionRewardProposal(event.params._proposalId.toHex());
-  ent.id = event.params._proposalId.toHex();
   ent.proposalId = event.params._proposalId;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
@@ -155,7 +150,6 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   }
 
   let ent = new ContributionRewardProposalResolved(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
@@ -171,7 +165,6 @@ export function handleNewContributionProposal(
 
   insertNewProposal(event);
   let ent = new ContributionRewardNewContributionProposal(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;

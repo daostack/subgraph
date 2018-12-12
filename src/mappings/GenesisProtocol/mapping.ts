@@ -41,7 +41,6 @@ export function handleNewProposal(event: NewProposal): void {
   domain.handleNewProposal(event);
 
   let ent = new GenesisProtocolProposal(event.params._proposalId.toHex());
-  ent.id = event.params._proposalId.toHex();
   ent.proposalId = event.params._proposalId;
   ent.submittedTime = event.block.timestamp;
   ent.proposer = event.params._proposer;
@@ -59,7 +58,6 @@ export function handleVoteProposal(event: VoteProposal): void {
 
   let vote = store.get('GenesisProtocolVote', uniqueId) as GenesisProtocolVote;
   if (vote == null) {
-    ent.id = uniqueId;
     ent.avatarAddress = event.params._organization;
     ent.reputation = event.params._reputation;
     ent.voterAddress = event.params._voter;
@@ -87,7 +85,6 @@ export function handleStake(event: Stake): void {
   ) as GenesisProtocolStake;
 
   if (stake == null) {
-    ent.id = uniqueId;
     ent.avatarAddress = event.params._organization;
     ent.stakeAmount = event.params._amount;
     ent.stakerAddress = event.params._staker;
@@ -137,7 +134,6 @@ export function handleGPExecuteProposal(event: GPExecuteProposal): void {
   genesisProtocolGPExecuteProposal.contract = event.address;
   genesisProtocolGPExecuteProposal.proposalId = event.params._proposalId;
   genesisProtocolGPExecuteProposal.txHash = event.transaction.hash;
-  genesisProtocolGPExecuteProposal.id = eventId(event);
   store.set(
     'GenesisProtocolGPExecuteProposal',
     genesisProtocolGPExecuteProposal.id,
@@ -174,7 +170,6 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
   genesisProtocolExecuteProposal.totalReputation =
     event.params._totalReputation;
   genesisProtocolExecuteProposal.txHash = event.transaction.hash;
-  genesisProtocolExecuteProposal.id = eventId(event);
   store.set(
     'GenesisProtocolExecuteProposal',
     genesisProtocolExecuteProposal.id,
@@ -243,7 +238,6 @@ function updateRedemption(
   ) as GenesisProtocolRedemption;
   if (redemption == null) {
     redemption = new GenesisProtocolRedemption(uniqueId);
-    redemption.id = uniqueId;
     redemption.redeemer = beneficiary;
     redemption.proposalId = proposalId.toHex();
     redemption.rewardId = rewardId.toHex();
@@ -256,7 +250,6 @@ function updateRedemption(
   ) as GenesisProtocolReward;
   if (reward == null) {
     reward = new GenesisProtocolReward(rewardId.toHex());
-    reward.id = rewardId.toHex();
     reward.type = rewardString.toString();
     reward.amount = amount;
 

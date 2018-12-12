@@ -23,7 +23,6 @@ import {
 function update(contract: Address, owner: Address): void {
   let rep = Reputation.bind(contract);
   let ent = new ReputationHolder(crypto.keccak256(concat(contract, owner)).toHex());
-  ent.id = crypto.keccak256(concat(contract, owner)).toHex();
   ent.contract = contract;
   ent.address = owner;
   let balance = rep.balanceOf(owner);
@@ -36,7 +35,6 @@ function update(contract: Address, owner: Address): void {
   }
 
   let reputationContract = new ReputationContract(contract.toHex());
-  reputationContract.id = contract.toHex();
   reputationContract.address = contract;
   reputationContract.totalSupply = rep.totalSupply();
   store.set('ReputationContract', reputationContract.id, reputationContract);
@@ -47,7 +45,6 @@ export function handleMint(event: Mint): void {
   update(event.address, event.params._to as Address);
 
   let ent = new ReputationMint(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.address = event.params._to;
@@ -61,7 +58,6 @@ export function handleBurn(event: Burn): void {
   update(event.address, event.params._from as Address);
 
   let ent = new ReputationBurn(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.address = event.params._from;

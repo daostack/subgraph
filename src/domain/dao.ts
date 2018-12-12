@@ -9,7 +9,6 @@ export function getDAO(id: string): DAO {
   let dao = store.get('DAO', id) as DAO;
   if (dao == null) {
     dao = new DAO(id);
-    dao.id = id;
   }
 
   return dao;

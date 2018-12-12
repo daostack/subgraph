@@ -30,7 +30,6 @@ import * as domain from '../../domain';
 function update(contract: Address, owner: Address): void {
   let token = DAOToken.bind(contract);
   let ent = new TokenHolder(crypto.keccak256(concat(contract, owner)).toHex());
-  ent.id = crypto.keccak256(concat(contract, owner)).toHex();
   ent.contract = contract;
   ent.address = owner;
   let balance = token.balanceOf(owner);
@@ -49,7 +48,6 @@ export function handleMint(event: Mint): void {
   update(event.address, event.params.to as Address);
 
   let ent = new TokenMint(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.to = event.params.to;
@@ -62,7 +60,6 @@ export function handleBurn(event: Burn): void {
   update(event.address, event.params.burner as Address);
 
   let ent = new TokenBurn(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.burner = event.params.burner;
@@ -73,7 +70,6 @@ export function handleBurn(event: Burn): void {
 
 export function handleMintFinished(event: MintFinished): void {
   let ent = new TokenMintFinished(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
 
@@ -86,7 +82,6 @@ export function handleTransfer(event: Transfer): void {
   update(event.address, event.params.to as Address);
   update(event.address, event.params.from as Address);
   let ent = new TokenTransfer(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.from = event.params.from;
@@ -98,7 +93,6 @@ export function handleTransfer(event: Transfer): void {
 
 export function handleApproval(event: Approval): void {
   let ent = new TokenApproval(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.spender = event.params.spender;
@@ -115,7 +109,6 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 function updateTokenContract(contract: Address): void {
   let token = DAOToken.bind(contract);
   let tokenContract = new TokenContract(contract.toHex());
-  tokenContract.id = contract.toHex();
   tokenContract.address = contract;
   tokenContract.totalSupply = token.totalSupply();
   tokenContract.owner = token.owner();

@@ -50,7 +50,6 @@ function insertScheme(
   let perms = uController.getSchemePermissions(scheme, avatarAddress);
 
   let ent = new UControllerScheme(crypto.keccak256(concat(avatarAddress, scheme)).toHex());
-  ent.id = crypto.keccak256(concat(avatarAddress, scheme)).toHex();
   ent.avatarAddress = avatarAddress;
   ent.address = scheme;
   ent.paramsHash = paramsHash;
@@ -82,21 +81,18 @@ function insertOrganization(
 
   let reputationContract = new ReputationContract(org.value1.toHex());
   let rep = Reputation.bind(org.value1);
-  reputationContract.id = org.value1.toHex();
   reputationContract.address = org.value1;
   reputationContract.totalSupply = rep.totalSupply();
   store.set('ReputationContract', reputationContract.id, reputationContract);
 
   let tokenContract = new TokenContract(org.value0.toHex());
   let daotoken = DAOToken.bind(org.value1);
-  tokenContract.id = org.value0.toHex();
   tokenContract.address = org.value0;
   tokenContract.totalSupply = daotoken.totalSupply();
   tokenContract.owner = uControllerAddress;
   store.set('TokenContract', tokenContract.id, tokenContract);
 
   let ent = new UControllerOrganization(avatarAddress.toHex());
-  ent.id = avatarAddress.toHex();
   ent.avatarAddress = avatarAddress;
   ent.nativeToken = org.value0.toHex();
   ent.nativeReputation = org.value1.toHex();
@@ -104,7 +100,6 @@ function insertOrganization(
 
   let avatarSC = Avatar.bind(avatarAddress);
   let avatar = new AvatarContract(avatarAddress.toHex());
-  avatar.id = avatarAddress.toHex();
   avatar.address = avatarAddress;
   avatar.name = avatarSC.orgName();
   avatar.nativeReputation = avatarSC.nativeReputation();
@@ -143,7 +138,6 @@ function insertGlobalConstraint(
   );
 
   let ent = new UControllerGlobalConstraint(crypto.keccak256(concat(avatarAddress, globalConstraint)).toHex());
-  ent.id = crypto.keccak256(concat(avatarAddress, globalConstraint)).toHex();
   ent.avatarAddress = avatarAddress;
   ent.address = globalConstraint;
   ent.paramsHash = paramsHash;
@@ -182,7 +176,6 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   insertScheme(event.address, event.params._avatar, event.params._scheme);
 
   let ent = new UControllerRegisterScheme(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.controller = event.address;
   ent.contract = event.params._sender;
@@ -195,7 +188,6 @@ export function handleUnregisterScheme(event: UnregisterScheme): void {
   deleteScheme(event.params._avatar, event.params._scheme);
 
   let ent = new UControllerUnregisterScheme(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.controller = event.address;
   ent.contract = event.params._sender;
@@ -208,7 +200,6 @@ export function handleUpgradeController(event: UpgradeController): void {
   updateController(event.params._avatar, event.params._newController);
 
   let ent = new UControllerUpgradeController(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.controller = event.params._oldController;
   ent.avatarAddress = event.params._avatar;
@@ -235,7 +226,6 @@ export function handleAddGlobalConstraint(event: AddGlobalConstraint): void {
   );
 
   let ent = new UControllerAddGlobalConstraint(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.controller = event.address;
   ent.avatarAddress = event.params._avatar;
@@ -252,7 +242,6 @@ export function handleRemoveGlobalConstraint(
   deleteGlobalConstraint(event.params._avatar, event.params._globalConstraint);
 
   let ent = new UControllerRemoveGlobalConstraint(eventId(event));
-  ent.id = eventId(event);
   ent.txHash = event.transaction.hash;
   ent.controller = event.address;
   ent.avatarAddress = event.params._avatar;

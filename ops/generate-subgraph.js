@@ -53,7 +53,7 @@ async function generateSubgraph() {
 }
 
 if (require.main === module) {
-	generateSubgraph();
+	generateSubgraph().catch((err)  => { console.log(err); process.exit(1) });
 } else {
 	module.exports = generateSubgraph;
 }

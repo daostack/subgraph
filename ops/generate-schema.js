@@ -21,7 +21,7 @@ async function generateSchema() {
 }
 
 if ((require.main === module)) {
-	generateSchema();
+	generateSchema().catch((err)  => { console.log(err); process.exit(1) })
 } else {
 	module.exports = generateSchema;
 }

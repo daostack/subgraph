@@ -27,7 +27,7 @@ async function deploy(cwd) {
 
 
 if (require.main === module) {
-	deploy();
+	deploy().catch((err)  => { console.log(err); process.exit(1) })
 } else {
 	module.exports = deploy;
 }

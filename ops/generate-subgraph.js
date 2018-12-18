@@ -47,7 +47,7 @@ async function generateSubgraph() {
 	const subgraph = {
 		specVersion: '0.0.1',
 		schema: { file: './schema.graphql' },
-		description: `DAOstack enables the effective governance of self-organizing collectives. Find DAO's members, proposals, votes, and more.`,
+		description: `DAOstack (https://daostack.io) powers decentralized companies, funds and markets to make fast and innovative decisions at scale.`,
 		repository: 'https://github.com/daostack/subgraph',
 		dataSources,
 	};

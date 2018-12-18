@@ -27,6 +27,7 @@ async function generateSubgraph() {
 		return {
 			kind: 'ethereum/contract',
 			name: `${contract}`,
+			network: 'mainnet',
 			source: {
 				address: contractAddress,
 				abi: abis && abis.length ? abis[0] : contract,
@@ -46,6 +47,8 @@ async function generateSubgraph() {
 	const subgraph = {
 		specVersion: '0.0.1',
 		schema: { file: './schema.graphql' },
+		description: `DAOstack enables the effective governance of self-organizing collectives. Find DAO's members, proposals, votes, and more.`,
+		repository: 'https://github.com/daostack/subgraph',
 		dataSources,
 	};
 

@@ -47,7 +47,7 @@ async function generateSubgraph() {
 	const subgraph = {
 		specVersion: '0.0.1',
 		schema: { file: './schema.graphql' },
-		description: `DAOstack (https://daostack.io) powers decentralized companies, funds and markets to make fast and innovative decisions at scale.`,
+		description: `This subgraph provides an indexing and caching layer for DAOstack Arc, which is the base layer of the DAO stack.`,
 		repository: 'https://github.com/daostack/subgraph',
 		dataSources,
 	};

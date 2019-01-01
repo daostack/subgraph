@@ -22,21 +22,18 @@
 		"docker:rebuild": "docker-compose build",
 		"docker:logs": "docker-compose logs --follow",
 		"jest": "jest --runInBand --forceExit",
-		"lint": "tslint -c tslint.json 'src//*.ts' -e 'src/types//.ts' && tslint -c tslint.json 'test/**/.ts'",
+		"lint": "tslint -c tslint.json 'src//*.ts' -e 'src/types//.ts' && tslint -c tslint.json 'test/**/.ts' && eslint ops",
 		"migrate": "node ops/deployDaoStack.js",
 		"test": "npm run deploy && jest --runInBand --forceExit",
 		"test:watch": "npm run test -- --watch"
 	},
 	"devDependencies": {
-		"@daostack/migration": "0.0.1-rc.3-v1",
-		"@types/axios": "^0.14.0",
-		"@types/graphql": "^14.0.3",
-		"@types/jest": "^23.3.7",
-		"@types/mocha": "^5.2.5",
-		"babel-eslint": "^10.0.1",
-		"eslint": "^5.9.0",
-		"spawn-command": "0.0.2-1",
-		"watch": "^1.0.2"
+		"eslint": "^5.11.0",
+		"eslint-config-standard": "^12.0.0",
+		"eslint-plugin-import": "^2.14.0",
+		"eslint-plugin-node": "^8.0.0",
+		"eslint-plugin-promise": "^4.0.1",
+		"eslint-plugin-standard": "^4.0.0"
 	},
 	"dependencies": {
 		"@graphprotocol/graph-cli": "0.5.1",

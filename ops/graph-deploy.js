@@ -1,12 +1,12 @@
-const path = require('path');
-const { runGraphCli, subgraphLocation } = require('./graph-cli.js');
+const path = require('path')
+const { runGraphCli, subgraphLocation } = require('./graph-cli.js')
 
-
-async function deploy(cwd) {
+async function deploy (cwd) {
   if (cwd === undefined) {
-    cwd = path.resolve(`${__dirname}/..`);
+    cwd = path.resolve(`${__dirname}/..`)
   }
-  console.log(`using ${cwd} and ${subgraphLocation}`);
+  console.log(`using ${cwd} and ${subgraphLocation}`)
+  /* eslint no-template-curly-in-string: "off" */
   const result = await runGraphCli([
     'deploy',
     '--access-token ""',
@@ -14,20 +14,19 @@ async function deploy(cwd) {
     '--node ${node_rpc-http://127.0.0.1:8020/}',
     '-n daostack',
     subgraphLocation
-  ], cwd);
-  const msg = result[1];
+  ], cwd)
+  const msg = result[1]
   if (result[0] === 1) {
-    throw Error(`Deployment failed! ${msg}`);
+    throw Error(`Deployment failed! ${msg}`)
   }
   if (msg.toLowerCase().indexOf('error') > 0) {
-    throw Error(`Deployment failed! ${msg}`);
+    throw Error(`Deployment failed! ${msg}`)
   }
-  return result;
+  return result
 }
 
-
 if (require.main === module) {
-	deploy().catch((err)  => { console.log(err); process.exit(1) })
+  deploy().catch((err) => { console.log(err); process.exit(1) })
 } else {
-	module.exports = deploy;
+  module.exports = deploy
 }

@@ -88,19 +88,21 @@ export function updateGPProposal(
   proposal.proposer = getMember(proposer, avatarAddress).id;
   proposal.dao = avatarAddress.toHex();
   let params = gp.parameters(paramsHash);
-  proposal.preBoostedVoteRequiredPercentage = params.value0; // preBoostedVoteRequiredPercentage
-  proposal.preBoostedVotePeriodLimit = params.value1; // preBoostedVotePeriodLimit
+
+  proposal.queuedVoteRequiredPercentage = params.value0; // preBoostedVoteRequiredPercentage
+  proposal.queuedVotePeriodLimit = params.value1; // preBoostedVotePeriodLimit
   proposal.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
-  proposal.thresholdConstA = params.value3; // thresholdConstA
-  proposal.thresholdConstB = params.value4; // thresholdConstB
-  proposal.minimumStakingFee = params.value5; // minimumStakingFee
+  proposal.preBoostedVotePeriodLimit = params.value3; // thresholdConstA
+  proposal.thresholdConst = params.value4; // thresholdConstB
+  proposal.limitExponentValue = params.value5; // minimumStakingFee
   proposal.quietEndingPeriod = params.value6; // quietEndingPeriod
-  proposal.proposingRepRewardConstA = params.value7; // proposingRepRewardConstA
-  proposal.proposingRepRewardConstB = params.value8; // proposingRepRewardConstB
-  proposal.stakerFeeRatioForVoters = params.value9; // stakerFeeRatioForVoters
-  proposal.votersReputationLossRatio = params.value10; // votersReputationLossRatio
-  proposal.votersGainRepRatioFromLostRep = params.value11; // votersGainRepRatioFromLostRep
+  proposal.proposingRepReward = params.value7; // proposingRepRewardConstA
+  proposal.minimumStakingFee = params.value8; // proposingRepRewardConstB
+  proposal.minimumDaoBounty = params.value9; // stakerFeeRatioForVoters
+  proposal.daoBountyConst = params.value10; // votersReputationLossRatio
+  proposal.activationTime = params.value11; // votersGainRepRatioFromLostRep
   proposal.voteOnBehalf = params.value12; // address voteOnBehalf
+
   saveProposal(proposal);
 }
 

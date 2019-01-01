@@ -68,18 +68,19 @@ type Proposal @entity {
 	stakesAgainst: BigInt!
 
 	# Genesis Protocol params
-	preBoostedVoteRequiredPercentage: BigInt!
-	preBoostedVotePeriodLimit: BigInt!
+	queuedVoteRequiredPercentage: BigInt!
+	queuedVotePeriodLimit: BigInt!
 	boostedVotePeriodLimit: BigInt!
-	thresholdConstA: BigInt!
-	thresholdConstB: BigInt!
-	minimumStakingFee: BigInt!
+	preBoostedVotePeriodLimit: BigInt!
+	thresholdConst: BigInt!
+	limitExponentValue: BigInt!
 	quietEndingPeriod: BigInt!
-	proposingRepRewardConstA: BigInt!
-	proposingRepRewardConstB: BigInt!
-	stakerFeeRatioForVoters: BigInt!
+	proposingRepReward: BigInt!
+	minimumStakingFee: BigInt!
 	votersReputationLossRatio: BigInt!
-	votersGainRepRatioFromLostRep: BigInt!
+	minimumDaoBounty: BigInt!
+	daoBountyConst: BigInt!
+	activationTime: BigInt!
 	voteOnBehalf: Bytes!
 
 	# Contribution Reward params

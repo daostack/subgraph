@@ -3,6 +3,7 @@ type TokenContract @entity {
 	address: Bytes!
 	totalSupply: BigInt!
 	owner: Bytes!
+	tokenHolders: [String!]
 }
 
 type TokenHolder @entity {
@@ -10,28 +11,6 @@ type TokenHolder @entity {
 	contract: Bytes!
 	address: Bytes!
 	balance: BigInt!
-}
-
-type TokenMint @entity {
-	id: ID!
-	txHash: Bytes!
-	contract: Bytes!
-	to: Bytes!
-	amount: BigInt!
-}
-
-type TokenBurn @entity {
-	id: ID!
-	txHash: Bytes!
-	contract: Bytes!
-	burner: Bytes!
-	amount: BigInt!
-}
-
-type TokenMintFinished @entity {
-	id: ID!
-	txHash: Bytes!
-	contract: Bytes!
 }
 
 type TokenTransfer @entity {

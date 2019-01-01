@@ -5,23 +5,17 @@ import { Address, BigInt, crypto, store } from '@graphprotocol/graph-ts';
 // Import event types from the Token contract ABI
 import {
   Approval,
-  Burn,
   DAOToken,
-  Mint,
-  MintFinished,
   OwnershipTransferred,
   Transfer,
 } from '../../types/NativeToken/DAOToken';
-import { concat, equals, eventId } from '../../utils';
+import { concat, equals, eventId, debug } from '../../utils';
 
 // Import entity types generated from the GraphQL schema
 import {
   TokenApproval,
-  TokenBurn,
   TokenContract,
   TokenHolder,
-  TokenMint,
-  TokenMintFinished,
   TokenTransfer,
 } from '../../types/schema';
 
@@ -41,39 +35,7 @@ function update(contract: Address, owner: Address): void {
     store.remove('TokenHolder', ent.id);
   }
 
-  updateTokenContract(contract);
-}
-
-export function handleMint(event: Mint): void {
-  update(event.address, event.params.to as Address);
-
-  let ent = new TokenMint(eventId(event));
-  ent.txHash = event.transaction.hash;
-  ent.contract = event.address;
-  ent.to = event.params.to;
-  ent.amount = event.params.amount;
-
-  store.set('TokenMint', ent.id, ent);
-}
-
-export function handleBurn(event: Burn): void {
-  update(event.address, event.params.burner as Address);
-
-  let ent = new TokenBurn(eventId(event));
-  ent.txHash = event.transaction.hash;
-  ent.contract = event.address;
-  ent.burner = event.params.burner;
-  ent.amount = event.params.value;
-
-  store.set('TokenBurn', ent.id, ent);
-}
-
-export function handleMintFinished(event: MintFinished): void {
-  let ent = new TokenMintFinished(eventId(event));
-  ent.txHash = event.transaction.hash;
-  ent.contract = event.address;
-
-  store.set('TokenMintFinished', ent.id, ent);
+  updateTokenContract(contract, ent.id);
 }
 
 export function handleTransfer(event: Transfer): void {
@@ -103,14 +65,26 @@ export function handleApproval(event: Approval): void {
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  updateTokenContract(event.address);
+  updateTokenContract(event.address,null);
 }
 
-function updateTokenContract(contract: Address): void {
+function updateTokenContract(contract: Address ,tokenHolder: string): void {
   let token = DAOToken.bind(contract);
-  let tokenContract = new TokenContract(contract.toHex());
+  let tokenContract = TokenContract.load(contract.toHex());
+  if (tokenContract == null) {
+    tokenContract = new TokenContract(contract.toHex());
+    tokenContract.tokenHolders = new Array<String>()
+  }
+  if (tokenHolder != null) {
+      let tokenHolders = tokenContract.tokenHolders;
+      let i = tokenHolders.indexOf(tokenHolder);
+      if (i == -1) {
+          tokenHolders.push(tokenHolder);
+      }
+      tokenContract.tokenHolders = tokenHolders;
+  }
   tokenContract.address = contract;
   tokenContract.totalSupply = token.totalSupply();
   tokenContract.owner = token.owner();
-  store.set('TokenContract', tokenContract.id, tokenContract);
+  tokenContract.save();
 }

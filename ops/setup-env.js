@@ -18,9 +18,7 @@ async function setupenv () {
   await require(`${subgraphRepo}/ops/generate-schema`)();
 
   console.log(`Generating subgraph`);
-  var daos = ["dao"]
-  var additionalNames = ["Avatar" ,"Reputation" ,"DAOToken"]
-  await require(`../ops/generate-subgraph`)(daos,additionalNames);
+  await require(`../ops/generate-subgraph`)();
 
   const cwd = subgraphRepo;
   console.log('Calling graph codegen');

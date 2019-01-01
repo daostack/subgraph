@@ -9,7 +9,7 @@
 		"url": "https://github.com/daostack/subgraph.git"
 	},
 	"engines": {
-		"node": ">=10.13.0"
+		"node": ">=10.15.0"
 	},
 	"scripts": {
 		"codegen": "node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js && node ops/graph-codegen.js",
@@ -28,7 +28,7 @@
 		"test:watch": "npm run test -- --watch"
 	},
 	"devDependencies": {
-		"@daostack/migration": "0.0.0-test1",
+		"@daostack/migration": "0.0.1-rc.3-v1",
 		"@types/axios": "^0.14.0",
 		"@types/graphql": "^14.0.3",
 		"@types/jest": "^23.3.7",

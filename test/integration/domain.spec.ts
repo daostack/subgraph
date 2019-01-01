@@ -160,20 +160,6 @@ describe('Domain Layer', () => {
       opts,
     );
 
-    /*
-    _queuedVoteRequiredPercentage=50,
-    _queuedVotePeriodLimit=60,
-    _boostedVotePeriodLimit=60,
-    _preBoostedVotePeriodLimit =0,
-    _thresholdConst=2000,
-    _quietEndingPeriod=0,
-    _proposingRepReward=60,
-    _votersReputationLossRatio=10,
-    _minimumDaoBounty=15,
-    _daoBountyConst=10,
-    _activationTime=0
-    */
-
     const gpParams = {
       queuedVoteRequiredPercentage: 50,
       queuedVotePeriodLimit: 60,

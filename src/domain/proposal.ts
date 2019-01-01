@@ -43,21 +43,22 @@ export function updateProposal(
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let gpProposal = gp.proposals(proposalId);
+  let gpTimes = gp.getProposalTimes(proposalId);
 
   // proposal.boostedPhaseTime
-  if (!equals(gpProposal.value5, BigInt.fromI32(0))) {
+  if (!equals(gpTimes[1], BigInt.fromI32(0))) {
     if (proposal.boostedAt == null) {
-      proposal.boostedAt = gpProposal.value5;
-    } else if (!equals(proposal.boostedAt as BigInt, gpProposal.value5)) {
-      proposal.quietEndingPeriodBeganAt = gpProposal.value5;
+      proposal.boostedAt = gpTimes[1];
+    } else if (!equals(proposal.boostedAt as BigInt, gpTimes[1])) {
+      proposal.quietEndingPeriodBeganAt = gpTimes[1];
     }
   }
 
   // proposal.winningVote
-  proposal.winningOutcome = parseOutcome(gpProposal.value7);
+  proposal.winningOutcome = parseOutcome(gpProposal.value3);
 
   // proposal.state
-  let state = gpProposal.value6;
+  let state = gpProposal.value2;
   if (state === 1) {
     // Closed
     proposal.stage = 'Resolved';

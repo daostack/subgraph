@@ -28,7 +28,15 @@
 		"test:watch": "npm run test -- --watch"
 	},
 	"devDependencies": {
+		"@daostack/migration": "0.0.1-rc.3-v1",
+		"@types/axios": "^0.14.0",
+		"@types/graphql": "^14.0.3",
+		"@types/jest": "^23.3.7",
+		"@types/mocha": "^5.2.5",
+		"babel-eslint": "^10.0.1",
 		"eslint": "^5.11.0",
+		"spawn-command": "0.0.2-1",
+		"watch": "^1.0.2",
 		"eslint-config-standard": "^12.0.0",
 		"eslint-plugin-import": "^2.14.0",
 		"eslint-plugin-node": "^8.0.0",

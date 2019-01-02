@@ -43,21 +43,22 @@ export function updateProposal(
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let gpProposal = gp.proposals(proposalId);
+  let gpTimes = gp.getProposalTimes(proposalId);
 
   // proposal.boostedPhaseTime
-  if (!equals(gpProposal.value5, BigInt.fromI32(0))) {
+  if (!equals(gpTimes[1], BigInt.fromI32(0))) {
     if (proposal.boostedAt == null) {
-      proposal.boostedAt = gpProposal.value5;
-    } else if (!equals(proposal.boostedAt as BigInt, gpProposal.value5)) {
-      proposal.quietEndingPeriodBeganAt = gpProposal.value5;
+      proposal.boostedAt = gpTimes[1];
+    } else if (!equals(proposal.boostedAt as BigInt, gpTimes[1])) {
+      proposal.quietEndingPeriodBeganAt = gpTimes[1];
     }
   }
 
   // proposal.winningVote
-  proposal.winningOutcome = parseOutcome(gpProposal.value7);
+  proposal.winningOutcome = parseOutcome(gpProposal.value3);
 
   // proposal.state
-  let state = gpProposal.value6;
+  let state = gpProposal.value2;
   if (state === 1) {
     // Closed
     proposal.stage = 'Resolved';
@@ -88,19 +89,21 @@ export function updateGPProposal(
   proposal.proposer = getMember(proposer, avatarAddress).id;
   proposal.dao = avatarAddress.toHex();
   let params = gp.parameters(paramsHash);
-  proposal.preBoostedVoteRequiredPercentage = params.value0; // preBoostedVoteRequiredPercentage
-  proposal.preBoostedVotePeriodLimit = params.value1; // preBoostedVotePeriodLimit
+
+  proposal.queuedVoteRequiredPercentage = params.value0; // preBoostedVoteRequiredPercentage
+  proposal.queuedVotePeriodLimit = params.value1; // preBoostedVotePeriodLimit
   proposal.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
-  proposal.thresholdConstA = params.value3; // thresholdConstA
-  proposal.thresholdConstB = params.value4; // thresholdConstB
-  proposal.minimumStakingFee = params.value5; // minimumStakingFee
+  proposal.preBoostedVotePeriodLimit = params.value3; // thresholdConstA
+  proposal.thresholdConst = params.value4; // thresholdConstB
+  proposal.limitExponentValue = params.value5; // minimumStakingFee
   proposal.quietEndingPeriod = params.value6; // quietEndingPeriod
-  proposal.proposingRepRewardConstA = params.value7; // proposingRepRewardConstA
-  proposal.proposingRepRewardConstB = params.value8; // proposingRepRewardConstB
-  proposal.stakerFeeRatioForVoters = params.value9; // stakerFeeRatioForVoters
-  proposal.votersReputationLossRatio = params.value10; // votersReputationLossRatio
-  proposal.votersGainRepRatioFromLostRep = params.value11; // votersGainRepRatioFromLostRep
+  proposal.proposingRepReward = params.value7; // proposingRepRewardConstA
+  proposal.minimumStakingFee = params.value8; // proposingRepRewardConstB
+  proposal.minimumDaoBounty = params.value9; // stakerFeeRatioForVoters
+  proposal.daoBountyConst = params.value10; // votersReputationLossRatio
+  proposal.activationTime = params.value11; // votersGainRepRatioFromLostRep
   proposal.voteOnBehalf = params.value12; // address voteOnBehalf
+
   saveProposal(proposal);
 }
 

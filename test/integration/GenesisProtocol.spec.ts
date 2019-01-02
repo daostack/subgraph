@@ -55,30 +55,42 @@ describe('GenesisProtocol', () => {
         ],
       })
       .send();
+
   });
 
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
-    const params = [
-      50, // preBoostedVoteRequiredPercentage
-      60, // preBoostedVotePeriodLimit
-      5, // boostedVotePeriodLimit
-      1, // thresholdConstA
-      1, // thresholdConstB
-      0, // minimumStakingFee
-      0, // quietEndingPeriod
-      60, // proposingRepRewardConstA
-      1, // proposingRepRewardConstB
-      10, // stakerFeeRatioForVoters
-      10, // votersReputationLossRatio
-      80, // votersGainRepRatioFromLostRep
-      15, // _daoBountyConst
-      10, // _daoBountyLimit
-    ];
-    const setParams = genesisProtocol.methods.setParameters(
-      params,
-      nullAddress,
-    );
+    //await reputation.methods.transferOwnership(genesisProtocolCallbacks.options.address).send();
+    const gpParams = {
+    queuedVoteRequiredPercentage: 50,
+    queuedVotePeriodLimit: 60,
+    boostedVotePeriodLimit: 5,
+    preBoostedVotePeriodLimit: 0,
+    thresholdConst: 2000,
+    quietEndingPeriod: 0,
+    proposingRepReward: 60,
+    votersReputationLossRatio: 10,
+    minimumDaoBounty: 15,
+    daoBountyConst: 10,
+    activationTime: 0,
+    voteOnBehalf: '0x0000000000000000000000000000000000000000',
+  };
+  const setParams = genesisProtocol.methods.setParameters(
+    [
+      gpParams.queuedVoteRequiredPercentage,
+      gpParams.queuedVotePeriodLimit,
+      gpParams.boostedVotePeriodLimit,
+      gpParams.preBoostedVotePeriodLimit,
+      gpParams.thresholdConst,
+      gpParams.quietEndingPeriod,
+      gpParams.proposingRepReward,
+      gpParams.votersReputationLossRatio,
+      gpParams.minimumDaoBounty,
+      gpParams.daoBountyConst,
+      gpParams.activationTime,
+    ],
+    gpParams.voteOnBehalf,
+  );
     const paramsHash = await setParams.call();
     await setParams.send();
 
@@ -113,20 +125,19 @@ describe('GenesisProtocol', () => {
 
     txs.push(
       await genesisProtocol.methods
-        .stake(proposalId, 1 /* YES */, 20)
-        .send({ from: accounts[1].address }),
+        .stake(proposalId, 1 /* YES */, 80)
+        .send(),
     );
-
     // vote for it to pass
+
     txs.push(
       await genesisProtocol.methods
-        .vote(proposalId, 1 /* YES */, nullAddress)
+        .vote(proposalId, 1 /* YES */,0, nullAddress)
         .send(),
     );
 
     // wait for proposal it pass
-    await new Promise((res) => setTimeout(res, params[2] * 1000));
-
+    await new Promise((res) => setTimeout(res, gpParams.boostedVotePeriodLimit * 1000));
     txs.push(await genesisProtocol.methods.execute(proposalId).send());
 
     txs.push(
@@ -160,8 +171,8 @@ describe('GenesisProtocol', () => {
       numOfChoices: '2',
       state: 2 /* Executed */,
       decision: '1' /* YES */,
-      executionState: 3, // enum ExecutionState
-      // { None, PreBoostedTimeOut, PreBoostedBarCrossed, BoostedTimeOut,BoostedBarCrossed }
+      executionState: 4, // enum ExecutionState
+                         //{ None, QueueBarCrossed, QueueTimeOut, PreBoostedBarCrossed, BoostedTimeOut, BoostedBarCrossed}
       executionTime: (await web3.eth.getBlock(
         txs[4].blockNumber,
       )).timestamp.toString(),
@@ -195,7 +206,7 @@ describe('GenesisProtocol', () => {
 
     expect(genesisProtocolGPExecuteProposals).toContainEqual({
       proposalId,
-      executionState: 3, //    enum ExecutionState
+      executionState: 4, //    enum ExecutionState
       //     { None, PreBoostedTimeOut, PreBoostedBarCrossed, BoostedTimeOut,BoostedBarCrossed }
     });
   }, 15000);

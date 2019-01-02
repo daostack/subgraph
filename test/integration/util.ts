@@ -32,7 +32,7 @@ export async function sendQuery(q: string, maxDelay = 1000) {
 
 export const addressLength = 40;
 export const hashLength = 64;
-export const nullAddress = '0x' + padZeros('', 40);
+export const nullAddress = '0x0000000000000000000000000000000000000000';
 export const nullParamsHash = '0x' + padZeros('', 64);
 
 export async function getWeb3() {

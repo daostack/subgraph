@@ -1,0 +1,44 @@
+{
+  "mappings": [
+    {
+      "name": "DAOToken",
+      "dao": "base",
+      "mapping": "DAOToken"
+    },
+    {
+      "name": "NativeToken",
+      "dao": "dao",
+      "mapping": "DAOToken"
+    },
+    {
+      "name": "Reputation",
+      "dao": "base",
+      "mapping": "Reputation"
+    },
+    {
+      "name": "NativeReputation",
+      "dao": "dao",
+      "mapping": "Reputation"
+    },
+    {
+      "name": "GenesisProtocol",
+      "dao": "base",
+      "mapping": "GenesisProtocol"
+    },
+    {
+      "name": "ContributionReward",
+      "dao": "base",
+      "mapping": "ContributionReward"
+    },
+    {
+      "name": "Avatar",
+      "dao": "dao",
+      "mapping": "Avatar"
+    },
+    {
+      "name": "UController",
+      "dao": "base",
+      "mapping": "UController"
+    }
+  ]
+}

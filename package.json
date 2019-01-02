@@ -1,6 +1,6 @@
 {
 	"name": "@daostack/subgraph",
-	"version": "0.0.0",
+	"version": "0.0.1-rc.1",
 	"author": "DAOstack (https://www.daostack.io)",
 	"license": "GPL-3.0",
 	"description": "A caching layer for daostack using The Graph",
@@ -9,7 +9,7 @@
 		"url": "https://github.com/daostack/subgraph.git"
 	},
 	"engines": {
-		"node": ">=10.13.0"
+		"node": ">=10.15.0"
 	},
 	"scripts": {
 		"codegen": "node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js && node ops/graph-codegen.js",
@@ -22,24 +22,28 @@
 		"docker:rebuild": "docker-compose build",
 		"docker:logs": "docker-compose logs --follow",
 		"jest": "jest --runInBand --forceExit",
-		"lint": "tslint -c tslint.json 'src//*.ts' -e 'src/types//.ts' && tslint -c tslint.json 'test/**/.ts'",
+		"lint": "tslint -c tslint.json 'src//*.ts' -e 'src/types//.ts' && tslint -c tslint.json 'test/**/.ts' && eslint ops",
 		"migrate": "node ops/deployDaoStack.js",
 		"test": "npm run deploy && jest --runInBand --forceExit",
 		"test:watch": "npm run test -- --watch"
 	},
 	"devDependencies": {
-		"@daostack/migration": "0.0.0-alpha.58-v9",
+		"@daostack/migration": "0.0.1-rc.3-v1",
 		"@types/axios": "^0.14.0",
 		"@types/graphql": "^14.0.3",
 		"@types/jest": "^23.3.7",
 		"@types/mocha": "^5.2.5",
 		"babel-eslint": "^10.0.1",
-		"eslint": "^5.9.0",
+		"eslint": "^5.11.0",
 		"spawn-command": "0.0.2-1",
-		"watch": "^1.0.2"
+		"watch": "^1.0.2",
+		"eslint-config-standard": "^12.0.0",
+		"eslint-plugin-import": "^2.14.0",
+		"eslint-plugin-node": "^8.0.0",
+		"eslint-plugin-promise": "^4.0.1",
+		"eslint-plugin-standard": "^4.0.0"
 	},
 	"dependencies": {
-		"@daostack/arc": "0.0.0-alpha.58",
 		"@graphprotocol/graph-cli": "0.5.1",
 		"@graphprotocol/graph-ts": "0.5.0",
 		"apollo-client": "^2.4.5",

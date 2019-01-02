@@ -52,7 +52,7 @@ describe('ContributionReward', () => {
             .deploy({ data: AbsoluteVote.bytecode, arguments: [] })
             .send();
 
-        const setParams = absVote.methods.setParameters(20, true);
+        const setParams = absVote.methods.setParameters(20, 0);
         const absVoteParamsHash = await setParams.call();
         await setParams.send();
         const crSetParams = contributionReward.methods.setParameters(0, absVoteParamsHash, absVote.options.address);
@@ -182,6 +182,7 @@ describe('ContributionReward', () => {
         const { transactionHash: executeTxHash, blockNumber } = await absVote.methods.vote(
                                                                 proposalId,
                                                                 1,
+                                                                0,
                                                                 accounts[0].address /* unused by the contract */)
                                                                 .send({ from: accounts[1].address });
         const block = await web3.eth.getBlock(blockNumber);

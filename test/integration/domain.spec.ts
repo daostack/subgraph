@@ -71,8 +71,8 @@ describe('Domain Layer', () => {
     }`;
     let members = (await sendQuery(getMigrationDaoMembers)).dao.members;
     expect(members).toContainEqual({
-      reputation:"1000",
-      tokens:"1000",
+      reputation:"1000000000000000000000",
+      tokens:"1000000000000000000000",
     });
   });
 
@@ -161,38 +161,32 @@ describe('Domain Layer', () => {
     );
 
     const gpParams = {
-      boostedVotePeriodLimit: 259200,
-      daoBountyConst: 75,
-      daoBountyLimitGWei: 100,
-      minimumStakingFeeGWei: 0,
-      preBoostedVotePeriodLimit: 1814400,
-      preBoostedVoteRequiredPercentage: 50,
-      proposingRepRewardConstA: 5,
-      proposingRepRewardConstB: 5,
-      quietEndingPeriod: 86400,
-      stakerFeeRatioForVoters: 50,
-      thresholdConstAGWei: 7,
-      thresholdConstB: 3,
+      queuedVoteRequiredPercentage: 50,
+      queuedVotePeriodLimit: 60,
+      boostedVotePeriodLimit: 60,
+      preBoostedVotePeriodLimit: 0,
+      thresholdConst: 2000,
+      quietEndingPeriod: 0,
+      proposingRepReward: 60,
+      votersReputationLossRatio: 10,
+      minimumDaoBounty: 15,
+      daoBountyConst: 10,
+      activationTime: 0,
       voteOnBehalf: '0x0000000000000000000000000000000000000000',
-      votersGainRepRatioFromLostRep: 80,
-      votersReputationLossRatio: 1,
     };
     const gpSetParams = genesisProtocol.methods.setParameters(
       [
-        gpParams.preBoostedVoteRequiredPercentage,
-        gpParams.preBoostedVotePeriodLimit,
+        gpParams.queuedVoteRequiredPercentage,
+        gpParams.queuedVotePeriodLimit,
         gpParams.boostedVotePeriodLimit,
-        web3.utils.toWei(gpParams.thresholdConstAGWei.toString(), 'gwei'),
-        gpParams.thresholdConstB,
-        web3.utils.toWei(gpParams.minimumStakingFeeGWei.toString(), 'gwei'),
+        gpParams.preBoostedVotePeriodLimit,
+        gpParams.thresholdConst,
         gpParams.quietEndingPeriod,
-        gpParams.proposingRepRewardConstA,
-        gpParams.proposingRepRewardConstB,
-        gpParams.stakerFeeRatioForVoters,
+        gpParams.proposingRepReward,
         gpParams.votersReputationLossRatio,
-        gpParams.votersGainRepRatioFromLostRep,
+        gpParams.minimumDaoBounty,
         gpParams.daoBountyConst,
-        web3.utils.toWei(gpParams.daoBountyLimitGWei.toString(), 'gwei'),
+        gpParams.activationTime,
       ],
       gpParams.voteOnBehalf,
     );
@@ -312,7 +306,7 @@ describe('Domain Layer', () => {
     const [PASS, FAIL] = [1, 2];
     async function vote({ proposalId, outcome, voter }) {
       const { blockNumber } = await genesisProtocol.methods
-        .vote(proposalId, outcome, voter)
+        .vote(proposalId, outcome,0, voter)
         .send({ from: voter });
       const { timestamp } = await web3.eth.getBlock(blockNumber);
       return timestamp;

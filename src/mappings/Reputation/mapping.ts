@@ -7,7 +7,7 @@ import {
   Burn,
   Mint,
   Reputation,
-} from '../../types/NativeReputation/Reputation';
+} from '../../types/Reputation/Reputation';
 import { concat, equals, eventId } from '../../utils';
 
 import * as domain from '../../domain';

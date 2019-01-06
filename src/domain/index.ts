@@ -136,8 +136,8 @@ export function handleRegisterScheme(event: RegisterScheme): void {
     // get reputation contract
     let repContract = store.get('ReputationContract', dao.nativeReputation) as ReputationContract;
     let holders: string[] = repContract.reputationHolders as string[];
-    for (let holder of holders) {
-      let reputationHolder = store.get('ReputationHolder', holder) as ReputationHolder;
+    for (let i = 0; i < holders.length; i++) {
+      let reputationHolder = store.get('ReputationHolder', holders[i]) as ReputationHolder;
       updateMemberReputationWithValue(reputationHolder.address as Address,
                                       event.params._avatar,
                                       reputationHolder.balance);

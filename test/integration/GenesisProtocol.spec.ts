@@ -60,7 +60,7 @@ describe('GenesisProtocol', () => {
 
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
-    //await reputation.methods.transferOwnership(genesisProtocolCallbacks.options.address).send();
+    // await reputation.methods.transferOwnership(genesisProtocolCallbacks.options.address).send();
     const gpParams = {
     queuedVoteRequiredPercentage: 50,
     queuedVotePeriodLimit: 60,
@@ -75,7 +75,7 @@ describe('GenesisProtocol', () => {
     activationTime: 0,
     voteOnBehalf: '0x0000000000000000000000000000000000000000',
   };
-  const setParams = genesisProtocol.methods.setParameters(
+    const setParams = genesisProtocol.methods.setParameters(
     [
       gpParams.queuedVoteRequiredPercentage,
       gpParams.queuedVotePeriodLimit,
@@ -132,7 +132,7 @@ describe('GenesisProtocol', () => {
 
     txs.push(
       await genesisProtocol.methods
-        .vote(proposalId, 1 /* YES */,0, nullAddress)
+        .vote(proposalId, 1 /* YES */, 0, nullAddress)
         .send(),
     );
 
@@ -172,7 +172,7 @@ describe('GenesisProtocol', () => {
       state: 2 /* Executed */,
       decision: '1' /* YES */,
       executionState: 4, // enum ExecutionState
-                         //{ None, QueueBarCrossed, QueueTimeOut, PreBoostedBarCrossed, BoostedTimeOut, BoostedBarCrossed}
+     // { None, QueueBarCrossed, QueueTimeOut, PreBoostedBarCrossed, BoostedTimeOut, BoostedBarCrossed}
       executionTime: (await web3.eth.getBlock(
         txs[4].blockNumber,
       )).timestamp.toString(),

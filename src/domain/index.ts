@@ -12,12 +12,13 @@ import {
   Stake,
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
-import { Burn, Mint } from '../types/Reputation/Reputation';
 import { Transfer } from '../types/NativeToken/DAOToken';
+import { Burn, Mint } from '../types/Reputation/Reputation';
+import { ReputationContract, ReputationHolder } from '../types/schema';
 import { RegisterScheme } from '../types/UController/UController';
 import { equals, eventId, hexToAddress } from '../utils';
 import { insertNewDAO } from './dao';
-import { updateMemberReputation, updateMemberTokens ,updateMemberReputationWithValue } from './member';
+import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {
   getProposal,
   parseOutcome,
@@ -30,12 +31,11 @@ import {
 import {
   getReputation,
   insertReputation,
-  updateReputationTotalSupply
+  updateReputationTotalSupply,
 } from './reputation';
 import { insertStake } from './stake';
 import { getToken, insertToken, updateTokenTotalSupply } from './token';
 import { insertVote } from './vote';
-import { ReputationContract,ReputationHolder } from '../types/schema';
 
 export function handleNewProposal(event: NewProposal): void {
   updateGPProposal(
@@ -131,14 +131,16 @@ export function handleRegisterScheme(event: RegisterScheme): void {
       hexToAddress(dao.nativeReputation),
       event.params._avatar.toHex(),
     );
-    //the following code handle cases where the reputation and token minting are done before the dao creation
-    //(e.g using daocreator)
+    // the following code handle cases where the reputation and token minting are done before the dao creation
+    // (e.g using daocreator)
     // get reputation contract
-    let repContract = store.get("ReputationContract",dao.nativeReputation) as ReputationContract;
-    let holders: Array<string> = repContract.reputationHolders as Array<string>;
-    for (var i=0;i<holders.length;i++) {
-      let reputationHolder = store.get("ReputationHolder",holders[i]) as ReputationHolder;
-      updateMemberReputationWithValue(reputationHolder.address as Address,event.params._avatar,reputationHolder.balance)
+    let repContract = store.get('ReputationContract', dao.nativeReputation) as ReputationContract;
+    let holders: string[] = repContract.reputationHolders as string[];
+    for (let holder of holders) {
+      let reputationHolder = store.get('ReputationHolder', holder) as ReputationHolder;
+      updateMemberReputationWithValue(reputationHolder.address as Address,
+                                      event.params._avatar,
+                                      reputationHolder.balance);
       updateMemberTokens(reputationHolder.address as Address, event.params._avatar);
     }
     updateTokenTotalSupply(hexToAddress(dao.nativeToken));

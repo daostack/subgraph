@@ -50,7 +50,7 @@ describe('DAOToken', () => {
 
     expect(tokenContracts).toContainEqual({
       address: daotoken.options.address.toLowerCase(),
-      totalSupply: await daotoken.methods.totalSupply().call() + "",
+      totalSupply: await daotoken.methods.totalSupply().call() + '',
       owner: accounts[1].address.toLowerCase(),
     });
 

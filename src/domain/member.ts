@@ -1,6 +1,6 @@
 import { Address, BigInt, crypto, store } from '@graphprotocol/graph-ts';
-import { Reputation } from '../types/Reputation/Reputation';
 import { DAOToken } from '../types/NativeToken/DAOToken';
+import { Reputation } from '../types/Reputation/Reputation';
 import { Member } from '../types/schema';
 import { concat, equals, hexToAddress } from '../utils';
 import { getDAO } from './dao';
@@ -44,7 +44,7 @@ export function updateMemberReputation(
 export function updateMemberReputationWithValue(
   address: Address,
   daoAddress: Address,
-  value: BigInt
+  value: BigInt,
 ): void {
   let member = getMember(address, daoAddress);
   member.reputation = value;

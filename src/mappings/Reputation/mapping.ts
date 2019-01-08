@@ -32,7 +32,8 @@ function update(contract: Address, owner: Address): void {
 
   if (reputationContract == null) {
     reputationContract = new ReputationContract(contract.toHex());
-    reputationContract.reputationHolders = new Array<String>()
+    // tslint:disable-next-line: ban-types
+    reputationContract.reputationHolders = new Array<String>();
   }
 
   let reputationHolders = reputationContract.reputationHolders;

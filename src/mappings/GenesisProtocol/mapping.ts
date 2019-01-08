@@ -54,7 +54,6 @@ export function handleVoteProposal(event: VoteProposal): void {
   domain.handleVoteProposal(event);
   let uniqueId = concat(event.params._proposalId, event.params._voter).toHex();
   let ent = new GenesisProtocolVote(uniqueId);
-  
 
   let vote = store.get('GenesisProtocolVote', uniqueId) as GenesisProtocolVote;
   if (vote == null) {

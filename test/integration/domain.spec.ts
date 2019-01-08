@@ -71,8 +71,8 @@ describe('Domain Layer', () => {
     }`;
     let members = (await sendQuery(getMigrationDaoMembers)).dao.members;
     expect(members).toContainEqual({
-      reputation:"1000000000000000000000",
-      tokens:"1000000000000000000000",
+      reputation: '1000000000000000000000',
+      tokens: '1000000000000000000000',
     });
   });
 
@@ -306,7 +306,7 @@ describe('Domain Layer', () => {
     const [PASS, FAIL] = [1, 2];
     async function vote({ proposalId, outcome, voter }) {
       const { blockNumber } = await genesisProtocol.methods
-        .vote(proposalId, outcome,0, voter)
+        .vote(proposalId, outcome, 0, voter)
         .send({ from: voter });
       const { timestamp } = await web3.eth.getBlock(blockNumber);
       return timestamp;

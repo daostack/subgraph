@@ -33,7 +33,7 @@ describe('Reputation', () => {
     }`);
     expect(reputationContracts).toContainEqual({
       address: reputation.options.address.toLowerCase(),
-      totalSupply: parseInt(await reputation.methods.totalSupply().call()) + "",
+      totalSupply: parseInt(await reputation.methods.totalSupply().call(), 10) + '',
     });
   }
 
@@ -71,12 +71,12 @@ describe('Reputation', () => {
     expect(reputationHolders).toContainEqual({
       contract: reputation.options.address.toLowerCase(),
       address: accounts[0].address.toLowerCase(),
-      balance: parseInt(await reputation.methods.balanceOf(accounts[0].address).call()) + "",
+      balance: parseInt(await reputation.methods.balanceOf(accounts[0].address).call(), 10) + '',
     });
     expect(reputationHolders).toContainEqual({
       contract: reputation.options.address.toLowerCase(),
       address: accounts[2].address.toLowerCase(),
-      balance: parseInt(await reputation.methods.balanceOf(accounts[2].address).call()) + "",
+      balance: parseInt(await reputation.methods.balanceOf(accounts[2].address).call(), 10) + '',
     });
 
     const { reputationMints } = await sendQuery(`{

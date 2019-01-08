@@ -9,7 +9,7 @@ import {
   OwnershipTransferred,
   Transfer,
 } from '../../types/NativeToken/DAOToken';
-import { concat, equals, eventId, debug } from '../../utils';
+import { concat, debug, equals, eventId } from '../../utils';
 
 // Import entity types generated from the GraphQL schema
 import {
@@ -65,20 +65,21 @@ export function handleApproval(event: Approval): void {
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  updateTokenContract(event.address,null);
+  updateTokenContract(event.address, null);
 }
 
-function updateTokenContract(contract: Address ,tokenHolder: string): void {
+function updateTokenContract(contract: Address , tokenHolder: string): void {
   let token = DAOToken.bind(contract);
   let tokenContract = TokenContract.load(contract.toHex());
   if (tokenContract == null) {
     tokenContract = new TokenContract(contract.toHex());
-    tokenContract.tokenHolders = new Array<String>()
+    // tslint:disable-next-line: ban-types
+    tokenContract.tokenHolders = new Array<String>();
   }
   if (tokenHolder != null) {
       let tokenHolders = tokenContract.tokenHolders;
       let i = tokenHolders.indexOf(tokenHolder);
-      if (i == -1) {
+      if (i === -1) {
           tokenHolders.push(tokenHolder);
       }
       tokenContract.tokenHolders = tokenHolders;

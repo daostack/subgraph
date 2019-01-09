@@ -24,6 +24,7 @@ type DAO @entity {
 	nativeReputation: Rep!
 	proposals: [Proposal!] @derivedFrom(field: "dao")
 	members: [Member!] @derivedFrom(field: "dao")
+	membersCount: BigInt!
 	rewards: [Reward!] @derivedFrom(field: "dao")
 }
 

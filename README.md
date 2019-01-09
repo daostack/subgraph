@@ -11,7 +11,7 @@ DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 
 If you have changed `package.json` (or pulled a new version from github), you need to rebuild the containers:
 ```sh
-docker-compose up build
+docker-compose build
 ```
 
 Run tests in the docker container:

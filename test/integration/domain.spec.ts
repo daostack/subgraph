@@ -41,6 +41,7 @@ describe('Domain Layer', () => {
             id
           }
         }
+        membersCount
       }
     }`;
     let dao = (await sendQuery(getMigrationDao)).dao;
@@ -59,6 +60,7 @@ describe('Domain Layer', () => {
           id: addresses.Avatar.toLowerCase(),
         },
       },
+      membersCount: '6',
     });
 
     const getMigrationDaoMembers = `{

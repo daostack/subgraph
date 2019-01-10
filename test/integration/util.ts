@@ -77,3 +77,12 @@ export const createSubscriptionObservable = (
   const link = new WebSocketLink(client);
   return execute(link, { query, variables });
 };
+
+export async function waitUntilTrue(f: () => boolean) {
+  return new Promise((resolve, reject) => {
+    (function waitForIt() {
+        if (f()) { return resolve(); }
+        setTimeout(waitForIt, 30);
+    })();
+  });
+}

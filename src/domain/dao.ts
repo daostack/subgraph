@@ -1,4 +1,4 @@
-import { Address, Entity, store, Value } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Entity, store, Value } from '@graphprotocol/graph-ts';
 import { DAOToken } from '../types/NativeToken/DAOToken';
 import { Reputation } from '../types/Reputation/Reputation';
 import { DAO } from '../types/schema';
@@ -9,9 +9,22 @@ export function getDAO(id: string): DAO {
   let dao = store.get('DAO', id) as DAO;
   if (dao == null) {
     dao = new DAO(id);
+    dao.membersCount = BigInt.fromI32(0);
   }
 
   return dao;
+}
+
+export function increaseDAOmembersCount(id: string): void {
+  let dao = getDAO(id);
+  dao.membersCount = dao.membersCount.plus(BigInt.fromI32(1));
+  saveDAO(dao);
+}
+
+export function decreaseDAOmembersCount(id: string): void {
+  let dao = getDAO(id);
+  dao.membersCount = dao.membersCount.minus(BigInt.fromI32(1));
+  saveDAO(dao);
 }
 
 export function saveDAO(dao: DAO): void {

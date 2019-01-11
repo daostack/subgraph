@@ -16,7 +16,7 @@ install:
   - docker-compose --version
 
 script:
-  - npm run docker lint
+  - npm ci
   - docker-compose up -d
   - npm run deploy
   # single test runs

@@ -21,6 +21,7 @@ script:
   - docker-compose up -d
   - docker-compose logs graph-node
   - npm run deploy
+  - npm run jest -- test/integration/SubscriptionLoop.spec.ts
   # single test runs
   - npm run jest -- test/integration/Subscription.spec.ts
   # running the test in quick succession fails

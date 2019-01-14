@@ -23,7 +23,7 @@ script:
   # single test runs
   - npm run jest -- test/integration/Subscription.spec.ts
   # running the test in quick succession fails
-  - for run in {1..10}; do npm run jest -- test/integration/Subscription.spec.ts && sleep 3 ; done
+  - for run in {1..10}; do sleep 3 && npm run jest -- test/integration/Subscription.spec.ts ; done
 
 after_script:
   - npm run docker:stop

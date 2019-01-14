@@ -10,6 +10,7 @@ addons:
   apt:
     packages:
       - docker-ce
+      - libsecret-1-dev
 
 install:
   - docker --version

@@ -7,12 +7,18 @@ async function deploy (cwd) {
   }
   console.log(`using ${cwd} and ${subgraphLocation}`)
   /* eslint no-template-curly-in-string: "off" */
+  await runGraphCli([
+    'create',
+    '--access-token ""',
+    '--node ${node_rpc-http://127.0.0.1:8020/}',
+    'daostack'
+  ], cwd)
+
   const result = await runGraphCli([
-    'deploy',
+    'deploy daostack',
     '--access-token ""',
     '--ipfs ${ipfs-/ip4/127.0.0.1/tcp/5001}',
     '--node ${node_rpc-http://127.0.0.1:8020/}',
-    '-n daostack',
     subgraphLocation
   ], cwd)
   const msg = result[1]

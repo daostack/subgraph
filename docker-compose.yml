@@ -9,7 +9,7 @@ services:
     environment:
       ethereum: http://ganache:8545
       test_mnemonic: myth like bonus scare over problem client lizard pioneer submit female collect
-      node_http: http://graph-node:8000/subgraphs/name/daostack/graphql
+      node_http: http://graph-node:8000/subgraphs/name/daostack
       node_ws: http://graph-node:8001/subgraphs/name/daostack
       node_rpc: http://graph-node:8020
       ipfs_host: ipfs
@@ -17,7 +17,7 @@ services:
       WAIT_HOSTS: ipfs:5001, graph-node:8020, ganache:8545
 
   graph-node:
-    image: graphprotocol/graph-node:v0.5.0
+    image: graphprotocol/graph-node:latest
     ports:
       - 8000:8000
       - 8001:8001

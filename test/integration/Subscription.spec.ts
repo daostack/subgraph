@@ -3,6 +3,7 @@ import {
   getContractAddresses,
   getOptions,
   getWeb3,
+  waitUntilTrue,
 } from './util';
 
 const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
@@ -41,10 +42,11 @@ describe('Subscriptions', () => {
     );
 
     let event;
-
+    let nextWasCalled = false;
     const consumer = await subscriptionClient.subscribe(
       (eventData) => {
         // Do something on receipt of the event
+        nextWasCalled = true;
         event = eventData.data.reputationMints;
       },
       (err) => {
@@ -54,8 +56,8 @@ describe('Subscriptions', () => {
 
     await reputation.methods.mint(accounts[4].address, '99').send();
 
-    // //wait a second
-    await new Promise((res) => setTimeout(res, 1000));
+    // wait until the subscription callback has been called
+    await waitUntilTrue(() => nextWasCalled);
 
     expect(event).toContainEqual({
       address: accounts[4].address.toLowerCase(),

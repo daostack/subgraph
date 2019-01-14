@@ -19,6 +19,7 @@ install:
 script:
   - npm ci
   - docker-compose up -d
+  - docker-compose logs graph-node
   - npm run deploy
   # single test runs
   - npm run jest -- test/integration/Subscription.spec.ts

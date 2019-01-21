@@ -86,7 +86,7 @@ export function updateGPProposal(
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let proposal = getProposal(proposalId.toHex());
-  proposal.proposer = getMember(proposer, avatarAddress).id;
+  proposal.proposer = proposer;
   proposal.dao = avatarAddress.toHex();
   let params = gp.parameters(paramsHash);
 

@@ -1,6 +1,5 @@
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import { ProposalStake } from '../types/schema';
-import { getMember } from './member';
 
 export function getStake(id: string): ProposalStake {
   let stake = store.get('ProposalStake', id) as ProposalStake;

@@ -6,13 +6,13 @@ import {
   NewContributionProposal,
   ProposalExecuted,
 } from '../types/ContributionReward/ContributionReward';
+import { Transfer } from '../types/DAOToken/DAOToken';
 import {
   ExecuteProposal,
   NewProposal,
   Stake,
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
-import { Transfer } from '../types/DAOToken/DAOToken';
 import { Burn, Mint } from '../types/Reputation/Reputation';
 import { ReputationContract, ReputationHolder } from '../types/schema';
 import { RegisterScheme } from '../types/UController/UController';

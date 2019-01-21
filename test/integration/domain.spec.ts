@@ -327,7 +327,7 @@ describe('Domain Layer', () => {
     const getProposal = `{
         proposal(id: "${p1}") {
             id
-            ipfsHash
+            descriptionHash
             stage
             createdAt
             boostedAt
@@ -364,7 +364,7 @@ describe('Domain Layer', () => {
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
-      ipfsHash: descHash,
+      descriptionHash: descHash,
       stage: 'Open',
       createdAt: p1Creation.toString(),
       boostedAt: null,
@@ -397,7 +397,7 @@ describe('Domain Layer', () => {
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
-      ipfsHash: descHash,
+      descriptionHash: descHash,
       stage: 'Open',
       createdAt: p1Creation.toString(),
       boostedAt: null,
@@ -439,7 +439,7 @@ describe('Domain Layer', () => {
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
-      ipfsHash: descHash,
+      descriptionHash: descHash,
       stage: 'Resolved',
       createdAt: p1Creation.toString(),
       boostedAt: null,

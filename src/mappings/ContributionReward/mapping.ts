@@ -81,7 +81,7 @@ function insertNewProposal(event: NewContributionProposal): void {
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
   ent.beneficiary = event.params._beneficiary;
-  ent.descriptionHash = event.params._contributionDescription;
+  ent.descriptionHash = event.params._descriptionHash;
   ent.externalToken = event.params._externalToken;
   ent.votingMachine = event.params._intVoteInterface;
   ent.reputationReward = event.params._reputationChange;
@@ -169,7 +169,7 @@ export function handleNewContributionProposal(
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
   ent.beneficiary = event.params._beneficiary;
-  ent.descriptionHash = event.params._contributionDescription;
+  ent.descriptionHash = event.params._descriptionHash;
   ent.externalToken = event.params._externalToken;
   ent.votingMachine = event.params._intVoteInterface;
   ent.proposalId = event.params._proposalId;

@@ -45,10 +45,6 @@ services:
     environment:
       POSTGRES_PASSWORD: 'letmein'
   ganache:
-    image: trufflesuite/ganache-cli:v6.2.5
+    image: daostack/migration:0.0.1-rc.6-v1
     ports:
       - 8545:8545
-    command: >
-      --deterministic
-      --gasLimit 8000000
-      --networkId ganache

@@ -1,5 +1,5 @@
 import { Address, BigInt, Entity, store, Value } from '@graphprotocol/graph-ts';
-import { DAOToken } from '../types/NativeToken/DAOToken';
+import { DAOToken } from '../types/DAOToken/DAOToken';
 import { Reputation } from '../types/Reputation/Reputation';
 import { DAO } from '../types/schema';
 import { Avatar } from '../types/UController/Avatar';

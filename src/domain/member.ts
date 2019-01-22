@@ -64,7 +64,7 @@ export function updateMemberTokens(
   let dao = getDAO(daoAddress.toHex());
   let token = DAOToken.bind(hexToAddress(dao.nativeToken));
   let member = getMember(address, daoAddress);
-  if (member.reputation.toI32() > 0) {
+  if (member.reputation.toString().charAt(0) !== '0') {
     member.tokens = token.balanceOf(address);
     saveMember(member);
   }

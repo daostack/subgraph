@@ -1,5 +1,5 @@
 import { Address, BigInt, crypto, store } from '@graphprotocol/graph-ts';
-import { DAOToken } from '../types/NativeToken/DAOToken';
+import { DAOToken } from '../types/DAOToken/DAOToken';
 import { Reputation } from '../types/Reputation/Reputation';
 import { Member } from '../types/schema';
 import { concat, equals, hexToAddress } from '../utils';

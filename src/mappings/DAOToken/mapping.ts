@@ -8,7 +8,7 @@ import {
   DAOToken,
   OwnershipTransferred,
   Transfer,
-} from '../../types/NativeToken/DAOToken';
+} from '../../types/DAOToken/DAOToken';
 import { concat, debug, equals, eventId } from '../../utils';
 
 // Import entity types generated from the GraphQL schema

@@ -112,7 +112,7 @@ export function updateCRProposal(
   createdAt: BigInt,
   avatarAddress: Address,
   beneficiary: Address,
-  ipfsHash: Bytes,
+  descriptionHash: string,
   periodLength: BigInt,
   periods: BigInt,
   reputationReward: BigInt,
@@ -133,7 +133,7 @@ export function updateCRProposal(
   proposal.periodLength = periodLength;
   proposal.periods = periods;
   proposal.externalToken = externalToken;
-  proposal.ipfsHash = ipfsHash;
+  proposal.descriptionHash = descriptionHash;
   saveProposal(proposal);
 }
 

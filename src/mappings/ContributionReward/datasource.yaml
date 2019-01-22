@@ -16,5 +16,5 @@ eventHandlers:
     handler: handleRedeemEther
   - event: ProposalExecuted(address,bytes32,int256)
     handler: handleProposalExecuted
-  - event: NewContributionProposal(address,bytes32,address,bytes32,int256,uint256[5],address,address)
+  - event: NewContributionProposal(address,bytes32,address,string,int256,uint256[5],address,address)
     handler: handleNewContributionProposal

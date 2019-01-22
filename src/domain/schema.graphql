@@ -52,7 +52,7 @@ type Proposal @entity {
 	quietEndingPeriodBeganAt: BigInt
 	executedAt: BigInt
 
-	ipfsHash: Bytes!
+	descriptionHash: String!
 	title: String
 	description: String
 	url: String

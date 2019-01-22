@@ -52,7 +52,12 @@ export async function getWeb3() {
 
 export function getContractAddresses() {
   const addresses = require(`${__dirname}/../../migration.json`);
-  return {...addresses.private.dao, ...addresses.private.base};
+  return {
+    ...addresses.private.dao,
+    ...addresses.private.base,
+    NativeToken: addresses.private.dao.DAOToken,
+    NativeReputation: addresses.private.dao.Reputation,
+  };
 }
 
 export async function getOptions(web3) {

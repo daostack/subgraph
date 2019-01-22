@@ -16,7 +16,7 @@ async function generateSubgraph () {
     var contract = mapping.name
     const { abis, entities, eventHandlers } = yaml.safeLoad(fs.readFileSync('src/mappings/' + mapping.mapping + '/datasource.yaml', 'utf-8'))
 
-    const contractAddress = addresses.private[mapping.dao][contract]
+    const contractAddress = addresses.private[mapping.dao][mapping.contractName]
 
     if (!contractAddress) {
       throw Error(`Address for contract ${contract} of ${mapping.dao} not found in ${migrationFile}`)

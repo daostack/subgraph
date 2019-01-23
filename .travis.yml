@@ -17,15 +17,17 @@ install:
   - docker-compose --version
 
 script:
-  - echo 'npm ci:' && echo -en 'travis_fold:start:script.3\\r'
-  - npm ci
-  - echo -en 'travis_fold:end:script.3\\r'
 
-  - docker-compose up graph-node -d
+  - docker-compose up -d graph-node
   - docker images --digests | grep graph-node
 
   - docker-compose logs graph-node
+
+  - echo 'npm ci:' && echo -en 'travis_fold:start:script.3\\r'
+  - npm ci
+  - echo -en 'travis_fold:end:script.3\\r'
   - npm run deploy
+  
   - docker-compose logs graph-node
   # single test runs
   - npm run jest -- test/integration/Subscription.spec.ts

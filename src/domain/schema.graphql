@@ -51,6 +51,7 @@ type Proposal @entity {
 	boostedAt: BigInt
 	quietEndingPeriodBeganAt: BigInt
 	executedAt: BigInt
+	votingMachine: Bytes!
 
 	descriptionHash: String!
 	title: String

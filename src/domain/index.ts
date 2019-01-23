@@ -61,6 +61,7 @@ export function handleNewContributionProposal(
     event.params._proposalId,
     event.block.timestamp,
     event.params._avatar,
+    event.params._intVoteInterface,
     event.params._beneficiary,
     event.params._descriptionHash,
     periodLength,

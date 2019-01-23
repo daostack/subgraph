@@ -349,6 +349,7 @@ describe('Domain Layer', () => {
             quietEndingPeriodBeganAt
             executedAt
             proposer
+            votingMachine
 
             votes {
                 createdAt
@@ -393,6 +394,7 @@ describe('Domain Layer', () => {
       quietEndingPeriodBeganAt: null,
       executedAt: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
 
       votes: [],
       votesFor: '0',
@@ -427,6 +429,7 @@ describe('Domain Layer', () => {
       quietEndingPeriodBeganAt: null,
       executedAt: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
 
       votes: [
         {
@@ -471,6 +474,7 @@ describe('Domain Layer', () => {
       quietEndingPeriodBeganAt: null,
       executedAt: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
 
       votes: [
         {
@@ -525,7 +529,8 @@ describe('Domain Layer', () => {
       quietEndingPeriodBeganAt: null,
       executedAt: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
-
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
+      
       votes: [
         {
           createdAt: v1Timestamp.toString(),
@@ -587,6 +592,7 @@ describe('Domain Layer', () => {
       quietEndingPeriodBeganAt: null,
       executedAt: v2Timestamp.toString(),
       proposer: web3.eth.defaultAccount.toLowerCase(),
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
 
       votesFor: '300',
       votesAgainst: '100',

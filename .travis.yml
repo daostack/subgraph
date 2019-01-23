@@ -21,7 +21,7 @@ script:
   - npm ci
   - echo -en 'travis_fold:end:script.3\\r'
 
-  - docker-compose up -d
+  - docker-compose up graph-node -d
   - docker images --digests | grep graph-node
 
   - docker-compose logs graph-node

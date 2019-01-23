@@ -17,15 +17,20 @@ install:
   - docker-compose --version
 
 script:
+  - echo 'Debug info:' && echo -en 'travis_fold:start:script.3\\r'
   - npm ci
+  - echo -en 'travis_fold:end:script.3\\r
+  
   - docker-compose up -d
   - npm run deploy
   - docker-compose logs graph-node
-  - npm run jest -- test/integration/SubscriptionLoop.spec.ts
   # single test runs
   - npm run jest -- test/integration/Subscription.spec.ts
   # running the test in quick succession fails
-  - for run in {1..10}; do sleep 3 && npm run jest -- test/integration/Subscription.spec.ts ; done
+  - npm run jest -- test/integration/SubscriptionLoop.spec.ts
+  # - for run in {1..10}; do sleep 3 && npm run jest -- test/integration/Subscription.spec.ts ; done
+  # running test again files
+  - npm run jest -- test/integration/Subscription.spec.ts
 
 after_script:
   - npm run docker:stop

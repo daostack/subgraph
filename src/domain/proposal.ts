@@ -90,7 +90,7 @@ export function updateGPProposal(
   proposal.proposer = proposer;
   proposal.dao = avatarAddress.toHex();
   let params = gp.parameters(paramsHash);
-  
+
   proposal.votingMachine = gpAddress;
   proposal.queuedVoteRequiredPercentage = params.value0; // preBoostedVoteRequiredPercentage
   proposal.queuedVotePeriodLimit = params.value1; // preBoostedVotePeriodLimit

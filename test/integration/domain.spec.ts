@@ -530,7 +530,7 @@ describe('Domain Layer', () => {
       executedAt: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
-      
+
       votes: [
         {
           createdAt: v1Timestamp.toString(),

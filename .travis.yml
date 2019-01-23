@@ -18,7 +18,8 @@ install:
 
 script:
 
-  - docker-compose up -d graph-node
+  # - docker-compose up -d graph-node
+  - docker-compose up 
   - docker images --digests | grep graph-node
 
   - docker-compose logs graph-node

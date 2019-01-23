@@ -17,11 +17,13 @@ install:
   - docker-compose --version
 
 script:
-  - echo 'Debug info:' && echo -en 'travis_fold:start:script.3\\r'
+  - echo 'npm ci:' && echo -en 'travis_fold:start:script.3\\r'
   - npm ci
-  - echo -en 'travis_fold:end:script.3\\r
-  
+  - echo -en 'travis_fold:end:script.3\\r'
+
   - docker-compose up -d
+  
+  - docker-compose logs graph-node
   - npm run deploy
   - docker-compose logs graph-node
   # single test runs

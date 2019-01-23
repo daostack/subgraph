@@ -29,7 +29,7 @@ script:
   - npm run deploy
 
   # run deploy twice to see if it reproduces the error
-  - npm rund deploy
+  - npm run deploy
 
   - docker-compose logs graph-node
   # single test runs

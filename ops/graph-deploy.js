@@ -10,18 +10,19 @@ async function deploy (cwd) {
   await runGraphCli([
     'create',
     '--access-token ""',
-    '--node ${node_rpc-http://127.0.0.1:8020/}',
+    '--node http://127.0.0.1:8020/',
     'daostack'
   ], cwd)
 
   const result = await runGraphCli([
-    'deploy daostack',
+    'deploy',
     '--access-token ""',
-    '--ipfs ${ipfs-/ip4/127.0.0.1/tcp/5001}',
-    '--node ${node_rpc-http://127.0.0.1:8020/}',
+    '--ipfs /ip4/127.0.0.1/tcp/5001',
+    '--node http://127.0.0.1:8020/',
+    '--subgraph-name daostack',
     subgraphLocation
   ], cwd)
-  const msg = result[1]
+  const msg = result[1] + result[2]
   if (result[0] === 1) {
     throw Error(`Deployment failed! ${msg}`)
   }

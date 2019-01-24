@@ -19,9 +19,9 @@ async function setupenv () {
   await require(`../ops/generate-subgraph`)()
 
   const cwd = subgraphRepo
-  console.log('Calling graph codegen')
+  console.log('Calling graph-codegen')
   result = await require(`../ops/graph-codegen`)(cwd)
-  console.log(result)
+  // console.log(result)
 
   console.log('Deploying subgraph configuration')
   await require(`${subgraphRepo}/ops/graph-deploy`)()

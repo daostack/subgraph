@@ -74,7 +74,7 @@ function updateTokenContract(contract: Address , tokenHolder: string): void {
   if (tokenContract == null) {
     tokenContract = new TokenContract(contract.toHex());
     // tslint:disable-next-line: ban-types
-    tokenContract.tokenHolders = new Array<String>();
+    tokenContract.tokenHolders = new Array<string>();
   }
   if (tokenHolder != null) {
       let tokenHolders = tokenContract.tokenHolders;

@@ -17,7 +17,8 @@ services:
       WAIT_HOSTS: ipfs:5001, graph-node:8020, ganache:8545
 
   graph-node:
-    image: graphprotocol/graph-node:latest
+    image: graphprotocol/graph-node:latest@sha256:a11adda030fcb4ac42d0c31c58cffaacadfda333fecfb1e361d9ec5a72ba1026
+
     ports:
       - 8000:8000
       - 8001:8001

@@ -33,6 +33,3 @@ script:
   - echo -en 'travis_fold:end:script.2\\r'
 
   - npm run test
-
-after_script:
-  - npm run docker:stop

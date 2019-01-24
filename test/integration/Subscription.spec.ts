@@ -24,7 +24,7 @@ describe('Subscriptions', () => {
       opts,
     );
   });
-  it('Reputation Mint', async () => {
+  it('Run one subscription and test for updates', async () => {
     const accounts = web3.eth.accounts.wallet;
     const SUBSCRIBE_QUERY = gql`
       subscription {

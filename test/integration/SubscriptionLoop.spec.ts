@@ -24,7 +24,7 @@ describe('Subscriptions Loop', () => {
       opts,
     );
   });
-  it('Reputation Mint', async () => {
+  it('Run 10 subscriptions and test for updates', async () => {
     const accounts = web3.eth.accounts.wallet;
     const SUBSCRIBE_QUERY = gql`
       subscription {
@@ -42,34 +42,32 @@ describe('Subscriptions Loop', () => {
     );
 
     let event;
-    for (var i = 1 ;i <=10 ;i++) {
-    console.log("subscription number" , i);
-    let nextWasCalled = false;
+    for (let i = 1 ; i <= 10 ; i++) {
+      console.log('subscription number' , i);
+      let nextWasCalled = false;
 
-    const consumer = await subscriptionClient.subscribe(
-      (eventData) => {
-        // Do something on receipt of the event
-        nextWasCalled = true;
-        event = eventData.data.reputationMints;
-      },
-      (err) => {
-        expect(true).toEqual(false);
-      },
-    );
+      const consumer = await subscriptionClient.subscribe(
+        (eventData) => {
+          // Do something on receipt of the event
+          nextWasCalled = true;
+          event = eventData.data.reputationMints;
+        },
+        (err) => {
+          expect(true).toEqual(false);
+        },
+      );
 
-    await reputation.methods.mint(accounts[4].address, i.toString()).send();
+      await reputation.methods.mint(accounts[4].address, i.toString()).send();
 
-    // wait until the subscription callback has been called
-    await waitUntilTrue(() => nextWasCalled);
+      // wait until the subscription callback has been called
+      await waitUntilTrue(() => nextWasCalled);
 
-    expect(event).toContainEqual({
-      address: accounts[4].address.toLowerCase(),
-      amount: i.toString(),
-      contract: reputation.options.address.toLowerCase(),
-    });
-    consumer.unsubscribe();
-  }
-
-
-}, 25000);
+      expect(event).toContainEqual({
+        address: accounts[4].address.toLowerCase(),
+        amount: i.toString(),
+        contract: reputation.options.address.toLowerCase(),
+      });
+      consumer.unsubscribe();
+    }
+  }, 25000);
 });

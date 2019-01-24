@@ -26,10 +26,10 @@ script:
   - echo -en 'travis_fold:end:script.3\\r'
   - docker-compose up  -d
   - docker images --digests | grep graph-node
-  - npm run deploy
+  # - npm run deploy
 
   # run deploy twice to see if it reproduces the error
-  - npm run deploy
+  # - npm run deploy
 
   - docker-compose logs graph-node
   # single test runs

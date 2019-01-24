@@ -43,7 +43,7 @@ describe('Subscriptions Loop', () => {
 
     let event;
     for (let i = 1 ; i <= 10 ; i++) {
-      console.log('subscription number' , i);
+      // console.log('subscription number' , i);
       let nextWasCalled = false;
 
       const consumer = await subscriptionClient.subscribe(

@@ -21,7 +21,6 @@ async function setupenv () {
   const cwd = subgraphRepo
   console.log('Calling graph-codegen')
   result = await require(`../ops/graph-codegen`)(cwd)
-  // console.log(result)
 
   console.log('Deploying subgraph configuration')
   await require(`${subgraphRepo}/ops/graph-deploy`)()
@@ -29,7 +28,6 @@ async function setupenv () {
   console.log('Environment setup finished successfully')
   // deploymentResult[0] is the status code
   // but it is not very helpful, because it returns 0 also on some errors
-  // console.log(deploymentResult[0])
 }
 
 if (require.main === module) {

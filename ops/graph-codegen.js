@@ -6,7 +6,6 @@ async function codegen (cwd) {
     '--output-dir src/types/',
     subgraphLocation
   ], cwd)
-  // console.log(result)
   if (result[0] === 1) {
     throw Error(`Deployment failed! ${result}`)
   }

@@ -2,41 +2,49 @@
   "mappings": [
     {
       "name": "DAOToken",
+      "contractName": "DAOToken",
       "dao": "base",
       "mapping": "DAOToken"
     },
     {
       "name": "NativeToken",
+      "contractName": "DAOToken",
       "dao": "dao",
       "mapping": "DAOToken"
     },
     {
       "name": "Reputation",
+      "contractName": "Reputation",
       "dao": "base",
       "mapping": "Reputation"
     },
     {
       "name": "NativeReputation",
+      "contractName": "Reputation",
       "dao": "dao",
       "mapping": "Reputation"
     },
     {
       "name": "GenesisProtocol",
+      "contractName": "GenesisProtocol",
       "dao": "base",
       "mapping": "GenesisProtocol"
     },
     {
       "name": "ContributionReward",
+      "contractName": "ContributionReward",
       "dao": "base",
       "mapping": "ContributionReward"
     },
     {
       "name": "Avatar",
+      "contractName": "Avatar",
       "dao": "dao",
       "mapping": "Avatar"
     },
     {
       "name": "UController",
+      "contractName": "UController",
       "dao": "base",
       "mapping": "UController"
     }

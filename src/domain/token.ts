@@ -1,5 +1,5 @@
 import { Address, store } from '@graphprotocol/graph-ts';
-import { DAOToken } from '../types/NativeToken/DAOToken';
+import { DAOToken } from '../types/DAOToken/DAOToken';
 import { Token } from '../types/schema';
 
 export function getToken(id: string): Token {

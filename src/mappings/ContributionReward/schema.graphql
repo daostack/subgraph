@@ -53,7 +53,7 @@ type ContributionRewardNewContributionProposal @entity {
 	contract: Bytes!
 	avatar: Bytes!
 	beneficiary: Bytes!
-	descriptionHash: Bytes!
+	descriptionHash: String!
 	externalToken: Bytes!
 	votingMachine: Bytes!
 	proposalId: Bytes!
@@ -71,7 +71,7 @@ type ContributionRewardProposal @entity {
 	contract: Bytes!
 	avatar: Bytes!
 	beneficiary: Bytes!
-	descriptionHash: Bytes!
+	descriptionHash: String!
 	externalToken: Bytes!
 	votingMachine: Bytes!
 	reputationReward: BigInt!

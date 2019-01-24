@@ -1,15 +1,13 @@
 const path = require('path')
 const subgraphRepo = path.resolve(`${__dirname}/..`)
+const { migrationFileLocation } = require('./settings')
+const migration = require('@daostack/migration/migration.json')
+const fs = require('fs')
 
 async function setupenv () {
   // const provider = 'http://ganach:8545';
   let result
-  console.log(`Deploying Daostack contracts`)
-  const deployDaoStack = require('./deployDaoStack')
-  result = await deployDaoStack()
-  console.log(result)
-  console.log(`Deployed Daostack contracts, information written to ${result.options.output}`)
-  console.log(result.migrationResult)
+  fs.writeFileSync(migrationFileLocation, JSON.stringify(migration, undefined, 2), 'utf-8')
   console.log(`Generating ABI files`)
   // node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js
   await require(`../ops/generate-abis`)()

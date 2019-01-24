@@ -18,15 +18,14 @@ install:
 
 script:
 
-  # - docker-compose up -d graph-node
-  - docker-compose up  -d
-  - docker images --digests | grep graph-node
 
   - docker-compose logs graph-node
 
   - echo 'npm ci:' && echo -en 'travis_fold:start:script.3\\r'
   - npm ci
   - echo -en 'travis_fold:end:script.3\\r'
+  - docker-compose up  -d
+  - docker images --digests | grep graph-node
   - npm run deploy
 
   # run deploy twice to see if it reproduces the error

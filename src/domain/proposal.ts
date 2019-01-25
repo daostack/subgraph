@@ -53,6 +53,7 @@ export function updateProposal(
       proposal.quietEndingPeriodBeganAt = gpTimes[1];
     }
   }
+  proposal.votingMachine = gpAddress;
 
   // proposal.winningVote
   proposal.winningOutcome = parseOutcome(gpProposal.value3);
@@ -86,10 +87,11 @@ export function updateGPProposal(
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let proposal = getProposal(proposalId.toHex());
-  proposal.proposer = getMember(proposer, avatarAddress).id;
+  proposal.proposer = proposer;
   proposal.dao = avatarAddress.toHex();
   let params = gp.parameters(paramsHash);
 
+  proposal.votingMachine = gpAddress;
   proposal.queuedVoteRequiredPercentage = params.value0; // preBoostedVoteRequiredPercentage
   proposal.queuedVotePeriodLimit = params.value1; // preBoostedVotePeriodLimit
   proposal.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
@@ -111,6 +113,7 @@ export function updateCRProposal(
   proposalId: Bytes,
   createdAt: BigInt,
   avatarAddress: Address,
+  votingMachine: Address,
   beneficiary: Address,
   descriptionHash: string,
   periodLength: BigInt,
@@ -126,6 +129,7 @@ export function updateCRProposal(
   proposal.beneficiary = beneficiary;
   proposal.reputationReward = reputationReward;
   proposal.createdAt = createdAt;
+  proposal.votingMachine = votingMachine;
 
   proposal.tokensReward = tokensReward;
   proposal.ethReward = ethReward;

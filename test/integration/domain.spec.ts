@@ -65,7 +65,7 @@ describe('Domain Layer', () => {
 
     const getMigrationDaoMembers = `{
       dao(id: "${addresses.Avatar.toLowerCase()}") {
-        members{
+        members {
           reputation
           tokens
         }
@@ -314,6 +314,21 @@ describe('Domain Layer', () => {
       return timestamp;
     }
 
+    async function stake({ proposalId, outcome, amount, staker }) {
+      const stakingToken = new web3.eth.Contract(
+        DAOToken.abi,
+        addresses.DAOToken,
+        opts,
+      );
+      await stakingToken.methods.mint(staker, amount).send();
+      await stakingToken.methods.approve(genesisProtocol.options.address, amount).send({ from: staker });
+      const { blockNumber } = await genesisProtocol.methods
+        .stake(proposalId, outcome, amount)
+        .send({ from: staker });
+      const { timestamp } = await web3.eth.getBlock(blockNumber);
+      return timestamp;
+    }
+
     const { proposalId: p1, timestamp: p1Creation } = await propose({
       rep: 10,
       tokens: 10,
@@ -333,6 +348,8 @@ describe('Domain Layer', () => {
             boostedAt
             quietEndingPeriodBeganAt
             executedAt
+            proposer
+            votingMachine
 
             votes {
                 createdAt
@@ -346,7 +363,13 @@ describe('Domain Layer', () => {
             votesAgainst
 
             stakes {
-                id
+              createdAt
+              proposal {
+                  id
+              }
+              outcome
+              amount
+              staker
             }
             stakesFor
             stakesAgainst
@@ -370,6 +393,8 @@ describe('Domain Layer', () => {
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
       executedAt: null,
+      proposer: web3.eth.defaultAccount.toLowerCase(),
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
 
       votes: [],
       votesFor: '0',
@@ -403,6 +428,8 @@ describe('Domain Layer', () => {
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
       executedAt: null,
+      proposer: web3.eth.defaultAccount.toLowerCase(),
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
 
       votes: [
         {
@@ -430,6 +457,125 @@ describe('Domain Layer', () => {
       beneficiary: accounts[1].address.toLowerCase(),
     });
 
+    const s1Timestamp = await stake({
+      proposalId: p1,
+      outcome: FAIL,
+      amount: web3.utils.toWei('100'),
+      staker: accounts[0].address,
+    });
+
+    proposal = (await sendQuery(getProposal)).proposal;
+    expect(proposal).toMatchObject({
+      id: p1,
+      descriptionHash: descHash,
+      stage: 'Open',
+      createdAt: p1Creation.toString(),
+      boostedAt: null,
+      quietEndingPeriodBeganAt: null,
+      executedAt: null,
+      proposer: web3.eth.defaultAccount.toLowerCase(),
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
+
+      votes: [
+        {
+          createdAt: v1Timestamp.toString(),
+          outcome: 'Fail',
+          proposal: {
+            id: p1,
+          },
+          reputation: '100',
+        },
+      ],
+      votesFor: '0',
+      votesAgainst: '100',
+      winningOutcome: 'Fail',
+
+      stakes: [
+        {
+          amount: '100000000000000000000',
+          createdAt: s1Timestamp.toString(),
+          outcome: 'Fail',
+          proposal: {
+            id: p1,
+          },
+          staker: accounts[0].address.toLowerCase(),
+        },
+      ],
+      stakesFor: '0',
+      stakesAgainst: '100000000000000000000',
+
+      reputationReward: '10',
+      tokensReward: '10',
+      externalTokenReward: '10',
+      externalToken: externalToken.options.address.toLowerCase(),
+      ethReward: '10',
+      beneficiary: accounts[1].address.toLowerCase(),
+    });
+
+    const s2Timestamp = await stake({
+      proposalId: p1,
+      outcome: PASS,
+      amount: web3.utils.toWei('100'),
+      staker: accounts[1].address,
+    });
+
+    proposal = (await sendQuery(getProposal)).proposal;
+    expect(proposal).toMatchObject({
+      id: p1,
+      descriptionHash: descHash,
+      stage: 'Open',
+      createdAt: p1Creation.toString(),
+      boostedAt: null,
+      quietEndingPeriodBeganAt: null,
+      executedAt: null,
+      proposer: web3.eth.defaultAccount.toLowerCase(),
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
+
+      votes: [
+        {
+          createdAt: v1Timestamp.toString(),
+          outcome: 'Fail',
+          proposal: {
+            id: p1,
+          },
+          reputation: '100',
+        },
+      ],
+      votesFor: '0',
+      votesAgainst: '100',
+      winningOutcome: 'Fail',
+
+      stakes: [
+        {
+          amount: '100000000000000000000',
+          createdAt: s1Timestamp.toString(),
+          outcome: 'Fail',
+          proposal: {
+            id: p1,
+          },
+          staker: accounts[0].address.toLowerCase(),
+        },
+        {
+          amount: '100000000000000000000',
+          createdAt: s2Timestamp.toString(),
+          outcome: 'Pass',
+          proposal: {
+            id: p1,
+          },
+          staker: accounts[1].address.toLowerCase(),
+        },
+      ],
+      stakesFor: '100000000000000000000',
+      stakesAgainst: '100000000000000000000',
+
+      reputationReward: '10',
+      tokensReward: '10',
+      externalTokenReward: '10',
+      externalToken: externalToken.options.address.toLowerCase(),
+      ethReward: '10',
+      beneficiary: accounts[1].address.toLowerCase(),
+    });
+
     const v2Timestamp = await vote({
       proposalId: p1,
       outcome: PASS,
@@ -445,14 +591,35 @@ describe('Domain Layer', () => {
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
       executedAt: v2Timestamp.toString(),
+      proposer: web3.eth.defaultAccount.toLowerCase(),
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
 
       votesFor: '300',
       votesAgainst: '100',
       winningOutcome: 'Pass',
 
-      stakes: [],
-      stakesFor: '0',
-      stakesAgainst: '0',
+      stakes: [
+        {
+          amount: '100000000000000000000',
+          createdAt: s1Timestamp.toString(),
+          outcome: 'Fail',
+          proposal: {
+            id: p1,
+          },
+          staker: accounts[0].address.toLowerCase(),
+        },
+        {
+          amount: '100000000000000000000',
+          createdAt: s2Timestamp.toString(),
+          outcome: 'Pass',
+          proposal: {
+            id: p1,
+          },
+          staker: accounts[1].address.toLowerCase(),
+        },
+      ],
+      stakesFor: '100000000000000000000',
+      stakesAgainst: '100000000000000000000',
 
       reputationReward: '10',
       tokensReward: '10',
@@ -461,6 +628,7 @@ describe('Domain Layer', () => {
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
     });
+
     expect(proposal.votes).toContainEqual({
       createdAt: v2Timestamp.toString(),
       outcome: 'Pass',

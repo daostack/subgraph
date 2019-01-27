@@ -198,6 +198,29 @@ describe('Domain Layer', () => {
       },
     });
 
+    // check reputation reputationHolders
+    const { reputationHolders } = await sendQuery(`{
+      reputationHolders (where: {contract: "${NativeReputation.toLowerCase()}"}){
+        contract,
+        address,
+        balance
+      }
+    }`);
+
+    // there are 6 founders that have reputation in this DAO
+    expect(reputationHolders.length).toEqual(6);
+
+    const { tokenHolders } = await sendQuery(`{
+      tokenHolders (where: {contract: "${NativeToken.toLowerCase()}"}){
+        contract,
+        address,
+        balance
+      }
+    }`);
+
+    // there are 6 founders that have tokens in this DAO
+    expect(tokenHolders.length).toEqual(6);
+
     const descHash =
       '0x000000000000000000000000000000000000000000000000000000000000abcd';
     async function propose({

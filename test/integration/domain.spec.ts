@@ -577,11 +577,18 @@ describe('Domain Layer', () => {
       outcome: PASS,
       voter: accounts[3].address,
     });
+
     const v5Timestamp = await vote({
       proposalId: p1,
       outcome: PASS,
       voter: accounts[4].address,
     });
+
+    function sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    await sleep(60000);
 
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({

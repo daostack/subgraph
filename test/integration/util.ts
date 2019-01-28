@@ -83,11 +83,11 @@ export const createSubscriptionObservable = (
   return execute(link, { query, variables });
 };
 
-export async function waitUntilTrue(f: () => boolean) {
+export async function waitUntilTrue(test: () => Promise<boolean> | boolean) {
   return new Promise((resolve, reject) => {
-    (function waitForIt() {
-        if (f()) { return resolve(); }
-        setTimeout(waitForIt, 30);
+    (async function waitForIt(): Promise<void> {
+      if (await test()) { return resolve(); }
+      setTimeout(waitForIt, 30);
     })();
   });
 }

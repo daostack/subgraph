@@ -2,12 +2,10 @@ import {
   getContractAddresses,
   getOptions,
   getWeb3,
-  padZeros,
   sendQuery,
+  waitUntilTrue,
 } from './util';
 
-const DaoCreator = require('@daostack/arc/build/contracts/DaoCreator.json');
-const ControllerCreator = require('@daostack/arc/build/contracts/ControllerCreator.json');
 const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
 const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
 const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
@@ -17,7 +15,7 @@ describe('Domain Layer', () => {
   let web3;
   let addresses;
   let opts;
-  let daotoken;
+
   beforeAll(async () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
@@ -81,76 +79,6 @@ describe('Domain Layer', () => {
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
 
-    // START setup
-    const externalToken = await new web3.eth.Contract(
-      DAOToken.abi,
-      undefined,
-      opts,
-    )
-      .deploy({
-        data: DAOToken.bytecode,
-        arguments: ['External', 'EXT', 0],
-      })
-      .send();
-
-    const controllerCreator = await new web3.eth.Contract(
-      ControllerCreator.abi,
-      undefined,
-      opts,
-    )
-      .deploy({
-        data: ControllerCreator.bytecode,
-        arguments: [],
-      })
-      .send();
-
-    const daoCreator = await new web3.eth.Contract(
-      DaoCreator.abi,
-      undefined,
-      opts,
-    )
-      .deploy({
-        data: DaoCreator.bytecode,
-        arguments: [controllerCreator.options.address],
-      })
-      .send();
-
-    const { orgName, tokenName, tokenSymbol, founders, cap } = {
-      orgName: 'TSST DAO',
-      tokenName: 'TSST Token',
-      tokenSymbol: 'TST',
-      founders: [
-        {
-          address: accounts[0].address,
-          tokens: 100,
-          reputation: 100,
-        },
-        {
-          address: accounts[1].address,
-          tokens: 100,
-          reputation: 300,
-        },
-        {
-          address: accounts[2].address,
-          tokens: 100,
-          reputation: 100,
-        },
-      ],
-      cap: 0,
-    };
-    const forge = daoCreator.methods.forgeOrg(
-      orgName,
-      tokenName,
-      tokenSymbol,
-      founders.map(({ address }) => address),
-      founders.map(({ tokens }) => tokens),
-      founders.map(({ reputation }) => reputation),
-      addresses.UController,
-      cap,
-    );
-    const avatarAddress = await forge.call();
-    await forge.send();
-
     const contributionReward = new web3.eth.Contract(
       ContributionReward.abi,
       addresses.ContributionReward,
@@ -162,73 +90,65 @@ describe('Domain Layer', () => {
       opts,
     );
 
-    const gpParams = {
-      queuedVoteRequiredPercentage: 50,
-      queuedVotePeriodLimit: 60,
-      boostedVotePeriodLimit: 60,
-      preBoostedVotePeriodLimit: 0,
-      thresholdConst: 2000,
-      quietEndingPeriod: 0,
-      proposingRepReward: 60,
-      votersReputationLossRatio: 10,
-      minimumDaoBounty: 15,
-      daoBountyConst: 10,
-      activationTime: 0,
-      voteOnBehalf: '0x0000000000000000000000000000000000000000',
-    };
-    const gpSetParams = genesisProtocol.methods.setParameters(
-      [
-        gpParams.queuedVoteRequiredPercentage,
-        gpParams.queuedVotePeriodLimit,
-        gpParams.boostedVotePeriodLimit,
-        gpParams.preBoostedVotePeriodLimit,
-        gpParams.thresholdConst,
-        gpParams.quietEndingPeriod,
-        gpParams.proposingRepReward,
-        gpParams.votersReputationLossRatio,
-        gpParams.minimumDaoBounty,
-        gpParams.daoBountyConst,
-        gpParams.activationTime,
-      ],
-      gpParams.voteOnBehalf,
-    );
-    const gpParamsHash = await gpSetParams.call();
-    await gpSetParams.send();
+    const orgName = 'Genesis Test';
+    const tokenName =  'Genesis Test';
+    const tokenSymbol = 'GDT';
 
-    const crParams = {
-      orgNativeTokenFeeGWei: 0,
-    };
-    const crSetParams = contributionReward.methods.setParameters(
-      web3.utils.toWei(crParams.orgNativeTokenFeeGWei.toString(), 'gwei'),
-      gpParamsHash,
-      addresses.GenesisProtocol,
-    );
-    const crParamsHash = await crSetParams.call();
-    await crSetParams.send();
-
-    const schemes = [
+    let founders =  [
       {
-        address: addresses.ContributionReward,
-        params: crParamsHash,
-        permissions: '0x00000000', /* no special params */
+        address: '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+        tokens: Number(web3.utils.toWei('1000')),
+        reputation: Number(web3.utils.toWei('1000')),
+      },
+      {
+        address: '0xffcf8fdee72ac11b5c542428b35eef5769c409f0',
+        tokens: Number(web3.utils.toWei('1000')),
+        reputation: Number(web3.utils.toWei('1000')),
+      },
+      {
+        address: '0x22d491bde2303f2f43325b2108d26f1eaba1e32b',
+        tokens: Number(web3.utils.toWei('1000')),
+        reputation: Number(web3.utils.toWei('1000')),
+      },
+      {
+        address: '0xe11ba2b4d45eaed5996cd0823791e0c93114882d',
+        tokens: Number(web3.utils.toWei('1000')),
+        reputation: Number(web3.utils.toWei('1000')),
+      },
+      {
+        address: '0xd03ea8624c8c5987235048901fb614fdca89b117',
+        tokens: Number(web3.utils.toWei('1000')),
+        reputation: Number(web3.utils.toWei('1000')),
+      },
+      {
+        address: '0x95ced938f7991cd0dfcb48f0a06a40fa1af46ebc',
+        tokens: Number(web3.utils.toWei('1000')),
+        reputation: Number(web3.utils.toWei('1000')),
       },
     ];
-    await daoCreator.methods
-      .setSchemes(
-        avatarAddress,
-        schemes.map(({ address }) => address),
-        schemes.map(({ params }) => params),
-        schemes.map(({ permissions }) => permissions),
-      )
-      .send();
 
-    const avatar = new web3.eth.Contract(Avatar.abi, avatarAddress, opts);
+    let gpParams =  {
+      boostedVotePeriodLimit: '259200',
+      daoBountyConst: '75',
+      minimumDaoBounty: web3.utils.toWei('100', 'gwei'),
+      queuedVotePeriodLimit: '1814400',
+      queuedVoteRequiredPercentage: '50',
+      preBoostedVotePeriodLimit: '259200',
+      proposingRepReward: web3.utils.toWei('5', 'gwei'),
+      quietEndingPeriod: '86400',
+      thresholdConst: '2000',
+      voteOnBehalf: '0x0000000000000000000000000000000000000000',
+      activationTime: '0',
+      votersReputationLossRatio: '1',
+    };
+
+    const avatar = new web3.eth.Contract(Avatar.abi, addresses.Avatar, opts);
     const NativeToken = await avatar.methods.nativeToken().call();
     const NativeReputation = await avatar.methods.nativeReputation().call();
     // END setup
 
     const getDAO = `{
-      dao(id: "${avatarAddress.toLowerCase()}") {
+      dao(id: "${addresses.Avatar.toLowerCase()}") {
         id
         name
         nativeToken {
@@ -253,31 +173,54 @@ describe('Domain Layer', () => {
     dao = (await sendQuery(getDAO)).dao;
 
     expect(dao).toMatchObject({
-      id: avatarAddress.toLowerCase(),
+      id: addresses.Avatar.toLowerCase(),
       name: orgName,
       nativeToken: {
         id: NativeToken.toLowerCase(),
         dao: {
-          id: avatarAddress.toLowerCase(),
+          id: addresses.Avatar.toLowerCase(),
         },
         name: tokenName,
         symbol: tokenSymbol,
         totalSupply: founders
           .map(({ tokens }) => tokens)
           .reduce((x, y) => x + y)
-          .toString(),
+          .toLocaleString('fullwide', {useGrouping: false}),
       },
       nativeReputation: {
         id: NativeReputation.toLowerCase(),
         dao: {
-          id: avatarAddress.toLowerCase(),
+          id: addresses.Avatar.toLowerCase(),
         },
         totalSupply: founders
           .map(({ reputation }) => reputation)
           .reduce((x, y) => x + y)
-          .toString(),
+          .toLocaleString('fullwide', {useGrouping: false}),
       },
     });
+
+    // check reputation reputationHolders
+    const { reputationHolders } = await sendQuery(`{
+      reputationHolders (where: {contract: "${NativeReputation.toLowerCase()}"}){
+        contract,
+        address,
+        balance
+      }
+    }`);
+
+    // there are 6 founders that have reputation in this DAO
+    expect(reputationHolders.length).toEqual(6);
+
+    const { tokenHolders } = await sendQuery(`{
+      tokenHolders (where: {contract: "${NativeToken.toLowerCase()}"}){
+        contract,
+        address,
+        balance
+      }
+    }`);
+
+    // there are 6 founders that have tokens in this DAO
+    expect(tokenHolders.length).toEqual(6);
 
     const descHash =
       '0x000000000000000000000000000000000000000000000000000000000000abcd';
@@ -291,11 +234,11 @@ describe('Domain Layer', () => {
       beneficiary,
     }) {
       const prop = contributionReward.methods.proposeContributionReward(
-        avatarAddress,
+        addresses.Avatar,
         descHash,
         rep,
         [tokens, eth, external, periodLength, periods],
-        externalToken.options.address,
+        addresses.DAOToken,
         beneficiary,
       );
       const proposalId = await prop.call();
@@ -375,14 +318,41 @@ describe('Domain Layer', () => {
             stakesAgainst
 
             reputationReward
-            tokensReward
+            nativeTokenReward
             externalTokenReward
             externalToken
             ethReward
             beneficiary
             winningOutcome
+
+            queuedVoteRequiredPercentage,
+            queuedVotePeriodLimit,
+            boostedVotePeriodLimit,
+            preBoostedVotePeriodLimit,
+            thresholdConst,
+            quietEndingPeriod,
+            proposingRepReward,
+            votersReputationLossRatio,
+            minimumDaoBounty,
+            daoBountyConst,
+            activationTime,
+            voteOnBehalf
         }
     }`;
+
+    let expectedVotesCount = 0;
+    const voteIsIndexed = async () => {
+      return (await sendQuery(getProposal)).proposal.votes.length >= expectedVotesCount;
+    };
+
+    let expectedStakesCount = 0;
+    const stakeIsIndexed = async () => {
+      return (await sendQuery(getProposal)).proposal.stakes.length >= expectedStakesCount;
+    };
+
+    await waitUntilTrue(voteIsIndexed);
+    await waitUntilTrue(stakeIsIndexed);
+
     let proposal;
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
@@ -406,19 +376,34 @@ describe('Domain Layer', () => {
       stakesAgainst: '0',
 
       reputationReward: '10',
-      tokensReward: '10',
+      nativeTokenReward: '10',
       externalTokenReward: '10',
-      externalToken: externalToken.options.address.toLowerCase(),
+      externalToken: addresses.DAOToken.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
+
+      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
+      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
+      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
+      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
+      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** 40).toString(),
+      quietEndingPeriod: gpParams.quietEndingPeriod,
+      proposingRepReward: gpParams.proposingRepReward,
+      votersReputationLossRatio: gpParams.votersReputationLossRatio,
+      minimumDaoBounty: gpParams.minimumDaoBounty,
+      daoBountyConst: gpParams.daoBountyConst,
+      activationTime: gpParams.activationTime,
+      voteOnBehalf: gpParams.voteOnBehalf,
     });
 
     const v1Timestamp = await vote({
       proposalId: p1,
       outcome: FAIL,
-      voter: accounts[2].address,
+      voter: accounts[0].address,
     });
 
+    expectedVotesCount++;
+    await waitUntilTrue(voteIsIndexed);
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
@@ -438,11 +423,11 @@ describe('Domain Layer', () => {
           proposal: {
             id: p1,
           },
-          reputation: '100',
+          reputation: '1000000000000000000000',
         },
       ],
       votesFor: '0',
-      votesAgainst: '100',
+      votesAgainst: '1000000000000000000000',
       winningOutcome: 'Fail',
 
       stakes: [],
@@ -450,11 +435,24 @@ describe('Domain Layer', () => {
       stakesAgainst: '0',
 
       reputationReward: '10',
-      tokensReward: '10',
+      nativeTokenReward: '10',
       externalTokenReward: '10',
-      externalToken: externalToken.options.address.toLowerCase(),
+      externalToken: addresses.DAOToken.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
+
+      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
+      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
+      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
+      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
+      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** 40).toString(),
+      quietEndingPeriod: gpParams.quietEndingPeriod,
+      proposingRepReward: gpParams.proposingRepReward,
+      votersReputationLossRatio: gpParams.votersReputationLossRatio,
+      minimumDaoBounty: gpParams.minimumDaoBounty,
+      daoBountyConst: gpParams.daoBountyConst,
+      activationTime: gpParams.activationTime,
+      voteOnBehalf: gpParams.voteOnBehalf,
     });
 
     const s1Timestamp = await stake({
@@ -464,6 +462,9 @@ describe('Domain Layer', () => {
       staker: accounts[0].address,
     });
 
+    expectedStakesCount++;
+    await waitUntilTrue(stakeIsIndexed);
+
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
@@ -483,11 +484,11 @@ describe('Domain Layer', () => {
           proposal: {
             id: p1,
           },
-          reputation: '100',
+          reputation: '1000000000000000000000',
         },
       ],
       votesFor: '0',
-      votesAgainst: '100',
+      votesAgainst: '1000000000000000000000',
       winningOutcome: 'Fail',
 
       stakes: [
@@ -505,11 +506,24 @@ describe('Domain Layer', () => {
       stakesAgainst: '100000000000000000000',
 
       reputationReward: '10',
-      tokensReward: '10',
+      nativeTokenReward: '10',
       externalTokenReward: '10',
-      externalToken: externalToken.options.address.toLowerCase(),
+      externalToken: addresses.DAOToken.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
+
+      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
+      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
+      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
+      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
+      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** 40).toString(),
+      quietEndingPeriod: gpParams.quietEndingPeriod,
+      proposingRepReward: gpParams.proposingRepReward,
+      votersReputationLossRatio: gpParams.votersReputationLossRatio,
+      minimumDaoBounty: gpParams.minimumDaoBounty,
+      daoBountyConst: gpParams.daoBountyConst,
+      activationTime: gpParams.activationTime,
+      voteOnBehalf: gpParams.voteOnBehalf,
     });
 
     const s2Timestamp = await stake({
@@ -518,6 +532,9 @@ describe('Domain Layer', () => {
       amount: web3.utils.toWei('100'),
       staker: accounts[1].address,
     });
+
+    expectedStakesCount++;
+    await waitUntilTrue(stakeIsIndexed);
 
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
@@ -538,20 +555,33 @@ describe('Domain Layer', () => {
           proposal: {
             id: p1,
           },
-          reputation: '100',
+          reputation: '1000000000000000000000',
         },
       ],
       votesFor: '0',
-      votesAgainst: '100',
+      votesAgainst: '1000000000000000000000',
       winningOutcome: 'Fail',
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000000000000000',
       reputationReward: '10',
-      tokensReward: '10',
+      nativeTokenReward: '10',
       externalTokenReward: '10',
-      externalToken: externalToken.options.address.toLowerCase(),
+      externalToken: addresses.DAOToken.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
+
+      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
+      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
+      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
+      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
+      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** 40).toString(),
+      quietEndingPeriod: gpParams.quietEndingPeriod,
+      proposingRepReward: gpParams.proposingRepReward,
+      votersReputationLossRatio: gpParams.votersReputationLossRatio,
+      minimumDaoBounty: gpParams.minimumDaoBounty,
+      daoBountyConst: gpParams.daoBountyConst,
+      activationTime: gpParams.activationTime,
+      voteOnBehalf: gpParams.voteOnBehalf,
     });
     expect(new Set(proposal.stakes)).toEqual(new Set([
       {
@@ -579,6 +609,36 @@ describe('Domain Layer', () => {
       voter: accounts[1].address,
     });
 
+    expectedVotesCount++;
+    await waitUntilTrue(voteIsIndexed);
+
+    const v3Timestamp = await vote({
+      proposalId: p1,
+      outcome: PASS,
+      voter: accounts[2].address,
+    });
+
+    expectedVotesCount++;
+    await waitUntilTrue(voteIsIndexed);
+
+    const v4Timestamp = await vote({
+      proposalId: p1,
+      outcome: PASS,
+      voter: accounts[3].address,
+    });
+
+    expectedVotesCount++;
+    await waitUntilTrue(voteIsIndexed);
+
+    const v5Timestamp = await vote({
+      proposalId: p1,
+      outcome: PASS,
+      voter: accounts[4].address,
+    });
+
+    expectedVotesCount++;
+    await waitUntilTrue(voteIsIndexed);
+
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
@@ -587,23 +647,36 @@ describe('Domain Layer', () => {
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
-      executedAt: v2Timestamp.toString(),
+      executedAt: v5Timestamp.toString(),
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
 
-      votesFor: '300',
-      votesAgainst: '100',
+      votesFor: '4000000000000000000000',
+      votesAgainst: '1000000000000000000000',
       winningOutcome: 'Pass',
 
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000000000000000',
 
       reputationReward: '10',
-      tokensReward: '10',
+      nativeTokenReward: '10',
       externalTokenReward: '10',
-      externalToken: externalToken.options.address.toLowerCase(),
+      externalToken: addresses.DAOToken.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
+
+      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
+      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
+      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
+      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
+      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** 40).toString(),
+      quietEndingPeriod: gpParams.quietEndingPeriod,
+      proposingRepReward: gpParams.proposingRepReward,
+      votersReputationLossRatio: gpParams.votersReputationLossRatio,
+      minimumDaoBounty: gpParams.minimumDaoBounty,
+      daoBountyConst: gpParams.daoBountyConst,
+      activationTime: gpParams.activationTime,
+      voteOnBehalf: gpParams.voteOnBehalf,
     });
 
     expect(new Set(proposal.stakes)).toEqual(new Set([
@@ -628,20 +701,44 @@ describe('Domain Layer', () => {
     ]));
 
     expect(proposal.votes).toContainEqual({
-      createdAt: v2Timestamp.toString(),
-      outcome: 'Pass',
-      proposal: {
-        id: p1,
-      },
-      reputation: '300',
-    });
-    expect(proposal.votes).toContainEqual({
       createdAt: v1Timestamp.toString(),
       outcome: 'Fail',
       proposal: {
         id: p1,
       },
-      reputation: '100',
+      reputation: '1000000000000000000000',
+    });
+    expect(proposal.votes).toContainEqual({
+      createdAt: v2Timestamp.toString(),
+      outcome: 'Pass',
+      proposal: {
+        id: p1,
+      },
+      reputation: '1000000000000000000000',
+    });
+    expect(proposal.votes).toContainEqual({
+      createdAt: v3Timestamp.toString(),
+      outcome: 'Pass',
+      proposal: {
+        id: p1,
+      },
+      reputation: '1000000000000000000000',
+    });
+    expect(proposal.votes).toContainEqual({
+      createdAt: v4Timestamp.toString(),
+      outcome: 'Pass',
+      proposal: {
+        id: p1,
+      },
+      reputation: '1000000000000000000000',
+    });
+    expect(proposal.votes).toContainEqual({
+      createdAt: v5Timestamp.toString(),
+      outcome: 'Pass',
+      proposal: {
+        id: p1,
+      },
+      reputation: '1000000000000000000000',
     });
   }, 100000);
 });

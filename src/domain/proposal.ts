@@ -92,19 +92,19 @@ export function updateGPProposal(
   let params = gp.parameters(paramsHash);
 
   proposal.votingMachine = gpAddress;
-  proposal.queuedVoteRequiredPercentage = params.value0; // preBoostedVoteRequiredPercentage
-  proposal.queuedVotePeriodLimit = params.value1; // preBoostedVotePeriodLimit
+  proposal.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
+  proposal.queuedVotePeriodLimit = params.value1; // queuedVotePeriodLimit
   proposal.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
-  proposal.preBoostedVotePeriodLimit = params.value3; // thresholdConstA
-  proposal.thresholdConst = params.value4; // thresholdConstB
-  proposal.limitExponentValue = params.value5; // minimumStakingFee
+  proposal.preBoostedVotePeriodLimit = params.value3; // preBoostedVotePeriodLimit
+  proposal.thresholdConst = params.value4; // thresholdConst
+  proposal.limitExponentValue = params.value5; // limitExponentValue
   proposal.quietEndingPeriod = params.value6; // quietEndingPeriod
-  proposal.proposingRepReward = params.value7; // proposingRepRewardConstA
-  proposal.minimumStakingFee = params.value8; // proposingRepRewardConstB
-  proposal.minimumDaoBounty = params.value9; // stakerFeeRatioForVoters
-  proposal.daoBountyConst = params.value10; // votersReputationLossRatio
-  proposal.activationTime = params.value11; // votersGainRepRatioFromLostRep
-  proposal.voteOnBehalf = params.value12; // address voteOnBehalf
+  proposal.proposingRepReward = params.value7;
+  proposal.votersReputationLossRatio = params.value8; // votersReputationLossRatio
+  proposal.minimumDaoBounty = params.value9; // minimumDaoBounty
+  proposal.daoBountyConst = params.value10; // daoBountyConst
+  proposal.activationTime = params.value11; // activationTime
+  proposal.voteOnBehalf = params.value12; // voteOnBehalf
 
   saveProposal(proposal);
 }
@@ -119,7 +119,7 @@ export function updateCRProposal(
   periodLength: BigInt,
   periods: BigInt,
   reputationReward: BigInt,
-  tokensReward: BigInt,
+  nativeTokenReward: BigInt,
   ethReward: BigInt,
   externalToken: Address,
   externalTokenReward: BigInt,
@@ -131,7 +131,7 @@ export function updateCRProposal(
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
 
-  proposal.tokensReward = tokensReward;
+  proposal.nativeTokenReward = nativeTokenReward;
   proposal.ethReward = ethReward;
   proposal.externalTokenReward = externalTokenReward;
   proposal.periodLength = periodLength;

@@ -51,7 +51,7 @@ export function handleNewContributionProposal(
   event: NewContributionProposal,
 ): void {
   let rewards = event.params._rewards;
-  let tokensReward = rewards.shift();
+  let nativeTokenReward = rewards.shift();
   let ethReward = rewards.shift();
   let externalTokenReward = rewards.shift();
   let periodLength = rewards.shift();
@@ -67,7 +67,7 @@ export function handleNewContributionProposal(
     periodLength,
     periods,
     event.params._reputationChange,
-    tokensReward,
+    nativeTokenReward,
     ethReward,
     event.params._externalToken,
     externalTokenReward,

@@ -553,7 +553,7 @@ describe('Domain Layer', () => {
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
     });
-    const expectedStakes = [
+    expect(new Set(proposal.stakes)).toEqual(new Set([
       {
         amount: '100000000000000000000',
         createdAt: s1Timestamp.toString(),
@@ -572,8 +572,7 @@ describe('Domain Layer', () => {
         },
         staker: accounts[1].address.toLowerCase(),
       },
-    ];
-    expect(new Set(proposal.stakes)).toEqual(new Set(expectedStakes));
+    ]));
     const v2Timestamp = await vote({
       proposalId: p1,
       outcome: PASS,
@@ -596,26 +595,6 @@ describe('Domain Layer', () => {
       votesAgainst: '100',
       winningOutcome: 'Pass',
 
-      stakes: [
-        {
-          amount: '100000000000000000000',
-          createdAt: s1Timestamp.toString(),
-          outcome: 'Fail',
-          proposal: {
-            id: p1,
-          },
-          staker: accounts[0].address.toLowerCase(),
-        },
-        {
-          amount: '100000000000000000000',
-          createdAt: s2Timestamp.toString(),
-          outcome: 'Pass',
-          proposal: {
-            id: p1,
-          },
-          staker: accounts[1].address.toLowerCase(),
-        },
-      ],
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000000000000000',
 
@@ -626,6 +605,27 @@ describe('Domain Layer', () => {
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
     });
+
+    expect(new Set(proposal.stakes)).toEqual(new Set([
+      {
+        amount: '100000000000000000000',
+        createdAt: s1Timestamp.toString(),
+        outcome: 'Fail',
+        proposal: {
+          id: p1,
+        },
+        staker: accounts[0].address.toLowerCase(),
+      },
+      {
+        amount: '100000000000000000000',
+        createdAt: s2Timestamp.toString(),
+        outcome: 'Pass',
+        proposal: {
+          id: p1,
+        },
+        staker: accounts[1].address.toLowerCase(),
+      },
+    ]));
 
     expect(proposal.votes).toContainEqual({
       createdAt: v2Timestamp.toString(),

@@ -3,6 +3,7 @@ import {
   getOptions,
   getWeb3,
   sendQuery,
+  waitUntilTrue,
 } from './util';
 
 const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
@@ -338,6 +339,14 @@ describe('Domain Layer', () => {
             voteOnBehalf
         }
     }`;
+
+    let expectedVotesCount = 0;
+    const voteIsIndexed = async () => {
+      return (await sendQuery(getProposal)).proposal.votes.length >= expectedVotesCount;
+    };
+
+    await waitUntilTrue(voteIsIndexed);
+
     let proposal;
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
@@ -387,6 +396,8 @@ describe('Domain Layer', () => {
       voter: accounts[0].address,
     });
 
+    expectedVotesCount++;
+    await waitUntilTrue(voteIsIndexed);
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
@@ -589,11 +600,17 @@ describe('Domain Layer', () => {
       voter: accounts[1].address,
     });
 
+    expectedVotesCount++;
+    await waitUntilTrue(voteIsIndexed);
+
     const v3Timestamp = await vote({
       proposalId: p1,
       outcome: PASS,
       voter: accounts[2].address,
     });
+
+    expectedVotesCount++;
+    await waitUntilTrue(voteIsIndexed);
 
     const v4Timestamp = await vote({
       proposalId: p1,
@@ -601,17 +618,17 @@ describe('Domain Layer', () => {
       voter: accounts[3].address,
     });
 
+    expectedVotesCount++;
+    await waitUntilTrue(voteIsIndexed);
+
     const v5Timestamp = await vote({
       proposalId: p1,
       outcome: PASS,
       voter: accounts[4].address,
     });
 
-    function sleep(ms) {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
-    await sleep(60000);
+    expectedVotesCount++;
+    await waitUntilTrue(voteIsIndexed);
 
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({

@@ -345,7 +345,13 @@ describe('Domain Layer', () => {
       return (await sendQuery(getProposal)).proposal.votes.length >= expectedVotesCount;
     };
 
+    let expectedStakesCount = 0;
+    const stakeIsIndexed = async () => {
+      return (await sendQuery(getProposal)).proposal.votes.length >= expectedStakesCount;
+    };
+
     await waitUntilTrue(voteIsIndexed);
+    await waitUntilTrue(stakeIsIndexed);
 
     let proposal;
     proposal = (await sendQuery(getProposal)).proposal;
@@ -456,6 +462,9 @@ describe('Domain Layer', () => {
       staker: accounts[0].address,
     });
 
+    expectedStakesCount++;
+    await waitUntilTrue(stakeIsIndexed);
+
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
@@ -523,6 +532,9 @@ describe('Domain Layer', () => {
       amount: web3.utils.toWei('100'),
       staker: accounts[1].address,
     });
+
+    expectedStakesCount++;
+    await waitUntilTrue(stakeIsIndexed);
 
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({

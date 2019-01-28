@@ -544,30 +544,8 @@ describe('Domain Layer', () => {
       votesFor: '0',
       votesAgainst: '100',
       winningOutcome: 'Fail',
-
-      stakes: [
-        {
-          amount: '100000000000000000000',
-          createdAt: s1Timestamp.toString(),
-          outcome: 'Fail',
-          proposal: {
-            id: p1,
-          },
-          staker: accounts[0].address.toLowerCase(),
-        },
-        {
-          amount: '100000000000000000000',
-          createdAt: s2Timestamp.toString(),
-          outcome: 'Pass',
-          proposal: {
-            id: p1,
-          },
-          staker: accounts[1].address.toLowerCase(),
-        },
-      ],
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000000000000000',
-
       reputationReward: '10',
       tokensReward: '10',
       externalTokenReward: '10',
@@ -575,7 +553,27 @@ describe('Domain Layer', () => {
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
     });
-
+    const expectedStakes = [
+      {
+        amount: '100000000000000000000',
+        createdAt: s1Timestamp.toString(),
+        outcome: 'Fail',
+        proposal: {
+          id: p1,
+        },
+        staker: accounts[0].address.toLowerCase(),
+      },
+      {
+        amount: '100000000000000000000',
+        createdAt: s2Timestamp.toString(),
+        outcome: 'Pass',
+        proposal: {
+          id: p1,
+        },
+        staker: accounts[1].address.toLowerCase(),
+      },
+    ];
+    expect(new Set(proposal.stakes)).toEqual(new Set(expectedStakes));
     const v2Timestamp = await vote({
       proposalId: p1,
       outcome: PASS,

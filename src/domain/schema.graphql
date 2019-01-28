@@ -87,7 +87,7 @@ type Proposal @entity {
 	# Contribution Reward params
 	beneficiary: Bytes!
 	reputationReward: BigInt!
-	tokensReward: BigInt!
+	nativeTokenReward: BigInt!
 	ethReward: BigInt!
 	externalTokenReward: BigInt!
 	externalToken: Bytes!

@@ -318,7 +318,7 @@ describe('Domain Layer', () => {
             stakesAgainst
 
             reputationReward
-            tokensReward
+            nativeTokenReward
             externalTokenReward
             externalToken
             ethReward
@@ -376,7 +376,7 @@ describe('Domain Layer', () => {
       stakesAgainst: '0',
 
       reputationReward: '10',
-      tokensReward: '10',
+      nativeTokenReward: '10',
       externalTokenReward: '10',
       externalToken: addresses.DAOToken.toLowerCase(),
       ethReward: '10',
@@ -435,7 +435,7 @@ describe('Domain Layer', () => {
       stakesAgainst: '0',
 
       reputationReward: '10',
-      tokensReward: '10',
+      nativeTokenReward: '10',
       externalTokenReward: '10',
       externalToken: addresses.DAOToken.toLowerCase(),
       ethReward: '10',
@@ -506,7 +506,7 @@ describe('Domain Layer', () => {
       stakesAgainst: '100000000000000000000',
 
       reputationReward: '10',
-      tokensReward: '10',
+      nativeTokenReward: '10',
       externalTokenReward: '10',
       externalToken: addresses.DAOToken.toLowerCase(),
       ethReward: '10',
@@ -586,7 +586,7 @@ describe('Domain Layer', () => {
       stakesAgainst: '100000000000000000000',
 
       reputationReward: '10',
-      tokensReward: '10',
+      nativeTokenReward: '10',
       externalTokenReward: '10',
       externalToken: addresses.DAOToken.toLowerCase(),
       ethReward: '10',
@@ -682,7 +682,7 @@ describe('Domain Layer', () => {
       stakesAgainst: '100000000000000000000',
 
       reputationReward: '10',
-      tokensReward: '10',
+      nativeTokenReward: '10',
       externalTokenReward: '10',
       externalToken: addresses.DAOToken.toLowerCase(),
       ethReward: '10',

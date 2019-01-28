@@ -119,7 +119,7 @@ export function updateCRProposal(
   periodLength: BigInt,
   periods: BigInt,
   reputationReward: BigInt,
-  tokensReward: BigInt,
+  nativeTokenReward: BigInt,
   ethReward: BigInt,
   externalToken: Address,
   externalTokenReward: BigInt,
@@ -131,7 +131,7 @@ export function updateCRProposal(
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
 
-  proposal.tokensReward = tokensReward;
+  proposal.nativeTokenReward = nativeTokenReward;
   proposal.ethReward = ethReward;
   proposal.externalTokenReward = externalTokenReward;
   proposal.periodLength = periodLength;

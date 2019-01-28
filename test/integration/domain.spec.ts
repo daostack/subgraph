@@ -561,30 +561,8 @@ describe('Domain Layer', () => {
       votesFor: '0',
       votesAgainst: '1000000000000000000000',
       winningOutcome: 'Fail',
-
-      stakes: [
-        {
-          amount: '100000000000000000000',
-          createdAt: s1Timestamp.toString(),
-          outcome: 'Fail',
-          proposal: {
-            id: p1,
-          },
-          staker: accounts[0].address.toLowerCase(),
-        },
-        {
-          amount: '100000000000000000000',
-          createdAt: s2Timestamp.toString(),
-          outcome: 'Pass',
-          proposal: {
-            id: p1,
-          },
-          staker: accounts[1].address.toLowerCase(),
-        },
-      ],
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000000000000000',
-
       reputationReward: '10',
       nativeTokenReward: '10',
       externalTokenReward: '10',
@@ -605,7 +583,26 @@ describe('Domain Layer', () => {
       activationTime: gpParams.activationTime,
       voteOnBehalf: gpParams.voteOnBehalf,
     });
-
+    expect(new Set(proposal.stakes)).toEqual(new Set([
+      {
+        amount: '100000000000000000000',
+        createdAt: s1Timestamp.toString(),
+        outcome: 'Fail',
+        proposal: {
+          id: p1,
+        },
+        staker: accounts[0].address.toLowerCase(),
+      },
+      {
+        amount: '100000000000000000000',
+        createdAt: s2Timestamp.toString(),
+        outcome: 'Pass',
+        proposal: {
+          id: p1,
+        },
+        staker: accounts[1].address.toLowerCase(),
+      },
+    ]));
     const v2Timestamp = await vote({
       proposalId: p1,
       outcome: PASS,
@@ -658,26 +655,6 @@ describe('Domain Layer', () => {
       votesAgainst: '1000000000000000000000',
       winningOutcome: 'Pass',
 
-      stakes: [
-        {
-          amount: '100000000000000000000',
-          createdAt: s1Timestamp.toString(),
-          outcome: 'Fail',
-          proposal: {
-            id: p1,
-          },
-          staker: accounts[0].address.toLowerCase(),
-        },
-        {
-          amount: '100000000000000000000',
-          createdAt: s2Timestamp.toString(),
-          outcome: 'Pass',
-          proposal: {
-            id: p1,
-          },
-          staker: accounts[1].address.toLowerCase(),
-        },
-      ],
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000000000000000',
 
@@ -701,6 +678,27 @@ describe('Domain Layer', () => {
       activationTime: gpParams.activationTime,
       voteOnBehalf: gpParams.voteOnBehalf,
     });
+
+    expect(new Set(proposal.stakes)).toEqual(new Set([
+      {
+        amount: '100000000000000000000',
+        createdAt: s1Timestamp.toString(),
+        outcome: 'Fail',
+        proposal: {
+          id: p1,
+        },
+        staker: accounts[0].address.toLowerCase(),
+      },
+      {
+        amount: '100000000000000000000',
+        createdAt: s2Timestamp.toString(),
+        outcome: 'Pass',
+        proposal: {
+          id: p1,
+        },
+        staker: accounts[1].address.toLowerCase(),
+      },
+    ]));
 
     expect(proposal.votes).toContainEqual({
       createdAt: v1Timestamp.toString(),

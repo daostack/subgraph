@@ -2,7 +2,7 @@ const path = require('path');
 require('dotenv').config();
 process.env = {
   ethereum: 'http://127.0.0.1:8545',
-  node_http: 'http://127.0.0.1:8000/subgraphs/name/daostack/graphql',
+  node_http: 'http://127.0.0.1:8000/subgraphs/name/daostack',
   node_ws: 'http://127.0.0.1:8001/subgraphs/name/daostack',
   test_mnemonic:
     'myth like bonus scare over problem client lizard pioneer submit female collect',
@@ -86,8 +86,6 @@ export const createSubscriptionObservable = (
 export async function waitUntilTrue(test: () => Promise<boolean> | boolean) {
   return new Promise((resolve, reject) => {
     (async function waitForIt(): Promise<void> {
-    //     cntr += 1
-    //     if (cntr > 1000) { throw new Error((`Waited but got nothing :-()`))}
       if (await test()) { return resolve(); }
       setTimeout(waitForIt, 30);
     })();

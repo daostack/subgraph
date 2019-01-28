@@ -9,7 +9,7 @@ import {
 const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
 const gql = require('graphql-tag');
 
-describe('Subscriptions', () => {
+describe('Subscriptions Loop', () => {
   let web3;
   let addresses;
   let opts;
@@ -24,7 +24,7 @@ describe('Subscriptions', () => {
       opts,
     );
   });
-  it('Run one subscription and test for updates', async () => {
+  it('Run 10 subscriptions and test for updates', async () => {
     const accounts = web3.eth.accounts.wallet;
     const SUBSCRIBE_QUERY = gql`
       subscription {
@@ -42,29 +42,31 @@ describe('Subscriptions', () => {
     );
 
     let event;
-    let nextWasCalled = false;
-    const consumer = await subscriptionClient.subscribe(
-      (eventData) => {
-        // Do something on receipt of the event
-        nextWasCalled = true;
-        event = eventData.data.reputationMints;
-      },
-      (err) => {
-        expect(true).toEqual(false);
-      },
-    );
+    for (let i = 1 ; i <= 10 ; i++) {
+      let nextWasCalled = false;
 
-    await reputation.methods.mint(accounts[4].address, '99').send();
+      const consumer = await subscriptionClient.subscribe(
+        (eventData) => {
+          // Do something on receipt of the event
+          nextWasCalled = true;
+          event = eventData.data.reputationMints;
+        },
+        (err) => {
+          expect(true).toEqual(false);
+        },
+      );
 
-    // wait until the subscription callback has been called
-    await waitUntilTrue(() => nextWasCalled);
+      await reputation.methods.mint(accounts[4].address, i.toString()).send();
 
-    expect(event).toContainEqual({
-      address: accounts[4].address.toLowerCase(),
-      amount: '99',
-      contract: reputation.options.address.toLowerCase(),
-    });
+      // wait until the subscription callback has been called
+      await waitUntilTrue(() => nextWasCalled);
 
-    consumer.unsubscribe();
-  }, 2500);
+      expect(event).toContainEqual({
+        address: accounts[4].address.toLowerCase(),
+        amount: i.toString(),
+        contract: reputation.options.address.toLowerCase(),
+      });
+      consumer.unsubscribe();
+    }
+  }, 25000);
 });

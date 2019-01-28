@@ -347,7 +347,7 @@ describe('Domain Layer', () => {
 
     let expectedStakesCount = 0;
     const stakeIsIndexed = async () => {
-      return (await sendQuery(getProposal)).proposal.votes.length >= expectedStakesCount;
+      return (await sendQuery(getProposal)).proposal.stakes.length >= expectedStakesCount;
     };
 
     await waitUntilTrue(voteIsIndexed);

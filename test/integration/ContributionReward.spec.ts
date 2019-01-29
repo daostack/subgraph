@@ -1,4 +1,4 @@
-import { getContractAddresses, getOptions, getWeb3, sendQuery, padZeros } from './util';
+import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
 
 const AbsoluteVote = require('@daostack/arc/build/contracts/AbsoluteVote.json');
 const Avatar = require('@daostack/arc/build/contracts/Avatar.json');

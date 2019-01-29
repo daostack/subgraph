@@ -25,7 +25,7 @@
       "mapping": "Reputation"
     },
     {
-      "name": "TestNativeReputation",
+      "name": "Reputation",
       "contractName": "Reputation",
       "dao": "test",
       "mapping": "Reputation"

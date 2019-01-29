@@ -14,12 +14,7 @@ If you have changed `package.json` (or pulled a new version from github), you ne
 docker-compose build
 ```
 
-Run tests in the docker container:
-```sh
-npm run docker test
-```
-
-Or, more explicitly, you can run the tests in the host container:
+Run the tests in the host container:
 
 ```sh
 docker-compose up graph-node
@@ -34,10 +29,6 @@ npm run test -- test/integration/Avatar.spec.js # run a single test file
 
 
 ## Commands
-
-All npm scripts can be called within a container using `docker-compose` with all dependencies and services set up:
-
-`npm run docker <command>`
 
 1. `migrate` - migrate contracts to ganache and write result to `migration.json`.
 2. `codegen` - (requires `migration.json`) automatically generate abi, subgraph, schema and type definitions for

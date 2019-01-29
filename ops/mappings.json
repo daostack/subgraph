@@ -19,12 +19,6 @@
       "mapping": "DAOToken"
     },
     {
-      "name": "Reputation",
-      "contractName": "Reputation",
-      "dao": "base",
-      "mapping": "Reputation"
-    },
-    {
       "name": "NativeReputation",
       "contractName": "Reputation",
       "dao": "dao",

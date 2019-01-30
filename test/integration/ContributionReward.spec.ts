@@ -52,7 +52,7 @@ describe('ContributionReward', () => {
             .deploy({ data: AbsoluteVote.bytecode, arguments: [] })
             .send();
 
-        const setParams = absVote.methods.setParameters(20, 0);
+        const setParams = absVote.methods.setParameters(20, '0x0000000000000000000000000000000000000000');
         const absVoteParamsHash = await setParams.call();
         await setParams.send();
         const crSetParams = contributionReward.methods.setParameters(0, absVoteParamsHash, absVote.options.address);

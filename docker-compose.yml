@@ -1,21 +1,5 @@
 version: '3'
 services:
-  subgraph:
-    build: .
-    links:
-      - ipfs
-      - graph-node
-      - ganache
-    environment:
-      ethereum: http://ganache:8545
-      test_mnemonic: myth like bonus scare over problem client lizard pioneer submit female collect
-      node_http: http://graph-node:8000/subgraphs/name/daostack
-      node_ws: http://graph-node:8001/subgraphs/name/daostack
-      node_rpc: http://graph-node:8020
-      ipfs_host: ipfs
-      ipfs_port: 5001
-      WAIT_HOSTS: ipfs:5001, graph-node:8020, ganache:8545
-
   graph-node:
     image: graphprotocol/graph-node:latest@sha256:a11adda030fcb4ac42d0c31c58cffaacadfda333fecfb1e361d9ec5a72ba1026
 
@@ -46,6 +30,6 @@ services:
     environment:
       POSTGRES_PASSWORD: 'letmein'
   ganache:
-    image: daostack/migration:0.0.1-rc.7-v1
+    image: daostack/migration:0.0.1-rc.7-v2
     ports:
       - 8545:8545

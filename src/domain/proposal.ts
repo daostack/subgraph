@@ -60,20 +60,29 @@ export function updateProposal(
   proposal.winningOutcome = parseOutcome(gpProposal.value3);
 
   // proposal.state
+
   let state = gpProposal.value2;
+  updateProposalState(proposal, state);
+  }
+
+export function updateProposalState(proposal: Proposal, state: number) {
+  // enum ProposalState { None, ExpiredInQueue, Executed, Queued, PreBoosted, Boosted, QuietEndingPeriod}
   if (state === 1) {
     // Closed
-    proposal.stage = 'Resolved';
+    proposal.stage = 'ExpiredInQueue';
   } else if (state === 2) {
     // Executed
-    proposal.stage = 'Resolved';
+    proposal.stage = 'Executed';
   } else if (state === 3) {
     // PreBoosted
-    proposal.stage = 'Open';
+    proposal.stage = 'Queued';
   } else if (state === 4) {
     // Boosted
-    proposal.stage = 'Boosted';
+    proposal.stage = 'PreBoosted';
   } else if (state === 5) {
+    // QuietEndingPeriod
+    proposal.stage = 'Boosted';
+  } else if (state === 6) {
     // QuietEndingPeriod
     proposal.stage = 'QuietEndingPeriod';
   }

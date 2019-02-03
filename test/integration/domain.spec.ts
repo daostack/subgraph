@@ -374,7 +374,7 @@ describe('Domain Layer', () => {
 
       stakes: [],
       stakesFor: '0',
-      stakesAgainst: '0',
+      stakesAgainst: '100000000000',
       confidence: '0',
 
       reputationReward: '10',
@@ -434,7 +434,7 @@ describe('Domain Layer', () => {
 
       stakes: [],
       stakesFor: '0',
-      stakesAgainst: '0',
+      stakesAgainst: '100000000000',
       confidence: '0',
 
       reputationReward: '10',
@@ -506,7 +506,7 @@ describe('Domain Layer', () => {
         },
       ],
       stakesFor: '0',
-      stakesAgainst: '100000000000000000000',
+      stakesAgainst: '100000000100000000000',
       confidence: '0',
 
       reputationReward: '10',
@@ -566,7 +566,7 @@ describe('Domain Layer', () => {
       votesAgainst: '1000000000000000000000',
       winningOutcome: 'Fail',
       stakesFor: '100000000000000000000',
-      stakesAgainst: '100000000000000000000',
+      stakesAgainst: '100000000100000000000',
       confidence: '1',
 
       reputationReward: '10',
@@ -662,7 +662,7 @@ describe('Domain Layer', () => {
       winningOutcome: 'Pass',
 
       stakesFor: '100000000000000000000',
-      stakesAgainst: '100000000000000000000',
+      stakesAgainst: '100000000100000000000',
       confidence: '1',
 
       reputationReward: '10',

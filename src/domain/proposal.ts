@@ -106,18 +106,14 @@ export function updateGPProposal(
   proposal.daoBountyConst = params.value10; // daoBountyConst
   proposal.activationTime = params.value11; // activationTime
   proposal.voteOnBehalf = params.value12; // voteOnBehalf
-  proposal = updateProposalConfidence(proposal);
+  proposal.stakesAgainst = gp.proposals(proposalId).value9;
+  proposal.confidence = getProposalConfidence(proposal);
 
   saveProposal(proposal);
 }
 
-export function updateProposalConfidence(proposal: Proposal): Proposal {
-  if (proposal.stakesAgainst.toI32() > 0) {
-    proposal.confidence = proposal.stakesFor.div(proposal.stakesAgainst);
-  } else {
-    proposal.confidence = proposal.stakesFor;
-  }
-  return proposal;
+export function getProposalConfidence(proposal: Proposal): BigInt {
+  return proposal.stakesFor.div(proposal.stakesAgainst);
 }
 
 export function updateCRProposal(

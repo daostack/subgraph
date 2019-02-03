@@ -21,12 +21,12 @@ import { insertNewDAO } from './dao';
 import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {
   getProposal,
+  getProposalConfidence,
   parseOutcome,
   saveProposal,
   updateCRProposal,
   updateGPProposal,
   updateProposal,
-  getProposalConfidence,
   updateProposalExecution,
 } from './proposal';
 import {
@@ -85,7 +85,7 @@ export function handleStake(event: Stake): void {
   }
 
   proposal.confidence = getProposalConfidence(proposal);
-  
+
   saveProposal(proposal);
   insertStake(
     eventId(event),

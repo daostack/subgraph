@@ -567,7 +567,7 @@ describe('Domain Layer', () => {
       winningOutcome: 'Fail',
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000100000000000',
-      confidence: '1',
+      confidence: '0',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -663,7 +663,7 @@ describe('Domain Layer', () => {
 
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000100000000000',
-      confidence: '1',
+      confidence: '0',
 
       reputationReward: '10',
       nativeTokenReward: '10',

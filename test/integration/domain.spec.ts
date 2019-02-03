@@ -316,6 +316,7 @@ describe('Domain Layer', () => {
             }
             stakesFor
             stakesAgainst
+            confidence
 
             reputationReward
             nativeTokenReward
@@ -374,6 +375,7 @@ describe('Domain Layer', () => {
       stakes: [],
       stakesFor: '0',
       stakesAgainst: '0',
+      confidence: '0',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -433,6 +435,7 @@ describe('Domain Layer', () => {
       stakes: [],
       stakesFor: '0',
       stakesAgainst: '0',
+      confidence: '0',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -504,6 +507,7 @@ describe('Domain Layer', () => {
       ],
       stakesFor: '0',
       stakesAgainst: '100000000000000000000',
+      confidence: '0',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -563,6 +567,8 @@ describe('Domain Layer', () => {
       winningOutcome: 'Fail',
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000000000000000',
+      confidence: '1',
+
       reputationReward: '10',
       nativeTokenReward: '10',
       externalTokenReward: '10',
@@ -657,6 +663,7 @@ describe('Domain Layer', () => {
 
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000000000000000',
+      confidence: '1',
 
       reputationReward: '10',
       nativeTokenReward: '10',

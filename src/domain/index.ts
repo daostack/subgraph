@@ -26,6 +26,7 @@ import {
   updateCRProposal,
   updateGPProposal,
   updateProposal,
+  updateProposalConfidence,
   updateProposalExecution,
 } from './proposal';
 import {
@@ -82,6 +83,9 @@ export function handleStake(event: Stake): void {
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
+
+  proposal = updateProposalConfidence(proposal);
+  
   saveProposal(proposal);
   insertStake(
     eventId(event),

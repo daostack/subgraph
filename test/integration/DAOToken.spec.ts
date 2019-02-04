@@ -60,7 +60,9 @@ describe('DAOToken', () => {
         address
         balance
         allowances {
-	        owner
+          owner {
+            address
+          }
 	        spender
 	        amount
         }
@@ -74,7 +76,7 @@ describe('DAOToken', () => {
       balance: await daotoken.methods.balanceOf(accounts[0].address).call(),
       allowances: [
         {
-          owner: accounts[0].address,
+          owner: {address: accounts[0].address},
           spender: accounts[3].address,
           amount: '50',
         },

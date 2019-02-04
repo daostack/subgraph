@@ -52,6 +52,7 @@ export function handleTransfer(event: Transfer): void {
   ent.value = event.params.value;
 
   store.set('TokenTransfer', ent.id, ent);
+
   if (event.params.from !== event.transaction.from) {
     updateAllowance(event.address, event.params.from, event.transaction.from);
   }

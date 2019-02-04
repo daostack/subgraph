@@ -59,6 +59,13 @@ describe('DAOToken', () => {
         contract
         address
         balance
+        allowances {
+          owner {
+            address
+          }
+	        spender
+	        amount
+        }
       }
     }`);
 
@@ -66,6 +73,13 @@ describe('DAOToken', () => {
     expect(tokenHolders).toContainEqual({
       contract: daotoken.options.address.toLowerCase(),
       address: accounts[0].address.toLowerCase(),
+      allowances: [
+        {
+          owner: {address: accounts[0].address.toLowerCase()},
+          spender: accounts[3].address.toLowerCase(),
+          amount: '50',
+        },
+      ],
       balance: await daotoken.methods.balanceOf(accounts[0].address).call(),
     });
 

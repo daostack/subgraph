@@ -4,8 +4,7 @@ const path = require('path')
 const runGraphCli = async (args = [], cwd = process.cwd()) => {
   // Resolve the path to graph.js
   // let graphClix = `${require.resolve('@graphprotocol/graph-cli')}/graph.js`
-  // let graphCli = `./node_modules/@graphprotocol/graph-cli/graph.js`
-  let graphCli = 'graph'
+  let graphCli = `${__dirname}/../node_modules/@graphprotocol/graph-cli/graph.js`
 
   // Make sure to set an absolute working directory
   cwd = cwd[0] !== '/' ? path.resolve(__dirname, cwd) : cwd

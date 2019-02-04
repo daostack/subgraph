@@ -27,6 +27,7 @@ export function getProposal(id: string): Proposal {
 
     proposal.stakesFor = BigInt.fromI32(0);
     proposal.stakesAgainst = BigInt.fromI32(0);
+    proposal.confidence = BigInt.fromI32(0);
   }
 
   return proposal;
@@ -105,8 +106,14 @@ export function updateGPProposal(
   proposal.daoBountyConst = params.value10; // daoBountyConst
   proposal.activationTime = params.value11; // activationTime
   proposal.voteOnBehalf = params.value12; // voteOnBehalf
+  proposal.stakesAgainst = gp.proposals(proposalId).value9;
+  proposal.confidence = getProposalConfidence(proposal);
 
   saveProposal(proposal);
+}
+
+export function getProposalConfidence(proposal: Proposal): BigInt {
+  return proposal.stakesFor.div(proposal.stakesAgainst);
 }
 
 export function updateCRProposal(

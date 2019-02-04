@@ -78,7 +78,7 @@ export function updateAllowance(contract: Bytes, owner: Bytes, spender: Bytes): 
   let token = DAOToken.bind(contract as Address);
   let allowanceAmount = token.allowance(owner as Address, spender as Address);
 
-  if (allowanceAmount === BigInt.fromI32(0)) {
+  if (equals(allowanceAmount, BigInt.fromI32(0))) {
     store.remove('Allowance', id);
     return;
   }

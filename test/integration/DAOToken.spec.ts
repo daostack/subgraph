@@ -73,14 +73,14 @@ describe('DAOToken', () => {
     expect(tokenHolders).toContainEqual({
       contract: daotoken.options.address.toLowerCase(),
       address: accounts[0].address.toLowerCase(),
-      balance: await daotoken.methods.balanceOf(accounts[0].address).call(),
       allowances: [
         {
-          owner: {address: accounts[0].address},
-          spender: accounts[3].address,
+          owner: {address: accounts[0].address.toLowerCase()},
+          spender: accounts[3].address.toLowerCase(),
           amount: '50',
         },
       ],
+      balance: await daotoken.methods.balanceOf(accounts[0].address).call(),
     });
 
     const { tokenTransfers } = await sendQuery(`{

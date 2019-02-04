@@ -59,6 +59,11 @@ describe('DAOToken', () => {
         contract
         address
         balance
+        allowances {
+	        owner
+	        spender
+	        amount
+        }
       }
     }`);
 
@@ -67,6 +72,13 @@ describe('DAOToken', () => {
       contract: daotoken.options.address.toLowerCase(),
       address: accounts[0].address.toLowerCase(),
       balance: await daotoken.methods.balanceOf(accounts[0].address).call(),
+      allowances: [
+        {
+          owner: accounts[0].address,
+          spender: accounts[3].address,
+          amount: '50',
+        },
+      ],
     });
 
     const { tokenTransfers } = await sendQuery(`{

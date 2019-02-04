@@ -1,6 +1,6 @@
 import 'allocator/arena';
 
-import { Address, BigInt, crypto, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, crypto, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Token contract ABI
 import {
@@ -13,6 +13,7 @@ import { concat, debug, equals, eventId } from '../../utils';
 
 // Import entity types generated from the GraphQL schema
 import {
+  Allowance,
   TokenApproval,
   TokenContract,
   TokenHolder,
@@ -51,6 +52,9 @@ export function handleTransfer(event: Transfer): void {
   ent.value = event.params.value;
 
   store.set('TokenTransfer', ent.id, ent);
+  if (event.params.from !== event.transaction.from) {
+    updateAllowance(event.address, event.params.from, event.transaction.from);
+  }
 }
 
 export function handleApproval(event: Approval): void {
@@ -62,6 +66,31 @@ export function handleApproval(event: Approval): void {
   ent.owner = event.params.owner;
 
   store.set('TokenApproval', ent.id, ent);
+
+  updateAllowance(event.address, event.params.owner, event.params.spender);
+}
+
+export function updateAllowance(contract: Bytes, owner: Bytes, spender: Bytes): void {
+  let id = crypto.keccak256(concat(concat(contract, owner), spender)).toHex();
+  let allowance = store.get('Allowance', id) as Allowance;
+
+  let token = DAOToken.bind(contract as Address);
+  let allowanceAmount = token.allowance(owner as Address, spender as Address);
+
+  if (allowanceAmount === BigInt.fromI32(0)) {
+    store.remove('Allowance', id);
+    return;
+  }
+
+  if (allowance == null) {
+    allowance = new Allowance(id);
+
+    allowance.owner = crypto.keccak256(concat(contract, owner)).toHex();
+    allowance.spender = spender;
+  }
+  allowance.amount = allowanceAmount;
+
+  store.set('Allowance', id, allowance);
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {

@@ -11,6 +11,14 @@ type TokenHolder @entity {
 	contract: Bytes!
 	address: Bytes!
 	balance: BigInt!
+	allowances: [Allowance!] @derivedFrom(field: "owner")
+}
+
+type Allowance @entity {
+	id: ID!
+	owner: TokenHolder!
+	spender: Bytes!
+	amount: BigInt!
 }
 
 type TokenTransfer @entity {

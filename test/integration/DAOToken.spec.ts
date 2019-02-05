@@ -25,6 +25,7 @@ describe('DAOToken', () => {
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
     let txs = [];
+    let tokenOwner = await daotoken.methods.owner().call();
 
     txs.push(await daotoken.methods.mint(accounts[0].address, '100').send());
     txs.push(await daotoken.methods.mint(accounts[1].address, '100').send());
@@ -101,5 +102,6 @@ describe('DAOToken', () => {
       to: accounts[3].address.toLowerCase(),
       value: '50',
     });
+    await daotoken.methods.transferOwnership(tokenOwner).send({from:accounts[1].address});
   }, 20000);
 });

@@ -7,13 +7,13 @@
       "mapping": "DAOToken"
     },
     {
-      "name": "NativeToken",
+      "name": "DAOToken",
       "contractName": "DAOToken",
       "dao": "dao",
       "mapping": "DAOToken"
     },
     {
-      "name": "TestNativeToken",
+      "name": "DAOToken",
       "contractName": "DAOToken",
       "dao": "test",
       "mapping": "DAOToken"
@@ -21,17 +21,17 @@
     {
       "name": "Reputation",
       "contractName": "Reputation",
-      "dao": "base",
-      "mapping": "Reputation"
-    },
-    {
-      "name": "NativeReputation",
-      "contractName": "Reputation",
       "dao": "dao",
       "mapping": "Reputation"
     },
     {
-      "name": "TestNativeReputation",
+      "name": "Reputation",
+      "contractName": "DemoReputation",
+      "dao": "organs",
+      "mapping": "Reputation"
+    },
+    {
+      "name": "Reputation",
       "contractName": "Reputation",
       "dao": "test",
       "mapping": "Reputation"

@@ -115,7 +115,6 @@ describe('ContributionReward', () => {
             }
         }`);
 
-        expect(contributionRewardNewContributionProposals.length).toEqual(2);
         expect(contributionRewardNewContributionProposals).toContainEqual({
             avatar: avatar.options.address.toLowerCase(),
             beneficiary: accounts[1].address.toLowerCase(),

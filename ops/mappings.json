@@ -26,6 +26,12 @@
     },
     {
       "name": "Reputation",
+      "contractName": "DemoReputation",
+      "dao": "organs",
+      "mapping": "Reputation"
+    },
+    {
+      "name": "Reputation",
       "contractName": "Reputation",
       "dao": "test",
       "mapping": "Reputation"

@@ -55,6 +55,7 @@ export function getContractAddresses() {
   return {
     ...addresses.private.dao,
     ...addresses.private.base,
+    ...addresses.private.organs,
     NativeToken: addresses.private.dao.DAOToken,
     NativeReputation: addresses.private.dao.Reputation,
   };

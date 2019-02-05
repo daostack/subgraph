@@ -13,8 +13,8 @@ import {
 
 import {
   ExecuteProposal,
+  ExpirationCallBounty,
   GenesisProtocol,
-  GPExecuteProposal,
   GPExecuteProposal,
   NewProposal,
   Redeem,
@@ -195,9 +195,13 @@ export function handleStateChange(event: StateChange): void {
   domain.handleStateChange(event);
 }
 
-export function handleExecutionStateChange(event: GPExecuteProposal): void {
-  domain.handleExecutionStateChange(event);
+export function handleExpirationCallBounty(event: ExpirationCallBounty): void {
+  // todo
 }
+
+// export function handleExecutionStateChange(event: GPExecuteProposal): void {
+//   domain.handleExecutionStateChange(event);
+// }
 
 export function handleRedeemDaoBounty(event: RedeemDaoBounty): void {
   let rewardType = new Uint8Array(1);

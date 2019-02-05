@@ -19,7 +19,7 @@ export function getProposal(id: string): Proposal {
   if (proposal == null) {
     proposal = new Proposal(id);
 
-    proposal.stage = 'Open';
+    proposal.stage = 'Queued';
 
     proposal.votesFor = BigInt.fromI32(0);
     proposal.votesAgainst = BigInt.fromI32(0);
@@ -65,7 +65,7 @@ export function updateProposal(
   updateProposalState(proposal, state);
   }
 
-export function updateProposalState(proposal: Proposal, state: number) {
+export function updateProposalState(proposal: Proposal, state: number): void {
   // enum ProposalState { None, ExpiredInQueue, Executed, Queued, PreBoosted, Boosted, QuietEndingPeriod}
   if (state === 1) {
     // Closed

@@ -10,13 +10,6 @@ enum Outcome {
 	Fail
 }
 
-enum Stage {
-	Open
-	Boosted
-	QuietEndingPeriod
-	Resolved
-}
-
 type DAO @entity {
 	id: ID!
 	name: String!
@@ -46,7 +39,7 @@ type Proposal @entity {
 	id: ID!
 	dao: DAO!
 	proposer: Bytes!
-	stage: Stage!
+	stage: String!
 	createdAt: BigInt!
 	boostedAt: BigInt
 	quietEndingPeriodBeganAt: BigInt

@@ -199,3 +199,8 @@ export function handleStateChange(event: StateChange): void {
   let proposal = getProposal(event.params._proposalId.toHex());
   updateProposalState(proposal, event.params._proposalState);
 }
+//
+// export function handleExecutionStateChange(event: GPExecuteProposal): void {
+//   let proposal = getProposal(event.params._proposalId.toHex());
+//   updateProposalState(proposal, event.params._proposalState);
+// }

@@ -31,6 +31,12 @@
       "mapping": "Reputation"
     },
     {
+      "name": "DAOToken",
+      "contractName": "DemoDAOToken",
+      "dao": "organs",
+      "mapping": "DAOToken"
+    },
+    {
       "name": "Reputation",
       "contractName": "Reputation",
       "dao": "test",

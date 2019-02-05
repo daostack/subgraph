@@ -102,6 +102,6 @@ describe('DAOToken', () => {
       to: accounts[3].address.toLowerCase(),
       value: '50',
     });
-    await daotoken.methods.transferOwnership(tokenOwner).send({from:accounts[1].address});
+    await daotoken.methods.transferOwnership(tokenOwner).send({from: accounts[1].address});
   }, 20000);
 });

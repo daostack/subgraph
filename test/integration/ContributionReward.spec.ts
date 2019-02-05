@@ -195,7 +195,6 @@ describe('ContributionReward', () => {
             }
         }`);
 
-        expect(contributionRewardProposalResolveds.length).toEqual(1);
         expect(contributionRewardProposalResolveds).toContainEqual({
             avatar: avatar.options.address.toLowerCase(),
             contract: contributionReward.options.address.toLowerCase(),

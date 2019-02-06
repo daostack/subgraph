@@ -13,6 +13,7 @@ import {
 
 import {
   ExecuteProposal,
+  ExpirationCallBounty,
   GenesisProtocol,
   GPExecuteProposal,
   NewProposal,
@@ -20,6 +21,7 @@ import {
   RedeemDaoBounty,
   RedeemReputation,
   Stake,
+  StateChange,
   VoteProposal,
 } from '../../types/GenesisProtocol/GenesisProtocol';
 
@@ -187,6 +189,14 @@ export function handleRedeem(event: Redeem): void {
     rewardType as ByteArray,
     'gpGen',
   );
+}
+
+export function handleStateChange(event: StateChange): void {
+  domain.handleStateChange(event);
+}
+
+export function handleExpirationCallBounty(event: ExpirationCallBounty): void {
+  // todo
 }
 
 export function handleRedeemDaoBounty(event: RedeemDaoBounty): void {

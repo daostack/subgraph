@@ -24,3 +24,7 @@ eventHandlers:
     handler: handleGPExecuteProposal
   - event: ExecuteProposal(bytes32,address,uint256,uint256)
     handler: handleExecuteProposal
+  - event: StateChange(bytes32,uint8)
+    handler: handleStateChange
+  - event: ExpirationCallBounty(bytes32,address,uint256)
+    handler: handleExpirationCallBounty

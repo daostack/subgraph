@@ -11,6 +11,7 @@ import {
   ExecuteProposal,
   NewProposal,
   Stake,
+  StateChange,
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
@@ -28,6 +29,8 @@ import {
   updateGPProposal,
   updateProposal,
   updateProposalExecution,
+  updateProposalExecutionState,
+  updateProposalState,
 } from './proposal';
 import {
   getReputation,
@@ -189,6 +192,13 @@ export function handleNativeTokenTransfer(event: Transfer): void {
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
-  let proposal = getProposal(event.params._proposalId.toHex());
-  updateProposal(proposal, event.address, event.params._proposalId);
+   // todo
+}
+
+export function handleStateChange(event: StateChange): void {
+  updateProposalState(event.params._proposalId.toHex(), event.params._proposalState);
+}
+
+export function handleExecutionStateChange(event: GPExecuteProposal): void {
+  updateProposalExecutionState(event.params._proposalId.toHex(), event.params._executionState);
 }

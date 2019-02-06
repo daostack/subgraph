@@ -91,6 +91,7 @@ describe('GenesisProtocol', () => {
     ],
     gpParams.voteOnBehalf,
   );
+
     const paramsHash = await setParams.call();
     await setParams.send();
 
@@ -101,7 +102,6 @@ describe('GenesisProtocol', () => {
     await daoToken.methods
       .approve(genesisProtocol.options.address, '100')
       .send();
-
     await reputation.methods.mint(accounts[0].address, '100').send();
     await reputation.methods.mint(accounts[1].address, '100').send();
     const propose = await genesisProtocolCallbacks.methods.propose(
@@ -111,13 +111,11 @@ describe('GenesisProtocol', () => {
       accounts[1].address,
       nullAddress,
     );
-
     const proposalId = await propose.call();
 
     const txs = [];
 
     txs.push(await propose.send());
-
     // boost the proposal
     txs.push(
       await genesisProtocol.methods.stake(proposalId, 1 /* YES */, 20).send(),

@@ -198,7 +198,6 @@ describe('Domain Layer', () => {
           .toLocaleString('fullwide', {useGrouping: false}),
       },
     });
-
     // check reputation reputationHolders
     const { reputationHolders } = await sendQuery(`{
       reputationHolders (where: {contract: "${NativeReputation.toLowerCase()}"}){
@@ -210,7 +209,6 @@ describe('Domain Layer', () => {
 
     // there are 6 founders that have reputation in this DAO
     expect(reputationHolders.length).toEqual(6);
-
     const { tokenHolders } = await sendQuery(`{
       tokenHolders (where: {contract: "${NativeToken.toLowerCase()}"}){
         contract,
@@ -247,7 +245,6 @@ describe('Domain Layer', () => {
 
       return { proposalId, timestamp };
     }
-
     const [PASS, FAIL] = [1, 2];
     async function vote({ proposalId, outcome, voter }) {
       const { blockNumber } = await genesisProtocol.methods
@@ -256,7 +253,6 @@ describe('Domain Layer', () => {
       const { timestamp } = await web3.eth.getBlock(blockNumber);
       return timestamp;
     }
-
     async function stake({ proposalId, outcome, amount, staker }) {
       const stakingToken = new web3.eth.Contract(
         DAOToken.abi,
@@ -359,7 +355,7 @@ describe('Domain Layer', () => {
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,
-      stage: 'Open',
+      stage: 'Queued',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
@@ -403,14 +399,13 @@ describe('Domain Layer', () => {
       outcome: FAIL,
       voter: accounts[0].address,
     });
-
     expectedVotesCount++;
     await waitUntilTrue(voteIsIndexed);
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,
-      stage: 'Open',
+      stage: 'Queued',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
@@ -472,7 +467,7 @@ describe('Domain Layer', () => {
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,
-      stage: 'Open',
+      stage: 'Queued',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
@@ -544,7 +539,7 @@ describe('Domain Layer', () => {
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,
-      stage: 'Open',
+      stage: 'Queued',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
@@ -609,6 +604,18 @@ describe('Domain Layer', () => {
         staker: accounts[1].address.toLowerCase(),
       },
     ]));
+     /// stake to boost
+    const s3Timestamp = await stake({
+       proposalId: p1,
+       outcome: PASS,
+       amount: web3.utils.toWei('300'),
+       staker: accounts[1].address,
+     });
+
+    proposal = (await sendQuery(getProposal)).proposal;
+    expect(proposal.stage).toEqual('PreBoosted');
+
+     //
     const v2Timestamp = await vote({
       proposalId: p1,
       outcome: PASS,
@@ -649,7 +656,7 @@ describe('Domain Layer', () => {
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,
-      stage: 'Resolved',
+      stage: 'Executed',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
@@ -661,9 +668,9 @@ describe('Domain Layer', () => {
       votesAgainst: '1000000000000000000000',
       winningOutcome: 'Pass',
 
-      stakesFor: '100000000000000000000',
+      stakesFor: '400000000000000000000',
       stakesAgainst: '100000000100000000000',
-      confidence: '0',
+      confidence: '3',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -699,6 +706,15 @@ describe('Domain Layer', () => {
       {
         amount: '100000000000000000000',
         createdAt: s2Timestamp.toString(),
+        outcome: 'Pass',
+        proposal: {
+          id: p1,
+        },
+        staker: accounts[1].address.toLowerCase(),
+      },
+      {
+        amount: '300000000000000000000',
+        createdAt: s3Timestamp.toString(),
         outcome: 'Pass',
         proposal: {
           id: p1,
@@ -748,4 +764,58 @@ describe('Domain Layer', () => {
       reputation: '1000000000000000000000',
     });
   }, 100000);
+
+  it('proposal states', async () => {
+    const getMigrationDao = `{
+      dao(id: "${addresses.Avatar.toLowerCase()}") {
+        id
+        name
+        nativeToken {
+          id
+          dao {
+            id
+          }
+        }
+        nativeReputation {
+          id
+          dao {
+            id
+          }
+        }
+        membersCount
+      }
+    }`;
+    let dao = (await sendQuery(getMigrationDao)).dao;
+    expect(dao).toMatchObject({
+      id: addresses.Avatar.toLowerCase(),
+      name: 'Genesis Test',
+      nativeToken: {
+        id: addresses.NativeToken.toLowerCase(),
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
+        },
+      },
+      nativeReputation: {
+        id: addresses.NativeReputation.toLowerCase(),
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
+        },
+      },
+      membersCount: '6',
+    });
+
+    const getMigrationDaoMembers = `{
+      dao(id: "${addresses.Avatar.toLowerCase()}") {
+        members {
+          reputation
+          tokens
+        }
+      }
+    }`;
+    let members = (await sendQuery(getMigrationDaoMembers)).dao.members;
+    expect(members).toContainEqual({
+      reputation: '1000000000000000000000',
+      tokens: '1000000000000000000000',
+    });
+  });
 });

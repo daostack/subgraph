@@ -29,6 +29,7 @@ import {
   updateGPProposal,
   updateProposal,
   updateProposalExecution,
+  updateProposalExecutionState,
   updateProposalState,
 } from './proposal';
 import {
@@ -191,16 +192,13 @@ export function handleNativeTokenTransfer(event: Transfer): void {
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
-  let proposal = getProposal(event.params._proposalId.toHex());
-  updateProposal(proposal, event.address, event.params._proposalId);
+   // todo
 }
 
 export function handleStateChange(event: StateChange): void {
-  let proposal = getProposal(event.params._proposalId.toHex());
-  updateProposalState(proposal, event.params._proposalState);
+  updateProposalState(event.params._proposalId.toHex(), event.params._proposalState);
 }
-//
-// export function handleExecutionStateChange(event: GPExecuteProposal): void {
-//   let proposal = getProposal(event.params._proposalId.toHex());
-//   updateProposalState(proposal, event.params._proposalState);
-// }
+
+export function handleExecutionStateChange(event: GPExecuteProposal): void {
+  updateProposalExecutionState(event.params._proposalId.toHex(), event.params._executionState);
+}

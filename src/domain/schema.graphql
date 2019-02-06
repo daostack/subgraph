@@ -45,6 +45,7 @@ type Proposal @entity {
 	quietEndingPeriodBeganAt: BigInt
 	executedAt: BigInt
 	votingMachine: Bytes!
+	executionState: String!
 
 	descriptionHash: String!
 	title: String

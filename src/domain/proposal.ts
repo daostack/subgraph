@@ -20,6 +20,7 @@ export function getProposal(id: string): Proposal {
     proposal = new Proposal(id);
 
     proposal.stage = 'Queued';
+    proposal.executionState = 'None';
 
     proposal.votesFor = BigInt.fromI32(0);
     proposal.votesAgainst = BigInt.fromI32(0);
@@ -62,10 +63,16 @@ export function updateProposal(
   // proposal.state
 
   let state = gpProposal.value2;
-  updateProposalState(proposal, state);
+  setProposalState(proposal, state);
   }
 
-export function updateProposalState(proposal: Proposal, state: number): void {
+export function updateProposalState(id: string, state: number): void {
+   let proposal = getProposal(id);
+   setProposalState(proposal, state);
+   saveProposal(proposal);
+}
+
+export function setProposalState(proposal: Proposal, state: number): void {
   // enum ProposalState { None, ExpiredInQueue, Executed, Queued, PreBoosted, Boosted, QuietEndingPeriod}
   if (state === 1) {
     // Closed
@@ -163,5 +170,22 @@ export function updateProposalExecution(
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.executedAt = timestamp;
+  saveProposal(proposal);
+}
+
+export function updateProposalExecutionState(id: string, executionState: number): void {
+  let proposal = getProposal(id);
+  // enum ExecutionState { None, QueueBarCrossed, QueueTimeOut, PreBoostedBarCrossed, BoostedTimeOut, BoostedBarCrossed}
+  if (state === 1) {
+    proposal.executionState = 'QueueBarCrossed';
+  } else if (state === 2) {
+    proposal.executionState = 'QueueTimeOut';
+  } else if (state === 3) {
+    proposal.executionState = 'PreBoostedBarCrossed';
+  } else if (state === 4) {
+    proposal.executionState = 'BoostedTimeOut';
+  } else if (state === 5) {
+    proposal.executionState = 'BoostedBarCrossed';
+  }
   saveProposal(proposal);
 }

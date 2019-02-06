@@ -199,10 +199,6 @@ export function handleExpirationCallBounty(event: ExpirationCallBounty): void {
   // todo
 }
 
-// export function handleExecutionStateChange(event: GPExecuteProposal): void {
-//   domain.handleExecutionStateChange(event);
-// }
-
 export function handleRedeemDaoBounty(event: RedeemDaoBounty): void {
   let rewardType = new Uint8Array(1);
   rewardType[0] = 6;

@@ -9,11 +9,6 @@ DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 
 ## Testing
 
-If you have changed `package.json` (or pulled a new version from github), you need to rebuild the containers:
-```sh
-docker-compose build
-```
-
 Run the tests in the host container:
 
 ```sh

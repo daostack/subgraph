@@ -19,7 +19,7 @@ describe('DAOToken', () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
     opts = await getOptions(web3);
-    daotoken = new web3.eth.Contract(DAOToken.abi, addresses.DAOToken, opts);
+    daotoken = new web3.eth.Contract(DAOToken.abi, addresses.GEN, opts);
   });
 
   it('Sanity', async () => {

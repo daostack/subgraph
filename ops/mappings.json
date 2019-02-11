@@ -1,8 +1,8 @@
 {
   "mappings": [
     {
-      "name": "DAOToken",
-      "contractName": "DAOToken",
+      "name": "GEN",
+      "contractName": "GEN",
       "dao": "base",
       "mapping": "DAOToken"
     },

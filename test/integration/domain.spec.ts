@@ -236,7 +236,7 @@ describe('Domain Layer', () => {
         descHash,
         rep,
         [tokens, eth, external, periodLength, periods],
-        addresses.DAOToken,
+        addresses.GEN,
         beneficiary,
       );
       const proposalId = await prop.call();
@@ -256,7 +256,7 @@ describe('Domain Layer', () => {
     async function stake({ proposalId, outcome, amount, staker }) {
       const stakingToken = new web3.eth.Contract(
         DAOToken.abi,
-        addresses.DAOToken,
+        addresses.GEN,
         opts,
       );
       await stakingToken.methods.mint(staker, amount).send();
@@ -376,7 +376,7 @@ describe('Domain Layer', () => {
       reputationReward: '10',
       nativeTokenReward: '10',
       externalTokenReward: '10',
-      externalToken: addresses.DAOToken.toLowerCase(),
+      externalToken: addresses.GEN.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
 
@@ -435,7 +435,7 @@ describe('Domain Layer', () => {
       reputationReward: '10',
       nativeTokenReward: '10',
       externalTokenReward: '10',
-      externalToken: addresses.DAOToken.toLowerCase(),
+      externalToken: addresses.GEN.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
 
@@ -507,7 +507,7 @@ describe('Domain Layer', () => {
       reputationReward: '10',
       nativeTokenReward: '10',
       externalTokenReward: '10',
-      externalToken: addresses.DAOToken.toLowerCase(),
+      externalToken: addresses.GEN.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
 
@@ -567,7 +567,7 @@ describe('Domain Layer', () => {
       reputationReward: '10',
       nativeTokenReward: '10',
       externalTokenReward: '10',
-      externalToken: addresses.DAOToken.toLowerCase(),
+      externalToken: addresses.GEN.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
 
@@ -675,7 +675,7 @@ describe('Domain Layer', () => {
       reputationReward: '10',
       nativeTokenReward: '10',
       externalTokenReward: '10',
-      externalToken: addresses.DAOToken.toLowerCase(),
+      externalToken: addresses.GEN.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
 

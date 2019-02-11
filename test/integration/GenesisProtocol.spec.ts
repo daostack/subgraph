@@ -39,7 +39,7 @@ describe('GenesisProtocol', () => {
       opts,
     );
 
-    daoToken = new web3.eth.Contract(DAOToken.abi, addresses.DAOToken, opts);
+    daoToken = new web3.eth.Contract(DAOToken.abi, addresses.GEN, opts);
 
     genesisProtocolCallbacks = await new web3.eth.Contract(
       GenesisProtocolCallbacks.abi,

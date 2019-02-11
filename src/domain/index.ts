@@ -115,7 +115,6 @@ export function handleVoteProposal(event: VoteProposal): void {
     eventId(event),
     event.block.timestamp,
     event.params._voter,
-    event.params._organization,
     event.params._proposalId.toHex(),
     parseOutcome(event.params._vote),
     event.params._reputation,

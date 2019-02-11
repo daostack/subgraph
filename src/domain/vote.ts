@@ -18,14 +18,13 @@ export function insertVote(
   eventId: string,
   timestamp: BigInt,
   voter: Address,
-  avatarAddress: Address,
   proposalId: string,
   outcome: string,
   reputation: BigInt,
 ): void {
   let vote = getVote(eventId);
   vote.createdAt = timestamp;
-  vote.member = getMember(voter, avatarAddress).id;
+  vote.voter = voter;
   vote.reputation = reputation;
   vote.proposal = proposalId;
   vote.outcome = outcome;

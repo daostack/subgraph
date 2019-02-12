@@ -102,7 +102,7 @@ type ProposalStake @entity {
 type ProposalVote @entity {
 	id: ID!
 	createdAt: BigInt!
-	member: Member!
+	voter: Bytes!
 	proposal: Proposal!
 	outcome: Outcome!
 	reputation: BigInt!
@@ -114,8 +114,6 @@ type Member @entity {
 	address: Bytes!
 	reputation: BigInt!
 	tokens: BigInt
-
-	votes: [ProposalVote!] @derivedFrom(field: "member")
 }
 
 enum RewardReason {

@@ -166,10 +166,14 @@ export function updateCRProposal(
 
 export function updateProposalExecution(
   proposalId: Bytes,
+  totalReputation: BigInt,
   timestamp: BigInt,
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.executedAt = timestamp;
+  if (totalReputation != null) {
+    proposal.totalRepWhenExecuted = totalReputation;
+  }
   saveProposal(proposal);
 }
 

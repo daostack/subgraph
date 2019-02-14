@@ -122,7 +122,7 @@ export function handleVoteProposal(event: VoteProposal): void {
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
-  updateProposalExecution(event.params._proposalId, event.block.timestamp);
+  updateProposalExecution(event.params._proposalId, null, event.block.timestamp);
 }
 
 export function handleRegisterScheme(event: RegisterScheme): void {
@@ -191,7 +191,7 @@ export function handleNativeTokenTransfer(event: Transfer): void {
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
-   // todo
+   updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
 }
 
 export function handleStateChange(event: StateChange): void {

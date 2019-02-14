@@ -191,7 +191,7 @@ export function handleNativeTokenTransfer(event: Transfer): void {
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
-   updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp)
+   updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
 }
 
 export function handleStateChange(event: StateChange): void {

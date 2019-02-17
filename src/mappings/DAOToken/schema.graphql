@@ -11,12 +11,12 @@ type TokenHolder @entity {
 	contract: Bytes!
 	address: Bytes!
 	balance: BigInt!
-	allowances: [Allowance!] @derivedFrom(field: "owner")
 }
 
 type Allowance @entity {
 	id: ID!
-	owner: TokenHolder!
+	contract: Bytes!
+	owner: Bytes!
 	spender: Bytes!
 	amount: BigInt!
 }

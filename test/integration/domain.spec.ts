@@ -290,6 +290,7 @@ describe('Domain Layer', () => {
             totalRepWhenExecuted
             proposer
             votingMachine
+            organizationId
 
             votes {
                 createdAt
@@ -314,6 +315,7 @@ describe('Domain Layer', () => {
             stakesFor
             stakesAgainst
             confidence
+            tokensNeededToPreBoost
 
             reputationReward
             nativeTokenReward
@@ -337,6 +339,11 @@ describe('Domain Layer', () => {
             voteOnBehalf
         }
     }`;
+
+    let orgId = web3.utils.soliditySha3(
+      { t: 'address', v: addresses.ContributionReward },
+      { t: 'address', v: addresses.Avatar },
+    );
 
     let expectedVotesCount = 0;
     const voteIsIndexed = async () => {
@@ -364,6 +371,7 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
+      organizationId: orgId,
 
       votes: [],
       votesFor: '0',
@@ -374,6 +382,7 @@ describe('Domain Layer', () => {
       stakesFor: '0',
       stakesAgainst: '100000000000',
       confidence: '0',
+      tokensNeededToPreBoost: '100000000000',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -415,6 +424,7 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
+      organizationId: orgId,
 
       votes: [
         {
@@ -434,6 +444,7 @@ describe('Domain Layer', () => {
       stakesFor: '0',
       stakesAgainst: '100000000000',
       confidence: '0',
+      tokensNeededToPreBoost: '100000000000',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -478,6 +489,7 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
+      organizationId: orgId,
 
       votes: [
         {
@@ -507,6 +519,7 @@ describe('Domain Layer', () => {
       stakesFor: '0',
       stakesAgainst: '100000000100000000000',
       confidence: '0',
+      tokensNeededToPreBoost: '100000000100000000000',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -551,6 +564,7 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
+      organizationId: orgId,
 
       votes: [
         {
@@ -568,6 +582,7 @@ describe('Domain Layer', () => {
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000100000000000',
       confidence: '0',
+      tokensNeededToPreBoost: '100000000000',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -669,6 +684,7 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: '6000000000000000000000',
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
+      organizationId: orgId,
 
       votesFor: '4000000000000000000000',
       votesAgainst: '1000000000000000000000',
@@ -677,6 +693,7 @@ describe('Domain Layer', () => {
       stakesFor: '400000000000000000000',
       stakesAgainst: '100000000100000000000',
       confidence: '3',
+      tokensNeededToPreBoost: null,
 
       reputationReward: '10',
       nativeTokenReward: '10',

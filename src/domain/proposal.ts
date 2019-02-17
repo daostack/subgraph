@@ -55,7 +55,16 @@ export function updateProposal(
       proposal.quietEndingPeriodBeganAt = gpTimes[1];
     }
   }
+
+  proposal.tokensNeededToPreBoost = gp.threshold(gpProposal.value6, proposal.organizationId)
+                                                                            .times(proposal.stakesAgainst)
+                                                                            .minus(proposal.stakesFor);
+
+  setProposalState(proposal, gpProposal.value2);
+
   proposal.votingMachine = gpAddress;
+
+  proposal.confidence = gp.score(proposalId);
 
   // proposal.winningVote
   proposal.winningOutcome = parseOutcome(gpProposal.value3);
@@ -64,7 +73,9 @@ export function updateProposal(
 
   let state = gpProposal.value2;
   setProposalState(proposal, state);
-  }
+
+  // return proposal;
+}
 
 export function updateProposalState(id: string, state: number): void {
    let proposal = getProposal(id);
@@ -74,7 +85,9 @@ export function updateProposalState(id: string, state: number): void {
 
 export function setProposalState(proposal: Proposal, state: number): void {
   // enum ProposalState { None, ExpiredInQueue, Executed, Queued, PreBoosted, Boosted, QuietEndingPeriod}
-  if (state === 1) {
+  if (state === 0) {
+    return;
+  } else if (state === 1) {
     // Closed
     proposal.stage = 'ExpiredInQueue';
   } else if (state === 2) {
@@ -83,6 +96,7 @@ export function setProposalState(proposal: Proposal, state: number): void {
   } else if (state === 3) {
     // PreBoosted
     proposal.stage = 'Queued';
+    return;
   } else if (state === 4) {
     // Boosted
     proposal.stage = 'PreBoosted';
@@ -93,6 +107,8 @@ export function setProposalState(proposal: Proposal, state: number): void {
     // QuietEndingPeriod
     proposal.stage = 'QuietEndingPeriod';
   }
+
+  proposal.tokensNeededToPreBoost = null;
 }
 
 export function updateGPProposal(
@@ -107,7 +123,9 @@ export function updateGPProposal(
   proposal.proposer = proposer;
   proposal.dao = avatarAddress.toHex();
   let params = gp.parameters(paramsHash);
+  let organizationId = gp.proposals(proposalId).value0;
 
+  proposal.organizationId = organizationId;
   proposal.votingMachine = gpAddress;
   proposal.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
   proposal.queuedVotePeriodLimit = params.value1; // queuedVotePeriodLimit
@@ -123,13 +141,12 @@ export function updateGPProposal(
   proposal.activationTime = params.value11; // activationTime
   proposal.voteOnBehalf = params.value12; // voteOnBehalf
   proposal.stakesAgainst = gp.proposals(proposalId).value9;
-  proposal.confidence = getProposalConfidence(proposal);
+  proposal.confidence = gp.score(proposalId);
+  proposal.tokensNeededToPreBoost = gp.threshold(paramsHash, organizationId)
+                                                                            .times(proposal.stakesAgainst)
+                                                                            .minus(proposal.stakesFor);
 
   saveProposal(proposal);
-}
-
-export function getProposalConfidence(proposal: Proposal): BigInt {
-  return proposal.stakesFor.div(proposal.stakesAgainst);
 }
 
 export function updateCRProposal(
@@ -180,16 +197,17 @@ export function updateProposalExecution(
 export function updateProposalExecutionState(id: string, executionState: number): void {
   let proposal = getProposal(id);
   // enum ExecutionState { None, QueueBarCrossed, QueueTimeOut, PreBoostedBarCrossed, BoostedTimeOut, BoostedBarCrossed}
-  if (state === 1) {
+  if (executionState === 1) {
     proposal.executionState = 'QueueBarCrossed';
-  } else if (state === 2) {
+  } else if (executionState === 2) {
     proposal.executionState = 'QueueTimeOut';
-  } else if (state === 3) {
+  } else if (executionState === 3) {
     proposal.executionState = 'PreBoostedBarCrossed';
-  } else if (state === 4) {
+  } else if (executionState === 4) {
     proposal.executionState = 'BoostedTimeOut';
-  } else if (state === 5) {
+  } else if (executionState === 5) {
     proposal.executionState = 'BoostedBarCrossed';
   }
+  proposal.tokensNeededToPreBoost = null;
   saveProposal(proposal);
 }

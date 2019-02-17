@@ -22,7 +22,6 @@ import { insertNewDAO } from './dao';
 import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {
   getProposal,
-  getProposalConfidence,
   parseOutcome,
   saveProposal,
   updateCRProposal,
@@ -80,14 +79,13 @@ export function handleNewContributionProposal(
 
 export function handleStake(event: Stake): void {
   let proposal = getProposal(event.params._proposalId.toHex());
-  updateProposal(proposal, event.address, event.params._proposalId);
   if (equals(event.params._vote, BigInt.fromI32(1))) {
     proposal.stakesFor = proposal.stakesFor.plus(event.params._amount);
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
 
-  proposal.confidence = getProposalConfidence(proposal);
+  updateProposal(proposal, event.address, event.params._proposalId);
 
   saveProposal(proposal);
   insertStake(
@@ -102,7 +100,7 @@ export function handleStake(event: Stake): void {
 
 export function handleVoteProposal(event: VoteProposal): void {
   let proposal = getProposal(event.params._proposalId.toHex());
-  updateProposal(proposal, event.address, event.params._proposalId);
+
   if (equals(event.params._vote, BigInt.fromI32(1))) {
     proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
   } else {
@@ -110,6 +108,9 @@ export function handleVoteProposal(event: VoteProposal): void {
       event.params._reputation,
     );
   }
+
+  updateProposal(proposal, event.address, event.params._proposalId);
+
   saveProposal(proposal);
   insertVote(
     eventId(event),

@@ -85,8 +85,8 @@ export function updateAllowance(contract: Bytes, owner: Bytes, spender: Bytes): 
 
   if (allowance == null) {
     allowance = new Allowance(id);
-
-    allowance.owner = crypto.keccak256(concat(contract, owner)).toHex();
+    allowance.token = contract;
+    allowance.owner = owner;
     allowance.spender = spender;
   }
   allowance.amount = allowanceAmount;

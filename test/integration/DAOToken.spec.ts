@@ -81,12 +81,12 @@ describe('DAOToken', () => {
       balance: await daotoken.methods.balanceOf(accounts[0].address).call(),
     });
 
-    expect(allowances).toEqual([{
+    expect(allowances).toContainEqual({
       token: daotoken.options.address.toLowerCase(),
       owner: accounts[0].address.toLowerCase(),
       spender: accounts[3].address.toLowerCase(),
       amount: '50',
-    }]);
+    });
 
     const { tokenTransfers } = await sendQuery(`{
       tokenTransfers {

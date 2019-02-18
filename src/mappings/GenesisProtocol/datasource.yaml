@@ -28,3 +28,5 @@ eventHandlers:
     handler: handleStateChange
   - event: ExpirationCallBounty(bytes32,address,uint256)
     handler: handleExpirationCallBounty
+  - event: ConfidenceLevelChange(bytes32,uint256)
+    handler: handleConfidenceLevelChange

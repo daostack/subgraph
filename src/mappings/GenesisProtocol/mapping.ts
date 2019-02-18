@@ -12,6 +12,7 @@ import {
 } from '@graphprotocol/graph-ts';
 
 import {
+  ConfidenceLevelChange,
   ExecuteProposal,
   ExpirationCallBounty,
   GenesisProtocol,
@@ -210,6 +211,10 @@ export function handleRedeemDaoBounty(event: RedeemDaoBounty): void {
     rewardType as ByteArray,
     'gpBounty',
   );
+}
+
+export function handleConfidenceLevelChange(event: ConfidenceLevelChange): void {
+  domain.confidenceLevelUpdate(event.params._proposalId, event.params._confidenceThreshold);
 }
 
 export function handleRedeemReputation(event: RedeemReputation): void {

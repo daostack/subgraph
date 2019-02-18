@@ -72,7 +72,7 @@ type Proposal @entity {
 	queuedVotePeriodLimit: BigInt!
 	boostedVotePeriodLimit: BigInt!
 	preBoostedVotePeriodLimit: BigInt!
-	thresholdConst: BigInt!
+	thresholdConst: Float!
 	limitExponentValue: BigInt!
 	quietEndingPeriod: BigInt!
 	proposingRepReward: BigInt!

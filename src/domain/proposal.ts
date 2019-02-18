@@ -1,8 +1,7 @@
-import { Address, BigInt, Bytes, crypto, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
-import { concat, equals } from '../utils';
-import { getMember } from './member';
+import { equals } from '../utils';
 
 export function parseOutcome(num: BigInt): string {
   if (equals(num, BigInt.fromI32(1))) {
@@ -131,7 +130,24 @@ export function updateGPProposal(
   proposal.queuedVotePeriodLimit = params.value1; // queuedVotePeriodLimit
   proposal.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
   proposal.preBoostedVotePeriodLimit = params.value3; // preBoostedVotePeriodLimit
-  proposal.thresholdConst = params.value4; // thresholdConst
+  const REAL_FBITS = 8;
+  let ct = params.value4;
+  let j = 0;
+  let iPart: BigInt = new BigInt();
+  let fPart: BigInt = new BigInt();
+  for (let i = 40; i < ct.length; i++) {
+    iPart[j] = ct[i];
+    j++; 
+  }
+  j = 0;
+  for (let i = 0; i < 40; i++) {
+    fPart[j] = ct[i];
+    j++;
+  }
+
+  fPart = fPart.div(BigInt.fromI32(0x100));
+
+  //proposal.thresholdConst = ct; // thresholdConst
   proposal.limitExponentValue = params.value5; // limitExponentValue
   proposal.quietEndingPeriod = params.value6; // quietEndingPeriod
   proposal.proposingRepReward = params.value7;

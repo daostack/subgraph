@@ -3,12 +3,11 @@ import {
   BigInt,
   ByteArray,
   crypto,
-  Entity,
   EthereumEvent,
   store,
   Value,
 } from '@graphprotocol/graph-ts';
-import {Debug } from './types/schema';
+import { Debug } from './types/schema';
 
 export function concat(a: ByteArray, b: ByteArray): ByteArray {
   let out = new Uint8Array(a.length + b.length);

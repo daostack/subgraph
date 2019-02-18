@@ -9,7 +9,6 @@ export function getDAO(id: string): DAO {
   let dao = store.get('DAO', id) as DAO;
   if (dao == null) {
     dao = new DAO(id);
-    dao.membersCount = BigInt.fromI32(0);
   }
 
   return dao;
@@ -27,6 +26,12 @@ export function decreaseDAOmembersCount(id: string): void {
   saveDAO(dao);
 }
 
+export function updateThreshold(id: string, threshold: BigInt): void {
+  let dao = getDAO(id);
+  dao.threshold = threshold;
+  saveDAO(dao);
+}
+
 export function saveDAO(dao: DAO): void {
   store.set('DAO', dao.id, dao);
 }
@@ -39,12 +44,14 @@ export function insertNewDAO(
   let org = uController.organizations(avatarAddress);
   let nativeTokenAddress = org.value0;
   let nativeReputationAddress = org.value1;
-
   let avatar = Avatar.bind(avatarAddress);
   let dao = getDAO(avatarAddress.toHex());
   dao.name = avatar.orgName().toString();
   dao.nativeToken = nativeTokenAddress.toHex();
   dao.nativeReputation = nativeReputationAddress.toHex();
+  dao.membersCount = BigInt.fromI32(0);
+  // 0x10000000000
+  dao.threshold =  BigInt.fromI32(1073741824).times(BigInt.fromI32(1024));
   saveDAO(dao);
 
   return dao;

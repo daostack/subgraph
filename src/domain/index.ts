@@ -1,7 +1,7 @@
 // Required for dynamic memory allocation in WASM / AssemblyScript
 import 'allocator/arena';
 
-import { Address, BigInt, Entity, store, Value } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
 import {
   NewContributionProposal,
   ProposalExecuted,
@@ -28,6 +28,7 @@ import {
   updateCRProposal,
   updateGPProposal,
   updateProposal,
+  updateProposalconfidence,
   updateProposalExecution,
   updateProposalExecutionState,
   updateProposalState,
@@ -125,6 +126,10 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   updateProposalExecution(event.params._proposalId, null, event.block.timestamp);
 }
 
+export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {
+  updateProposalconfidence(proposalId, confidenceThreshold);
+}
+
 export function handleRegisterScheme(event: RegisterScheme): void {
   // Detect the first register scheme event which indicates a new DAO
   let isFirstRegister = store.get(
@@ -195,7 +200,7 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
 }
 
 export function handleStateChange(event: StateChange): void {
-  updateProposalState(event.params._proposalId.toHex(), event.params._proposalState);
+  updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
 }
 
 export function handleExecutionStateChange(event: GPExecuteProposal): void {

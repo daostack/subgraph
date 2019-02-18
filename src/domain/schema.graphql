@@ -19,6 +19,7 @@ type DAO @entity {
 	members: [Member!] @derivedFrom(field: "dao")
 	membersCount: BigInt!
 	rewards: [Reward!] @derivedFrom(field: "dao")
+	threshold: BigInt!
 }
 
 type Rep @entity {
@@ -47,6 +48,8 @@ type Proposal @entity {
 	totalRepWhenExecuted: BigInt
 	votingMachine: Bytes!
 	executionState: String!
+	paramsHash: Bytes!
+	organizationId: Bytes!
 
 	descriptionHash: String!
 	title: String

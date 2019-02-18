@@ -2,6 +2,7 @@ import {
   getContractAddresses,
   getOptions,
   getWeb3,
+  increaseTime,
   sendQuery,
   waitUntilTrue,
 } from './util';
@@ -10,7 +11,7 @@ const ContributionReward = require('@daostack/arc/build/contracts/ContributionRe
 const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
 const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
 const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
-
+const REAL_FBITS = 40;
 describe('Domain Layer', () => {
   let web3;
   let addresses;
@@ -167,6 +168,7 @@ describe('Domain Layer', () => {
           }
           totalSupply
         }
+        threshold
       }
     }`;
     let dao;
@@ -197,6 +199,7 @@ describe('Domain Layer', () => {
           .reduce((x, y) => x + y)
           .toLocaleString('fullwide', {useGrouping: false}),
       },
+      threshold: Math.pow(2, REAL_FBITS).toString(),
     });
     // check reputation reputationHolders
     const { reputationHolders } = await sendQuery(`{
@@ -290,7 +293,9 @@ describe('Domain Layer', () => {
             totalRepWhenExecuted
             proposer
             votingMachine
-
+            dao {
+              threshold
+            }
             votes {
                 createdAt
                 proposal {
@@ -335,6 +340,8 @@ describe('Domain Layer', () => {
             daoBountyConst,
             activationTime,
             voteOnBehalf
+
+
         }
     }`;
 
@@ -351,8 +358,7 @@ describe('Domain Layer', () => {
     await waitUntilTrue(voteIsIndexed);
     await waitUntilTrue(stakeIsIndexed);
 
-    let proposal;
-    proposal = (await sendQuery(getProposal)).proposal;
+    let proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,
@@ -386,7 +392,7 @@ describe('Domain Layer', () => {
       queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
       boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
       preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
-      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** 40).toString(),
+      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** REAL_FBITS).toString(),
       quietEndingPeriod: gpParams.quietEndingPeriod,
       proposingRepReward: gpParams.proposingRepReward,
       votersReputationLossRatio: gpParams.votersReputationLossRatio,
@@ -415,7 +421,7 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
-
+      dao: { threshold : Math.pow(2, REAL_FBITS).toString()},
       votes: [
         {
           createdAt: v1Timestamp.toString(),
@@ -442,18 +448,6 @@ describe('Domain Layer', () => {
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
 
-      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
-      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
-      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
-      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
-      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** 40).toString(),
-      quietEndingPeriod: gpParams.quietEndingPeriod,
-      proposingRepReward: gpParams.proposingRepReward,
-      votersReputationLossRatio: gpParams.votersReputationLossRatio,
-      minimumDaoBounty: gpParams.minimumDaoBounty,
-      daoBountyConst: gpParams.daoBountyConst,
-      activationTime: gpParams.activationTime,
-      voteOnBehalf: gpParams.voteOnBehalf,
     });
 
     const s1Timestamp = await stake({
@@ -478,7 +472,7 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
-
+      dao: { threshold : Math.pow(2, REAL_FBITS).toString()},
       votes: [
         {
           createdAt: v1Timestamp.toString(),
@@ -514,19 +508,6 @@ describe('Domain Layer', () => {
       externalToken: addresses.GEN.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
-
-      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
-      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
-      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
-      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
-      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** 40).toString(),
-      quietEndingPeriod: gpParams.quietEndingPeriod,
-      proposingRepReward: gpParams.proposingRepReward,
-      votersReputationLossRatio: gpParams.votersReputationLossRatio,
-      minimumDaoBounty: gpParams.minimumDaoBounty,
-      daoBountyConst: gpParams.daoBountyConst,
-      activationTime: gpParams.activationTime,
-      voteOnBehalf: gpParams.voteOnBehalf,
     });
 
     const s2Timestamp = await stake({
@@ -551,7 +532,7 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
-
+      dao: { threshold : Math.pow(2, REAL_FBITS).toString()},
       votes: [
         {
           createdAt: v1Timestamp.toString(),
@@ -575,19 +556,6 @@ describe('Domain Layer', () => {
       externalToken: addresses.GEN.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
-
-      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
-      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
-      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
-      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
-      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** 40).toString(),
-      quietEndingPeriod: gpParams.quietEndingPeriod,
-      proposingRepReward: gpParams.proposingRepReward,
-      votersReputationLossRatio: gpParams.votersReputationLossRatio,
-      minimumDaoBounty: gpParams.minimumDaoBounty,
-      daoBountyConst: gpParams.daoBountyConst,
-      activationTime: gpParams.activationTime,
-      voteOnBehalf: gpParams.voteOnBehalf,
     });
     expect(new Set(proposal.stakes)).toEqual(new Set([
       {
@@ -619,12 +587,20 @@ describe('Domain Layer', () => {
 
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal.stage).toEqual('PreBoosted');
+    // boost it
 
-     //
+    await increaseTime(300000, web3);
+    // this will also shift the proposal to boosted phase
     const v2Timestamp = await vote({
       proposalId: p1,
       outcome: PASS,
       voter: accounts[1].address,
+    });
+
+    proposal = (await sendQuery(getProposal)).proposal;
+    expect(proposal).toMatchObject({
+      stage: 'Boosted',
+      dao : { threshold: ((Number(gpParams.thresholdConst) / 1000) * Math.pow(2, REAL_FBITS)).toString() },
     });
 
     expectedVotesCount++;
@@ -663,13 +639,13 @@ describe('Domain Layer', () => {
       descriptionHash: descHash,
       stage: 'Executed',
       createdAt: p1Creation.toString(),
-      boostedAt: null,
+      boostedAt: v2Timestamp.toString(),
       quietEndingPeriodBeganAt: null,
       executedAt: v5Timestamp.toString(),
       totalRepWhenExecuted: '6000000000000000000000',
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
-
+      dao: { threshold : Math.pow(2, REAL_FBITS).toString()},
       votesFor: '4000000000000000000000',
       votesAgainst: '1000000000000000000000',
       winningOutcome: 'Pass',
@@ -684,19 +660,6 @@ describe('Domain Layer', () => {
       externalToken: addresses.GEN.toLowerCase(),
       ethReward: '10',
       beneficiary: accounts[1].address.toLowerCase(),
-
-      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
-      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
-      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
-      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
-      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** 40).toString(),
-      quietEndingPeriod: gpParams.quietEndingPeriod,
-      proposingRepReward: gpParams.proposingRepReward,
-      votersReputationLossRatio: gpParams.votersReputationLossRatio,
-      minimumDaoBounty: gpParams.minimumDaoBounty,
-      daoBountyConst: gpParams.daoBountyConst,
-      activationTime: gpParams.activationTime,
-      voteOnBehalf: gpParams.voteOnBehalf,
     });
 
     expect(new Set(proposal.stakes)).toEqual(new Set([

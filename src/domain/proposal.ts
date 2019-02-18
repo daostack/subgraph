@@ -1,7 +1,8 @@
 import { Address, BigInt, Bytes, crypto, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { Proposal } from '../types/schema';
+import { Proposal, ProposalVote, Reward } from '../types/schema';
 import { concat, equals } from '../utils';
+import { updateThreshold } from './dao';
 import { getMember } from './member';
 
 export function parseOutcome(num: BigInt): string {
@@ -66,8 +67,16 @@ export function updateProposal(
   setProposalState(proposal, state);
   }
 
-export function updateProposalState(id: string, state: number): void {
-   let proposal = getProposal(id);
+export function updateProposalconfidence(id: Bytes, confidence: BigInt): void {
+   let proposal = getProposal(id.toHex());
+   proposal.confidence = confidence;
+   saveProposal(proposal);
+}
+
+export function updateProposalState(id: Bytes, state: number, gpAddress: Address): void {
+   let gp = GenesisProtocol.bind(gpAddress);
+   let proposal = getProposal(id.toHex());
+   updateThreshold(proposal.dao, gp.threshold(proposal.paramsHash, proposal.organizationId));
    setProposalState(proposal, state);
    saveProposal(proposal);
 }
@@ -124,6 +133,8 @@ export function updateGPProposal(
   proposal.voteOnBehalf = params.value12; // voteOnBehalf
   proposal.stakesAgainst = gp.proposals(proposalId).value9;
   proposal.confidence = getProposalConfidence(proposal);
+  proposal.paramsHash = paramsHash;
+  proposal.organizationId = gp.proposals(proposalId).value0;
 
   saveProposal(proposal);
 }
@@ -163,6 +174,31 @@ export function updateCRProposal(
   proposal.descriptionHash = descriptionHash;
   saveProposal(proposal);
 }
+
+// export function updateProposalExecution(
+//   proposalId: Bytes,
+//   timestamp: BigInt,
+// ): void {
+//   let proposal = getProposal(proposalId.toHex());
+//   proposal.executedAt = timestamp;
+//   let voters: string[] = proposal.votes as string[];
+//   for (let i = 0; i < voters.length; i++) {
+//     let proposalVote = store.get('ProposalVote', voters[i]) as ProposalVote;
+//     let voterAddress = store.get('Member', proposalVote.member).address;
+//     let uniqueId = i.toString();
+//     let reward = new Reward(uniqueId);
+//     reward.beneficiary = voterAddress;
+//     reward.proposal = proposal.id;
+//     //reward.reason = ;
+//     let genesisProtocol = GenesisProtocol.bind(address);
+//     reward.amount = 0;
+//     reward.redeemed = 0;
+//
+//     proposal.rewards.push();
+//   }
+//
+//   saveProposal(proposal);
+// }
 
 export function updateProposalExecution(
   proposalId: Bytes,

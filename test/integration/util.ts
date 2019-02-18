@@ -92,3 +92,27 @@ export async function waitUntilTrue(test: () => Promise<boolean> | boolean) {
     })();
   });
 }
+
+export const increaseTime = async function(duration, web3) {
+  const id = await Date.now();
+  web3.providers.HttpProvider.prototype.sendAsync = web3.providers.HttpProvider.prototype.send;
+
+  return new Promise((resolve, reject) => {
+    web3.currentProvider.sendAsync({
+      jsonrpc: '2.0',
+      method: 'evm_increaseTime',
+      params: [duration],
+      id,
+    }, (err1) => {
+      if (err1) { return reject(err1); }
+
+      web3.currentProvider.sendAsync({
+        jsonrpc: '2.0',
+        method: 'evm_mine',
+        id: id + 1,
+      }, (err2, res) => {
+        return err2 ? reject(err2) : resolve(res);
+      });
+    });
+  });
+};

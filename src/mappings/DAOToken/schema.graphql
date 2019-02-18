@@ -15,7 +15,7 @@ type TokenHolder @entity {
 
 type Allowance @entity {
 	id: ID!
-	contract: Bytes!
+	token: Bytes!
 	owner: Bytes!
 	spender: Bytes!
 	amount: BigInt!

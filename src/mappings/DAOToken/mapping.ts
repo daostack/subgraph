@@ -85,7 +85,7 @@ export function updateAllowance(contract: Bytes, owner: Bytes, spender: Bytes): 
 
   if (allowance == null) {
     allowance = new Allowance(id);
-    allowance.contract = contract;
+    allowance.token = contract;
     allowance.owner = owner;
     allowance.spender = spender;
   }

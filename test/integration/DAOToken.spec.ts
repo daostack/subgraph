@@ -65,7 +65,7 @@ describe('DAOToken', () => {
 
     const { allowances } = await sendQuery(`{
       allowances {
-        contract
+        token
         owner {
           address
         }
@@ -82,7 +82,7 @@ describe('DAOToken', () => {
     });
 
     expect(allowances).toEqual([{
-      contract: daotoken.options.address.toLowerCase(),
+      token: daotoken.options.address.toLowerCase(),
       owner: accounts[0].address.toLowerCase(),
       spender: accounts[3].address.toLowerCase(),
       amount: '50',

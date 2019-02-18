@@ -22,7 +22,7 @@
 		"docker:logs": "docker-compose logs --follow",
 		"jest": "jest --runInBand --forceExit",
 		"lint": "tslint -c tslint.json 'src//**/*.ts' -e 'src//types/**/*.ts' && tslint -c tslint.json 'test/**/*.ts'",
-		"migrate": "node ops/deployDaoStack.js",
+		"migrate": "node ops/migrate.js",
 		"test": "npm run deploy && jest --runInBand --forceExit",
 		"test:watch": "npm run test -- --watch"
 	},

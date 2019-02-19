@@ -5,6 +5,7 @@ import {
   increaseTime,
   sendQuery,
   waitUntilTrue,
+  writeProposalIPFS,
 } from './util';
 
 const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
@@ -223,8 +224,20 @@ describe('Domain Layer', () => {
     // there are 6 founders that have tokens in this DAO
     expect(tokenHolders.length).toEqual(6);
 
-    const descHash =
-      '0x000000000000000000000000000000000000000000000000000000000000abcd';
+    // Save proposal data to IPFS
+
+    let proposalIPFSData = {
+      description: 'Just eat them',
+      title: 'A modest proposal',
+      url: 'http://swift.org/modest',
+    };
+
+    let proposalDescription = proposalIPFSData.description;
+    let proposalTitle = proposalIPFSData.title;
+    let proposalUrl = proposalIPFSData.url;
+
+    const descHash = await writeProposalIPFS(proposalIPFSData);
+
     async function propose({
       rep,
       tokens,
@@ -285,6 +298,9 @@ describe('Domain Layer', () => {
         proposal(id: "${p1}") {
             id
             descriptionHash
+            title
+            description
+            url
             stage
             createdAt
             preBoostedAt
@@ -341,8 +357,6 @@ describe('Domain Layer', () => {
             daoBountyConst,
             activationTime,
             voteOnBehalf
-
-
         }
     }`;
 
@@ -363,6 +377,9 @@ describe('Domain Layer', () => {
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,
+      title: proposalTitle,
+      description: proposalDescription,
+      url: proposalUrl,
       stage: 'Queued',
       createdAt: p1Creation.toString(),
       boostedAt: null,

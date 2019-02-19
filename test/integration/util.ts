@@ -1,7 +1,10 @@
 const path = require('path');
 require('dotenv').config();
+const IPFSClient = require('ipfs-http-client');
+
 process.env = {
   ethereum: 'http://127.0.0.1:8545',
+  ipfs: '/ip4/127.0.0.1/tcp/5001',
   node_http: 'http://127.0.0.1:8000/subgraphs/name/daostack',
   node_ws: 'http://127.0.0.1:8001/subgraphs/name/daostack',
   test_mnemonic:
@@ -17,7 +20,7 @@ import axios from 'axios';
 import * as HDWallet from 'hdwallet-accounts';
 const Web3 = require('web3');
 
-const { node_ws, node_http, ethereum, test_mnemonic } = process.env;
+const { node_ws, node_http, ethereum, ipfs, test_mnemonic } = process.env;
 
 export async function sendQuery(q: string, maxDelay = 1000) {
   await new Promise((res, rej) => setTimeout(res, maxDelay));
@@ -67,6 +70,13 @@ export async function getOptions(web3) {
     from: web3.eth.defaultAccount,
     gas: block.gasLimit - 100000,
   };
+}
+
+export async function writeProposalIPFS(data: any) {
+  const ipfsClient = IPFSClient(ipfs);
+  const ipfsResponse = await ipfsClient.add(new Buffer(JSON.stringify(data)));
+  
+  return ipfsResponse[0].path;
 }
 
 export function padZeros(str: string, max = 36) {

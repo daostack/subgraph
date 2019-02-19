@@ -75,6 +75,17 @@ describe('Domain Layer', () => {
       reputation: '1000000000000000000000',
       tokens: '1000000000000000000000',
     });
+    const getMigrationDaoMembersAddress = `{
+      dao(id: "${addresses.Avatar.toLowerCase()}") {
+        members {
+          address
+        }
+      }
+    }`;
+    members = (await sendQuery(getMigrationDaoMembersAddress)).dao.members;
+    expect(members).toContainEqual({
+      address: addresses.Avatar.toLowerCase(),
+    });
   });
 
   it('Sanity', async () => {
@@ -736,58 +747,4 @@ describe('Domain Layer', () => {
       reputation: '1000000000000000000000',
     });
   }, 100000);
-
-  it('proposal states', async () => {
-    const getMigrationDao = `{
-      dao(id: "${addresses.Avatar.toLowerCase()}") {
-        id
-        name
-        nativeToken {
-          id
-          dao {
-            id
-          }
-        }
-        nativeReputation {
-          id
-          dao {
-            id
-          }
-        }
-        membersCount
-      }
-    }`;
-    let dao = (await sendQuery(getMigrationDao)).dao;
-    expect(dao).toMatchObject({
-      id: addresses.Avatar.toLowerCase(),
-      name: 'Genesis Test',
-      nativeToken: {
-        id: addresses.NativeToken.toLowerCase(),
-        dao: {
-          id: addresses.Avatar.toLowerCase(),
-        },
-      },
-      nativeReputation: {
-        id: addresses.NativeReputation.toLowerCase(),
-        dao: {
-          id: addresses.Avatar.toLowerCase(),
-        },
-      },
-      membersCount: '6',
-    });
-
-    const getMigrationDaoMembers = `{
-      dao(id: "${addresses.Avatar.toLowerCase()}") {
-        members {
-          reputation
-          tokens
-        }
-      }
-    }`;
-    let members = (await sendQuery(getMigrationDaoMembers)).dao.members;
-    expect(members).toContainEqual({
-      reputation: '1000000000000000000000',
-      tokens: '1000000000000000000000',
-    });
-  });
 });

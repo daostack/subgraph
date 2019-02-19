@@ -71,4 +71,4 @@ In order to add support for a new contract follow these steps:
          map of solidity event signatures to event handlers in mapping code.
    4. `test/integration/<contract name>.spec.ts`
 
-3. (Optionally) add a deployment step for your contract in `ops/deployDaoStack.js` that will run before testing.
+3. (Optionally) add a deployment step for your contract in `ops/migrate.js` that will run before testing.

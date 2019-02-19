@@ -287,6 +287,7 @@ describe('Domain Layer', () => {
             descriptionHash
             stage
             createdAt
+            preBoostedAt
             boostedAt
             quietEndingPeriodBeganAt
             executedAt
@@ -318,7 +319,7 @@ describe('Domain Layer', () => {
             }
             stakesFor
             stakesAgainst
-            confidence
+            confidenceThreshold
 
             reputationReward
             nativeTokenReward
@@ -379,7 +380,7 @@ describe('Domain Layer', () => {
       stakes: [],
       stakesFor: '0',
       stakesAgainst: '100000000000',
-      confidence: '0',
+      confidenceThreshold: '0',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -439,7 +440,7 @@ describe('Domain Layer', () => {
       stakes: [],
       stakesFor: '0',
       stakesAgainst: '100000000000',
-      confidence: '0',
+      confidenceThreshold: '0',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -500,7 +501,7 @@ describe('Domain Layer', () => {
       ],
       stakesFor: '0',
       stakesAgainst: '100000000100000000000',
-      confidence: '0',
+      confidenceThreshold: '0',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -548,7 +549,7 @@ describe('Domain Layer', () => {
       winningOutcome: 'Fail',
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000100000000000',
-      confidence: '0',
+      confidenceThreshold: '0',
 
       reputationReward: '10',
       nativeTokenReward: '10',
@@ -587,8 +588,10 @@ describe('Domain Layer', () => {
 
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal.stage).toEqual('PreBoosted');
-    // boost it
+    expect(proposal.preBoostedAt).toEqual(s3Timestamp.toString());
+    expect(proposal.confidenceThreshold).toEqual(Math.pow(2, REAL_FBITS).toString());
 
+    // boost it
     await increaseTime(300000, web3);
     // this will also shift the proposal to boosted phase
     const v2Timestamp = await vote({
@@ -652,7 +655,7 @@ describe('Domain Layer', () => {
 
       stakesFor: '400000000000000000000',
       stakesAgainst: '100000000100000000000',
-      confidence: '3',
+      confidenceThreshold: Math.pow(2, REAL_FBITS).toString(),
 
       reputationReward: '10',
       nativeTokenReward: '10',

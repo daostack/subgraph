@@ -29,7 +29,7 @@ export function getProposal(id: string): Proposal {
 
     proposal.stakesFor = BigInt.fromI32(0);
     proposal.stakesAgainst = BigInt.fromI32(0);
-    proposal.confidence = BigInt.fromI32(0);
+    proposal.confidenceThreshold = BigInt.fromI32(0);
   }
 
   return proposal;
@@ -46,30 +46,14 @@ export function updateProposal(
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let gpProposal = gp.proposals(proposalId);
-  let gpTimes = gp.getProposalTimes(proposalId);
-
-  // proposal.boostedPhaseTime
-  if (!equals(gpTimes[1], BigInt.fromI32(0))) {
-    if (proposal.boostedAt == null) {
-      proposal.boostedAt = gpTimes[1];
-    } else if (!equals(proposal.boostedAt as BigInt, gpTimes[1])) {
-      proposal.quietEndingPeriodBeganAt = gpTimes[1];
-    }
-  }
   proposal.votingMachine = gpAddress;
-
   // proposal.winningVote
   proposal.winningOutcome = parseOutcome(gpProposal.value3);
-
-  // proposal.state
-
-  let state = gpProposal.value2;
-  setProposalState(proposal, state);
   }
 
 export function updateProposalconfidence(id: Bytes, confidence: BigInt): void {
    let proposal = getProposal(id.toHex());
-   proposal.confidence = confidence;
+   proposal.confidenceThreshold = confidence;
    saveProposal(proposal);
 }
 
@@ -77,11 +61,14 @@ export function updateProposalState(id: Bytes, state: number, gpAddress: Address
    let gp = GenesisProtocol.bind(gpAddress);
    let proposal = getProposal(id.toHex());
    updateThreshold(proposal.dao, gp.threshold(proposal.paramsHash, proposal.organizationId));
-   setProposalState(proposal, state);
+   setProposalState(proposal, state, gp.getProposalTimes(id));
+   if (state === 4) {
+     proposal.confidenceThreshold = gp.proposals(id).value10;
+   }
    saveProposal(proposal);
 }
 
-export function setProposalState(proposal: Proposal, state: number): void {
+export function setProposalState(proposal: Proposal, state: number, gpTimes: BigInt[]): void {
   // enum ProposalState { None, ExpiredInQueue, Executed, Queued, PreBoosted, Boosted, QuietEndingPeriod}
   if (state === 1) {
     // Closed
@@ -90,16 +77,19 @@ export function setProposalState(proposal: Proposal, state: number): void {
     // Executed
     proposal.stage = 'Executed';
   } else if (state === 3) {
-    // PreBoosted
+    // Queued
     proposal.stage = 'Queued';
   } else if (state === 4) {
-    // Boosted
+    // PreBoosted
     proposal.stage = 'PreBoosted';
+    proposal.preBoostedAt = gpTimes[2];
   } else if (state === 5) {
-    // QuietEndingPeriod
+    // Boosted
+    proposal.boostedAt = gpTimes[1];
     proposal.stage = 'Boosted';
   } else if (state === 6) {
     // QuietEndingPeriod
+    proposal.quietEndingPeriodBeganAt = gpTimes[1];
     proposal.stage = 'QuietEndingPeriod';
   }
 }
@@ -116,6 +106,7 @@ export function updateGPProposal(
   proposal.proposer = proposer;
   proposal.dao = avatarAddress.toHex();
   let params = gp.parameters(paramsHash);
+  let gpProposal = gp.proposals(proposalId);
 
   proposal.votingMachine = gpAddress;
   proposal.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
@@ -131,16 +122,12 @@ export function updateGPProposal(
   proposal.daoBountyConst = params.value10; // daoBountyConst
   proposal.activationTime = params.value11; // activationTime
   proposal.voteOnBehalf = params.value12; // voteOnBehalf
-  proposal.stakesAgainst = gp.proposals(proposalId).value9;
-  proposal.confidence = getProposalConfidence(proposal);
+  proposal.stakesAgainst = gp.voteStake(proposalId, BigInt.fromI32(2));
+  proposal.confidenceThreshold = gpProposal.value10;
   proposal.paramsHash = paramsHash;
-  proposal.organizationId = gp.proposals(proposalId).value0;
+  proposal.organizationId = gpProposal.value0;
 
   saveProposal(proposal);
-}
-
-export function getProposalConfidence(proposal: Proposal): BigInt {
-  return proposal.stakesFor.div(proposal.stakesAgainst);
 }
 
 export function updateCRProposal(

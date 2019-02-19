@@ -22,7 +22,6 @@ import { insertNewDAO } from './dao';
 import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {
   getProposal,
-  getProposalConfidence,
   parseOutcome,
   saveProposal,
   updateCRProposal,
@@ -87,8 +86,6 @@ export function handleStake(event: Stake): void {
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
-
-  proposal.confidence = getProposalConfidence(proposal);
 
   saveProposal(proposal);
   insertStake(

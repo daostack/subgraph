@@ -42,6 +42,7 @@ type Proposal @entity {
 	proposer: Bytes!
 	stage: String!
 	createdAt: BigInt!
+	preBoostedAt: BigInt
 	boostedAt: BigInt
 	quietEndingPeriodBeganAt: BigInt
 	executedAt: BigInt
@@ -50,6 +51,7 @@ type Proposal @entity {
 	executionState: String!
 	paramsHash: Bytes!
 	organizationId: Bytes!
+	confidenceThreshold: BigInt!
 
 	descriptionHash: String!
 	title: String
@@ -66,7 +68,6 @@ type Proposal @entity {
 	stakes: [ProposalStake!] @derivedFrom(field: "proposal")
 	stakesFor: BigInt!
 	stakesAgainst: BigInt!
-	confidence: BigInt!
 
 	# Genesis Protocol params
 	queuedVoteRequiredPercentage: BigInt!

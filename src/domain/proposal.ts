@@ -125,11 +125,6 @@ export function updateGPProposal(
   proposal.confidenceThreshold = gpProposal.value10;
   proposal.paramsHash = paramsHash;
   proposal.organizationId = gpProposal.value0;
-  // tslint:disable-next-line: ban-types
-  proposal.votes = new Array<String>();
-  // tslint:disable-next-line: ban-types
-  proposal.stakes = new Array<String>();
-
   saveProposal(proposal);
 }
 

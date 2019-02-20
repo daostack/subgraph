@@ -1,34 +1,66 @@
 import { Address, BigInt, Bytes , crypto, EthereumValue, SmartContract , store} from '@graphprotocol/graph-ts';
 import { GenesisProtocol__voteInfoResult } from '../types/GenesisProtocol/GenesisProtocol';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { GPReward, ProposalStake, ProposalVote } from '../types/schema';
-import { concat } from '../utils';
+import { GPReward, GPRewardsHelper, ProposalStake , ProposalVote } from '../types/schema';
+import { concat , debug , equals } from '../utils';
 import { getProposal } from './proposal';
 
-export function daoBountyRedemption(proposalId: Bytes, beneficiary: Address): void {
-   let id = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
-   let reward = store.get('GPReward', id) as GPReward;
-   reward.redeemedDaoBountyForStaker = true;
-   saveGPReward(reward);
+function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
+    let gpRewardsHelper = GPRewardsHelper.load(proposalId);
+    if (gpRewardsHelper == null) {
+        gpRewardsHelper = new GPRewardsHelper(proposalId);
+        // tslint:disable-next-line: ban-types
+        gpRewardsHelper.gpRewards = new Array<String>();
+    }
+    return gpRewardsHelper as GPRewardsHelper;
 }
 
-export function tokenRedemption(proposalId: Bytes, beneficiary: Address): void {
-   let id = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
-   let reward = store.get('GPReward', id) as GPReward;
-   reward.redeemedTokensForStaker = true;
-   saveGPReward(reward);
+export function insertGPRewardsToHelper(proposalId: Bytes, beneficiary: Address, timestamp: BigInt): void {
+  let rewardId = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
+  updateGPReward(rewardId,
+               beneficiary,
+               proposalId.toHex(),
+               BigInt.fromI32(0),
+               BigInt.fromI32(0),
+               BigInt.fromI32(0),
+               BigInt.fromI32(0),
+               new Address(),
+               getProposal(proposalId.toHex()).dao,
+               timestamp,
+            );
+  let gpRewardsHelper = getGPRewardsHelper(proposalId.toHex());
+  let gpRewards = gpRewardsHelper.gpRewards;
+  gpRewards.push(rewardId);
+  gpRewardsHelper.gpRewards = gpRewards;
+  gpRewardsHelper.save();
 }
 
-export function reputationRedemption(proposalId: Bytes, beneficiary: Address): void {
+export function daoBountyRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt): void {
    let id = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
    let reward = store.get('GPReward', id) as GPReward;
-   if (reward.reputationForProposer !== BigInt.fromI32(0)) {
-       reward.redeemedReputationForProposer = true;
+   reward.redeemedDaoBountyForStaker = timestamp;
+   reward.save();
+}
+
+export function tokenRedemption(proposalId: Bytes, beneficiary: Address, timestamp: BigInt): void {
+   let id = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
+   let reward = store.get('GPReward', id) as GPReward;
+   reward.redeemedTokensForStaker = timestamp;
+   reward.save();
+}
+
+export function reputationRedemption(proposalId: Bytes, beneficiary: Address, timestamp: BigInt): void {
+   let id = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
+   let reward = store.get('GPReward', id) as GPReward;
+
+   if (reward.reputationForProposer != null) {
+       reward.redeemedReputationForProposer = timestamp;
    }
-   if (reward.reputationForVoter !== BigInt.fromI32(0)) {
-       reward.redeemedReputationForVoter = true;
+   if (reward.reputationForVoter != null) {
+       reward.redeemedReputationForVoter = timestamp;
    }
-   saveGPReward(reward);
+
+   reward.save();
 }
 
 export function insertGPRewards(
@@ -37,72 +69,43 @@ export function insertGPRewards(
   gpAddress: Address,
 ): void {
   let proposal = getProposal(proposalId.toHex());
-  let voters: string[] = proposal.votes as string[];
   let genesisProtocolExt = GenesisProtocolExt.bind(gpAddress);
   let i = 0;
-  let rewardId: string;
-  for (i = 0; i < voters.length; i++) {
-    let proposalVote = store.get('ProposalVote', voters[i]) as ProposalVote;
-    rewardId = crypto.keccak256(concat(proposalId, proposalVote.voter)).toHex();
-    let reputationForVoter = genesisProtocolExt.redeem(proposalId, proposalVote.voter as Address)[1];
-    if (reputationForVoter.toString() !== '0') {
-        updateGPReward(rewardId,
-                     proposalVote.voter,
+  let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];
+  debug(BigInt.fromI32(gpRewards.length).toString());
+
+  for (i = 0; i < gpRewards.length; i++) {
+    let gpReward = GPReward.load(gpRewards[i]);
+    let redeemValues = genesisProtocolExt.redeem(proposalId, gpReward.beneficiary as Address);
+    let daoBountyForStaker = genesisProtocolExt.redeemDaoBounty(proposalId, gpReward.beneficiary as Address).value1;
+    if (!equals(redeemValues[0], BigInt.fromI32(0)) ||
+        !equals(redeemValues[1], BigInt.fromI32(0)) ||
+        !equals(redeemValues[2], BigInt.fromI32(0)) ||
+        !equals(daoBountyForStaker, BigInt.fromI32(0))) {
+        updateGPReward(gpReward.id,
+                     gpReward.beneficiary,
                      proposal.id,
-                     reputationForVoter,
-                     BigInt.fromI32(0),
-                     BigInt.fromI32(0),
-                     BigInt.fromI32(0),
+                     redeemValues[0],
+                     redeemValues[1],
+                     redeemValues[2],
+                     daoBountyForStaker,
                      gpAddress,
                      proposal.dao,
                      timestamp,
                   );
+    } else {
+      // remove the gpReward entity
+      store.remove('GPReward', gpReward.id);
     }
   }
-
-  let stakers: string[] = proposal.stakes as string[];
-  for (i = 0; i < stakers.length; i++) {
-    let proposalStake = store.get('ProposalStake', stakers[i]) as ProposalStake;
-    rewardId = crypto.keccak256(concat(proposalId, proposalStake.staker)).toHex();
-    let tokensForStaker = genesisProtocolExt.redeem(proposalId, proposalStake.staker as Address)[0];
-    let daoBountyForStaker = genesisProtocolExt.redeemDaoBounty(proposalId, proposalStake.staker as Address).value1;
-    if (tokensForStaker.toString() !== '0' || daoBountyForStaker.toString() !== '0') {
-
-      updateGPReward(rewardId,
-                   proposalStake.staker,
-                   proposal.id,
-                   BigInt.fromI32(0),
-                   tokensForStaker,
-                   BigInt.fromI32(0),
-                   daoBountyForStaker,
-                   gpAddress,
-                   proposal.dao,
-                   timestamp,
-                );
-    }
-  }
-  rewardId = crypto.keccak256(concat(proposalId, proposal.proposer)).toHex();
-  let reputationForProposer = genesisProtocolExt.redeem(proposalId, proposal.proposer as Address)[2];
-  if (reputationForProposer.toString() !== '0') {
-      updateGPReward(rewardId,
-                   proposal.proposer,
-                   proposal.id,
-                   BigInt.fromI32(0),
-                   BigInt.fromI32(0),
-                   reputationForProposer,
-                   BigInt.fromI32(0),
-                   gpAddress,
-                   proposal.dao,
-                   timestamp,
-                );
-  }
+  store.remove('GPRewardsHelper' , proposalId.toHex());
 }
 
 function updateGPReward(id: string,
                         beneficiary: Bytes,
                         proposalId: string,
-                        reputationForVoter: BigInt,
                         tokensForStaker: BigInt,
+                        reputationForVoter: BigInt,
                         reputationForProposer: BigInt,
                         daoBountyForStaker: BigInt,
                         gpAddress: Bytes,
@@ -116,31 +119,27 @@ function updateGPReward(id: string,
         reward.proposal = proposalId;
         reward.dao = dao;
         reward.createdAt = createdAt;
-        reward.redeemedTokensForStaker = false;
-        reward.redeemedReputationForVoter = false;
-        reward.redeemedReputationForProposer = false;
-        reward.redeemedDaoBountyForStaker = false;
+        reward.redeemedTokensForStaker = BigInt.fromI32(0);
+        reward.redeemedReputationForVoter = BigInt.fromI32(0);
+        reward.redeemedReputationForProposer = BigInt.fromI32(0);
+        reward.redeemedDaoBountyForStaker = BigInt.fromI32(0);
       }
-      if (reputationForVoter.toString() !== '0') {
+      if (equals(reputationForVoter, BigInt.fromI32(0)) === false) {
           reward.reputationForVoter = reputationForVoter;
       }
-      if (tokensForStaker.toString() !== '0') {
+      if (equals(tokensForStaker, BigInt.fromI32(0)) === false) {
           reward.tokensForStaker = tokensForStaker;
       }
-      if (reputationForProposer.toString() !== '0') {
+      if (equals(reputationForProposer, BigInt.fromI32(0)) === false) {
           reward.reputationForProposer = reputationForProposer;
       }
-      if (daoBountyForStaker.toString() !== '0')  {
+      if (equals(daoBountyForStaker, BigInt.fromI32(0)) === false) {
           reward.daoBountyForStaker = daoBountyForStaker;
           let genesisProtocol = GenesisProtocol.bind(gpAddress as Address);
           reward.tokenAddress = genesisProtocol.stakingToken();
       }
-      saveGPReward(reward);
+      reward.save();
       return  reward;
-}
-
-export function saveGPReward(reward: GPReward): void {
-   store.set('GPReward', reward.id, reward);
 }
 
 // this is a hack :)

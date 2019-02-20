@@ -1,6 +1,5 @@
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import { ProposalVote } from '../types/schema';
-import { getProposal , saveProposal } from './proposal';
 
 export function getVote(id: string): ProposalVote {
   let vote = store.get('ProposalVote', id) as ProposalVote;
@@ -29,9 +28,4 @@ export function insertVote(
   vote.proposal = proposalId;
   vote.outcome = outcome;
   saveVote(vote);
-  let proposal = getProposal(proposalId);
-  let votes = proposal.votes;
-  votes.push(vote.id);
-  proposal.votes = votes;
-  saveProposal(proposal);
 }

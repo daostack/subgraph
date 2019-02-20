@@ -102,6 +102,12 @@ describe('Domain Layer', () => {
       opts,
     );
 
+    const stakingToken = new web3.eth.Contract(
+      DAOToken.abi,
+      addresses.GEN,
+      opts,
+    );
+
     const orgName = 'Genesis Test';
     const tokenName =  'Genesis Test';
     const tokenSymbol = 'GDT';
@@ -268,11 +274,7 @@ describe('Domain Layer', () => {
       return timestamp;
     }
     async function stake({ proposalId, outcome, amount, staker }) {
-      const stakingToken = new web3.eth.Contract(
-        DAOToken.abi,
-        addresses.GEN,
-        opts,
-      );
+
       await stakingToken.methods.mint(staker, amount).send();
       await stakingToken.methods.approve(genesisProtocol.options.address, amount).send({ from: staker });
       const { blockNumber } = await genesisProtocol.methods
@@ -746,5 +748,107 @@ describe('Domain Layer', () => {
       },
       reputation: '1000000000000000000000',
     });
+
+    const getProposalRewards = `{
+        proposal(id: "${p1}") {
+            gpRewards{
+               beneficiary
+               reputationForProposer
+               tokenAddress
+               tokensForStaker
+               reputationForVoter
+               daoBountyForStaker
+               redeemedTokensForStaker
+               redeemedReputationForVoter
+               redeemedDaoBountyForStaker
+               redeemedReputationForProposer
+            }
+        }
+    }`;
+    let gpRewards = (await sendQuery(getProposalRewards)).proposal.gpRewards;
+    expect(gpRewards).toContainEqual({
+    beneficiary: accounts[1].address.toLowerCase(),
+    daoBountyForStaker: '100000000000',
+    redeemedDaoBountyForStaker: '0',
+    redeemedReputationForProposer: '0',
+    redeemedReputationForVoter: '0',
+    redeemedTokensForStaker: '0',
+    reputationForProposer: null,
+    reputationForVoter: null,
+    tokenAddress: addresses.GEN.toLowerCase(),
+    tokensForStaker: '500000000000000000000',
+  });
+    expect(gpRewards).toContainEqual({
+    beneficiary: web3.eth.defaultAccount.toLowerCase(),
+    daoBountyForStaker: null,
+    redeemedDaoBountyForStaker: '0',
+    redeemedReputationForProposer: '0',
+    redeemedReputationForVoter: '0',
+    redeemedTokensForStaker: '0',
+    reputationForProposer: '5000000000',
+    reputationForVoter: null,
+    tokenAddress: null,
+    tokensForStaker: null,
+  });
+    async function redeem({ proposalId, beneficiary }) {
+    const { blockNumber } = await genesisProtocol.methods
+      .redeem(proposalId, beneficiary)
+      .send();
+    const { timestamp } = await web3.eth.getBlock(blockNumber);
+    return timestamp;
+  }
+
+    async function redeemDaoBounty({ proposalId, beneficiary }) {
+    const { blockNumber } = await genesisProtocol.methods
+      .redeemDaoBounty(proposalId, beneficiary)
+      .send();
+    const { timestamp } = await web3.eth.getBlock(blockNumber);
+    return timestamp;
+  }
+  // redeem for proposer
+    const r1Timestamp = await redeem({
+    proposalId: p1,
+    beneficiary: web3.eth.defaultAccount.toLowerCase(),
+  });
+  // redeem for staker
+    const r2Timestamp = await redeem({
+    proposalId: p1,
+    beneficiary: accounts[1].address.toLowerCase(),
+  });
+
+    // mint gen to avatr for the daoBounty
+    await stakingToken.methods.mint(addresses.Avatar, '100000000000').send();
+
+    const rd1Timestamp = await redeemDaoBounty({
+    proposalId: p1,
+    beneficiary: accounts[1].address.toLowerCase(),
+  });
+
+    gpRewards = (await sendQuery(getProposalRewards)).proposal.gpRewards;
+    expect(gpRewards).toContainEqual({
+  beneficiary: accounts[1].address.toLowerCase(),
+  daoBountyForStaker: '100000000000',
+  redeemedDaoBountyForStaker: rd1Timestamp.toString(),
+  redeemedReputationForProposer: '0',
+  redeemedReputationForVoter: '0',
+  redeemedTokensForStaker: r2Timestamp.toString(),
+  reputationForProposer: null,
+  reputationForVoter: null,
+  tokenAddress: addresses.GEN.toLowerCase(),
+  tokensForStaker: '500000000000000000000',
+});
+    expect(gpRewards).toContainEqual({
+  beneficiary: web3.eth.defaultAccount.toLowerCase(),
+  daoBountyForStaker: null,
+  redeemedDaoBountyForStaker: '0',
+  redeemedReputationForProposer: r1Timestamp.toString(),
+  redeemedReputationForVoter: '0',
+  redeemedTokensForStaker: '0',
+  reputationForProposer: '5000000000',
+  reputationForVoter: null,
+  tokenAddress: null,
+  tokensForStaker: null,
+});
+
   }, 100000);
 });

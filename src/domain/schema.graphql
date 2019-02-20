@@ -60,12 +60,12 @@ type Proposal @entity {
 
 	gpRewards: [GPReward!] @derivedFrom(field: "proposal")
 
-	votes: [ProposalVote!]
+	votes: [ProposalVote!] @derivedFrom(field: "proposal")
 	votesFor: BigInt!
 	votesAgainst: BigInt!
 	winningOutcome: Outcome!
 
-	stakes: [ProposalStake!]
+	stakes: [ProposalStake!] @derivedFrom(field: "proposal")
 	stakesFor: BigInt!
 	stakesAgainst: BigInt!
 
@@ -136,6 +136,11 @@ enum RewardType {
 	External
 }
 
+type GPRewardsHelper @entity {
+   id: ID!
+	 gpRewards: [GPReward!]
+}
+
 type GPReward @entity {
 	id: ID!
 	createdAt: BigInt!
@@ -146,10 +151,10 @@ type GPReward @entity {
 	tokensForStaker: BigInt
 	daoBountyForStaker: BigInt
 	reputationForProposer: BigInt
-	redeemedReputationForVoter: Boolean!
-	redeemedTokensForStaker: Boolean!
-	redeemedReputationForProposer: Boolean!
-	redeemedDaoBountyForStaker: Boolean!
+	redeemedReputationForVoter: BigInt!
+	redeemedTokensForStaker: BigInt!
+	redeemedReputationForProposer: BigInt!
+	redeemedDaoBountyForStaker: BigInt!
 	tokenAddress: Bytes
 	redeemed: BigInt!
 }

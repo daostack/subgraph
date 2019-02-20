@@ -37,7 +37,13 @@ import {
   insertReputation,
   updateReputationTotalSupply,
 } from './reputation';
-import { daoBountyRedemption, insertGPRewards, reputationRedemption , tokenRedemption } from './reward';
+import {
+  daoBountyRedemption,
+  insertGPRewards,
+  insertGPRewardsToHelper ,
+  reputationRedemption ,
+  tokenRedemption,
+} from './reward';
 import { insertStake } from './stake';
 import { getToken, insertToken, updateTokenTotalSupply } from './token';
 import { insertVote } from './vote';
@@ -50,6 +56,7 @@ export function handleNewProposal(event: NewProposal): void {
     event.params._organization,
     event.params._paramsHash,
   );
+  insertGPRewardsToHelper(event.params._proposalId, event.params._proposer, event.block.timestamp);
 }
 
 export function handleNewContributionProposal(
@@ -97,6 +104,7 @@ export function handleStake(event: Stake): void {
     event.params._proposalId.toHex(),
     parseOutcome(event.params._vote),
   );
+  insertGPRewardsToHelper(event.params._proposalId, event.params._staker, event.block.timestamp);
 }
 
 export function handleVoteProposal(event: VoteProposal): void {
@@ -118,6 +126,7 @@ export function handleVoteProposal(event: VoteProposal): void {
     parseOutcome(event.params._vote),
     event.params._reputation,
   );
+  insertGPRewardsToHelper(event.params._proposalId, event.params._voter, event.block.timestamp);
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
@@ -208,12 +217,12 @@ export function handleExecutionStateChange(event: GPExecuteProposal): void {
   updateProposalExecutionState(event.params._proposalId.toHex(), event.params._executionState);
 }
 
-export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , type: string): void {
+export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): void {
    if (type === 'token') {
-       tokenRedemption(proposalId, beneficiary);
+       tokenRedemption(proposalId, beneficiary, timestamp);
    } else if (type === 'reputation') {
-       reputationRedemption(proposalId, beneficiary);
+       reputationRedemption(proposalId, beneficiary, timestamp);
    } else {
-       daoBountyRedemption(proposalId, beneficiary);
+       daoBountyRedemption(proposalId, beneficiary, timestamp);
    }
 }

@@ -1,9 +1,8 @@
 import { Address, BigInt, Bytes, crypto, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { Proposal, ProposalVote, Reward } from '../types/schema';
-import { concat, equals } from '../utils';
+import { Proposal } from '../types/schema';
+import { equals } from '../utils';
 import { updateThreshold } from './dao';
-import { getMember } from './member';
 
 export function parseOutcome(num: BigInt): string {
   if (equals(num, BigInt.fromI32(1))) {
@@ -126,6 +125,10 @@ export function updateGPProposal(
   proposal.confidenceThreshold = gpProposal.value10;
   proposal.paramsHash = paramsHash;
   proposal.organizationId = gpProposal.value0;
+  // tslint:disable-next-line: ban-types
+  proposal.votes = new Array<String>();
+  // tslint:disable-next-line: ban-types
+  proposal.stakes = new Array<String>();
 
   saveProposal(proposal);
 }
@@ -161,31 +164,6 @@ export function updateCRProposal(
   proposal.descriptionHash = descriptionHash;
   saveProposal(proposal);
 }
-
-// export function updateProposalExecution(
-//   proposalId: Bytes,
-//   timestamp: BigInt,
-// ): void {
-//   let proposal = getProposal(proposalId.toHex());
-//   proposal.executedAt = timestamp;
-//   let voters: string[] = proposal.votes as string[];
-//   for (let i = 0; i < voters.length; i++) {
-//     let proposalVote = store.get('ProposalVote', voters[i]) as ProposalVote;
-//     let voterAddress = store.get('Member', proposalVote.member).address;
-//     let uniqueId = i.toString();
-//     let reward = new Reward(uniqueId);
-//     reward.beneficiary = voterAddress;
-//     reward.proposal = proposal.id;
-//     //reward.reason = ;
-//     let genesisProtocol = GenesisProtocol.bind(address);
-//     reward.amount = 0;
-//     reward.redeemed = 0;
-//
-//     proposal.rewards.push();
-//   }
-//
-//   saveProposal(proposal);
-// }
 
 export function updateProposalExecution(
   proposalId: Bytes,

@@ -356,7 +356,6 @@ describe('Domain Layer', () => {
 
         }
     }`;
-
     let expectedVotesCount = 0;
     const voteIsIndexed = async () => {
       return (await sendQuery(getProposal)).proposal.votes.length >= expectedVotesCount;
@@ -419,6 +418,7 @@ describe('Domain Layer', () => {
       outcome: FAIL,
       voter: accounts[0].address,
     });
+
     expectedVotesCount++;
     await waitUntilTrue(voteIsIndexed);
     proposal = (await sendQuery(getProposal)).proposal;

@@ -37,6 +37,7 @@ import {
   insertReputation,
   updateReputationTotalSupply,
 } from './reputation';
+import { daoBountyRedemption, insertGPRewards, reputationRedemption , tokenRedemption } from './reward';
 import { insertStake } from './stake';
 import { getToken, insertToken, updateTokenTotalSupply } from './token';
 import { insertVote } from './vote';
@@ -120,7 +121,8 @@ export function handleVoteProposal(event: VoteProposal): void {
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
-  updateProposalExecution(event.params._proposalId, null, event.block.timestamp);
+  // this already handled at handleExecuteProposal
+  // updateProposalExecution(event.params._proposalId, null, event.block.timestamp,event.address);
 }
 
 export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {
@@ -194,6 +196,8 @@ export function handleNativeTokenTransfer(event: Transfer): void {
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
    updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
+   insertGPRewards(event.params._proposalId, event.block.timestamp, event.address);
+
 }
 
 export function handleStateChange(event: StateChange): void {
@@ -202,4 +206,14 @@ export function handleStateChange(event: StateChange): void {
 
 export function handleExecutionStateChange(event: GPExecuteProposal): void {
   updateProposalExecutionState(event.params._proposalId.toHex(), event.params._executionState);
+}
+
+export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , type: string): void {
+   if (type === 'token') {
+       tokenRedemption(proposalId, beneficiary);
+   } else if (type === 'reputation') {
+       reputationRedemption(proposalId, beneficiary);
+   } else {
+       daoBountyRedemption(proposalId, beneficiary);
+   }
 }

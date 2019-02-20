@@ -1,5 +1,6 @@
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import { ProposalStake } from '../types/schema';
+import { getProposal , saveProposal} from './proposal';
 
 export function getStake(id: string): ProposalStake {
   let stake = store.get('ProposalStake', id) as ProposalStake;
@@ -28,4 +29,10 @@ export function insertStake(
   stake.proposal = proposalId;
   stake.outcome = outcome;
   saveStake(stake);
+
+  let proposal = getProposal(proposalId);
+  let stakes = proposal.stakes;
+  stakes.push(stake.id);
+  proposal.stakes = stakes;
+  saveProposal(proposal);
 }

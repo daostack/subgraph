@@ -353,7 +353,8 @@ describe('Domain Layer', () => {
             minimumDaoBounty,
             daoBountyConst,
             activationTime,
-            voteOnBehalf
+            voteOnBehalf,
+            expiresInQueueAt,
 
 
         }
@@ -413,6 +414,7 @@ describe('Domain Layer', () => {
       daoBountyConst: gpParams.daoBountyConst,
       activationTime: gpParams.activationTime,
       voteOnBehalf: gpParams.voteOnBehalf,
+      expiresInQueueAt: (Number(gpParams.queuedVotePeriodLimit) + p1Creation).toString(),
     });
 
     const v1Timestamp = await vote({

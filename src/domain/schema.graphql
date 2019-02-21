@@ -59,6 +59,7 @@ type Proposal @entity {
 	url: String
 
 	gpRewards: [GPReward!] @derivedFrom(field: "proposal")
+	expiresInQueueAt: BigInt!
 
 	votes: [ProposalVote!] @derivedFrom(field: "proposal")
 	votesFor: BigInt!

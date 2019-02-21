@@ -99,6 +99,7 @@ export function updateGPProposal(
   proposer: Address,
   avatarAddress: Address,
   paramsHash: Bytes,
+  timestamp: BigInt,
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let proposal = getProposal(proposalId.toHex());
@@ -125,6 +126,8 @@ export function updateGPProposal(
   proposal.confidenceThreshold = gpProposal.value10;
   proposal.paramsHash = paramsHash;
   proposal.organizationId = gpProposal.value0;
+  proposal.expiresInQueueAt = timestamp.plus(params.value1);
+  proposal.createdAt = timestamp;
   saveProposal(proposal);
 }
 

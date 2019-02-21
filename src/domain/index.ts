@@ -55,6 +55,7 @@ export function handleNewProposal(event: NewProposal): void {
     event.params._proposer,
     event.params._organization,
     event.params._paramsHash,
+    event.block.timestamp,
   );
   insertGPRewardsToHelper(event.params._proposalId, event.params._proposer, event.block.timestamp);
 }

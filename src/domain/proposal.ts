@@ -136,29 +136,13 @@ export function updateCRProposal(
   createdAt: BigInt,
   avatarAddress: Address,
   votingMachine: Address,
-  beneficiary: Address,
   descriptionHash: string,
-  periodLength: BigInt,
-  periods: BigInt,
-  reputationReward: BigInt,
-  nativeTokenReward: BigInt,
-  ethReward: BigInt,
-  externalToken: Address,
-  externalTokenReward: BigInt,
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.dao = avatarAddress.toHex();
-  proposal.beneficiary = beneficiary;
-  proposal.reputationReward = reputationReward;
+  proposal.contributionReward = proposalId.toHex();
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
-
-  proposal.nativeTokenReward = nativeTokenReward;
-  proposal.ethReward = ethReward;
-  proposal.externalTokenReward = externalTokenReward;
-  proposal.periodLength = periodLength;
-  proposal.periods = periods;
-  proposal.externalToken = externalToken;
   proposal.descriptionHash = descriptionHash;
   saveProposal(proposal);
 }

@@ -334,12 +334,6 @@ describe('Domain Layer', () => {
             stakesAgainst
             confidenceThreshold
 
-            reputationReward
-            nativeTokenReward
-            externalTokenReward
-            externalToken
-            ethReward
-            beneficiary
             winningOutcome
 
             queuedVoteRequiredPercentage,
@@ -355,6 +349,14 @@ describe('Domain Layer', () => {
             activationTime,
             voteOnBehalf,
             expiresInQueueAt,
+            contributionReward {
+              beneficiary,
+              ethReward,
+              externalToken,
+              externalTokenReward,
+              nativeTokenReward,
+              reputationReward,
+            }
 
 
         }
@@ -371,7 +373,6 @@ describe('Domain Layer', () => {
 
     await waitUntilTrue(voteIsIndexed);
     await waitUntilTrue(stakeIsIndexed);
-
     let proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
@@ -395,12 +396,14 @@ describe('Domain Layer', () => {
       stakesAgainst: '100000000000',
       confidenceThreshold: '0',
 
-      reputationReward: '10',
-      nativeTokenReward: '10',
-      externalTokenReward: '10',
-      externalToken: addresses.GEN.toLowerCase(),
-      ethReward: '10',
-      beneficiary: accounts[1].address.toLowerCase(),
+      contributionReward: {
+        beneficiary: accounts[1].address.toLowerCase(),
+        ethReward: '10',
+        externalToken: addresses.GEN.toLowerCase(),
+        externalTokenReward: '10',
+        nativeTokenReward: '10',
+        reputationReward: '10',
+      },
 
       queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
       queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
@@ -457,13 +460,6 @@ describe('Domain Layer', () => {
       stakesAgainst: '100000000000',
       confidenceThreshold: '0',
 
-      reputationReward: '10',
-      nativeTokenReward: '10',
-      externalTokenReward: '10',
-      externalToken: addresses.GEN.toLowerCase(),
-      ethReward: '10',
-      beneficiary: accounts[1].address.toLowerCase(),
-
     });
 
     const s1Timestamp = await stake({
@@ -517,13 +513,6 @@ describe('Domain Layer', () => {
       stakesFor: '0',
       stakesAgainst: '100000000100000000000',
       confidenceThreshold: '0',
-
-      reputationReward: '10',
-      nativeTokenReward: '10',
-      externalTokenReward: '10',
-      externalToken: addresses.GEN.toLowerCase(),
-      ethReward: '10',
-      beneficiary: accounts[1].address.toLowerCase(),
     });
 
     const s2Timestamp = await stake({
@@ -565,13 +554,6 @@ describe('Domain Layer', () => {
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000100000000000',
       confidenceThreshold: '0',
-
-      reputationReward: '10',
-      nativeTokenReward: '10',
-      externalTokenReward: '10',
-      externalToken: addresses.GEN.toLowerCase(),
-      ethReward: '10',
-      beneficiary: accounts[1].address.toLowerCase(),
     });
     expect(new Set(proposal.stakes)).toEqual(new Set([
       {
@@ -671,13 +653,6 @@ describe('Domain Layer', () => {
       stakesFor: '400000000000000000000',
       stakesAgainst: '100000000100000000000',
       confidenceThreshold: Math.pow(2, REAL_FBITS).toString(),
-
-      reputationReward: '10',
-      nativeTokenReward: '10',
-      externalTokenReward: '10',
-      externalToken: addresses.GEN.toLowerCase(),
-      ethReward: '10',
-      beneficiary: accounts[1].address.toLowerCase(),
     });
 
     expect(new Set(proposal.stakes)).toEqual(new Set([

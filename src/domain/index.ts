@@ -75,15 +75,7 @@ export function handleNewContributionProposal(
     event.block.timestamp,
     event.params._avatar,
     event.params._intVoteInterface,
-    event.params._beneficiary,
     event.params._descriptionHash,
-    periodLength,
-    periods,
-    event.params._reputationChange,
-    nativeTokenReward,
-    ethReward,
-    event.params._externalToken,
-    externalTokenReward,
   );
 }
 

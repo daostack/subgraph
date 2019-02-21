@@ -86,14 +86,8 @@ type Proposal @entity {
 	voteOnBehalf: Bytes!
 
 	# Contribution Reward params
-	beneficiary: Bytes!
-	reputationReward: BigInt!
-	nativeTokenReward: BigInt!
-	ethReward: BigInt!
-	externalTokenReward: BigInt!
-	externalToken: Bytes!
-	periods: BigInt!
-	periodLength: BigInt!
+	contributionReward: ContributionRewardProposal 
+
 }
 
 type ProposalStake @entity {
@@ -152,12 +146,12 @@ type GPReward @entity {
 	tokensForStaker: BigInt
 	daoBountyForStaker: BigInt
 	reputationForProposer: BigInt
+	tokenAddress: Bytes
+	# timestamps of the redeem events
 	redeemedReputationForVoter: BigInt!
 	redeemedTokensForStaker: BigInt!
 	redeemedReputationForProposer: BigInt!
 	redeemedDaoBountyForStaker: BigInt!
-	tokenAddress: Bytes
-	redeemed: BigInt!
 }
 
 type FirstRegisterSchemeFlag @entity {

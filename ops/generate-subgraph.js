@@ -1,7 +1,7 @@
 const fs = require('fs')
 const yaml = require('js-yaml')
-const { migrationFileLocation } = require('./settings')
-const mappings = require('./mappings.json').mappings
+const { migrationFileLocation, network } = require('./settings')
+const mappings = require('./mappings.json')[network].mappings
 
 /**
  * Generate a `subgraph.yaml` file from `datasource.yaml` fragments in
@@ -16,7 +16,7 @@ async function generateSubgraph () {
     var contract = mapping.name
     const { abis, entities, eventHandlers } = yaml.safeLoad(fs.readFileSync('src/mappings/' + mapping.mapping + '/datasource.yaml', 'utf-8'))
 
-    const contractAddress = addresses.private[mapping.dao][mapping.contractName]
+    const contractAddress = addresses[network][mapping.dao][mapping.contractName]
 
     if (!contractAddress) {
       throw Error(`Address for contract ${contract} of ${mapping.dao} not found in ${migrationFile}`)
@@ -24,6 +24,7 @@ async function generateSubgraph () {
     return {
       kind: 'ethereum/contract',
       name: `${contract}`,
+      network: `${network}`,
       source: {
         address: contractAddress,
         abi: abis && abis.length ? abis[0] : contract

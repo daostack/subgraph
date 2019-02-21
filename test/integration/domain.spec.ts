@@ -513,13 +513,6 @@ describe('Domain Layer', () => {
       stakesFor: '0',
       stakesAgainst: '100000000100000000000',
       confidenceThreshold: '0',
-
-      // reputationReward: '10',
-      // nativeTokenReward: '10',
-      // externalTokenReward: '10',
-      // externalToken: addresses.GEN.toLowerCase(),
-      // ethReward: '10',
-      // beneficiary: accounts[1].address.toLowerCase(),
     });
 
     const s2Timestamp = await stake({
@@ -561,13 +554,6 @@ describe('Domain Layer', () => {
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000100000000000',
       confidenceThreshold: '0',
-
-      // reputationReward: '10',
-      // nativeTokenReward: '10',
-      // externalTokenReward: '10',
-      // externalToken: addresses.GEN.toLowerCase(),
-      // ethReward: '10',
-      // beneficiary: accounts[1].address.toLowerCase(),
     });
     expect(new Set(proposal.stakes)).toEqual(new Set([
       {
@@ -667,13 +653,6 @@ describe('Domain Layer', () => {
       stakesFor: '400000000000000000000',
       stakesAgainst: '100000000100000000000',
       confidenceThreshold: Math.pow(2, REAL_FBITS).toString(),
-
-      // reputationReward: '10',
-      // nativeTokenReward: '10',
-      // externalTokenReward: '10',
-      // externalToken: addresses.GEN.toLowerCase(),
-      // ethReward: '10',
-      // beneficiary: accounts[1].address.toLowerCase(),
     });
 
     expect(new Set(proposal.stakes)).toEqual(new Set([

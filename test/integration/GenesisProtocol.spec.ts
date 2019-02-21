@@ -2,10 +2,8 @@ import {
   getContractAddresses,
   getOptions,
   getWeb3,
-  hashLength,
+  increaseTime,
   nullAddress,
-  nullParamsHash,
-  padZeros,
   sendQuery,
 } from './util';
 
@@ -60,7 +58,6 @@ describe('GenesisProtocol', () => {
 
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
-    // await reputation.methods.transferOwnership(genesisProtocolCallbacks.options.address).send();
     const gpParams = {
     queuedVoteRequiredPercentage: 50,
     queuedVotePeriodLimit: 60,
@@ -104,6 +101,7 @@ describe('GenesisProtocol', () => {
       .send();
     await reputation.methods.mint(accounts[0].address, '100').send();
     await reputation.methods.mint(accounts[1].address, '100').send();
+    await reputation.methods.transferOwnership(genesisProtocolCallbacks.options.address).send();
     const propose = await genesisProtocolCallbacks.methods.propose(
       2,
       paramsHash,
@@ -135,7 +133,7 @@ describe('GenesisProtocol', () => {
     );
 
     // wait for proposal it pass
-    await new Promise((res) => setTimeout(res, gpParams.boostedVotePeriodLimit * 1000));
+    await increaseTime(gpParams.boostedVotePeriodLimit * 1000, web3);
     txs.push(await genesisProtocol.methods.execute(proposalId).send());
 
     txs.push(

@@ -18,7 +18,7 @@ type DAO @entity {
 	proposals: [Proposal!] @derivedFrom(field: "dao")
 	members: [Member!] @derivedFrom(field: "dao")
 	membersCount: BigInt!
-	rewards: [Reward!] @derivedFrom(field: "dao")
+	rewards: [GPReward!] @derivedFrom(field: "dao")
 	threshold: BigInt!
 }
 
@@ -58,7 +58,8 @@ type Proposal @entity {
 	description: String
 	url: String
 
-	rewards: [Reward!] @derivedFrom(field: "proposal")
+	gpRewards: [GPReward!] @derivedFrom(field: "proposal")
+	expiresInQueueAt: BigInt!
 
 	votes: [ProposalVote!] @derivedFrom(field: "proposal")
 	votesFor: BigInt!
@@ -136,16 +137,26 @@ enum RewardType {
 	External
 }
 
-type Reward @entity {
+type GPRewardsHelper @entity {
+   id: ID!
+	 gpRewards: [GPReward!]
+}
+
+type GPReward @entity {
 	id: ID!
 	createdAt: BigInt!
 	dao: DAO!
 	beneficiary: Bytes!
 	proposal: Proposal!
-	reason: RewardReason!
-	type: RewardType!
+	reputationForVoter: BigInt
+	tokensForStaker: BigInt
+	daoBountyForStaker: BigInt
+	reputationForProposer: BigInt
+	redeemedReputationForVoter: BigInt!
+	redeemedTokensForStaker: BigInt!
+	redeemedReputationForProposer: BigInt!
+	redeemedDaoBountyForStaker: BigInt!
 	tokenAddress: Bytes
-	amount: BigInt
 	redeemed: BigInt!
 }
 

@@ -112,7 +112,7 @@ export function handleStake(event: Stake): void {
     proposal,
   );
 
-  store.set('GPStake', uniqueId, ent);
+  store.set('GenesisProtocolStake', uniqueId, ent);
 }
 
 export function handleGPExecuteProposal(event: GPExecuteProposal): void {
@@ -180,6 +180,7 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
 }
 
 export function handleRedeem(event: Redeem): void {
+  domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'token');
   let rewardType = new Uint8Array(1);
   rewardType[0] = 5;
   updateRedemption(
@@ -201,6 +202,7 @@ export function handleExpirationCallBounty(event: ExpirationCallBounty): void {
 }
 
 export function handleRedeemDaoBounty(event: RedeemDaoBounty): void {
+  domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'daobounty');
   let rewardType = new Uint8Array(1);
   rewardType[0] = 6;
   updateRedemption(
@@ -218,6 +220,7 @@ export function handleConfidenceLevelChange(event: ConfidenceLevelChange): void 
 }
 
 export function handleRedeemReputation(event: RedeemReputation): void {
+  domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'reputation');
   let rewardType = new Uint8Array(1);
   rewardType[0] = 4;
   updateRedemption(

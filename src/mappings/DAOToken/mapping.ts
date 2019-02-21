@@ -9,7 +9,7 @@ import {
   OwnershipTransferred,
   Transfer,
 } from '../../types/DAOToken/DAOToken';
-import { concat, debug, equals, eventId } from '../../utils';
+import { concat, equals, eventId } from '../../utils';
 
 // Import entity types generated from the GraphQL schema
 import {

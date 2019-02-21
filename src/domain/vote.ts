@@ -1,13 +1,12 @@
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import { ProposalVote } from '../types/schema';
-import { getMember } from './member';
 
 export function getVote(id: string): ProposalVote {
-  let stake = store.get('ProposalVote', id) as ProposalVote;
-  if (stake == null) {
-    stake = new ProposalVote(id);
+  let vote = store.get('ProposalVote', id) as ProposalVote;
+  if (vote == null) {
+    vote = new ProposalVote(id);
   }
-  return stake;
+  return vote;
 }
 
 export function saveVote(vote: ProposalVote): void {

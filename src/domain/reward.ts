@@ -17,22 +17,31 @@ function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
 
 export function insertGPRewardsToHelper(proposalId: Bytes, beneficiary: Address, timestamp: BigInt): void {
   let rewardId = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
-  updateGPReward(rewardId,
-               beneficiary,
-               proposalId.toHex(),
-               BigInt.fromI32(0),
-               BigInt.fromI32(0),
-               BigInt.fromI32(0),
-               BigInt.fromI32(0),
-               new Address(),
-               getProposal(proposalId.toHex()).dao,
-               timestamp,
-            );
   let gpRewardsHelper = getGPRewardsHelper(proposalId.toHex());
   let gpRewards = gpRewardsHelper.gpRewards;
-  gpRewards.push(rewardId);
-  gpRewardsHelper.gpRewards = gpRewards;
-  gpRewardsHelper.save();
+  // check if already exist
+  let i = 0;
+  for (i; i < gpRewards.length; i++) {
+       if ((gpRewards as string[])[i]  === rewardId) {
+           break;
+       }
+  }
+  if (i === gpRewards.length) { // not exist
+      updateGPReward(rewardId,
+                   beneficiary,
+                   proposalId.toHex(),
+                   BigInt.fromI32(0),
+                   BigInt.fromI32(0),
+                   BigInt.fromI32(0),
+                   BigInt.fromI32(0),
+                   new Address(),
+                   getProposal(proposalId.toHex()).dao,
+                   timestamp,
+                );
+      gpRewards.push(rewardId);
+      gpRewardsHelper.gpRewards = gpRewards;
+      gpRewardsHelper.save();
+   }
 }
 
 export function daoBountyRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt): void {
@@ -72,8 +81,6 @@ export function insertGPRewards(
   let genesisProtocolExt = GenesisProtocolExt.bind(gpAddress);
   let i = 0;
   let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];
-  debug(BigInt.fromI32(gpRewards.length).toString());
-
   for (i = 0; i < gpRewards.length; i++) {
     let gpReward = GPReward.load(gpRewards[i]);
     let redeemValues = genesisProtocolExt.redeem(proposalId, gpReward.beneficiary as Address);

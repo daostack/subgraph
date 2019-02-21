@@ -112,7 +112,7 @@ export function handleStake(event: Stake): void {
     proposal,
   );
 
-  store.set('GPStake', uniqueId, ent);
+  store.set('GenesisProtocolStake', uniqueId, ent);
 }
 
 export function handleGPExecuteProposal(event: GPExecuteProposal): void {

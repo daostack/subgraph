@@ -18,6 +18,7 @@ export function insertVote(
   timestamp: BigInt,
   voter: Address,
   proposalId: string,
+  daoId: string,
   outcome: string,
   reputation: BigInt,
 ): void {
@@ -26,6 +27,7 @@ export function insertVote(
   vote.voter = voter;
   vote.reputation = reputation;
   vote.proposal = proposalId;
+  vote.dao = daoId;
   vote.outcome = outcome;
   saveVote(vote);
 }

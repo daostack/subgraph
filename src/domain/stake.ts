@@ -19,6 +19,7 @@ export function insertStake(
   staker: Address,
   amount: BigInt,
   proposalId: string,
+  daoId: string,
   outcome: string,
 ): void {
   let stake = getStake(eventId);
@@ -26,6 +27,7 @@ export function insertStake(
   stake.staker = staker;
   stake.amount = amount;
   stake.proposal = proposalId;
+  stake.dao = daoId;
   stake.outcome = outcome;
   saveStake(stake);
 }

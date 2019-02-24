@@ -1,7 +1,7 @@
 import { Address, BigInt, Bytes , crypto, EthereumValue, SmartContract , store} from '@graphprotocol/graph-ts';
 import { GenesisProtocol__voteInfoResult } from '../types/GenesisProtocol/GenesisProtocol';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { GPReward, GPRewardsHelper, ProposalStake , ProposalVote } from '../types/schema';
+import { GPReward, GPRewardsHelper } from '../types/schema';
 import { concat , debug , equals } from '../utils';
 import { getProposal } from './proposal';
 
@@ -10,7 +10,7 @@ function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
     if (gpRewardsHelper == null) {
         gpRewardsHelper = new GPRewardsHelper(proposalId);
         // tslint:disable-next-line: ban-types
-        gpRewardsHelper.gpRewards = new Array<String>();
+        gpRewardsHelper.gpRewards = new Array<string>();
     }
     return gpRewardsHelper as GPRewardsHelper;
 }

@@ -95,6 +95,7 @@ type ProposalStake @entity {
 	createdAt: BigInt!
 	staker: Bytes!
 	proposal: Proposal!
+	dao: DAO!
 	outcome: Outcome!
 	amount: BigInt!
 }
@@ -104,6 +105,7 @@ type ProposalVote @entity {
 	createdAt: BigInt!
 	voter: Bytes!
 	proposal: Proposal!
+	dao: DAO!
 	outcome: Outcome!
 	reputation: BigInt!
 }

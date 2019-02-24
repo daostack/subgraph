@@ -95,6 +95,7 @@ export function handleStake(event: Stake): void {
     event.params._staker,
     event.params._amount,
     event.params._proposalId.toHex(),
+    event.params._organization.toHex(),
     parseOutcome(event.params._vote),
   );
   insertGPRewardsToHelper(event.params._proposalId, event.params._staker, event.block.timestamp);
@@ -116,6 +117,7 @@ export function handleVoteProposal(event: VoteProposal): void {
     event.block.timestamp,
     event.params._voter,
     event.params._proposalId.toHex(),
+    event.params._organization.toHex(),
     parseOutcome(event.params._vote),
     event.params._reputation,
   );

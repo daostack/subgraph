@@ -315,6 +315,9 @@ describe('Domain Layer', () => {
                 proposal {
                     id
                 }
+                dao {
+                  id
+                }
                 outcome
                 reputation
             }
@@ -325,6 +328,9 @@ describe('Domain Layer', () => {
               createdAt
               proposal {
                   id
+              }
+              dao {
+                id
               }
               outcome
               amount
@@ -448,6 +454,9 @@ describe('Domain Layer', () => {
           proposal: {
             id: p1,
           },
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
+          },
           reputation: '1000000000000000000000',
         },
       ],
@@ -492,6 +501,9 @@ describe('Domain Layer', () => {
           proposal: {
             id: p1,
           },
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
+          },
           reputation: '1000000000000000000000',
         },
       ],
@@ -506,6 +518,9 @@ describe('Domain Layer', () => {
           outcome: 'Fail',
           proposal: {
             id: p1,
+          },
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
           },
           staker: accounts[0].address.toLowerCase(),
         },
@@ -545,6 +560,9 @@ describe('Domain Layer', () => {
           proposal: {
             id: p1,
           },
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
+          },
           reputation: '1000000000000000000000',
         },
       ],
@@ -558,21 +576,27 @@ describe('Domain Layer', () => {
     expect(new Set(proposal.stakes)).toEqual(new Set([
       {
         amount: '100000000000000000000',
-        createdAt: s1Timestamp.toString(),
-        outcome: 'Fail',
-        proposal: {
-          id: p1,
-        },
-        staker: accounts[0].address.toLowerCase(),
-      },
-      {
-        amount: '100000000000000000000',
         createdAt: s2Timestamp.toString(),
         outcome: 'Pass',
         proposal: {
           id: p1,
         },
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
+        },
         staker: accounts[1].address.toLowerCase(),
+      },
+      {
+        amount: '100000000000000000000',
+        createdAt: s1Timestamp.toString(),
+        outcome: 'Fail',
+        proposal: {
+          id: p1,
+        },
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
+        },
+        staker: accounts[0].address.toLowerCase(),
       },
     ]));
      /// stake to boost
@@ -658,21 +682,27 @@ describe('Domain Layer', () => {
     expect(new Set(proposal.stakes)).toEqual(new Set([
       {
         amount: '100000000000000000000',
-        createdAt: s1Timestamp.toString(),
-        outcome: 'Fail',
-        proposal: {
-          id: p1,
-        },
-        staker: accounts[0].address.toLowerCase(),
-      },
-      {
-        amount: '100000000000000000000',
         createdAt: s2Timestamp.toString(),
         outcome: 'Pass',
         proposal: {
           id: p1,
         },
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
+        },
         staker: accounts[1].address.toLowerCase(),
+      },
+      {
+        amount: '100000000000000000000',
+        createdAt: s1Timestamp.toString(),
+        outcome: 'Fail',
+        proposal: {
+          id: p1,
+        },
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
+        },
+        staker: accounts[0].address.toLowerCase(),
       },
       {
         amount: '300000000000000000000',
@@ -680,6 +710,9 @@ describe('Domain Layer', () => {
         outcome: 'Pass',
         proposal: {
           id: p1,
+        },
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
         },
         staker: accounts[1].address.toLowerCase(),
       },
@@ -691,6 +724,9 @@ describe('Domain Layer', () => {
       proposal: {
         id: p1,
       },
+      dao: {
+        id: addresses.Avatar.toLowerCase(),
+      },
       reputation: '1000000000000000000000',
     });
     expect(proposal.votes).toContainEqual({
@@ -698,6 +734,9 @@ describe('Domain Layer', () => {
       outcome: 'Pass',
       proposal: {
         id: p1,
+      },
+      dao: {
+        id: addresses.Avatar.toLowerCase(),
       },
       reputation: '1000000000000000000000',
     });
@@ -707,6 +746,9 @@ describe('Domain Layer', () => {
       proposal: {
         id: p1,
       },
+      dao: {
+        id: addresses.Avatar.toLowerCase(),
+      },
       reputation: '1000000000000000000000',
     });
     expect(proposal.votes).toContainEqual({
@@ -715,6 +757,9 @@ describe('Domain Layer', () => {
       proposal: {
         id: p1,
       },
+      dao: {
+        id: addresses.Avatar.toLowerCase(),
+      },
       reputation: '1000000000000000000000',
     });
     expect(proposal.votes).toContainEqual({
@@ -722,6 +767,9 @@ describe('Domain Layer', () => {
       outcome: 'Pass',
       proposal: {
         id: p1,
+      },
+      dao: {
+        id: addresses.Avatar.toLowerCase(),
       },
       reputation: '1000000000000000000000',
     });

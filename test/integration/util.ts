@@ -1,4 +1,3 @@
-const path = require('path');
 require('dotenv').config();
 process.env = {
   ethereum: 'http://127.0.0.1:8545',

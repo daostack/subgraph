@@ -10,6 +10,7 @@ import {
 const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
 const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
 const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
+const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
 const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
 const REAL_FBITS = 40;
 describe('Domain Layer', () => {
@@ -163,6 +164,14 @@ describe('Domain Layer', () => {
     const avatar = new web3.eth.Contract(Avatar.abi, addresses.Avatar, opts);
     const NativeToken = await avatar.methods.nativeToken().call();
     const NativeReputation = await avatar.methods.nativeReputation().call();
+
+    const reputation = await new web3.eth.Contract(
+      Reputation.abi,
+      NativeReputation,
+      opts,
+    );
+
+    const totalRep = await reputation.methods.totalSupply().call();
     // END setup
 
     const getDAO = `{
@@ -211,10 +220,7 @@ describe('Domain Layer', () => {
         dao: {
           id: addresses.Avatar.toLowerCase(),
         },
-        totalSupply: founders
-          .map(({ reputation }) => reputation)
-          .reduce((x, y) => x + y)
-          .toLocaleString('fullwide', {useGrouping: false}),
+        totalSupply: totalRep,
       },
       threshold: Math.pow(2, REAL_FBITS).toString(),
     });
@@ -265,14 +271,16 @@ describe('Domain Layer', () => {
 
       return { proposalId, timestamp };
     }
+
     const [PASS, FAIL] = [1, 2];
-    async function vote({ proposalId, outcome, voter }) {
+    async function vote({ proposalId, outcome, voter, amount = 0 }) {
       const { blockNumber } = await genesisProtocol.methods
-        .vote(proposalId, outcome, 0, voter)
+        .vote(proposalId, outcome, amount, voter)
         .send({ from: voter });
       const { timestamp } = await web3.eth.getBlock(blockNumber);
       return timestamp;
     }
+
     async function stake({ proposalId, outcome, amount, staker }) {
 
       await stakingToken.methods.mint(staker, amount).send();
@@ -426,6 +434,12 @@ describe('Domain Layer', () => {
       expiresInQueueAt: (Number(gpParams.queuedVotePeriodLimit) + p1Creation).toString(),
     });
 
+    const address0Rep = await reputation.methods.balanceOf(accounts[0].address).call();
+    const address1Rep = await reputation.methods.balanceOf(accounts[1].address).call();
+    const address2Rep = await reputation.methods.balanceOf(accounts[2].address).call();
+    const address3Rep = await reputation.methods.balanceOf(accounts[3].address).call();
+    const address4Rep = await reputation.methods.balanceOf(accounts[4].address).call();
+
     const v1Timestamp = await vote({
       proposalId: p1,
       outcome: FAIL,
@@ -457,11 +471,11 @@ describe('Domain Layer', () => {
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
-          reputation: '1000000000000000000000',
+          reputation: address0Rep,
         },
       ],
       votesFor: '0',
-      votesAgainst: '1000000000000000000000',
+      votesAgainst: address0Rep,
       winningOutcome: 'Fail',
 
       stakes: [],
@@ -504,11 +518,11 @@ describe('Domain Layer', () => {
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
-          reputation: '1000000000000000000000',
+          reputation: address0Rep,
         },
       ],
       votesFor: '0',
-      votesAgainst: '1000000000000000000000',
+      votesAgainst: address0Rep,
       winningOutcome: 'Fail',
 
       stakes: [
@@ -563,11 +577,11 @@ describe('Domain Layer', () => {
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
-          reputation: '1000000000000000000000',
+          reputation: address0Rep,
         },
       ],
       votesFor: '0',
-      votesAgainst: '1000000000000000000000',
+      votesAgainst: address0Rep,
       winningOutcome: 'Fail',
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000100000000000',
@@ -643,6 +657,7 @@ describe('Domain Layer', () => {
       proposalId: p1,
       outcome: PASS,
       voter: accounts[3].address,
+      amount: 1000,
     });
 
     expectedVotesCount++;
@@ -666,12 +681,12 @@ describe('Domain Layer', () => {
       boostedAt: v2Timestamp.toString(),
       quietEndingPeriodBeganAt: null,
       executedAt: v5Timestamp.toString(),
-      totalRepWhenExecuted: '6000000000000000000000',
+      totalRepWhenExecuted: totalRep,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
       dao: { threshold : Math.pow(2, REAL_FBITS).toString()},
-      votesFor: '4000000000000000000000',
-      votesAgainst: '1000000000000000000000',
+      votesFor: '3000000000000000001000',
+      votesAgainst: address0Rep,
       winningOutcome: 'Pass',
 
       stakesFor: '400000000000000000000',
@@ -727,7 +742,7 @@ describe('Domain Layer', () => {
       dao: {
         id: addresses.Avatar.toLowerCase(),
       },
-      reputation: '1000000000000000000000',
+      reputation: address0Rep,
     });
     expect(proposal.votes).toContainEqual({
       createdAt: v2Timestamp.toString(),
@@ -738,7 +753,7 @@ describe('Domain Layer', () => {
       dao: {
         id: addresses.Avatar.toLowerCase(),
       },
-      reputation: '1000000000000000000000',
+      reputation: address1Rep,
     });
     expect(proposal.votes).toContainEqual({
       createdAt: v3Timestamp.toString(),
@@ -749,7 +764,7 @@ describe('Domain Layer', () => {
       dao: {
         id: addresses.Avatar.toLowerCase(),
       },
-      reputation: '1000000000000000000000',
+      reputation: address2Rep,
     });
     expect(proposal.votes).toContainEqual({
       createdAt: v4Timestamp.toString(),
@@ -760,7 +775,7 @@ describe('Domain Layer', () => {
       dao: {
         id: addresses.Avatar.toLowerCase(),
       },
-      reputation: '1000000000000000000000',
+      reputation: '1000',
     });
     expect(proposal.votes).toContainEqual({
       createdAt: v5Timestamp.toString(),
@@ -771,7 +786,7 @@ describe('Domain Layer', () => {
       dao: {
         id: addresses.Avatar.toLowerCase(),
       },
-      reputation: '1000000000000000000000',
+      reputation: address4Rep,
     });
 
     const getProposalRewards = `{

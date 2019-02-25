@@ -242,7 +242,6 @@ describe('UController', () => {
       }
     }`);
 
-    expect(ucontrollerAddGlobalConstraints.length).toEqual(2);
     expect(ucontrollerAddGlobalConstraints).toContainEqual({
       txHash: txs[2],
       controller: uController.options.address.toLowerCase(),
@@ -270,7 +269,6 @@ describe('UController', () => {
       }
     }`);
 
-    expect(ucontrollerRemoveGlobalConstraints.length).toEqual(1);
     expect(ucontrollerRemoveGlobalConstraints).toContainEqual({
       txHash: txs[6],
       controller: uController.options.address.toLowerCase(),
@@ -288,7 +286,6 @@ describe('UController', () => {
       }
     }`);
 
-    expect(ucontrollerGlobalConstraints.length).toEqual(1);
     expect(ucontrollerGlobalConstraints).toContainEqual({
       avatarAddress: avatar.options.address.toLowerCase(),
       address: tokenCap1.options.address.toLowerCase(),
@@ -311,7 +308,6 @@ describe('UController', () => {
       }
     }`);
 
-    expect(ucontrollerUpgradeControllers.length).toEqual(1);
     expect(ucontrollerUpgradeControllers).toContainEqual({
       txHash: txs[7],
       controller: uController.options.address.toLowerCase(),

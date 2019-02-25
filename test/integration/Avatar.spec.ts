@@ -15,7 +15,7 @@ describe('Avatar', () => {
 
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
-
+    const balance = await web3.eth.getBalance(addresses.Avatar.toLowerCase());
     await web3.eth.sendTransaction({
       from: accounts[0].address,
       to: avatar.options.address,
@@ -42,7 +42,7 @@ describe('Avatar', () => {
       name: 'Genesis Test',
       nativeToken: addresses.NativeToken.toLowerCase(),
       nativeReputation: addresses.NativeReputation.toLowerCase(),
-      balance: '1',
+      balance: `${Number(balance) + 1}`,
       owner: addresses.UController.toLowerCase(),
     });
   }, 20000);

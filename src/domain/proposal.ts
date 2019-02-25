@@ -161,6 +161,22 @@ export function updateGSProposal(
   saveProposal(proposal);
 }
 
+export function updateSRProposal(
+  proposalId: string,
+  createdAt: BigInt,
+  avatarAddress: Address,
+  votingMachine: Address,
+  descriptionHash: string,
+): void {
+  let proposal = getProposal(proposalId);
+  proposal.dao = avatarAddress.toHex();
+  proposal.schemeRegistrarProposal = proposalId;
+  proposal.createdAt = createdAt;
+  proposal.votingMachine = votingMachine;
+  proposal.descriptionHash = descriptionHash;
+  saveProposal(proposal);
+}
+
 export function updateProposalExecution(
   proposalId: Bytes,
   totalReputation: BigInt,

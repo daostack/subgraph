@@ -88,8 +88,10 @@ type Proposal @entity {
 	# Contribution Reward params
 	contributionReward: ContributionRewardProposal
 
-	# Generic Scheme params
+	# Generic Scheme proposal
 	genericScheme : GenericSchemeProposal
+	# SchemeRegistrar proposal
+	schemeRegistrarProposal : SchemeRegistrarProposal
 }
 
 type ProposalStake @entity {

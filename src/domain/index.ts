@@ -87,7 +87,7 @@ export function handleNewCallProposal(
   );
 
 
-export function handleNewSchemeRegiterProposal(
+export function handleNewSchemeRegisterProposal(
   proposalId: String,
   timestamp: BigInt,
   avatar: Bytes,
@@ -97,8 +97,8 @@ export function handleNewSchemeRegiterProposal(
    updateSRProposal(
      proposalId,
      timestamp,
-     avatar,
-     votingMachine,
+     avatar as Address,
+     votingMachine as Address,
      descriptionHash,
    )
 }

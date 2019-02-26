@@ -1,7 +1,5 @@
 import { Address, BigInt, Entity, store, Value } from '@graphprotocol/graph-ts';
-import { DAOToken } from '../types/DAOToken/DAOToken';
-import { Reputation } from '../types/Reputation/Reputation';
-import { DAO } from '../types/schema';
+import { DAO, GPQue } from '../types/schema';
 import { Avatar } from '../types/UController/Avatar';
 import { UController } from '../types/UController/UController';
 import { getMember } from './member';
@@ -27,12 +25,6 @@ export function decreaseDAOmembersCount(id: string): void {
   saveDAO(dao);
 }
 
-export function updateThreshold(id: string, threshold: BigInt): void {
-  let dao = getDAO(id);
-  dao.threshold = threshold;
-  saveDAO(dao);
-}
-
 export function saveDAO(dao: DAO): void {
   store.set('DAO', dao.id, dao);
 }
@@ -52,7 +44,7 @@ export function insertNewDAO(
   dao.nativeReputation = nativeReputationAddress.toHex();
   dao.membersCount = BigInt.fromI32(0);
   // 0x10000000000
-  dao.threshold =  BigInt.fromI32(1073741824).times(BigInt.fromI32(1024));
+  //dao.threshold =  BigInt.fromI32(1073741824).times(BigInt.fromI32(1024));
   saveDAO(dao);
   // add the avatar as a member so we can track its balance
   getMember(avatarAddress, avatarAddress);

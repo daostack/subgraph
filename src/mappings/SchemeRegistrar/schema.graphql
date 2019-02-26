@@ -1,4 +1,4 @@
-type NewSchemeProposal @entity {
+type SchemeRegistrarNewSchemeProposal @entity {
 	id: ID!
 	txHash: Bytes!
 	contract: Bytes!
@@ -11,7 +11,7 @@ type NewSchemeProposal @entity {
 	descriptionHash: String!
 }
 
-type RemoveSchemeProposal @entity {
+type SchemeRegistrarRemoveSchemeProposal @entity {
 	id: ID!
 	txHash: Bytes!
 	contract: Bytes!
@@ -22,7 +22,7 @@ type RemoveSchemeProposal @entity {
 	descriptionHash: String!
 }
 
-type SRProposalExecuted @entity {
+type SchemeRegistrarProposalExecuted @entity {
 	id: ID!
 	txHash: Bytes!
 	contract: Bytes!
@@ -34,11 +34,11 @@ type SRProposalExecuted @entity {
 type SchemeRegistrarProposal @entity {
 	id: ID!
 	dao: DAO!
-	schemeToRegister: Bytes!
-	schemeToRegisterParamsHash: Bytes!
-	schemeToRegisterPermission: Bytes!
-  schemeToRemove: Bytes!
-  decision: BigInt!
-  schemeRegistered: Boolean!
-  schemeRemoved: Boolean!
+	schemeToRegister: Bytes
+	schemeToRegisterParamsHash: Bytes
+	schemeToRegisterPermission: Bytes
+  schemeToRemove: Bytes
+  decision: BigInt
+  schemeRegistered: Boolean
+  schemeRemoved: Boolean
 }

@@ -4,53 +4,76 @@ import { Address, BigInt, Bytes, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Reputation contract ABI
 import {
-} from '../../types/ContributionReward/ContributionReward';
+  NewSchemeProposal,
+  RemoveSchemeProposal,
+  ProposalExecuted,
+} from '../../types/SchemeRegistrar/SchemeRegistrar';
+
+import {
+  getDAO,
+} from '../../domain/dao';
 
 import * as domain from '../../domain';
 
 // Import entity types generated from the GraphQL schema
 import {
+   SchemeRegistrarNewSchemeProposal,
+   SchemeRegistrarRemoveSchemeProposal,
+   SchemeRegistrarProposalExecuted,
+   SchemeRegistrarProposal,
 } from '../../types/schema';
-import { equals, eventId } from '../../utils';
+import { equals, eventId ,debug } from '../../utils';
 
 export function handleNewSchemeProposal(event: NewSchemeProposal): void {
-  let ent = NewSchemeProposal.load(eventId(event));
+  let ent = SchemeRegistrarNewSchemeProposal.load(eventId(event));
+  if (ent == null) {
+    ent = new SchemeRegistrarNewSchemeProposal(eventId(event));
+  }
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
   ent.proposalId = event.params._proposalId;
   ent.scheme = event.params._scheme;
-  ent.paramsHash = event.params._paramsHash;
-  ent.permission = event.params._permission;
+  ent.paramsHash = event.params._parametersHash;
+  ent.permission = event.params._permissions;
   ent.descriptionHash = event.params._descriptionHash;
-  ent.votingMachine = event.params._votingMachine;
-
+  ent.votingMachine = event.params._intVoteInterface;
   //need to fill up other fileds.
   ent.save();
-  insertNewProposalRegister(ent.avatr,
-                            ent.proposalId,
-                            ent.scheme,
-                            ent.paramsHash,
-                            ent.permission);
 
-    domain.handleNewSchemeRegisterProposal(ent.proposalId,
-                                           event.block.timestamp,
-                                           ent.avatar,
-                                           ent.votingMachine,
-                                           ent.descriptionHash);
+
+  domain.handleNewSchemeRegisterProposal(event.params._proposalId.toHex(),
+                                         event.block.timestamp,
+                                         ent.avatar,
+                                         ent.votingMachine,
+                                         ent.descriptionHash);
+insertNewProposalRegister(ent.avatar as Address,
+                          ent.proposalId,
+                          ent.scheme,
+                          ent.paramsHash,
+                          ent.permission);
 }
 
 export function handleRemoveSchemeProposal(event: RemoveSchemeProposal): void {
-  let ent = RemoveSchemeProposal.load(eventId(event));
+  let ent = SchemeRegistrarRemoveSchemeProposal.load(eventId(event));
+  if (ent == null) {
+    ent = new SchemeRegistrarRemoveSchemeProposal(eventId(event));
+  }
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
   ent.proposalId = event.params._proposalId;
   ent.descriptionHash = event.params._descriptionHash;
-  ent.votingMachine = event.params._votingMachine;
+  ent.votingMachine = event.params._intVoteInterface;
+  ent.scheme = event.params._scheme;
   //need to fill up other fileds.
   ent.save();
-  domain.handleNewSchemeRegisterProposal(ent.proposalId,
+
+  insertNewProposalUnRegister(ent.avatar as Address,
+                              ent.proposalId,
+                              ent.scheme);
+
+  domain.handleNewSchemeRegisterProposal(event.params._proposalId.toHex(),
                                          event.block.timestamp,
                                          ent.avatar,
                                          ent.votingMachine,
@@ -58,44 +81,59 @@ export function handleRemoveSchemeProposal(event: RemoveSchemeProposal): void {
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
-  let ent = SRProposalExecuted.load(eventId(event));
+  let ent = SchemeRegistrarProposalExecuted.load(eventId(event));
+  if (ent == null) {
+    ent = new SchemeRegistrarProposalExecuted(eventId(event));
+  }
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
   ent.proposalId = event.params._proposalId;
-  ent.decision = event.params._decision;
+  ent.decision = event.params._param;
     //need to fill up other fileds.
   ent.save();
+  updateProposalExecution(ent.proposalId,  ent.decision);
 }
 
-function insertNewProposalRegister(avatar: Bytes,proposalId:Bytes,scheme:Bytes,paramsHash:Bytes,permission:Bytes): void {
+function insertNewProposalRegister(avatar: Address,proposalId:Bytes,scheme:Bytes,paramsHash:Bytes,permissions:Bytes): void {
   let ent = SchemeRegistrarProposal.load(proposalId.toHex());
-  ent.dao = avatar;
+  if (ent == null) {
+    ent = new SchemeRegistrarProposal(proposalId.toHex());
+  }
+  ent.dao = avatar.toHex();
   ent.schemeToRegister = scheme;
 	ent.schemeToRegisterParamsHash =  paramsHash;
-	ent.permission =  permission;
-  ent.schemeToRemove = null;
+	ent.schemeToRegisterPermission =  permissions;
+  debug("oren");
   //need to fill up other fileds.
   ent.save();
 }
 
-function insertNewProposalUnRegister(avatar: Bytes,proposalId:Bytes,scheme:Bytes): void {
+function insertNewProposalUnRegister(avatar: Address,proposalId:Bytes,scheme:Bytes): void {
   let ent = SchemeRegistrarProposal.load(proposalId.toHex());
-  ent.dao = avatar;
+  if (ent == null) {
+    ent = new SchemeRegistrarProposal(proposalId.toHex());
+  }
+
+  ent.dao = avatar.toHex();
   ent.schemeToRemove = scheme;
-  ent.schemeToRegister = null;
+  debug("oren1");
   //need to fill up other fileds.
   ent.save();
 }
 
 function updateProposalExecution(proposalId:Bytes,decision:BigInt): void {
   let ent = SchemeRegistrarProposal.load(proposalId.toHex());
+  if (ent == null) {
+    ent = new SchemeRegistrarProposal(proposalId.toHex());
+  }
   ent.decision = decision;
   if (ent.schemeToRegister != null) {
     ent.schemeRegistered = true;
   } else {
-    ent.schemeRemoved = true;
+    ent.schemeRemoved = false;
   }
+  debug("oren2");
   //need to fill up other fileds.
   ent.save();
 }

@@ -19,7 +19,14 @@ type DAO @entity {
 	members: [Member!] @derivedFrom(field: "dao")
 	membersCount: BigInt!
 	rewards: [GPReward!] @derivedFrom(field: "dao")
+	gpQues:[GPQue!] @derivedFrom(field: "dao")
+}
+
+type GPQue @entity {
+	id: ID!
+	paramsHash: Bytes!
 	threshold: BigInt!
+	dao: DAO!
 }
 
 type Rep @entity {

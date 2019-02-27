@@ -437,7 +437,6 @@ describe('Domain Layer', () => {
     const address0Rep = await reputation.methods.balanceOf(accounts[0].address).call();
     const address1Rep = await reputation.methods.balanceOf(accounts[1].address).call();
     const address2Rep = await reputation.methods.balanceOf(accounts[2].address).call();
-    const address3Rep = await reputation.methods.balanceOf(accounts[3].address).call();
     const address4Rep = await reputation.methods.balanceOf(accounts[4].address).call();
 
     const v1Timestamp = await vote({

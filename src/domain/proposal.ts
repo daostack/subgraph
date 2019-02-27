@@ -147,6 +147,20 @@ export function updateCRProposal(
   saveProposal(proposal);
 }
 
+export function updateGSProposal(
+  proposalId: Bytes,
+  createdAt: BigInt,
+  avatarAddress: Address,
+  descriptionHash: string,
+): void {
+  let proposal = getProposal(proposalId.toHex());
+  proposal.dao = avatarAddress.toHex();
+  proposal.genericScheme = proposalId.toHex();
+  proposal.createdAt = createdAt;
+  proposal.descriptionHash = descriptionHash;
+  saveProposal(proposal);
+}
+
 export function updateProposalExecution(
   proposalId: Bytes,
   totalReputation: BigInt,
@@ -163,15 +177,15 @@ export function updateProposalExecution(
 export function updateProposalExecutionState(id: string, executionState: number): void {
   let proposal = getProposal(id);
   // enum ExecutionState { None, QueueBarCrossed, QueueTimeOut, PreBoostedBarCrossed, BoostedTimeOut, BoostedBarCrossed}
-  if (state === 1) {
+  if (executionState === 1) {
     proposal.executionState = 'QueueBarCrossed';
-  } else if (state === 2) {
+  } else if (executionState === 2) {
     proposal.executionState = 'QueueTimeOut';
-  } else if (state === 3) {
+  } else if (executionState === 3) {
     proposal.executionState = 'PreBoostedBarCrossed';
-  } else if (state === 4) {
+  } else if (executionState === 4) {
     proposal.executionState = 'BoostedTimeOut';
-  } else if (state === 5) {
+  } else if (executionState === 5) {
     proposal.executionState = 'BoostedBarCrossed';
   }
   saveProposal(proposal);

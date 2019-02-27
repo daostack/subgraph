@@ -1,0 +1,7 @@
+entities:
+  - GenericSchemeProposal
+eventHandlers:
+  - event: ProposalExecuted(address,bytes32,bytes)
+    handler: handleProposalExecuted
+  - event: NewCallProposal(address,bytes32,bytes,string)
+    handler: handleNewCallProposal

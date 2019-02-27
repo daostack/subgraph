@@ -7,8 +7,10 @@ import {
   ProposalExecuted,
 } from '../types/ContributionReward/ContributionReward';
 import { Transfer } from '../types/DAOToken/DAOToken';
+import { NewCallProposal } from '../types/GenericScheme/GenericScheme';
 import {
   ExecuteProposal,
+  GPExecuteProposal,
   NewProposal,
   Stake,
   StateChange,
@@ -26,6 +28,7 @@ import {
   saveProposal,
   updateCRProposal,
   updateGPProposal,
+  updateGSProposal,
   updateProposal,
   updateProposalconfidence,
   updateProposalExecution,
@@ -63,18 +66,22 @@ export function handleNewProposal(event: NewProposal): void {
 export function handleNewContributionProposal(
   event: NewContributionProposal,
 ): void {
-  let rewards = event.params._rewards;
-  let nativeTokenReward = rewards.shift();
-  let ethReward = rewards.shift();
-  let externalTokenReward = rewards.shift();
-  let periodLength = rewards.shift();
-  let periods = rewards.shift();
-
   updateCRProposal(
     event.params._proposalId,
     event.block.timestamp,
     event.params._avatar,
     event.params._intVoteInterface,
+    event.params._descriptionHash,
+  );
+}
+
+export function handleNewCallProposal(
+  event: NewCallProposal,
+): void {
+  updateGSProposal(
+    event.params._proposalId,
+    event.block.timestamp,
+    event.params._avatar,
     event.params._descriptionHash,
   );
 }

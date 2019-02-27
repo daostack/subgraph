@@ -86,8 +86,10 @@ type Proposal @entity {
 	voteOnBehalf: Bytes!
 
 	# Contribution Reward params
-	contributionReward: ContributionRewardProposal 
+	contributionReward: ContributionRewardProposal
 
+	# Generic Scheme params
+	genericScheme : GenericSchemeProposal
 }
 
 type ProposalStake @entity {

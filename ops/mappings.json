@@ -57,6 +57,12 @@
         "mapping": "ContributionReward"
       },
       {
+        "name": "GenericScheme",
+        "contractName": "GenericScheme",
+        "dao": "base",
+        "mapping": "GenericScheme"
+      },
+      {
         "name": "Avatar",
         "contractName": "Avatar",
         "dao": "dao",
@@ -102,6 +108,12 @@
         "contractName": "ContributionReward",
         "dao": "base",
         "mapping": "ContributionReward"
+      },
+      {
+        "name": "GenericScheme",
+        "contractName": "GenericScheme",
+        "dao": "base",
+        "mapping": "GenericScheme"
       },
       {
         "name": "Avatar",

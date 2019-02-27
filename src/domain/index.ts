@@ -86,8 +86,7 @@ export function handleNewCallProposal(
     event.params._descriptionHash,
   );
 
-
-export function handleNewSchemeRegisterProposal(
+  export function handleNewSchemeRegisterProposal(
   proposalId: string,
   timestamp: BigInt,
   avatar: Bytes,
@@ -103,7 +102,7 @@ export function handleNewSchemeRegisterProposal(
    );
 }
 
-export function handleStake(event: Stake): void {
+  export function handleStake(event: Stake): void {
   let proposal = getProposal(event.params._proposalId.toHex());
   updateProposal(proposal, event.address, event.params._proposalId);
   if (equals(event.params._vote, BigInt.fromI32(1))) {
@@ -125,7 +124,7 @@ export function handleStake(event: Stake): void {
   insertGPRewardsToHelper(event.params._proposalId, event.params._staker, event.block.timestamp);
 }
 
-export function handleVoteProposal(event: VoteProposal): void {
+  export function handleVoteProposal(event: VoteProposal): void {
   let proposal = getProposal(event.params._proposalId.toHex());
   updateProposal(proposal, event.address, event.params._proposalId);
   if (equals(event.params._vote, BigInt.fromI32(1))) {
@@ -148,16 +147,16 @@ export function handleVoteProposal(event: VoteProposal): void {
   insertGPRewardsToHelper(event.params._proposalId, event.params._voter, event.block.timestamp);
 }
 
-export function handleProposalExecuted(event: ProposalExecuted): void {
+  export function handleProposalExecuted(event: ProposalExecuted): void {
   // this already handled at handleExecuteProposal
   // updateProposalExecution(event.params._proposalId, null, event.block.timestamp,event.address);
 }
 
-export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {
+  export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {
   updateProposalconfidence(proposalId, confidenceThreshold);
 }
 
-export function handleRegisterScheme(event: RegisterScheme): void {
+  export function handleRegisterScheme(event: RegisterScheme): void {
   // Detect the first register scheme event which indicates a new DAO
   let isFirstRegister = store.get(
     'FirstRegisterSchemeFlag',
@@ -189,7 +188,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   }
 }
 
-export function handleMint(event: Mint): void {
+  export function handleMint(event: Mint): void {
   let rep = getReputation(event.address.toHex());
   if (rep.dao == null) {
     // reputation that's not attached to a DAO
@@ -200,7 +199,7 @@ export function handleMint(event: Mint): void {
   updateReputationTotalSupply(event.address);
 }
 
-export function handleBurn(event: Burn): void {
+  export function handleBurn(event: Burn): void {
   let dao = getReputation(event.address.toHex()).dao;
   if (dao == null) {
     // reputation that's not attached to a DAO
@@ -210,7 +209,7 @@ export function handleBurn(event: Burn): void {
   updateReputationTotalSupply(event.address);
 }
 
-export function handleNativeTokenTransfer(event: Transfer): void {
+  export function handleNativeTokenTransfer(event: Transfer): void {
   let dao = getToken(event.address.toHex()).dao;
   if (dao == null) {
     // reputation that's not attached to a DAO
@@ -222,21 +221,21 @@ export function handleNativeTokenTransfer(event: Transfer): void {
   updateTokenTotalSupply(event.address);
 }
 
-export function handleExecuteProposal(event: ExecuteProposal): void {
+  export function handleExecuteProposal(event: ExecuteProposal): void {
    updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
    insertGPRewards(event.params._proposalId, event.block.timestamp, event.address);
 
 }
 
-export function handleStateChange(event: StateChange): void {
+  export function handleStateChange(event: StateChange): void {
   updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
 }
 
-export function handleExecutionStateChange(event: GPExecuteProposal): void {
+  export function handleExecutionStateChange(event: GPExecuteProposal): void {
   updateProposalExecutionState(event.params._proposalId.toHex(), event.params._executionState);
 }
 
-export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): void {
+  export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): void {
    if (type === 'token') {
        tokenRedemption(proposalId, beneficiary, timestamp);
    } else if (type === 'reputation') {

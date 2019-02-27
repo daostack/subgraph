@@ -12,9 +12,9 @@ DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 Run the tests in the host container:
 
 ```sh
-docker-compose up graph-node
-npm run test # in a new terminal
-docker-compose down -v
+npm run docker:run
+npm run test
+npm run docker:stop
 ```
 The tests are run with jest, which takes a number of options that may be useful when developing:
 ```sh
@@ -86,10 +86,16 @@ It is also recommended to read this guide: https://thegraph.com/docs/deploy-a-su
 2. Create a `.env` file containing the following:
 ```
 network="<TARGET_NETWORK>"
+subgraph="<YOUR_SUBGAPH_NAME>"
+
+# Not necessary for Docker deployment 
 graph_node="https://api.thegraph.com/deploy/"
 ipfs_node="https://api.thegraph.com/ipfs/"
-subgraph="<YOUR_SUBGAPH_NAME>"
 access_token=<YOUR_ACCESS_TOKEN>
+
+# Not necessary for The Graph server 
+postgres_password=<YOUR_PASSWORD>
+ethereum_node="https://<TARGET_NETWORK>.infura.io/<INFURA-KEY>"
 ```
 
 3. Run: ``npm run deploy``

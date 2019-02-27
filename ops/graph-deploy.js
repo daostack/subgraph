@@ -1,6 +1,6 @@
 const path = require('path')
 const { runGraphCli, subgraphLocation } = require('./graph-cli.js')
-const { network, graphNode, ipfsNode, subgraphName } = require('./settings')
+const { graphNode, ipfsNode, subgraphName } = require('./settings')
 
 async function deploy (cwd) {
   if (cwd === undefined) {
@@ -10,13 +10,13 @@ async function deploy (cwd) {
   let result
   let msg
 
-  if (network == "private") {
+  if (graphNode == 'http://127.0.0.1:8020/') {
     /* create the subgraph */
     result = await runGraphCli([
       'create',
       '--access-token ""',
       '--node ' + graphNode,
-      'daostack'
+      subgraphName
     ], cwd)
     msg = result[1] + result[2]
     if (result[0] === 1) {

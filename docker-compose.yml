@@ -1,36 +1,34 @@
 version: '3'
 services:
   graph-node:
-    image: graphprotocol/graph-node:latest@sha256:bc64577f8ed7d2a7badb575d85d99bf017bdddd68bf20b032c184654d27a4bef
+    image: >-
+      graphprotocol/graph-node:latest@sha256:bc64577f8ed7d2a7badb575d85d99bf017bdddd68bf20b032c184654d27a4bef
     ports:
-      - 8000:8000
-      - 8001:8001
-      - 8020:8020
+      - '8000:8000'
+      - '8001:8001'
+      - '8020:8020'
     links:
       - ipfs
       - postgres
       - ganache
     environment:
-      postgres_host: postgres:5432
+      postgres_host: 'postgres:5432'
       postgres_user: postgres
-      postgres_pass: 'letmein'
+      postgres_pass: letmein
       postgres_db: postgres
-      ipfs: ipfs:5001
-      ethereum: development:http://ganache:8545
-
+      ipfs: 'ipfs:5001'
+      ethereum: 'development:http://ganache:8545'
   ipfs:
     image: ipfs/go-ipfs
     ports:
-      - 5001:5001
-
+      - '5001:5001'
   postgres:
     image: postgres
     ports:
-      - 5434:5432
+      - '5434:5432'
     environment:
-      POSTGRES_PASSWORD: 'letmein'
-
+      POSTGRES_PASSWORD: letmein
   ganache:
-    image: daostack/migration:0.0.1-rc.11-v3
+    image: 'daostack/migration:0.0.1-rc.11-v3'
     ports:
-      - 8545:8545
+      - '8545:8545'

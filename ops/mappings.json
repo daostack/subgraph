@@ -128,5 +128,111 @@
         "mapping": "UController"
       }
     ]
+  },
+  "rinkeby":
+    { 
+      "mappings": [
+      {
+        "name": "GEN",
+        "contractName": "GEN",
+        "dao": "base",
+        "mapping": "DAOToken"
+      },
+      {
+        "name": "DAOToken",
+        "contractName": "DAOToken",
+        "dao": "dao",
+        "mapping": "DAOToken"
+      },
+      {
+        "name": "Reputation",
+        "contractName": "Reputation",
+        "dao": "dao",
+        "mapping": "Reputation"
+      },
+      {
+        "name": "GenesisProtocol",
+        "contractName": "GenesisProtocol",
+        "dao": "base",
+        "mapping": "GenesisProtocol"
+      },
+      {
+        "name": "ContributionReward",
+        "contractName": "ContributionReward",
+        "dao": "base",
+        "mapping": "ContributionReward"
+      },
+      {
+        "name": "GenericScheme",
+        "contractName": "GenericScheme",
+        "dao": "base",
+        "mapping": "GenericScheme"
+      },
+      {
+        "name": "Avatar",
+        "contractName": "Avatar",
+        "dao": "dao",
+        "mapping": "Avatar"
+      },
+      {
+        "name": "UController",
+        "contractName": "UController",
+        "dao": "base",
+        "mapping": "UController"
+      }
+    ]
+  },
+"mainnet":
+  { 
+    "mappings": [
+    {
+      "name": "GEN",
+      "contractName": "GEN",
+      "dao": "base",
+      "mapping": "DAOToken"
+    },
+    {
+      "name": "DAOToken",
+      "contractName": "DAOToken",
+      "dao": "dao",
+      "mapping": "DAOToken"
+    },
+    {
+      "name": "Reputation",
+      "contractName": "Reputation",
+      "dao": "dao",
+      "mapping": "Reputation"
+    },
+    {
+      "name": "GenesisProtocol",
+      "contractName": "GenesisProtocol",
+      "dao": "base",
+      "mapping": "GenesisProtocol"
+    },
+    {
+      "name": "ContributionReward",
+      "contractName": "ContributionReward",
+      "dao": "base",
+      "mapping": "ContributionReward"
+    },
+    {
+      "name": "GenericScheme",
+      "contractName": "GenericScheme",
+      "dao": "base",
+      "mapping": "GenericScheme"
+    },
+    {
+      "name": "Avatar",
+      "contractName": "Avatar",
+      "dao": "dao",
+      "mapping": "Avatar"
+    },
+    {
+      "name": "UController",
+      "contractName": "UController",
+      "dao": "base",
+      "mapping": "UController"
+    }
+  ]
   }
 }

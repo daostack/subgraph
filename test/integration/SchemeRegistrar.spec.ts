@@ -3,9 +3,6 @@ import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
 const AbsoluteVote = require('@daostack/arc/build/contracts/AbsoluteVote.json');
 const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
 const SchemeRegistrar = require('@daostack/arc/build/contracts/SchemeRegistrar.json');
-const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
-const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
-const UController = require('@daostack/arc/build/contracts/UController.json');
 
 describe('SchemeRegistrar', () => {
     let web3;
@@ -21,61 +18,17 @@ describe('SchemeRegistrar', () => {
 
     it('Sanity', async () => {
         const accounts = web3.eth.accounts.wallet;
-
-        // START long setup ...
-        const externalToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-            .deploy({ data: DAOToken.bytecode, arguments: ['Test Token', 'TST', '10000000000'] })
-            .send();
-        await externalToken.methods.mint(accounts[0].address, '100000').send();
-
-        const nativeToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-            .deploy({ data: DAOToken.bytecode, arguments: ['Test Token', 'TST', '10000000000'] })
-            .send();
-
-        const reputation = await new web3.eth.Contract(Reputation.abi, undefined, opts)
-            .deploy({ data: Reputation.bytecode, arguments: [] })
-            .send();
-        await reputation.methods.mint(accounts[1].address, 100000).send(); // to be able to pass a vote
-
-        const avatar = await new web3.eth.Contract(Avatar.abi, undefined, opts)
-            .deploy({ arguments: ['Test', nativeToken.options.address, reputation.options.address],
-                      data: Avatar.bytecode,
-                    })
-            .send();
-        await externalToken.methods.transfer(avatar.options.address, '100000').send();
-
-        const controller = await new web3.eth.Contract(UController.abi, undefined, opts)
-            .deploy({ data: UController.bytecode, arguments: [] })
-            .send();
-
-        const absVote = await new web3.eth.Contract(AbsoluteVote.abi, undefined, opts)
-            .deploy({ data: AbsoluteVote.bytecode, arguments: [] })
-            .send();
-
-        const setParams = absVote.methods.setParameters(20, '0x0000000000000000000000000000000000000000');
-        const absVoteParamsHash = await setParams.call();
-        await setParams.send();
-        const srSetParams = schemeRegistrar.methods.setParameters(absVoteParamsHash, absVoteParamsHash, absVote.options.address);
-        const paramsHash = await srSetParams.call();
-        await srSetParams.send();
-        await reputation.methods.transferOwnership(controller.options.address).send();
-        await nativeToken.methods.transferOwnership(controller.options.address).send();
-        await avatar.methods.transferOwnership(controller.options.address).send();
-        await controller.methods.newOrganization(avatar.options.address).send();
-        await controller.methods.registerScheme(
-            schemeRegistrar.options.address,
-            paramsHash,
-            '0x0000001F', // full permissions,
-            avatar.options.address,
-        ).send();
-        // END setup
+        const absVote = new web3.eth.Contract(
+          AbsoluteVote.abi,
+          addresses.AbsoluteVote,
+          opts,
+        );
 
         const descHash = '0x0000000000000000000000000000000000000000000000000000000000000123';
         const registerSchemeParamsHash = '0x0000000000000000000000000000000000000000000000000000000000001234';
 
-
         let propose = schemeRegistrar.methods.proposeScheme(
-            avatar.options.address,
+            addresses.Avatar,
             accounts[0].address,
             registerSchemeParamsHash,
             '0x0000001f',
@@ -96,22 +49,22 @@ describe('SchemeRegistrar', () => {
               paramsHash,
               permission,
             }
-        }`);
+        }`, 3000);
 
         expect(schemeRegistrarNewSchemeProposals).toContainEqual({
-            avatar: avatar.options.address.toLowerCase(),
+            avatar: addresses.Avatar.toLowerCase(),
             contract: schemeRegistrar.options.address.toLowerCase(),
             descriptionHash: descHash,
             proposalId,
             txHash: proposaTxHash,
-            votingMachine: absVote.options.address.toLowerCase(),
+            votingMachine: addresses.AbsoluteVote.toLowerCase(),
             scheme: accounts[0].address.toLowerCase(),
             paramsHash: registerSchemeParamsHash,
-            permission:'0x0000001f',
+            permission: '0x0000001f',
         });
 
         propose = schemeRegistrar.methods.proposeToRemoveScheme(
-            avatar.options.address,
+            addresses.Avatar,
             accounts[0].address,
             descHash,
         );
@@ -131,29 +84,46 @@ describe('SchemeRegistrar', () => {
         }`);
 
         expect(schemeRegistrarRemoveSchemeProposals).toContainEqual({
-            avatar: avatar.options.address.toLowerCase(),
+            avatar: addresses.Avatar.toLowerCase(),
             contract: schemeRegistrar.options.address.toLowerCase(),
             descriptionHash: descHash,
             proposalId: removeProposalId,
             txHash: removeProposaTxHash,
-            votingMachine: absVote.options.address.toLowerCase(),
+            votingMachine: addresses.AbsoluteVote.toLowerCase(),
             scheme: accounts[0].address.toLowerCase(),
         });
 
+        let i = 0;
+        // get absolute majority for both proposals
+        for (i = 0; i < 3; i++) {
+            await absVote.methods.vote(
+                                      proposalId,
+                                      1,
+                                      0,
+                                      accounts[0].address /* unused by the contract */)
+                                      .send({ from: accounts[i].address });
+            await absVote.methods.vote(
+                                      removeProposalId,
+                                      1,
+                                      0,
+                                      accounts[0].address /* unused by the contract */)
+                                      .send({ from: accounts[i].address });
+        }
+
         // pass the proposals
-        const { transactionHash: executeTxHash, blockNumber } = await absVote.methods.vote(
+        const { transactionHash: executeTxHash } = await absVote.methods.vote(
                                                                 proposalId,
                                                                 1,
                                                                 0,
                                                                 accounts[0].address /* unused by the contract */)
-                                                                .send({ from: accounts[1].address });
+                                                                .send({ from: accounts[i].address });
 
-        // const { transactionHash: removeExecuteTxHash, removeBlockNumber } = await absVote.methods.vote(
-        //                                                         removeProposalId,
-        //                                                         1,
-        //                                                         0,
-        //                                                         accounts[0].address /* unused by the contract */)
-        //                                                         .send({ from: accounts[1].address });
+        const { transactionHash: removeExecuteTxHash } = await absVote.methods.vote(
+                                                                removeProposalId,
+                                                                1,
+                                                                0,
+                                                                accounts[0].address /* unused by the contract */)
+                                                                .send({ from: accounts[i].address });
 
         const { schemeRegistrarProposalExecuteds } = await sendQuery(`{
             schemeRegistrarProposalExecuteds {
@@ -166,24 +136,26 @@ describe('SchemeRegistrar', () => {
         }`);
 
         expect(schemeRegistrarProposalExecuteds).toContainEqual({
-          avatar: avatar.options.address.toLowerCase(),
+          avatar: addresses.Avatar.toLowerCase(),
           contract: schemeRegistrar.options.address.toLowerCase(),
-          proposalId: proposalId,
+          proposalId,
           txHash: executeTxHash,
           decision: '1',
         });
 
-        // expect(schemeRegistrarProposalExecuteds).toContainEqual(
-        // {avatar: avatar.options.address.toLowerCase(),
-        // contract: schemeRegistrar.options.address.toLowerCase(),
-        // proposalId: removeProposalId,
-        // txHash: removeExecuteTxHash,
-        // decision: '1',
-        // });
+        expect(schemeRegistrarProposalExecuteds).toContainEqual(
+        {avatar: addresses.Avatar.toLowerCase(),
+        contract: schemeRegistrar.options.address.toLowerCase(),
+        proposalId: removeProposalId,
+        txHash: removeExecuteTxHash,
+        decision: '1',
+        });
 
         const { schemeRegistrarProposals } = await sendQuery(`{
             schemeRegistrarProposals {
-              dao,
+              dao {
+                id
+              },
               schemeToRegister,
               schemeToRegisterParamsHash,
               schemeToRegisterPermission,
@@ -191,221 +163,32 @@ describe('SchemeRegistrar', () => {
               decision,
               schemeRegistered,
               schemeRemoved,
+              id
             }
         }`);
 
-        expect(schemeRegistrarProposalExecuteds).toContainEqual({
-          avatar: avatar.options.address.toLowerCase(),
-          contract: schemeRegistrar.options.address.toLowerCase(),
-          proposalId: proposalId,
-          txHash: executeTxHash,
+        expect(schemeRegistrarProposals).toContainEqual({
+          dao: { id : addresses.Avatar.toLowerCase() },
+          schemeToRegister: accounts[0].address.toLowerCase(),
+          schemeToRegisterParamsHash: registerSchemeParamsHash,
+          schemeToRegisterPermission: '0x0000001f',
+          schemeToRemove: null,
+          id: proposalId,
+          schemeRegistered: true,
+          schemeRemoved: null,
           decision: '1',
         });
-        //
-        // // pass the proposal
-        // const { transactionHash: executeTxHash, blockNumber } = await absVote.methods.vote(
-        //                                                         proposalId,
-        //                                                         1,
-        //                                                         0,
-        //                                                         accounts[0].address /* unused by the contract */)
-        //                                                         .send({ from: accounts[1].address });
-        // const block = await web3.eth.getBlock(blockNumber);
-        //
-        // const { contributionRewardProposalResolveds } = await sendQuery(`{
-        //     contributionRewardProposalResolveds {
-        //       txHash
-        //       contract
-        //       avatar
-        //       proposalId
-        //       passed
-        //     }
-        // }`);
-        //
-        // expect(contributionRewardProposalResolveds).toContainEqual({
-        //     avatar: avatar.options.address.toLowerCase(),
-        //     contract: contributionReward.options.address.toLowerCase(),
-        //     txHash: executeTxHash,
-        //
-        //     passed: true,
-        //     proposalId,
-        // });
-        //
-        // contributionRewardProposals = (await sendQuery(`{
-        //     contributionRewardProposals {
-        //         executedAt
-        //     }
-        // }`)).contributionRewardProposals;
-        //
-        // expect(contributionRewardProposals).toContainEqual({
-        //     executedAt: block.timestamp.toString(),
-        // });
-        //
-        // // wait 2 periods
-        // await new Promise((res) => setTimeout(res, rewards.periodLength * 2 * 1000));
-        // const { transactionHash: redeemReputationTxHash } = await contributionReward
-        //                                                           .methods
-        //                                                           .redeemReputation(proposalId,
-        //                                                                             avatar.options.address)
-        //                                                                             .send();
-        //
-        // const { contributionRewardRedeemReputations } = await sendQuery(`{
-        //     contributionRewardRedeemReputations {
-        //       txHash,
-        //       contract,
-        //       avatar,
-        //       beneficiary,
-        //       proposalId,
-        //       amount
-        //     }
-        // }`);
-        //
-        // expect(contributionRewardRedeemReputations.length).toEqual(1);
-        // expect(contributionRewardRedeemReputations).toContainEqual({
-        //     txHash: redeemReputationTxHash,
-        //     contract: contributionReward.options.address.toLowerCase(),
-        //     avatar: avatar.options.address.toLowerCase(),
-        //     beneficiary: accounts[1].address.toLowerCase(),
-        //     proposalId,
-        //     amount: (rewards.rep * 2).toString(),
-        // });
-        //
-        // contributionRewardProposals = (await sendQuery(`{
-        //     contributionRewardProposals {
-        //         alreadyRedeemedReputationPeriods
-        //     }
-        // }`)).contributionRewardProposals;
-        //
-        // expect(contributionRewardProposals).toContainEqual({
-        //     alreadyRedeemedReputationPeriods: '2',
-        // });
-        //
-        // const { transactionHash: redeemNativeTokenTxHash } = await contributionReward
-        //                                                            .methods
-        //                                                            .redeemNativeToken(proposalId,
-        //                                                                               avatar.options.address)
-        //                                                            .send();
-        //
-        // const { contributionRewardRedeemNativeTokens } = await sendQuery(`{
-        //     contributionRewardRedeemNativeTokens {
-        //       txHash,
-        //       contract,
-        //       avatar,
-        //       beneficiary,
-        //       proposalId,
-        //       amount
-        //     }
-        // }`);
-        //
-        // expect(contributionRewardRedeemNativeTokens.length).toEqual(1);
-        // expect(contributionRewardRedeemNativeTokens).toContainEqual({
-        //     txHash: redeemNativeTokenTxHash,
-        //     contract: contributionReward.options.address.toLowerCase(),
-        //     avatar: avatar.options.address.toLowerCase(),
-        //     beneficiary: accounts[1].address.toLowerCase(),
-        //     proposalId,
-        //     amount: (rewards.nativeToken * 2).toString(),
-        // });
-        //
-        // contributionRewardProposals = (await sendQuery(`{
-        //     contributionRewardProposals {
-        //         alreadyRedeemedNativeTokenPeriods
-        //     }
-        // }`)).contributionRewardProposals;
-        //
-        // expect(contributionRewardProposals).toContainEqual({
-        //     alreadyRedeemedNativeTokenPeriods: '2',
-        // });
-        //
-        // const { transactionHash: redeemExternalTokenTxHash } = await contributionReward
-        //                                                              .methods.
-        //                                                              redeemExternalToken(proposalId,
-        //                                                              avatar.options.address)
-        //                                                              .send();
-        //
-        // const { contributionRewardRedeemExternalTokens } = await sendQuery(`{
-        //     contributionRewardRedeemExternalTokens {
-        //       txHash,
-        //       contract,
-        //       avatar,
-        //       beneficiary,
-        //       proposalId,
-        //       amount
-        //     }
-        // }`);
-        //
-        // expect(contributionRewardRedeemExternalTokens.length).toEqual(1);
-        // expect(contributionRewardRedeemExternalTokens).toContainEqual({
-        //     txHash: redeemExternalTokenTxHash,
-        //     contract: contributionReward.options.address.toLowerCase(),
-        //     avatar: avatar.options.address.toLowerCase(),
-        //     beneficiary: accounts[1].address.toLowerCase(),
-        //     proposalId,
-        //     amount: (rewards.externalToken * 2).toString(),
-        // });
-        //
-        // contributionRewardProposals = (await sendQuery(`{
-        //     contributionRewardProposals {
-        //         alreadyRedeemedExternalTokenPeriods
-        //     }
-        // }`)).contributionRewardProposals;
-        //
-        // expect(contributionRewardProposals).toContainEqual({
-        //     alreadyRedeemedExternalTokenPeriods: '2',
-        // });
-        //
-        // await web3.eth.sendTransaction({ from: accounts[0].address,
-        //                                  to: avatar.options.address,
-        //                                  value: web3.utils.toWei('10', 'ether'),
-        //                                  data: '0xABCD', // data field is needed here due to bug in ganache
-        //                                  gas: 50000});
-        //
-        // const { transactionHash: redeemEtherTxHash } = await contributionReward
-        //                                                      .methods
-        //                                                      .redeemEther(proposalId,
-        //                                                       avatar.options.address)
-        //                                                       .send({gas: 1000000});
-        //
-        // const receipt = await web3.eth.getTransactionReceipt(redeemEtherTxHash);
-        //
-        // let amountRedeemed = 0;
-        // await contributionReward.getPastEvents('RedeemEther', {
-        //       fromBlock: receipt.blockNumber,
-        //       toBlock: 'latest',
-        //   })
-        //   .then(function(events) {
-        //       amountRedeemed = events[0].returnValues._amount;
-        //   });
-        //
-        // const { contributionRewardRedeemEthers } = await sendQuery(`{
-        //     contributionRewardRedeemEthers {
-        //       txHash,
-        //       contract,
-        //       avatar,
-        //       beneficiary,
-        //       proposalId,
-        //       amount
-        //     }
-        // }`);
-        //
-        // expect(contributionRewardRedeemEthers.length).toEqual(1);
-        // expect(contributionRewardRedeemEthers).toContainEqual({
-        //     txHash: redeemEtherTxHash,
-        //     contract: contributionReward.options.address.toLowerCase(),
-        //     avatar: avatar.options.address.toLowerCase(),
-        //     beneficiary: accounts[1].address.toLowerCase(),
-        //     proposalId,
-        //     amount: (amountRedeemed).toString(),
-        // });
-        //
-        // contributionRewardProposals = (await sendQuery(`{
-        //     contributionRewardProposals {
-        //         alreadyRedeemedEthPeriods
-        //     }
-        // }`)).contributionRewardProposals;
-        //
-        // expect(contributionRewardProposals).toContainEqual({
-        //     alreadyRedeemedEthPeriods: '2',
-        // });
 
+        expect(schemeRegistrarProposals).toContainEqual({
+          dao: { id : addresses.Avatar.toLowerCase() },
+          schemeToRegister: null,
+          schemeToRegisterParamsHash: null,
+          schemeToRegisterPermission: null,
+          schemeToRemove: accounts[0].address.toLowerCase(),
+          id: removeProposalId,
+          schemeRegistered: null,
+          schemeRemoved: true,
+          decision: '1',
+        });
     }, 100000);
 });

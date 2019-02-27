@@ -41,9 +41,9 @@ let debugId = 0;
 export function debug(msg: string): void {
 
   let id = BigInt.fromI32(debugId).toHex();
-  let ent = new Debug(id);
+  let ent = new Debug(msg);
   ent.set('message', Value.fromString(msg));
-  store.set('Debug', id, ent);
+  store.set('Debug', msg, ent);
   debugId++;
 }
 

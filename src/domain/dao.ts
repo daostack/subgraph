@@ -44,7 +44,7 @@ export function insertNewDAO(
   dao.nativeReputation = nativeReputationAddress.toHex();
   dao.membersCount = BigInt.fromI32(0);
   // 0x10000000000
-  //dao.threshold =  BigInt.fromI32(1073741824).times(BigInt.fromI32(1024));
+  // dao.threshold =  BigInt.fromI32(1073741824).times(BigInt.fromI32(1024));
   saveDAO(dao);
   // add the avatar as a member so we can track its balance
   getMember(avatarAddress, avatarAddress);

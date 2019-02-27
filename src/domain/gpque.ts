@@ -13,7 +13,7 @@ export function updateThreshold(dao: string,
                                 threshold: BigInt,
                                 paramsHash: Bytes,
                                 organizationId: Bytes): void {
-  let gPQue = getGPQue(organizationId.toString());
+  let gPQue = getGPQue(organizationId.toHex());
   gPQue.threshold =  threshold;
   gPQue.paramsHash = paramsHash;
   gPQue.dao = dao;

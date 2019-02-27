@@ -60,11 +60,12 @@ export function updateProposalState(id: Bytes, state: number, gpAddress: Address
    let gp = GenesisProtocol.bind(gpAddress);
    let proposal = getProposal(id.toHex());
 
-   updateThreshold(proposal.dao,
+   updateThreshold(proposal.dao.toString(),
                    gp.threshold(proposal.paramsHash, proposal.organizationId),
                    proposal.paramsHash,
-                   proposal.organizationId
+                   proposal.organizationId,
                    );
+
    setProposalState(proposal, state, gp.getProposalTimes(id));
    if (state === 4) {
      proposal.confidenceThreshold = gp.proposals(id).value10;

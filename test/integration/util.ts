@@ -25,7 +25,6 @@ export async function sendQuery(q: string, maxDelay = 1000) {
   } = await axios.post(node_http, {
     query: q,
   });
-
   return data;
 }
 

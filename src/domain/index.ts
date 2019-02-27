@@ -88,11 +88,11 @@ export function handleNewCallProposal(
 
 
 export function handleNewSchemeRegisterProposal(
-  proposalId: String,
+  proposalId: string,
   timestamp: BigInt,
   avatar: Bytes,
-  votingMachine : Bytes,
-  descriptionHash : String,
+  votingMachine: Bytes,
+  descriptionHash: string,
 ): void {
    updateSRProposal(
      proposalId,
@@ -100,7 +100,7 @@ export function handleNewSchemeRegisterProposal(
      avatar as Address,
      votingMachine as Address,
      descriptionHash,
-   )
+   );
 }
 
 export function handleStake(event: Stake): void {

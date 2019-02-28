@@ -76,6 +76,7 @@ export function insertGPRewards(
   proposalId: Bytes,
   timestamp: BigInt,
   gpAddress: Address,
+  state: number,
 ): void {
   let proposal = getProposal(proposalId.toHex());
   let genesisProtocolExt = GenesisProtocolExt.bind(gpAddress);
@@ -84,7 +85,10 @@ export function insertGPRewards(
   for (i = 0; i < gpRewards.length; i++) {
     let gpReward = GPReward.load(gpRewards[i]);
     let redeemValues = genesisProtocolExt.redeem(proposalId, gpReward.beneficiary as Address);
-    let daoBountyForStaker = genesisProtocolExt.redeemDaoBounty(proposalId, gpReward.beneficiary as Address).value1;
+    let daoBountyForStaker: BigInt;
+    if (state === 2) {// call redeemDaoBounty only on execute
+       daoBountyForStaker = genesisProtocolExt.redeemDaoBounty(proposalId, gpReward.beneficiary as Address).value1;
+    }
     if (!equals(redeemValues[0], BigInt.fromI32(0)) ||
         !equals(redeemValues[1], BigInt.fromI32(0)) ||
         !equals(redeemValues[2], BigInt.fromI32(0)) ||

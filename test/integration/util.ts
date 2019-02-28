@@ -75,7 +75,7 @@ export async function getOptions(web3) {
 export async function writeProposalIPFS(data: any) {
   const ipfsClient = IPFSClient(ipfs);
   const ipfsResponse = await ipfsClient.add(new Buffer(JSON.stringify(data)));
-  
+
   return ipfsResponse[0].path;
 }
 

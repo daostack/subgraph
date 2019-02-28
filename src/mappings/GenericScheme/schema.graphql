@@ -1,0 +1,8 @@
+type GenericSchemeProposal @entity {
+    id: ID!
+ 	dao: DAO!
+ 	contractToCall: Bytes!
+    callData: Bytes!
+    executed: Boolean!
+    returnValue: Bytes
+}

@@ -1,4 +1,3 @@
-const path = require('path');
 require('dotenv').config();
 const IPFSClient = require('ipfs-http-client');
 
@@ -56,9 +55,11 @@ export async function getWeb3() {
 export function getContractAddresses() {
   const addresses = require(`${__dirname}/../../migration.json`);
   return {
+    ...addresses.private.test,
     ...addresses.private.dao,
     ...addresses.private.base,
     ...addresses.private.organs,
+    TestAvatar: addresses.private.test.Avatar,
     NativeToken: addresses.private.dao.DAOToken,
     NativeReputation: addresses.private.dao.Reputation,
   };

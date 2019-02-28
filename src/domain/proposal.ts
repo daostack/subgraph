@@ -1,9 +1,8 @@
 import { Address, BigInt, Bytes, ipfs, json, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { Proposal, ProposalVote, Reward } from '../types/schema';
-import { concat, equals } from '../utils';
+import { Proposal } from '../types/schema';
+import { equals } from '../utils';
 import { updateThreshold } from './dao';
-import { getMember } from './member';
 
 export function parseOutcome(num: BigInt): string {
   if (equals(num, BigInt.fromI32(1))) {
@@ -100,6 +99,7 @@ export function updateGPProposal(
   proposer: Address,
   avatarAddress: Address,
   paramsHash: Bytes,
+  timestamp: BigInt,
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let proposal = getProposal(proposalId.toHex());
@@ -126,7 +126,8 @@ export function updateGPProposal(
   proposal.confidenceThreshold = gpProposal.value10;
   proposal.paramsHash = paramsHash;
   proposal.organizationId = gpProposal.value0;
-
+  proposal.expiresInQueueAt = timestamp.plus(params.value1);
+  proposal.createdAt = timestamp;
   saveProposal(proposal);
 }
 
@@ -135,29 +136,13 @@ export function updateCRProposal(
   createdAt: BigInt,
   avatarAddress: Address,
   votingMachine: Address,
-  beneficiary: Address,
   descriptionHash: string,
-  periodLength: BigInt,
-  periods: BigInt,
-  reputationReward: BigInt,
-  nativeTokenReward: BigInt,
-  ethReward: BigInt,
-  externalToken: Address,
-  externalTokenReward: BigInt,
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.dao = avatarAddress.toHex();
-  proposal.beneficiary = beneficiary;
-  proposal.reputationReward = reputationReward;
+  proposal.contributionReward = proposalId.toHex();
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
-
-  proposal.nativeTokenReward = nativeTokenReward;
-  proposal.ethReward = ethReward;
-  proposal.externalTokenReward = externalTokenReward;
-  proposal.periodLength = periodLength;
-  proposal.periods = periods;
-  proposal.externalToken = externalToken;
   proposal.descriptionHash = descriptionHash;
 
   // IPFS reading
@@ -173,30 +158,19 @@ export function updateCRProposal(
   saveProposal(proposal);
 }
 
-// export function updateProposalExecution(
-//   proposalId: Bytes,
-//   timestamp: BigInt,
-// ): void {
-//   let proposal = getProposal(proposalId.toHex());
-//   proposal.executedAt = timestamp;
-//   let voters: string[] = proposal.votes as string[];
-//   for (let i = 0; i < voters.length; i++) {
-//     let proposalVote = store.get('ProposalVote', voters[i]) as ProposalVote;
-//     let voterAddress = store.get('Member', proposalVote.member).address;
-//     let uniqueId = i.toString();
-//     let reward = new Reward(uniqueId);
-//     reward.beneficiary = voterAddress;
-//     reward.proposal = proposal.id;
-//     //reward.reason = ;
-//     let genesisProtocol = GenesisProtocol.bind(address);
-//     reward.amount = 0;
-//     reward.redeemed = 0;
-//
-//     proposal.rewards.push();
-//   }
-//
-//   saveProposal(proposal);
-// }
+export function updateGSProposal(
+  proposalId: Bytes,
+  createdAt: BigInt,
+  avatarAddress: Address,
+  descriptionHash: string,
+): void {
+  let proposal = getProposal(proposalId.toHex());
+  proposal.dao = avatarAddress.toHex();
+  proposal.genericScheme = proposalId.toHex();
+  proposal.createdAt = createdAt;
+  proposal.descriptionHash = descriptionHash;
+  saveProposal(proposal);
+}
 
 export function updateProposalExecution(
   proposalId: Bytes,
@@ -214,15 +188,15 @@ export function updateProposalExecution(
 export function updateProposalExecutionState(id: string, executionState: number): void {
   let proposal = getProposal(id);
   // enum ExecutionState { None, QueueBarCrossed, QueueTimeOut, PreBoostedBarCrossed, BoostedTimeOut, BoostedBarCrossed}
-  if (state === 1) {
+  if (executionState === 1) {
     proposal.executionState = 'QueueBarCrossed';
-  } else if (state === 2) {
+  } else if (executionState === 2) {
     proposal.executionState = 'QueueTimeOut';
-  } else if (state === 3) {
+  } else if (executionState === 3) {
     proposal.executionState = 'PreBoostedBarCrossed';
-  } else if (state === 4) {
+  } else if (executionState === 4) {
     proposal.executionState = 'BoostedTimeOut';
-  } else if (state === 5) {
+  } else if (executionState === 5) {
     proposal.executionState = 'BoostedBarCrossed';
   }
   saveProposal(proposal);

@@ -18,7 +18,7 @@ type DAO @entity {
 	proposals: [Proposal!] @derivedFrom(field: "dao")
 	members: [Member!] @derivedFrom(field: "dao")
 	membersCount: BigInt!
-	rewards: [Reward!] @derivedFrom(field: "dao")
+	rewards: [GPReward!] @derivedFrom(field: "dao")
 	threshold: BigInt!
 }
 
@@ -58,7 +58,8 @@ type Proposal @entity {
 	description: String
 	url: String
 
-	rewards: [Reward!] @derivedFrom(field: "proposal")
+	gpRewards: [GPReward!] @derivedFrom(field: "proposal")
+	expiresInQueueAt: BigInt!
 
 	votes: [ProposalVote!] @derivedFrom(field: "proposal")
 	votesFor: BigInt!
@@ -85,14 +86,10 @@ type Proposal @entity {
 	voteOnBehalf: Bytes!
 
 	# Contribution Reward params
-	beneficiary: Bytes!
-	reputationReward: BigInt!
-	nativeTokenReward: BigInt!
-	ethReward: BigInt!
-	externalTokenReward: BigInt!
-	externalToken: Bytes!
-	periods: BigInt!
-	periodLength: BigInt!
+	contributionReward: ContributionRewardProposal
+
+	# Generic Scheme params
+	genericScheme : GenericSchemeProposal
 }
 
 type ProposalStake @entity {
@@ -100,6 +97,7 @@ type ProposalStake @entity {
 	createdAt: BigInt!
 	staker: Bytes!
 	proposal: Proposal!
+	dao: DAO!
 	outcome: Outcome!
 	amount: BigInt!
 }
@@ -109,6 +107,7 @@ type ProposalVote @entity {
 	createdAt: BigInt!
 	voter: Bytes!
 	proposal: Proposal!
+	dao: DAO!
 	outcome: Outcome!
 	reputation: BigInt!
 }
@@ -136,17 +135,27 @@ enum RewardType {
 	External
 }
 
-type Reward @entity {
+type GPRewardsHelper @entity {
+   id: ID!
+	 gpRewards: [GPReward!]
+}
+
+type GPReward @entity {
 	id: ID!
 	createdAt: BigInt!
 	dao: DAO!
 	beneficiary: Bytes!
 	proposal: Proposal!
-	reason: RewardReason!
-	type: RewardType!
+	reputationForVoter: BigInt
+	tokensForStaker: BigInt
+	daoBountyForStaker: BigInt
+	reputationForProposer: BigInt
 	tokenAddress: Bytes
-	amount: BigInt
-	redeemed: BigInt!
+	# timestamps of the redeem events
+	redeemedReputationForVoter: BigInt!
+	redeemedTokensForStaker: BigInt!
+	redeemedReputationForProposer: BigInt!
+	redeemedDaoBountyForStaker: BigInt!
 }
 
 type FirstRegisterSchemeFlag @entity {

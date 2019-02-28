@@ -7,7 +7,7 @@ describe('Reputation', () => {
   let web3;
   let addresses;
   let reputation;
-  let uController;
+
   beforeAll(async () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
@@ -15,11 +15,6 @@ describe('Reputation', () => {
     reputation = new web3.eth.Contract(
       Reputation.abi,
       addresses.DemoReputation,
-      opts,
-    );
-    uController = new web3.eth.Contract(
-      UController.abi,
-      addresses.UController,
       opts,
     );
   });

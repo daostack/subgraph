@@ -233,7 +233,6 @@ describe('ContributionReward', () => {
             }
         }`);
 
-        expect(contributionRewardRedeemReputations.length).toEqual(1);
         expect(contributionRewardRedeemReputations).toContainEqual({
             txHash: redeemReputationTxHash,
             contract: contributionReward.options.address.toLowerCase(),
@@ -270,7 +269,6 @@ describe('ContributionReward', () => {
             }
         }`);
 
-        expect(contributionRewardRedeemNativeTokens.length).toEqual(1);
         expect(contributionRewardRedeemNativeTokens).toContainEqual({
             txHash: redeemNativeTokenTxHash,
             contract: contributionReward.options.address.toLowerCase(),
@@ -307,7 +305,6 @@ describe('ContributionReward', () => {
             }
         }`);
 
-        expect(contributionRewardRedeemExternalTokens.length).toEqual(1);
         expect(contributionRewardRedeemExternalTokens).toContainEqual({
             txHash: redeemExternalTokenTxHash,
             contract: contributionReward.options.address.toLowerCase(),
@@ -361,7 +358,6 @@ describe('ContributionReward', () => {
             }
         }`);
 
-        expect(contributionRewardRedeemEthers.length).toEqual(1);
         expect(contributionRewardRedeemEthers).toContainEqual({
             txHash: redeemEtherTxHash,
             contract: contributionReward.options.address.toLowerCase(),

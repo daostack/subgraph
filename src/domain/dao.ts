@@ -4,6 +4,7 @@ import { Reputation } from '../types/Reputation/Reputation';
 import { DAO } from '../types/schema';
 import { Avatar } from '../types/UController/Avatar';
 import { UController } from '../types/UController/UController';
+import { getMember } from './member';
 
 export function getDAO(id: string): DAO {
   let dao = store.get('DAO', id) as DAO;
@@ -53,6 +54,9 @@ export function insertNewDAO(
   // 0x10000000000
   dao.threshold =  BigInt.fromI32(1073741824).times(BigInt.fromI32(1024));
   saveDAO(dao);
+  // add the avatar as a member so we can track its balance
+  getMember(avatarAddress, avatarAddress);
+  decreaseDAOmembersCount(avatarAddress.toHex());
 
   return dao;
 }

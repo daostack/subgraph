@@ -5,6 +5,7 @@ entities:
   - ContributionRewardRedeemEther
   - ContributionRewardProposalExecuted
   - ContributionRewardNewContributionProposal
+  - ContributionRewardProposal
 eventHandlers:
   - event: RedeemReputation(address,bytes32,address,int256)
     handler: handleRedeemReputation

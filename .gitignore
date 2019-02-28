@@ -7,3 +7,4 @@ abis
 yarn.lock
 src/types
 /schema.graphql
+.env

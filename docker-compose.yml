@@ -23,7 +23,7 @@ services:
     ports:
       - '5001:5001'
   postgres:
-    image: postgres
+    build: docker/postgres
     ports:
       - '5434:5432'
     environment:

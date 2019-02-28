@@ -163,10 +163,12 @@ export function updateCRProposal(
   // IPFS reading
 
   let ipfsData = ipfs.cat('/ipfs/' + descriptionHash);
-  let descJson = json.fromBytes(ipfsData);
-  proposal.title = descJson.toObject().get('title').toString();
-  proposal.description = descJson.toObject().get('description').toString();
-  proposal.url = descJson.toObject().get('url').toString();
+  if (ipfsData != null) {
+    let descJson = json.fromBytes(ipfsData);
+    proposal.title = descJson.toObject().get('title').toString();
+    proposal.description = descJson.toObject().get('description').toString();
+    proposal.url = descJson.toObject().get('url').toString();
+  }
 
   saveProposal(proposal);
 }

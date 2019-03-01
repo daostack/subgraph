@@ -154,10 +154,10 @@ export function updateCRProposal(
       proposal.title = descJson.toObject().get('title').toString();
     }
     if (descJson.toObject().get('description') != null) {
-      proposal.title = descJson.toObject().get('description').toString();
+      proposal.description = descJson.toObject().get('description').toString();
     }
     if (descJson.toObject().get('url') != null) {
-      proposal.title = descJson.toObject().get('url').toString();
+      proposal.url = descJson.toObject().get('url').toString();
     }
   }
 

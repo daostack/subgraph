@@ -105,4 +105,9 @@ ethereum_node="https://<TARGET_NETWORK>.infura.io/<INFURA-KEY>"
 
 The repository provides a `release.sh` script that will:
 - (re)start the docker containers and deploy the subgraph
-- save the image and push it to docker hub under `daostack/subgraph-postgres:${network}-${migration-version}-${subgraph-version}`
+- commit the images for ipfs and postgres and push these to docker hub
+
+The docker images are available as:
+
+`daostack/subgraph-postgres:${network}-${migration-version}-${subgraph-version}`
+`daostack/subgraph-ipfs:${network}-${migration-version}-${subgraph-version}`

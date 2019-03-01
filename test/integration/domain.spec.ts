@@ -907,25 +907,22 @@ describe('Domain Layer', () => {
 });
 
     const { proposalId: p2 } = await propose({
-  rep: 10,
-  tokens: 10,
-  eth: 10,
-  external: 10,
-  periodLength: 0,
-  periods: 1,
-  beneficiary: accounts[1].address,
-});
+    rep: 10,
+    tokens: 10,
+    eth: 10,
+    external: 10,
+    periodLength: 0,
+    periods: 1,
+    beneficiary: accounts[1].address,
+    });
 
     const getExpiredProposal = `{
     proposal(id: "${p2}") {
         stage
-    }
-}`;
+    }}`;
 
     increaseTime(1814400 + 1 , web3);
-    await genesisProtocol.methods
-   .execute(p2)
-   .send();
+    await genesisProtocol.methods.execute(p2).send();
 
     let stage = (await sendQuery(getExpiredProposal)).proposal.stage;
     expect(stage).toEqual('ExpiredInQueue');

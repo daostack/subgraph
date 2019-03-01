@@ -88,14 +88,26 @@ It is also recommended to read this guide: https://thegraph.com/docs/deploy-a-su
 network="<TARGET_NETWORK>"
 subgraph="<YOUR_SUBGAPH_NAME>"
 
-# Not necessary for Docker deployment 
+# Not necessary for Docker deployment
 graph_node="https://api.thegraph.com/deploy/"
 ipfs_node="https://api.thegraph.com/ipfs/"
 access_token=<YOUR_ACCESS_TOKEN>
 
-# Not necessary for The Graph server 
+# Not necessary for The Graph server
 postgres_password=<YOUR_PASSWORD>
 ethereum_node="https://<TARGET_NETWORK>.infura.io/<INFURA-KEY>"
 ```
 
 3. Run: ``npm run deploy``
+
+## Release subgraph images on docker hub
+
+
+The repository provides a `release.sh` script that will:
+- (re)start the docker containers and deploy the subgraph
+- commit the images for ipfs and postgres and push these to docker hub
+
+The docker images are available as:
+
+`daostack/subgraph-postgres:${network}-${migration-version}-${subgraph-version}`
+`daostack/subgraph-ipfs:${network}-${migration-version}-${subgraph-version}`

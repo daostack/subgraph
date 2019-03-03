@@ -65,6 +65,9 @@ describe('Generic Scheme', () => {
 
     const { proposalId: p1, timestamp: p1Creation } = await propose();
 
+
+    console.log(p1)
+
     const getProposal = `{
       proposal(id: "${p1}") {
           id
@@ -88,7 +91,7 @@ describe('Generic Scheme', () => {
       }
   }`;
 
-    let proposal = (await sendQuery(getProposal)).proposal;
+    let proposal = (await sendQuery(getProposal,3000)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,

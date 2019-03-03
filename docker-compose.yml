@@ -18,19 +18,16 @@ services:
       postgres_db: postgres
       ipfs: 'ipfs:5001'
       ethereum: 'development:http://ganache:8545'
-
   ipfs:
     build: docker/ipfs
     ports:
       - '5001:5001'
-
   postgres:
     build: docker/postgres
     ports:
       - '5434:5432'
     environment:
       POSTGRES_PASSWORD: letmein
-      
   ganache:
     image: 'daostack/migration:0.0.1-rc.11-v3'
     ports:

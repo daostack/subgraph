@@ -207,12 +207,14 @@ export function handleNativeTokenTransfer(event: Transfer): void {
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
    updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
-   insertGPRewards(event.params._proposalId, event.block.timestamp, event.address);
-
 }
 
 export function handleStateChange(event: StateChange): void {
   updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
+  if ((event.params._proposalState === 1) ||
+      (event.params._proposalState === 2)) {
+      insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
+  }
 }
 
 export function handleExecutionStateChange(event: GPExecuteProposal): void {

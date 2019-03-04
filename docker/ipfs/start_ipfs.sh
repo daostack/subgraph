@@ -15,12 +15,13 @@ if [ -e "$repo/config" ]; then
   echo "Found IPFS fs-repo at $repo"
 else
   ipfs init
-  ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
-  # ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
-  ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
-  ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
 fi
 
+ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
+# ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
+ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
+ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'
+  
 # For the love of Krishna, do not use `--debug`!
 # You can modify them later, けど. See
 # https://ipfs.io/docs/commands/#ipfs-log-level

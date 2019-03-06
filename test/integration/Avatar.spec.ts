@@ -6,6 +6,8 @@ describe('Avatar', () => {
   let web3;
   let addresses;
   let avatar;
+  const orgName = require(`@daostack/migration/migration.json`).private.dao.name;
+
   beforeAll(async () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
@@ -39,7 +41,7 @@ describe('Avatar', () => {
     expect(avatarContracts).toContainEqual({
       id: addresses.Avatar.toLowerCase(),
       address: addresses.Avatar.toLowerCase(),
-      name: 'Genesis Test',
+      name: orgName,
       nativeToken: addresses.NativeToken.toLowerCase(),
       nativeReputation: addresses.NativeReputation.toLowerCase(),
       balance: `${Number(balance) + 1}`,

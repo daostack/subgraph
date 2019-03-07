@@ -16,7 +16,7 @@ async function setDockerNetwork () {
     if (network == 'development') {
       doc['services']['ganache'] = 
       {
-        image: 'daostack/migration:0.0.1-rc.11-v3',
+        image: 'daostack/migration:' + require('../package.json').devDependencies['@daostack/migration'],
         ports: [ '8545:8545' ] 
       }
 

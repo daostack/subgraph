@@ -9,10 +9,6 @@ import {
   RemoveSchemeProposal,
 } from '../../types/SchemeRegistrar/SchemeRegistrar';
 
-import {
-  getDAO,
-} from '../../domain/dao';
-
 import * as domain from '../../domain';
 
 // Import entity types generated from the GraphQL schema
@@ -22,7 +18,7 @@ import {
    SchemeRegistrarProposalExecuted,
    SchemeRegistrarRemoveSchemeProposal,
 } from '../../types/schema';
-import { equals, eventId } from '../../utils';
+import { eventId } from '../../utils';
 
 export function handleNewSchemeProposal(event: NewSchemeProposal): void {
   let ent = SchemeRegistrarNewSchemeProposal.load(eventId(event));

@@ -1,4 +1,10 @@
-import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
+import {
+  getContractAddresses,
+  getOptions,
+  getWeb3,
+  sendQuery,
+  waitUntilTrue,
+} from './util';
 
 const AbsoluteVote = require('@daostack/arc/build/contracts/AbsoluteVote.json');
 const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
@@ -37,19 +43,28 @@ describe('SchemeRegistrar', () => {
         const proposalId = await propose.call();
         let { transactionHash: proposaTxHash } = await propose.send();
 
-        const { schemeRegistrarNewSchemeProposals } = await sendQuery(`{
-            schemeRegistrarNewSchemeProposals {
-              txHash,
-              contract,
-              avatar,
-              descriptionHash,
-              votingMachine,
-              proposalId,
-              scheme,
-              paramsHash,
-              permission,
-            }
-        }`, 3000);
+        const schemeRegistrarNewSchemeProposalsQuery = `{
+          schemeRegistrarNewSchemeProposals {
+            txHash,
+            contract,
+            avatar,
+            descriptionHash,
+            votingMachine,
+            proposalId,
+            scheme,
+            paramsHash,
+            permission,
+          }
+        }`;
+
+        const proposalIsIndexed = async () => {
+          let query = (await sendQuery(schemeRegistrarNewSchemeProposalsQuery)).schemeRegistrarNewSchemeProposals;
+          return query.length > 0 && query[query.length - 1].txHash === proposaTxHash;
+        };
+
+        await waitUntilTrue(proposalIsIndexed);
+
+        const { schemeRegistrarNewSchemeProposals } = await sendQuery(schemeRegistrarNewSchemeProposalsQuery, 3000);
 
         expect(schemeRegistrarNewSchemeProposals).toContainEqual({
             avatar: addresses.Avatar.toLowerCase(),

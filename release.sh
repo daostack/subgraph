@@ -5,8 +5,6 @@ docker_compose_migration_version=$(cat docker-compose.yml | grep daostack/migrat
 package_version=$(cat package.json | jq -r '.version')
 image_version=ganache-$migration_version-$package_version
 
-echo $docker_compose_migration_version
-echo $migration_version
 if [[ $docker_compose_migration_version != $migration_version ]]; then
   echo "The migration version in the docker-compose file is not the same as the one in package.json ($docker_compose_migration_version != $migration_version)"
   exit

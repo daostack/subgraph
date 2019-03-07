@@ -53,7 +53,7 @@ export async function getWeb3() {
 }
 
 export function getContractAddresses() {
-  const addresses = require(`${__dirname}/../../migration.json`);
+  const addresses = require(`@daostack/migration/migration.json`);
   return {
     ...addresses.private.test,
     ...addresses.private.dao,

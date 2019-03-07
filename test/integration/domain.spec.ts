@@ -18,6 +18,9 @@ describe('Domain Layer', () => {
   let web3;
   let addresses;
   let opts;
+  const orgName = require(`@daostack/migration/migration.json`).private.dao.name;
+  const tokenName = orgName + ' Token';
+  const tokenSymbol = orgName[0] + orgName.split(' ')[0] + 'T';
 
   beforeAll(async () => {
     web3 = await getWeb3();
@@ -48,7 +51,7 @@ describe('Domain Layer', () => {
     let dao = (await sendQuery(getMigrationDao)).dao;
     expect(dao).toMatchObject({
       id: addresses.Avatar.toLowerCase(),
-      name: 'Genesis Test',
+      name: orgName,
       nativeToken: {
         id: addresses.NativeToken.toLowerCase(),
         dao: {
@@ -110,10 +113,6 @@ describe('Domain Layer', () => {
       opts,
     );
 
-    const orgName = 'Genesis Test';
-    const tokenName =  'Genesis Test';
-    const tokenSymbol = 'GDT';
-
     let founders =  [
       {
         address: '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
@@ -148,14 +147,14 @@ describe('Domain Layer', () => {
     ];
 
     let gpParams =  {
-      boostedVotePeriodLimit: '259200',
-      daoBountyConst: '75',
+      boostedVotePeriodLimit: '600',
+      daoBountyConst: '10',
       minimumDaoBounty: web3.utils.toWei('100', 'gwei'),
-      queuedVotePeriodLimit: '1814400',
+      queuedVotePeriodLimit: '1800',
       queuedVoteRequiredPercentage: '50',
-      preBoostedVotePeriodLimit: '259200',
+      preBoostedVotePeriodLimit: '600',
       proposingRepReward: web3.utils.toWei('5', 'gwei'),
-      quietEndingPeriod: '86400',
+      quietEndingPeriod: '300',
       thresholdConst: '2000',
       voteOnBehalf: '0x0000000000000000000000000000000000000000',
       activationTime: '0',

@@ -328,9 +328,6 @@ describe('Domain Layer', () => {
             totalRepWhenExecuted
             proposer
             votingMachine
-            dao {
-              threshold
-            }
             votes {
                 createdAt
                 proposal {
@@ -577,7 +574,6 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
-      dao: { threshold : Math.pow(2, REAL_FBITS).toString()},
       votes: [
         {
           createdAt: v1Timestamp.toString(),
@@ -649,7 +645,6 @@ describe('Domain Layer', () => {
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       stage: 'Boosted',
-      dao : { threshold: ((Number(gpParams.thresholdConst) / 1000) * Math.pow(2, REAL_FBITS)).toString() },
     });
 
     expectedVotesCount++;

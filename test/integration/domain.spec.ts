@@ -328,6 +328,9 @@ describe('Domain Layer', () => {
             totalRepWhenExecuted
             proposer
             votingMachine
+            dao {
+              threshold
+            }
             votes {
                 createdAt
                 proposal {

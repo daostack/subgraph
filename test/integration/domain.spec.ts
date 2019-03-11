@@ -194,7 +194,6 @@ describe('Domain Layer', () => {
           }
           totalSupply
         }
-        threshold
       }
     }`;
     let dao;
@@ -222,7 +221,6 @@ describe('Domain Layer', () => {
         },
         totalSupply: totalRep,
       },
-      threshold: Math.pow(2, REAL_FBITS).toString(),
     });
     // check reputation reputationHolders
     const { reputationHolders } = await sendQuery(`{
@@ -330,9 +328,6 @@ describe('Domain Layer', () => {
             totalRepWhenExecuted
             proposer
             votingMachine
-            dao {
-              threshold
-            }
             votes {
                 createdAt
                 proposal {
@@ -475,7 +470,6 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
-      dao: { threshold : Math.pow(2, REAL_FBITS).toString()},
       votes: [
         {
           createdAt: v1Timestamp.toString(),
@@ -522,7 +516,6 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
-      dao: { threshold : Math.pow(2, REAL_FBITS).toString()},
       votes: [
         {
           createdAt: v1Timestamp.toString(),
@@ -581,7 +574,6 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: null,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
-      dao: { threshold : Math.pow(2, REAL_FBITS).toString()},
       votes: [
         {
           createdAt: v1Timestamp.toString(),
@@ -653,7 +645,6 @@ describe('Domain Layer', () => {
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       stage: 'Boosted',
-      dao : { threshold: ((Number(gpParams.thresholdConst) / 1000) * Math.pow(2, REAL_FBITS)).toString() },
     });
 
     expectedVotesCount++;
@@ -699,7 +690,6 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: totalRep,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
-      dao: { threshold : Math.pow(2, REAL_FBITS).toString()},
       votesFor: '3000000000000000001000',
       votesAgainst: address0Rep,
       winningOutcome: 'Pass',
@@ -904,6 +894,18 @@ describe('Domain Layer', () => {
   tokenAddress: null,
   tokensForStaker: null,
 });
+
+    const getGPQues = `{
+    gpques {
+        threshold
+    }
+    }`;
+
+    let gpQues = (await sendQuery(getGPQues)).gpques;
+
+    expect(gpQues).toContainEqual({
+    threshold: Math.pow(2, REAL_FBITS).toString(),
+    });
 
     const { proposalId: p2 } = await propose({
     rep: 10,

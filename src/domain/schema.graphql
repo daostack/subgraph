@@ -19,7 +19,13 @@ type DAO @entity {
 	members: [Member!] @derivedFrom(field: "dao")
 	membersCount: BigInt!
 	rewards: [GPReward!] @derivedFrom(field: "dao")
-	threshold: BigInt!
+}
+
+type GPQue @entity {
+ 	id: ID!
+ 	paramsHash: Bytes!
+ 	threshold: BigInt!
+ 	dao: DAO!
 }
 
 type Rep @entity {
@@ -90,6 +96,9 @@ type Proposal @entity {
 
 	# Generic Scheme params
 	genericScheme : GenericSchemeProposal
+
+	# SchemeRegistrar proposal
+  schemeRegistrar : SchemeRegistrarProposal
 }
 
 type ProposalStake @entity {

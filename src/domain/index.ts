@@ -34,6 +34,7 @@ import {
   updateProposalExecution,
   updateProposalExecutionState,
   updateProposalState,
+  updateSRProposal,
 } from './proposal';
 import {
   getReputation,
@@ -74,6 +75,22 @@ export function handleNewContributionProposal(
     event.params._descriptionHash,
   );
 }
+
+export function handleNewSchemeRegisterProposal(
+   proposalId: string,
+   timestamp: BigInt,
+   avatar: Bytes,
+   votingMachine: Bytes,
+   descriptionHash: string,
+ ): void {
+    updateSRProposal(
+      proposalId,
+      timestamp,
+      avatar as Address,
+      votingMachine as Address,
+      descriptionHash,
+    );
+ }
 
 export function handleNewCallProposal(
   event: NewCallProposal,

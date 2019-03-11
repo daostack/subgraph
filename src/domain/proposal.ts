@@ -2,7 +2,7 @@ import { Address, BigInt, Bytes, ipfs, json, JSONValueKind, store } from '@graph
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
 import { equals } from '../utils';
-import { updateThreshold } from './dao';
+import { updateThreshold } from './gpque';
 
 export function parseOutcome(num: BigInt): string {
   if (equals(num, BigInt.fromI32(1))) {
@@ -59,7 +59,11 @@ export function updateProposalconfidence(id: Bytes, confidence: BigInt): void {
 export function updateProposalState(id: Bytes, state: number, gpAddress: Address): void {
    let gp = GenesisProtocol.bind(gpAddress);
    let proposal = getProposal(id.toHex());
-   updateThreshold(proposal.dao, gp.threshold(proposal.paramsHash, proposal.organizationId));
+   updateThreshold(proposal.dao.toString(),
+                    gp.threshold(proposal.paramsHash, proposal.organizationId),
+                    proposal.paramsHash,
+                    proposal.organizationId,
+                    );
    setProposalState(proposal, state, gp.getProposalTimes(id));
    if (state === 4) {
      proposal.confidenceThreshold = gp.proposals(id).value10;
@@ -178,6 +182,22 @@ export function updateGSProposal(
   proposal.dao = avatarAddress.toHex();
   proposal.genericScheme = proposalId.toHex();
   proposal.createdAt = createdAt;
+  proposal.descriptionHash = descriptionHash;
+  saveProposal(proposal);
+}
+
+export function updateSRProposal(
+  proposalId: string,
+  createdAt: BigInt,
+  avatarAddress: Address,
+  votingMachine: Address,
+  descriptionHash: string,
+): void {
+  let proposal = getProposal(proposalId);
+  proposal.dao = avatarAddress.toHex();
+  proposal.schemeRegistrar = proposalId;
+  proposal.createdAt = createdAt;
+  proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
   saveProposal(proposal);
 }

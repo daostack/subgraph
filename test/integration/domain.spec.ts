@@ -20,7 +20,7 @@ describe('Domain Layer', () => {
   let opts;
   const orgName = require(`@daostack/migration/migration.json`).private.dao.name;
   const tokenName = orgName + ' Token';
-  const tokenSymbol = orgName[0] + orgName.split(' ')[0] + 'T';
+  const tokenSymbol = orgName[0] + orgName.split(' ')[1][0] + 'T';
 
   beforeAll(async () => {
     web3 = await getWeb3();

@@ -161,10 +161,10 @@ type GPReward @entity {
 	reputationForProposer: BigInt
 	tokenAddress: Bytes
 	# timestamps of the redeem events
-	redeemedReputationForVoter: BigInt!
-	redeemedTokensForStaker: BigInt!
-	redeemedReputationForProposer: BigInt!
-	redeemedDaoBountyForStaker: BigInt!
+	reputationForVoterRedeemedAt: BigInt!
+	tokensForStakerRedeemedAt: BigInt!
+	reputationForProposerRedeemedAt: BigInt!
+	daoBountyForStakerRedeemedAt: BigInt!
 }
 
 type FirstRegisterSchemeFlag @entity {

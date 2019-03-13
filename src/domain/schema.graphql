@@ -21,7 +21,7 @@ type DAO @entity {
 	rewards: [GPReward!] @derivedFrom(field: "dao")
 }
 
-type GPQue @entity {
+type GPQueue @entity {
  	id: ID!
  	paramsHash: Bytes!
  	threshold: BigInt!

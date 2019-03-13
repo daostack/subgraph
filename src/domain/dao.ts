@@ -1,7 +1,7 @@
 import { Address, BigInt, Entity, store, Value } from '@graphprotocol/graph-ts';
 import { DAOToken } from '../types/DAOToken/DAOToken';
 import { Reputation } from '../types/Reputation/Reputation';
-import { DAO , GPQue } from '../types/schema';
+import { DAO , GPQueue } from '../types/schema';
 import { Avatar } from '../types/UController/Avatar';
 import { UController } from '../types/UController/UController';
 import { getMember } from './member';

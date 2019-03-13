@@ -895,15 +895,15 @@ describe('Domain Layer', () => {
   tokensForStaker: null,
 });
 
-    const getGPQues = `{
-    gpques {
+    const getGPQueues = `{
+    gpqueues {
         threshold
     }
     }`;
 
-    let gpQues = (await sendQuery(getGPQues)).gpques;
+    let gpQueues = (await sendQuery(getGPQueues)).gpqueues;
 
-    expect(gpQues).toContainEqual({
+    expect(gpQueues).toContainEqual({
     threshold: Math.pow(2, REAL_FBITS).toString(),
     });
 

@@ -803,10 +803,10 @@ describe('Domain Layer', () => {
                tokensForStaker
                reputationForVoter
                daoBountyForStaker
-               redeemedTokensForStaker
-               redeemedReputationForVoter
-               redeemedDaoBountyForStaker
-               redeemedReputationForProposer
+               tokensForStakerRedeemedAt
+               reputationForVoterRedeemedAt
+               daoBountyForStakerRedeemedAt
+               reputationForProposerRedeemedAt
             }
         }
     }`;
@@ -814,10 +814,10 @@ describe('Domain Layer', () => {
     expect(gpRewards).toContainEqual({
     beneficiary: accounts[1].address.toLowerCase(),
     daoBountyForStaker: '100000000000',
-    redeemedDaoBountyForStaker: '0',
-    redeemedReputationForProposer: '0',
-    redeemedReputationForVoter: '0',
-    redeemedTokensForStaker: '0',
+    daoBountyForStakerRedeemedAt: '0',
+    reputationForProposerRedeemedAt: '0',
+    reputationForVoterRedeemedAt: '0',
+    tokensForStakerRedeemedAt: '0',
     reputationForProposer: null,
     reputationForVoter: null,
     tokenAddress: addresses.GEN.toLowerCase(),
@@ -826,10 +826,10 @@ describe('Domain Layer', () => {
     expect(gpRewards).toContainEqual({
     beneficiary: web3.eth.defaultAccount.toLowerCase(),
     daoBountyForStaker: null,
-    redeemedDaoBountyForStaker: '0',
-    redeemedReputationForProposer: '0',
-    redeemedReputationForVoter: '0',
-    redeemedTokensForStaker: '0',
+    daoBountyForStakerRedeemedAt: '0',
+    reputationForProposerRedeemedAt: '0',
+    reputationForVoterRedeemedAt: '0',
+    tokensForStakerRedeemedAt: '0',
     reputationForProposer: '5000000000',
     reputationForVoter: null,
     tokenAddress: null,
@@ -873,10 +873,10 @@ describe('Domain Layer', () => {
     expect(gpRewards).toContainEqual({
   beneficiary: accounts[1].address.toLowerCase(),
   daoBountyForStaker: '100000000000',
-  redeemedDaoBountyForStaker: rd1Timestamp.toString(),
-  redeemedReputationForProposer: '0',
-  redeemedReputationForVoter: '0',
-  redeemedTokensForStaker: r2Timestamp.toString(),
+  daoBountyForStakerRedeemedAt: rd1Timestamp.toString(),
+  reputationForProposerRedeemedAt: '0',
+  reputationForVoterRedeemedAt: '0',
+  tokensForStakerRedeemedAt: r2Timestamp.toString(),
   reputationForProposer: null,
   reputationForVoter: null,
   tokenAddress: addresses.GEN.toLowerCase(),
@@ -885,25 +885,25 @@ describe('Domain Layer', () => {
     expect(gpRewards).toContainEqual({
   beneficiary: web3.eth.defaultAccount.toLowerCase(),
   daoBountyForStaker: null,
-  redeemedDaoBountyForStaker: '0',
-  redeemedReputationForProposer: r1Timestamp.toString(),
-  redeemedReputationForVoter: '0',
-  redeemedTokensForStaker: '0',
+  daoBountyForStakerRedeemedAt: '0',
+  reputationForProposerRedeemedAt: r1Timestamp.toString(),
+  reputationForVoterRedeemedAt: '0',
+  tokensForStakerRedeemedAt: '0',
   reputationForProposer: '5000000000',
   reputationForVoter: null,
   tokenAddress: null,
   tokensForStaker: null,
 });
 
-    const getGPQues = `{
-    gpques {
+    const getGPQueues = `{
+    gpqueues {
         threshold
     }
     }`;
 
-    let gpQues = (await sendQuery(getGPQues)).gpques;
+    let gpQueues = (await sendQuery(getGPQueues)).gpqueues;
 
-    expect(gpQues).toContainEqual({
+    expect(gpQueues).toContainEqual({
     threshold: Math.pow(2, REAL_FBITS).toString(),
     });
 

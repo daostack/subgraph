@@ -47,14 +47,14 @@ export function insertGPRewardsToHelper(proposalId: Bytes, beneficiary: Address,
 export function daoBountyRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt): void {
    let id = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
    let reward = store.get('GPReward', id) as GPReward;
-   reward.redeemedDaoBountyForStaker = timestamp;
+   reward.daoBountyForStakerRedeemedAt = timestamp;
    reward.save();
 }
 
 export function tokenRedemption(proposalId: Bytes, beneficiary: Address, timestamp: BigInt): void {
    let id = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
    let reward = store.get('GPReward', id) as GPReward;
-   reward.redeemedTokensForStaker = timestamp;
+   reward.tokensForStakerRedeemedAt = timestamp;
    reward.save();
 }
 
@@ -63,10 +63,10 @@ export function reputationRedemption(proposalId: Bytes, beneficiary: Address, ti
    let reward = store.get('GPReward', id) as GPReward;
 
    if (reward.reputationForProposer != null) {
-       reward.redeemedReputationForProposer = timestamp;
+       reward.reputationForProposerRedeemedAt = timestamp;
    }
    if (reward.reputationForVoter != null) {
-       reward.redeemedReputationForVoter = timestamp;
+       reward.reputationForVoterRedeemedAt = timestamp;
    }
 
    reward.save();
@@ -130,10 +130,10 @@ function updateGPReward(id: string,
         reward.proposal = proposalId;
         reward.dao = dao;
         reward.createdAt = createdAt;
-        reward.redeemedTokensForStaker = BigInt.fromI32(0);
-        reward.redeemedReputationForVoter = BigInt.fromI32(0);
-        reward.redeemedReputationForProposer = BigInt.fromI32(0);
-        reward.redeemedDaoBountyForStaker = BigInt.fromI32(0);
+        reward.tokensForStakerRedeemedAt = BigInt.fromI32(0);
+        reward.reputationForVoterRedeemedAt = BigInt.fromI32(0);
+        reward.reputationForProposerRedeemedAt = BigInt.fromI32(0);
+        reward.daoBountyForStakerRedeemedAt = BigInt.fromI32(0);
       }
       if (equals(reputationForVoter, BigInt.fromI32(0)) === false) {
           reward.reputationForVoter = reputationForVoter;

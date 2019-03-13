@@ -2,7 +2,7 @@ import { Address, BigInt, Bytes, ipfs, json, JSONValueKind, store } from '@graph
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
 import { equals } from '../utils';
-import { updateThreshold } from './gpque';
+import { updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
   if (equals(num, BigInt.fromI32(1))) {

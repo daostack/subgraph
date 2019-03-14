@@ -1,7 +1,7 @@
 import { Address, BigInt, Bytes, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
-import { equals } from '../utils';
+import { equals, equalsBytes } from '../utils';
 import { updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
@@ -29,6 +29,7 @@ export function getProposal(id: string): Proposal {
     proposal.stakesFor = BigInt.fromI32(0);
     proposal.stakesAgainst = BigInt.fromI32(0);
     proposal.confidenceThreshold = BigInt.fromI32(0);
+    proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
   }
 
   return proposal;
@@ -230,4 +231,34 @@ export function updateProposalExecutionState(id: string, executionState: number)
     proposal.executionState = 'BoostedBarCrossed';
   }
   saveProposal(proposal);
+}
+
+export function addRedeemableRewardOwner(
+  proposalId: Bytes,
+  redeemer: Bytes,
+): void {
+  let proposal = getProposal(proposalId.toHex());
+  let accounts = proposal.accountsWithUnclaimedRewards;
+  accounts.push(redeemer);
+  proposal.accountsWithUnclaimedRewards = accounts;
+  saveProposal(proposal);
+}
+
+export function removeRedeemableRewardOwner(
+  proposalId: Bytes,
+  redeemer: Bytes,
+): void {
+  let proposal = getProposal(proposalId.toHex());
+  let accounts: Bytes[] = proposal.accountsWithUnclaimedRewards as Bytes[];
+  let idx = 0;
+  for (idx; idx < accounts.length; idx++) {
+      if (equalsBytes(accounts[idx], redeemer)) {
+        break;
+      }
+  }
+  if (idx !== accounts.length) {
+    accounts.splice(idx, 1);
+    proposal.accountsWithUnclaimedRewards = accounts;
+    saveProposal(proposal);
+  }
 }

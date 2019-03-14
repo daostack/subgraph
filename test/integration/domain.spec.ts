@@ -808,9 +808,11 @@ describe('Domain Layer', () => {
                daoBountyForStakerRedeemedAt
                reputationForProposerRedeemedAt
             }
+            accountsWithUnclaimedRewards
         }
     }`;
-    let gpRewards = (await sendQuery(getProposalRewards)).proposal.gpRewards;
+    proposal = (await sendQuery(getProposalRewards)).proposal;
+    let gpRewards = proposal.gpRewards;
     expect(gpRewards).toContainEqual({
     beneficiary: accounts[1].address.toLowerCase(),
     daoBountyForStaker: '100000000000',
@@ -835,6 +837,11 @@ describe('Domain Layer', () => {
     tokenAddress: null,
     tokensForStaker: null,
   });
+    expect(proposal).toMatchObject({
+    accountsWithUnclaimedRewards: [
+      accounts[0].address.toLowerCase(),
+      accounts[1].address.toLowerCase(),
+    ]});
     async function redeem({ proposalId, beneficiary }) {
     const { blockNumber } = await genesisProtocol.methods
       .redeem(proposalId, beneficiary)
@@ -869,7 +876,8 @@ describe('Domain Layer', () => {
     beneficiary: accounts[1].address.toLowerCase(),
   });
 
-    gpRewards = (await sendQuery(getProposalRewards)).proposal.gpRewards;
+    proposal = (await sendQuery(getProposalRewards)).proposal;
+    gpRewards = proposal.gpRewards;
     expect(gpRewards).toContainEqual({
   beneficiary: accounts[1].address.toLowerCase(),
   daoBountyForStaker: '100000000000',
@@ -894,6 +902,14 @@ describe('Domain Layer', () => {
   tokenAddress: null,
   tokensForStaker: null,
 });
+
+    const accountsWithUnclaimedRewardsIsIndexed = async () => {
+      return (await sendQuery(getProposalRewards)).proposal.accountsWithUnclaimedRewards.length === 0;
+    };
+
+    await waitUntilTrue(accountsWithUnclaimedRewardsIsIndexed);
+
+    expect(proposal).toMatchObject({ accountsWithUnclaimedRewards: [] });
 
     const getGPQueues = `{
     gpqueues {

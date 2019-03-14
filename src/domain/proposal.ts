@@ -1,7 +1,7 @@
 import { Address, BigInt, Bytes, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
-import { equals } from '../utils';
+import { equals, equalsBytes } from '../utils';
 import { updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
@@ -249,9 +249,16 @@ export function removeRedeemableRewardOwner(
   redeemer: Bytes,
 ): void {
   let proposal = getProposal(proposalId.toHex());
-  let accounts = proposal.accountsWithUnclaimedRewards;
-
-  accounts = accounts.splice(accounts.indexOf(redeemer), 1);
-  proposal.accountsWithUnclaimedRewards = accounts;
-  saveProposal(proposal);
+  let accounts: Bytes[] = proposal.accountsWithUnclaimedRewards as Bytes[];
+  let idx = 0;
+  for (idx; idx < accounts.length; idx++) {
+      if (equalsBytes(accounts[idx], redeemer)) {
+        break;
+      }
+  }
+  if (idx !== accounts.length) {
+    accounts.splice(idx, 1);
+    proposal.accountsWithUnclaimedRewards = accounts;
+    saveProposal(proposal);
+  }
 }

@@ -77,7 +77,7 @@ export function reputationRedemption(proposalId: Bytes, beneficiary: Address, ti
 
    reward.save();
    if (shouldRemoveAccountFromUnclaimed(reward)) {
-    removeRedeemableRewardOwner(proposalId, beneficiary);
+      removeRedeemableRewardOwner(proposalId, beneficiary);
    }
 }
 

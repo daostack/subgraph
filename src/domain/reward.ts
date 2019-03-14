@@ -2,8 +2,8 @@ import { Address, BigInt, Bytes , crypto, EthereumValue, SmartContract , store} 
 import { GenesisProtocol__voteInfoResult } from '../types/GenesisProtocol/GenesisProtocol';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { GPReward, GPRewardsHelper } from '../types/schema';
-import { concat , debug , equals } from '../utils';
-import { getProposal } from './proposal';
+import { concat , equals, equalsBytes } from '../utils';
+import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 
 function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
     let gpRewardsHelper = GPRewardsHelper.load(proposalId);
@@ -49,6 +49,9 @@ export function daoBountyRedemption(proposalId: Bytes, beneficiary: Address , ti
    let reward = store.get('GPReward', id) as GPReward;
    reward.daoBountyForStakerRedeemedAt = timestamp;
    reward.save();
+   if (shouldRemoveAccountFromUnclaimed(reward)) {
+      removeRedeemableRewardOwner(proposalId, beneficiary);
+   }
 }
 
 export function tokenRedemption(proposalId: Bytes, beneficiary: Address, timestamp: BigInt): void {
@@ -56,6 +59,9 @@ export function tokenRedemption(proposalId: Bytes, beneficiary: Address, timesta
    let reward = store.get('GPReward', id) as GPReward;
    reward.tokensForStakerRedeemedAt = timestamp;
    reward.save();
+   if (shouldRemoveAccountFromUnclaimed(reward)) {
+    removeRedeemableRewardOwner(proposalId, beneficiary);
+   }
 }
 
 export function reputationRedemption(proposalId: Bytes, beneficiary: Address, timestamp: BigInt): void {
@@ -70,6 +76,25 @@ export function reputationRedemption(proposalId: Bytes, beneficiary: Address, ti
    }
 
    reward.save();
+   if (shouldRemoveAccountFromUnclaimed(reward)) {
+    removeRedeemableRewardOwner(proposalId, beneficiary);
+   }
+}
+
+function shouldRemoveAccountFromUnclaimed(reward: GPReward): boolean {
+  return ((reward.reputationForVoter == null ||
+    (reward.reputationForVoter != null &&
+     equals(reward.reputationForVoterRedeemedAt, BigInt.fromI32(0)) === false)) &&
+     (reward.reputationForProposer == null ||
+       (reward.reputationForProposer != null &&
+        equals(reward.reputationForProposerRedeemedAt, BigInt.fromI32(0)) === false)) &&
+        (reward.tokensForStaker == null ||
+         (reward.tokensForStaker != null &&
+          equals(reward.tokensForStakerRedeemedAt, BigInt.fromI32(0)) === false)) &&
+          (reward.daoBountyForStaker == null ||
+           (reward.daoBountyForStaker != null &&
+            equals(reward.daoBountyForStakerRedeemedAt, BigInt.fromI32(0)) === false))
+     );
 }
 
 export function insertGPRewards(
@@ -104,6 +129,17 @@ export function insertGPRewards(
                      proposal.dao,
                      timestamp,
                   );
+        let idx = 0;
+        let accountsWithUnclaimedRewards: Bytes[] =
+          getProposal(proposalId.toHex()).accountsWithUnclaimedRewards as Bytes[];
+        for (idx; idx < accountsWithUnclaimedRewards.length; idx++) {
+            if (equalsBytes(accountsWithUnclaimedRewards[idx], gpReward.beneficiary)) {
+              break;
+            }
+        }
+        if (idx === accountsWithUnclaimedRewards.length) {
+          addRedeemableRewardOwner(proposalId, gpReward.beneficiary);
+        }
     } else {
       // remove the gpReward entity
       store.remove('GPReward', gpReward.id);
@@ -150,7 +186,7 @@ function updateGPReward(id: string,
           reward.tokenAddress = genesisProtocol.stakingToken();
       }
       reward.save();
-      return  reward;
+      return reward;
 }
 
 // this is a hack :)

@@ -29,6 +29,7 @@ export function getProposal(id: string): Proposal {
     proposal.stakesFor = BigInt.fromI32(0);
     proposal.stakesAgainst = BigInt.fromI32(0);
     proposal.confidenceThreshold = BigInt.fromI32(0);
+    proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
   }
 
   return proposal;
@@ -229,5 +230,28 @@ export function updateProposalExecutionState(id: string, executionState: number)
   } else if (executionState === 5) {
     proposal.executionState = 'BoostedBarCrossed';
   }
+  saveProposal(proposal);
+}
+
+export function addRedeemableRewardOwner(
+  proposalId: Bytes,
+  redeemer: Bytes,
+): void {
+  let proposal = getProposal(proposalId.toHex());
+  let accounts = proposal.accountsWithUnclaimedRewards;
+  accounts.push(redeemer);
+  proposal.accountsWithUnclaimedRewards = accounts;
+  saveProposal(proposal);
+}
+
+export function removeRedeemableRewardOwner(
+  proposalId: Bytes,
+  redeemer: Bytes,
+): void {
+  let proposal = getProposal(proposalId.toHex());
+  let accounts = proposal.accountsWithUnclaimedRewards;
+
+  accounts = accounts.splice(accounts.indexOf(redeemer), 1);
+  proposal.accountsWithUnclaimedRewards = accounts;
   saveProposal(proposal);
 }

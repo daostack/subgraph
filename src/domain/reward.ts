@@ -83,17 +83,13 @@ export function reputationRedemption(proposalId: Bytes, beneficiary: Address, ti
 
 function shouldRemoveAccountFromUnclaimed(reward: GPReward): boolean {
   return ((reward.reputationForVoter == null ||
-    (reward.reputationForVoter != null &&
-     equals(reward.reputationForVoterRedeemedAt, BigInt.fromI32(0)) === false)) &&
+    equals(reward.reputationForVoterRedeemedAt, BigInt.fromI32(0)) === false) &&
      (reward.reputationForProposer == null ||
-       (reward.reputationForProposer != null &&
-        equals(reward.reputationForProposerRedeemedAt, BigInt.fromI32(0)) === false)) &&
+        equals(reward.reputationForProposerRedeemedAt, BigInt.fromI32(0)) === false) &&
         (reward.tokensForStaker == null ||
-         (reward.tokensForStaker != null &&
-          equals(reward.tokensForStakerRedeemedAt, BigInt.fromI32(0)) === false)) &&
+          equals(reward.tokensForStakerRedeemedAt, BigInt.fromI32(0)) === false) &&
           (reward.daoBountyForStaker == null ||
-           (reward.daoBountyForStaker != null &&
-            equals(reward.daoBountyForStakerRedeemedAt, BigInt.fromI32(0)) === false))
+            equals(reward.daoBountyForStakerRedeemedAt, BigInt.fromI32(0)) === false)
      );
 }
 

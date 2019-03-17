@@ -1,5 +1,7 @@
 #!/bin/bash
 echo "Creating a new release"
+npm ci
+
 migration_version=$(cat package.json  | jq -r '.devDependencies."@daostack/migration"')
 docker_compose_migration_version=$(cat docker-compose.yml | grep daostack/migration | cut -d ":" -f 3 | sed "s/'//")
 package_version=$(cat package.json | jq -r '.version')
@@ -51,6 +53,7 @@ docker push $image_name:$image_version
 
 docker-compose down -v
 # tag on github
+echo "create tag ${image_version}"
 git tag -a $image_version -m "Release of version $image_name:$image_version"
 git push --tags
 # done

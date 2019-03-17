@@ -811,6 +811,13 @@ describe('Domain Layer', () => {
             accountsWithUnclaimedRewards
         }
     }`;
+
+    const proposalIsIndexed = async () => {
+      return (await sendQuery(getProposalRewards)).proposal.accountsWithUnclaimedRewards.length === 2;
+    };
+
+    await waitUntilTrue(proposalIsIndexed);
+
     proposal = (await sendQuery(getProposalRewards)).proposal;
     let gpRewards = proposal.gpRewards;
     expect(gpRewards).toContainEqual({

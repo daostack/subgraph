@@ -146,8 +146,13 @@ enum RewardType {
 }
 
 type GPRewardsHelper @entity {
-   id: ID!
-	 gpRewards: [GPReward!]
+   	id: ID!
+	gpRewards: [PreGPReward!]
+}
+
+type PreGPReward @entity {
+	id: ID!
+	beneficiary: Bytes!
 }
 
 type GPReward @entity {

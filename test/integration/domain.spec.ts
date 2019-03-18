@@ -4,6 +4,7 @@ import {
   getWeb3,
   increaseTime,
   sendQuery,
+  toFixed,
   waitUntilTrue,
   writeProposalIPFS,
 } from './util';
@@ -452,7 +453,7 @@ describe('Domain Layer', () => {
 
     const v1Timestamp = await vote({
       proposalId: p1,
-      outcome: FAIL,
+      outcome: PASS,
       voter: accounts[0].address,
     });
 
@@ -473,7 +474,7 @@ describe('Domain Layer', () => {
       votes: [
         {
           createdAt: v1Timestamp.toString(),
-          outcome: 'Fail',
+          outcome: 'Pass',
           proposal: {
             id: p1,
           },
@@ -483,9 +484,9 @@ describe('Domain Layer', () => {
           reputation: address0Rep,
         },
       ],
-      votesFor: '0',
-      votesAgainst: address0Rep,
-      winningOutcome: 'Fail',
+      votesFor: address0Rep,
+      votesAgainst: '0',
+      winningOutcome: 'Pass',
 
       stakes: [],
       stakesFor: '0',
@@ -519,7 +520,7 @@ describe('Domain Layer', () => {
       votes: [
         {
           createdAt: v1Timestamp.toString(),
-          outcome: 'Fail',
+          outcome: 'Pass',
           proposal: {
             id: p1,
           },
@@ -529,9 +530,9 @@ describe('Domain Layer', () => {
           reputation: address0Rep,
         },
       ],
-      votesFor: '0',
-      votesAgainst: address0Rep,
-      winningOutcome: 'Fail',
+      votesFor: address0Rep,
+      votesAgainst: '0',
+      winningOutcome: 'Pass',
 
       stakes: [
         {
@@ -577,7 +578,7 @@ describe('Domain Layer', () => {
       votes: [
         {
           createdAt: v1Timestamp.toString(),
-          outcome: 'Fail',
+          outcome: 'Pass',
           proposal: {
             id: p1,
           },
@@ -587,9 +588,9 @@ describe('Domain Layer', () => {
           reputation: address0Rep,
         },
       ],
-      votesFor: '0',
-      votesAgainst: address0Rep,
-      winningOutcome: 'Fail',
+      votesFor: address0Rep,
+      votesAgainst: '0',
+      winningOutcome: 'Pass',
       stakesFor: '100000000000000000000',
       stakesAgainst: '100000000100000000000',
       confidenceThreshold: '0',
@@ -638,7 +639,7 @@ describe('Domain Layer', () => {
     // this will also shift the proposal to boosted phase
     const v2Timestamp = await vote({
       proposalId: p1,
-      outcome: PASS,
+      outcome: FAIL,
       voter: accounts[1].address,
     });
 
@@ -679,6 +680,9 @@ describe('Domain Layer', () => {
     await waitUntilTrue(voteIsIndexed);
 
     proposal = (await sendQuery(getProposal)).proposal;
+    let votesFor = toFixed(Number(address0Rep) + Number(address2Rep) + Number(address4Rep));
+    votesFor = votesFor.substr(0, votesFor.length - 4) + '1' + votesFor.substr(votesFor.length - 3);
+
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,
@@ -690,8 +694,8 @@ describe('Domain Layer', () => {
       totalRepWhenExecuted: totalRep,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
-      votesFor: '3000000000000000001000',
-      votesAgainst: address0Rep,
+      votesFor,
+      votesAgainst: address1Rep,
       winningOutcome: 'Pass',
 
       stakesFor: '400000000000000000000',
@@ -740,7 +744,7 @@ describe('Domain Layer', () => {
 
     expect(proposal.votes).toContainEqual({
       createdAt: v1Timestamp.toString(),
-      outcome: 'Fail',
+      outcome: 'Pass',
       proposal: {
         id: p1,
       },
@@ -751,7 +755,7 @@ describe('Domain Layer', () => {
     });
     expect(proposal.votes).toContainEqual({
       createdAt: v2Timestamp.toString(),
-      outcome: 'Pass',
+      outcome: 'Fail',
       proposal: {
         id: p1,
       },
@@ -840,7 +844,7 @@ describe('Domain Layer', () => {
     reputationForVoterRedeemedAt: '0',
     tokensForStakerRedeemedAt: '0',
     reputationForProposer: '5000000000',
-    reputationForVoter: null,
+    reputationForVoter: '10000000000000000000',
     tokenAddress: null,
     tokensForStaker: null,
   });
@@ -902,10 +906,10 @@ describe('Domain Layer', () => {
   daoBountyForStaker: null,
   daoBountyForStakerRedeemedAt: '0',
   reputationForProposerRedeemedAt: r1Timestamp.toString(),
-  reputationForVoterRedeemedAt: '0',
+  reputationForVoterRedeemedAt: r1Timestamp.toString(),
   tokensForStakerRedeemedAt: '0',
   reputationForProposer: '5000000000',
-  reputationForVoter: null,
+  reputationForVoter: '10000000000000000000',
   tokenAddress: null,
   tokensForStaker: null,
 });

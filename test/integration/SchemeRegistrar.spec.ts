@@ -7,7 +7,6 @@ import {
 } from './util';
 
 const AbsoluteVote = require('@daostack/arc/build/contracts/AbsoluteVote.json');
-const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
 const SchemeRegistrar = require('@daostack/arc/build/contracts/SchemeRegistrar.json');
 
 describe('SchemeRegistrar', () => {
@@ -110,7 +109,7 @@ describe('SchemeRegistrar', () => {
 
         let i = 0;
         // get absolute majority for both proposals
-        for (i = 0; i < 3; i++) {
+        for (i = 0; i < 2; i++) {
             await absVote.methods.vote(
                                       proposalId,
                                       1,
@@ -126,19 +125,36 @@ describe('SchemeRegistrar', () => {
         }
 
         // pass the proposals
-        const { transactionHash: executeTxHash } = await absVote.methods.vote(
+        let { transactionHash: executeTxHash } = await absVote.methods.vote(
                                                                 proposalId,
                                                                 1,
                                                                 0,
                                                                 accounts[0].address /* unused by the contract */)
                                                                 .send({ from: accounts[i].address });
 
-        const { transactionHash: removeExecuteTxHash } = await absVote.methods.vote(
+        let { transactionHash: removeExecuteTxHash } = await absVote.methods.vote(
                                                                 removeProposalId,
                                                                 1,
                                                                 0,
                                                                 accounts[0].address /* unused by the contract */)
                                                                 .send({ from: accounts[i].address });
+        if ((await absVote.methods.proposals(proposalId).call()).organizationId
+        !== '0x0000000000000000000000000000000000000000000000000000000000000000') {
+          i++;
+          executeTxHash = (await absVote.methods.vote(
+            proposalId,
+            1,
+            0,
+            accounts[0].address /* unused by the contract */)
+            .send({ from: accounts[i].address })).transactionHash;
+
+          removeExecuteTxHash = (await absVote.methods.vote(
+            removeProposalId,
+            1,
+            0,
+            accounts[0].address /* unused by the contract */)
+            .send({ from: accounts[i].address })).transactionHash;
+        }
 
         const { schemeRegistrarProposalExecuteds } = await sendQuery(`{
             schemeRegistrarProposalExecuteds {

@@ -61,7 +61,7 @@ export function handleNewProposal(event: NewProposal): void {
     event.params._paramsHash,
     event.block.timestamp,
   );
-  insertGPRewardsToHelper(event.params._proposalId, event.params._proposer, event.block.timestamp);
+  insertGPRewardsToHelper(event.params._proposalId, event.params._proposer);
 }
 
 export function handleNewContributionProposal(
@@ -122,7 +122,7 @@ export function handleStake(event: Stake): void {
     event.params._organization.toHex(),
     parseOutcome(event.params._vote),
   );
-  insertGPRewardsToHelper(event.params._proposalId, event.params._staker, event.block.timestamp);
+  insertGPRewardsToHelper(event.params._proposalId, event.params._staker);
 }
 
 export function handleVoteProposal(event: VoteProposal): void {
@@ -145,7 +145,7 @@ export function handleVoteProposal(event: VoteProposal): void {
     parseOutcome(event.params._vote),
     event.params._reputation,
   );
-  insertGPRewardsToHelper(event.params._proposalId, event.params._voter, event.block.timestamp);
+  insertGPRewardsToHelper(event.params._proposalId, event.params._voter);
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {

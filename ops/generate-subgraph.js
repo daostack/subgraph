@@ -8,6 +8,8 @@ const mappings = require('./mappings.json')[network].mappings
   `mappings` directory `mappings.json` and migration.json`
  */
 async function generateSubgraph () {
+  let indexesAddresses = []
+
   const migrationFile = migrationFileLocation
 
   const addresses = JSON.parse(fs.readFileSync(migrationFile, 'utf-8'))
@@ -21,6 +23,9 @@ async function generateSubgraph () {
     if (!contractAddress) {
       throw Error(`Address for contract ${contract} of ${mapping.dao} not found in ${migrationFile}`)
     }
+
+    indexesAddresses.push(contractAddress)
+
     return {
       kind: 'ethereum/contract',
       name: `${contract}`,
@@ -47,6 +52,14 @@ async function generateSubgraph () {
     schema: { file: './schema.graphql' },
     dataSources
   }
+
+  console.log('Use this addresses list in utils isAddressIndexed function:\n')
+  let indexedArrayStirng = ''
+  for (i in indexesAddresses) {
+    indexedArrayStirng += "Address.fromString('" + indexesAddresses[i] + "')" +',\n'
+  }
+  console.log(indexedArrayStirng)
+
   fs.writeFileSync('subgraph.yaml', yaml.safeDump(subgraph, { noRefs: true }), 'utf-8')
 }
 

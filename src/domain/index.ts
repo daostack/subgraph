@@ -163,6 +163,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
     'FirstRegisterSchemeFlag',
     event.params._avatar.toHex(),
   );
+
   if (isFirstRegister == null) {
     let dao = insertNewDAO(event.address, event.params._avatar);
     insertToken(hexToAddress(dao.nativeToken), event.params._avatar.toHex());

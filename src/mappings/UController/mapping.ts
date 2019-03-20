@@ -3,17 +3,15 @@ import 'allocator/arena';
 import {
   Address,
   BigInt,
-  ByteArray,
-  Bytes,
   crypto,
   Entity,
   store,
-  Value,
 } from '@graphprotocol/graph-ts';
 
 import { Avatar } from '../../types/UController/Avatar';
 import { DAOToken } from '../../types/UController/DAOToken';
 import { Reputation } from '../../types/UController/Reputation';
+import { isAddressIndexed } from '../../utils';
 
 import * as domain from '../../domain';
 
@@ -76,6 +74,10 @@ function insertOrganization(
   uControllerAddress: Address,
   avatarAddress: Address,
 ): void {
+  if (!isAddressIndexed(avatarAddress)) {
+    return;
+  }
+
   let uController = UController.bind(uControllerAddress);
   let org = uController.organizations(avatarAddress);
 

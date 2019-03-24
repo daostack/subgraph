@@ -74,10 +74,6 @@ function insertOrganization(
   uControllerAddress: Address,
   avatarAddress: Address,
 ): void {
-  if (!isAddressIndexed(avatarAddress)) {
-    return;
-  }
-
   let uController = UController.bind(uControllerAddress);
   let org = uController.organizations(avatarAddress);
 
@@ -159,6 +155,9 @@ function deleteGlobalConstraint(
 }
 
 export function handleRegisterScheme(event: RegisterScheme): void {
+  if (!isAddressIndexed(event.params._avatar)) {
+    return;
+  }
   domain.handleRegisterScheme(event);
 
   // Detect a new organization event by looking for the first register scheme event for that org.

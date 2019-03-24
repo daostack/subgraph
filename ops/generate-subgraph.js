@@ -53,12 +53,13 @@ async function generateSubgraph () {
     dataSources
   }
 
-  console.log('Use this addresses list in utils isAddressIndexed function:\n')
-  let indexedArrayStirng = ''
+  let indexedArrayStirng = 'import { Address } from \'@graphprotocol/graph-ts\';\n\nexport let addresses: Address[] = [\n'
   for (i in indexesAddresses) {
-    indexedArrayStirng += "Address.fromString('" + indexesAddresses[i] + "')" +',\n'
+    indexedArrayStirng += "    Address.fromString('" + indexesAddresses[i] + "')" +',\n'
   }
-  console.log(indexedArrayStirng)
+
+  indexedArrayStirng += '  ];\n'
+  fs.writeFileSync('src/addresses.ts', indexedArrayStirng, 'utf-8')
 
   fs.writeFileSync('subgraph.yaml', yaml.safeDump(subgraph, { noRefs: true }), 'utf-8')
 }

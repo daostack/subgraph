@@ -75,6 +75,12 @@
         "mapping": "Avatar"
       },
       {
+        "name": "Avatar",
+        "contractName": "Avatar",
+        "dao": "test",
+        "mapping": "Avatar"
+      },
+      {
         "name": "UController",
         "contractName": "UController",
         "dao": "base",

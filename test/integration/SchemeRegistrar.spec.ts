@@ -134,7 +134,9 @@ describe('SchemeRegistrar', () => {
           }
       }`;
 
-        let prevExecutedsLength = (await sendQuery(getSchemeRegistrarProposalExecuteds)).length;
+        let prevExecutedsLength = (
+            await sendQuery(getSchemeRegistrarProposalExecuteds)
+          ).schemeRegistrarProposalExecuteds.length;
 
         // pass the proposals
         let { transactionHash: executeTxHash } = await genesisProtocol.methods.vote(
@@ -168,7 +170,8 @@ describe('SchemeRegistrar', () => {
         }
 
         const executedIsIndexed = async () => {
-          return (await sendQuery(getSchemeRegistrarProposalExecuteds)).length > prevExecutedsLength;
+          return (await sendQuery(getSchemeRegistrarProposalExecuteds)).schemeRegistrarProposalExecuteds.length
+           > prevExecutedsLength;
         };
 
         await waitUntilTrue(executedIsIndexed);

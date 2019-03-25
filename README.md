@@ -73,6 +73,9 @@ In order to add support for a new contract follow these steps:
 
 3. (Optionally) add a deployment step for your contract in `ops/migrate.js` that will run before testing.
 
+## Add a new dao tracker
+Add <daoname>.json file to daos directory
+
 ## Deploy Subgraph
 To deploy the subgraph, please follow the instructions below:
 

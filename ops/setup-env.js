@@ -18,6 +18,9 @@ async function setupenv () {
   console.log(`Generating subgraph`)
   await require(`../ops/generate-subgraph`)()
 
+  console.log(`Generating daos subgraph`)
+  await require(`../ops/generate-daos-subgraph`)()
+
   const cwd = subgraphRepo
   console.log('Calling graph-codegen')
   result = await require(`../ops/graph-codegen`)(cwd)

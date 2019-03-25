@@ -1,0 +1,65 @@
+type ControllerOrganization @entity {
+	id: ID!
+	avatarAddress: Bytes!
+	nativeToken: TokenContract!
+	nativeReputation: ReputationContract!
+	controller: Bytes!
+}
+
+type ControllerScheme @entity {
+	id: ID!
+	avatarAddress: Bytes!
+	address: Bytes!
+	paramsHash: Bytes!
+	canRegisterSchemes: Boolean
+	canManageGlobalConstraints: Boolean
+	canUpgradeController: Boolean
+	canDelegateCall: Boolean
+}
+
+type ControllerGlobalConstraint @entity {
+	id: ID!
+	address: Bytes!
+	paramsHash: Bytes!
+	type: String!
+}
+
+type ControllerRegisterScheme @entity {
+	id: ID!
+	txHash: Bytes!
+	controller: Bytes!
+	contract: Bytes!
+	scheme: Bytes!
+}
+
+type ControllerUnregisterScheme @entity {
+	id: ID!
+	txHash: Bytes!
+	controller: Bytes!
+	contract: Bytes!
+	scheme: Bytes!
+}
+
+type ControllerUpgradeController @entity {
+	id: ID!
+	txHash: Bytes!
+	controller: Bytes!
+	newController: Bytes!
+}
+
+type ControllerAddGlobalConstraint @entity {
+	id: ID!
+	txHash: Bytes!
+	controller: Bytes!
+	globalConstraint: Bytes!
+	paramsHash: Bytes!
+	type: String!
+}
+
+type ControllerRemoveGlobalConstraint @entity {
+	id: ID!
+	txHash: Bytes!
+	controller: Bytes!
+	globalConstraint: Bytes!
+	isPre: Boolean
+}

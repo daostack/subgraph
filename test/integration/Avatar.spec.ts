@@ -36,7 +36,7 @@ describe('Avatar', () => {
         balance
         owner
       }
-    }`);
+    }`, 3000);
 
     expect(avatarContracts).toContainEqual({
       id: addresses.Avatar.toLowerCase(),
@@ -45,7 +45,7 @@ describe('Avatar', () => {
       nativeToken: addresses.NativeToken.toLowerCase(),
       nativeReputation: addresses.NativeReputation.toLowerCase(),
       balance: `${Number(balance) + 1}`,
-      owner: addresses.UController.toLowerCase(),
+      owner: addresses.Controller.toLowerCase(),
     });
   }, 20000);
 });

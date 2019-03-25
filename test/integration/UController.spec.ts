@@ -73,6 +73,8 @@ describe('UController', () => {
       .send();
 
     await avatar.methods.transferOwnership(uController.options.address).send();
+    await reputation.methods.transferOwnership(uController.options.address).send();
+    await daoToken.methods.transferOwnership(uController.options.address).send();
     let txs = [];
     txs.push(
       await uController.methods.newOrganization(avatar.options.address).send(),

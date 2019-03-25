@@ -46,7 +46,7 @@ describe('Generic Scheme', () => {
     let callData = await actionMock.methods.test2(addresses.TestAvatar).encodeABI();
 
     async function propose() {
-      const prop = genericScheme.methods.proposeCall(addresses.TestAvatar, callData, descHash);
+      const prop = genericScheme.methods.proposeCall(addresses.TestAvatar, callData, 0, descHash);
       const proposalId = await prop.call();
       const { blockNumber } = await prop.send();
       const { timestamp } = await web3.eth.getBlock(blockNumber);

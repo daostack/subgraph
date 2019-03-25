@@ -6,7 +6,7 @@ import {
   waitUntilTrue,
 } from './util';
 
-const AbsoluteVote = require('@daostack/arc/build/contracts/AbsoluteVote.json');
+const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
 const SchemeRegistrar = require('@daostack/arc/build/contracts/SchemeRegistrar.json');
 
 describe('SchemeRegistrar', () => {
@@ -23,9 +23,9 @@ describe('SchemeRegistrar', () => {
 
     it('Sanity', async () => {
         const accounts = web3.eth.accounts.wallet;
-        const absVote = new web3.eth.Contract(
-          AbsoluteVote.abi,
-          addresses.AbsoluteVote,
+        const genesisProtocol = new web3.eth.Contract(
+          GenesisProtocol.abi,
+          addresses.GenesisProtocol,
           opts,
         );
 
@@ -71,7 +71,7 @@ describe('SchemeRegistrar', () => {
             descriptionHash: descHash,
             proposalId,
             txHash: proposaTxHash,
-            votingMachine: addresses.AbsoluteVote.toLowerCase(),
+            votingMachine: addresses.GenesisProtocol.toLowerCase(),
             scheme: accounts[0].address.toLowerCase(),
             paramsHash: registerSchemeParamsHash,
             permission: '0x0000001f',
@@ -103,20 +103,20 @@ describe('SchemeRegistrar', () => {
             descriptionHash: descHash,
             proposalId: removeProposalId,
             txHash: removeProposaTxHash,
-            votingMachine: addresses.AbsoluteVote.toLowerCase(),
+            votingMachine: addresses.GenesisProtocol.toLowerCase(),
             scheme: accounts[0].address.toLowerCase(),
         });
 
         let i = 0;
         // get absolute majority for both proposals
         for (i = 0; i < 2; i++) {
-            await absVote.methods.vote(
+            await genesisProtocol.methods.vote(
                                       proposalId,
                                       1,
                                       0,
                                       accounts[0].address /* unused by the contract */)
                                       .send({ from: accounts[i].address });
-            await absVote.methods.vote(
+            await genesisProtocol.methods.vote(
                                       removeProposalId,
                                       1,
                                       0,
@@ -124,47 +124,59 @@ describe('SchemeRegistrar', () => {
                                       .send({ from: accounts[i].address });
         }
 
+        const getSchemeRegistrarProposalExecuteds = `{
+          schemeRegistrarProposalExecuteds {
+            txHash,
+            contract,
+            avatar,
+            proposalId,
+            decision
+          }
+      }`;
+
+        let prevExecutedsLength = (
+            await sendQuery(getSchemeRegistrarProposalExecuteds)
+          ).schemeRegistrarProposalExecuteds.length;
+
         // pass the proposals
-        let { transactionHash: executeTxHash } = await absVote.methods.vote(
+        let { transactionHash: executeTxHash } = await genesisProtocol.methods.vote(
                                                                 proposalId,
                                                                 1,
                                                                 0,
                                                                 accounts[0].address /* unused by the contract */)
                                                                 .send({ from: accounts[i].address });
 
-        let { transactionHash: removeExecuteTxHash } = await absVote.methods.vote(
+        let { transactionHash: removeExecuteTxHash } = await genesisProtocol.methods.vote(
                                                                 removeProposalId,
                                                                 1,
                                                                 0,
                                                                 accounts[0].address /* unused by the contract */)
                                                                 .send({ from: accounts[i].address });
-        if ((await absVote.methods.proposals(proposalId).call()).organizationId
-        !== '0x0000000000000000000000000000000000000000000000000000000000000000') {
+        while ((await genesisProtocol.methods.proposals(proposalId).call()).state !== '2') {
           i++;
-          executeTxHash = (await absVote.methods.vote(
+          executeTxHash = (await genesisProtocol.methods.vote(
             proposalId,
             1,
             0,
-            accounts[0].address /* unused by the contract */)
+            accounts[i].address)
             .send({ from: accounts[i].address })).transactionHash;
 
-          removeExecuteTxHash = (await absVote.methods.vote(
+          removeExecuteTxHash = (await genesisProtocol.methods.vote(
             removeProposalId,
             1,
             0,
-            accounts[0].address /* unused by the contract */)
+            accounts[i].address)
             .send({ from: accounts[i].address })).transactionHash;
         }
 
-        const { schemeRegistrarProposalExecuteds } = await sendQuery(`{
-            schemeRegistrarProposalExecuteds {
-              txHash,
-              contract,
-              avatar,
-              proposalId,
-              decision
-            }
-        }`);
+        const executedIsIndexed = async () => {
+          return (await sendQuery(getSchemeRegistrarProposalExecuteds)).schemeRegistrarProposalExecuteds.length
+           > prevExecutedsLength;
+        };
+
+        await waitUntilTrue(executedIsIndexed);
+
+        const { schemeRegistrarProposalExecuteds } = await sendQuery(getSchemeRegistrarProposalExecuteds);
 
         expect(schemeRegistrarProposalExecuteds).toContainEqual({
           avatar: addresses.Avatar.toLowerCase(),

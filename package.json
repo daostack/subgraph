@@ -30,7 +30,7 @@
 		"test:watch": "npm run test -- --watch"
 	},
 	"devDependencies": {
-		"@daostack/migration": "0.0.1-rc.12-v3",
+		"@daostack/migration": "0.0.1-rc.14-v4",
 		"@types/graphql": "^14.0.3",
 		"@types/jest": "^23.3.7",
 		"@types/mocha": "^5.2.5",
@@ -64,7 +64,7 @@
 		"handlebars": "^4.1.0",
 		"hdwallet-accounts": "0.0.1",
 		"jest": "^24.1.0",
-		"js-yaml": "^3.12.2",
+		"js-yaml": "^3.13.0",
 		"moment": "^2.22.2",
 		"mustache": "^3.0.0",
 		"shell-exec": "^1.0.2",

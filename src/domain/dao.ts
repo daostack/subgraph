@@ -32,13 +32,10 @@ export function saveDAO(dao: DAO): void {
 }
 
 export function insertNewDAO(
-  uControllerAddress: Address,
   avatarAddress: Address,
+  nativeTokenAddress: Address,
+  nativeReputationAddress: Address,
 ): DAO {
-  let uController = UController.bind(uControllerAddress);
-  let org = uController.organizations(avatarAddress);
-  let nativeTokenAddress = org.value0;
-  let nativeReputationAddress = org.value1;
   let avatar = Avatar.bind(avatarAddress);
   let dao = getDAO(avatarAddress.toHex());
   dao.name = avatar.orgName().toString();

@@ -157,18 +157,20 @@ export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: Bi
   updateProposalconfidence(proposalId, confidenceThreshold);
 }
 
-export function handleRegisterScheme(event: RegisterScheme): void {
+export function handleRegisterScheme(avatar: Address,
+                                     nativeTokenAddress: Address,
+                                     nativeReputationAddress: Address): void {
   // Detect the first register scheme event which indicates a new DAO
   let isFirstRegister = store.get(
     'FirstRegisterSchemeFlag',
-    event.params._avatar.toHex(),
+    avatar.toHex(),
   );
   if (isFirstRegister == null) {
-    let dao = insertNewDAO(event.address, event.params._avatar);
-    insertToken(hexToAddress(dao.nativeToken), event.params._avatar.toHex());
+    let dao = insertNewDAO(avatar, nativeTokenAddress , nativeReputationAddress);
+    insertToken(hexToAddress(dao.nativeToken), avatar.toHex());
     insertReputation(
       hexToAddress(dao.nativeReputation),
-      event.params._avatar.toHex(),
+      avatar.toHex(),
     );
     // the following code handle cases where the reputation and token minting are done before the dao creation
     // (e.g using daocreator)
@@ -178,14 +180,14 @@ export function handleRegisterScheme(event: RegisterScheme): void {
     for (let i = 0; i < holders.length; i++) {
       let reputationHolder = store.get('ReputationHolder', holders[i]) as ReputationHolder;
       updateMemberReputationWithValue(reputationHolder.address as Address,
-                                      event.params._avatar,
+                                      avatar,
                                       reputationHolder.balance);
-      updateMemberTokens(reputationHolder.address as Address, event.params._avatar);
+      updateMemberTokens(reputationHolder.address as Address, avatar);
     }
     updateTokenTotalSupply(hexToAddress(dao.nativeToken));
     let ent = new Entity();
-    ent.set('id', Value.fromString(event.params._avatar.toHex()));
-    store.set('FirstRegisterSchemeFlag', event.params._avatar.toHex(), ent);
+    ent.set('id', Value.fromString(avatar.toHex()));
+    store.set('FirstRegisterSchemeFlag', avatar.toHex(), ent);
   }
 }
 

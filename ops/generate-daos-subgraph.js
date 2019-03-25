@@ -38,10 +38,34 @@ async function generateSubgraph () {
     const subgraphYaml = yaml.safeLoad(fs.readFileSync('subgraph.yaml', 'utf8'));
     files.forEach(function (file, index) {
       const dao = JSON.parse(fs.readFileSync(daodir+file, 'utf-8'));
-      subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml("Reputation",dao.Reputation);
-      subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml("DAOToken",dao.DAOToken);
-      subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml("Avatar",dao.Avatar);
-      if (dao.Controller != undefined) {
+      let includeRep = false;
+      let includeToken = false;
+      let includeAvatar = false;
+      let includeController = false;
+      for (let i = 0;i<subgraphYaml.dataSources.length ;i++) {
+        if (subgraphYaml.dataSources[i].source.address ==  dao.Reputation){
+          includeRep = true;
+        }
+        if (subgraphYaml.dataSources[i].source.address ==  dao.DAOToken){
+          includeToken = true;
+        }
+        if (subgraphYaml.dataSources[i].source.address ==  dao.Avatar){
+          includeAvatar = true;
+        }
+        if (subgraphYaml.dataSources[i].source.address ==  dao.Controller){
+          includeController = true;
+        }
+      }
+      if (includeRep == false) {
+         subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml("Reputation",dao.Reputation);
+      }
+      if (includeToken == false) {
+         subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml("DAOToken",dao.DAOToken);
+      }
+      if (includeAvatar == false) {
+         subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml("Avatar",dao.Avatar);
+      }
+      if ((dao.Controller != undefined) && (includeController == false)) {
           subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml("Controller",dao.Controller);
       }
     })

@@ -18,9 +18,10 @@ function getControllerDAOAddresses() {
   const controllerDao = require(`../../daos/testdao.json`);
   return {
     Controller: controllerDao.Controller,
-    controllerAvatar: controllerDao.Avatar,
+    ControllerAvatar: controllerDao.Avatar,
     ControllerReputation: controllerDao.Reputation,
     ControllerToken: controllerDao.DAOToken,
+    Name: controllerDao.name,
   };
 }
 
@@ -32,8 +33,9 @@ describe('Controller', () => {
 
   it('Sanity', async () => {
     const getMigrationDao = `{
-      dao(id: "${addresses.controllerAvatar.toLowerCase()}") {
+      dao(id: "${addresses.ControllerAvatar.toLowerCase()}") {
         id
+        name
         nativeToken {
           id
           dao {
@@ -50,17 +52,18 @@ describe('Controller', () => {
     }`;
     let dao = (await sendQuery(getMigrationDao)).dao;
     expect(dao).toMatchObject({
-      id: addresses.controllerAvatar.toLowerCase(),
+      id: addresses.ControllerAvatar.toLowerCase(),
+      name: addresses.Name,
       nativeToken: {
         id: addresses.ControllerToken.toLowerCase(),
         dao: {
-          id: addresses.controllerAvatar.toLowerCase(),
+          id: addresses.ControllerAvatar.toLowerCase(),
         },
       },
       nativeReputation: {
         id: addresses.ControllerReputation.toLowerCase(),
         dao: {
-          id: addresses.controllerAvatar.toLowerCase(),
+          id: addresses.ControllerAvatar.toLowerCase(),
         },
       },
     });

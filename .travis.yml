@@ -34,4 +34,4 @@ script:
   - echo -en 'travis_fold:end:script.2\\r'
 
   - npm run lint
-  - npm run test
+  - npm run jest

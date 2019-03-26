@@ -2,7 +2,7 @@ const fs = require('fs')
 const yaml = require('js-yaml')
 const { migrationFileLocation, network } = require('./settings')
 //const mappings = require('./mappings.json')[network].mappings
-const daodir = "./daos/";
+const daodir = "./daos/"+network+"/";
 
 function daoYaml (contract,contractAddress) {
   const { abis, entities, eventHandlers } = yaml.safeLoad(fs.readFileSync('src/mappings/' + contract + '/datasource.yaml', 'utf-8'))
@@ -30,6 +30,10 @@ function daoYaml (contract,contractAddress) {
   `mappings` directory `mappings.json` and migration.json`
  */
 async function generateSubgraph () {
+  const dao = require(migrationFileLocation)[network].dao
+  if (dao !== undefined) {
+      fs.writeFileSync(daodir+'testdao.json', JSON.stringify(dao, undefined, 2), 'utf-8');
+  }
   fs.readdir(daodir, function (err, files) {
     if (err) {
       console.error("Could not list the directory.", err);
@@ -43,16 +47,16 @@ async function generateSubgraph () {
       let includeAvatar = false;
       let includeController = false;
       for (let i = 0;i<subgraphYaml.dataSources.length ;i++) {
-        if (subgraphYaml.dataSources[i].source.address ==  dao.Reputation){
+        if (subgraphYaml.dataSources[i].source.address ==  dao.Reputation) {
           includeRep = true;
         }
-        if (subgraphYaml.dataSources[i].source.address ==  dao.DAOToken){
+        if (subgraphYaml.dataSources[i].source.address ==  dao.DAOToken) {
           includeToken = true;
         }
-        if (subgraphYaml.dataSources[i].source.address ==  dao.Avatar){
+        if (subgraphYaml.dataSources[i].source.address ==  dao.Avatar) {
           includeAvatar = true;
         }
-        if (subgraphYaml.dataSources[i].source.address ==  dao.Controller){
+        if (subgraphYaml.dataSources[i].source.address ==  dao.Controller) {
           includeController = true;
         }
       }

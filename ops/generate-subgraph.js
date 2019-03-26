@@ -9,7 +9,6 @@ const mappings = require('./mappings.json')[network].mappings
  */
 async function generateSubgraph () {
   const migrationFile = migrationFileLocation
-
   const addresses = JSON.parse(fs.readFileSync(migrationFile, 'utf-8'))
 
   const dataSources = mappings.map(mapping => {

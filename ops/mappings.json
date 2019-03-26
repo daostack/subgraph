@@ -79,6 +79,12 @@
         "contractName": "UController",
         "dao": "base",
         "mapping": "UController"
+      },
+      {
+        "name": "DAORegistry",
+        "contractName": "DAORegistry",
+        "dao": "base",
+        "mapping": "DAORegistry"
       }
     ]
   },
@@ -138,6 +144,12 @@
         "contractName": "UController",
         "dao": "base",
         "mapping": "UController"
+      },
+      {
+        "name": "DAORegistry",
+        "contractName": "DAORegistry",
+        "dao": "base",
+        "mapping": "DAORegistry"
       }
     ]
   },
@@ -197,6 +209,12 @@
         "contractName": "UController",
         "dao": "base",
         "mapping": "UController"
+      },
+      {
+        "name": "DAORegistry",
+        "contractName": "DAORegistry",
+        "dao": "base",
+        "mapping": "DAORegistry"
       }
     ]
   },
@@ -256,6 +274,12 @@
       "contractName": "UController",
       "dao": "base",
       "mapping": "UController"
+    },
+    {
+      "name": "DAORegistry",
+      "contractName": "DAORegistry",
+      "dao": "base",
+      "mapping": "DAORegistry"
     }
   ]
   }

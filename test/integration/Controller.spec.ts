@@ -15,7 +15,7 @@ const TokenCapGC = require('@daostack/arc/build/contracts/TokenCapGC.json');
 const Controller = require('@daostack/arc/build/contracts/Controller.json');
 
 function getControllerDAOAddresses() {
-  const controllerDao = require(`../../daos/testdao.json`);
+  const controllerDao = require(`../../daos/private/testdao.json`);
   return {
     Controller: controllerDao.Controller,
     ControllerAvatar: controllerDao.Avatar,

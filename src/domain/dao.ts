@@ -42,7 +42,7 @@ export function insertNewDAO(
   dao.nativeToken = nativeTokenAddress.toHex();
   dao.nativeReputation = nativeReputationAddress.toHex();
   dao.membersCount = BigInt.fromI32(0);
-  dao.register = "na";
+  dao.register = 'na';
   saveDAO(dao);
   // add the avatar as a member so we can track its balance
   getMember(avatarAddress, avatarAddress);

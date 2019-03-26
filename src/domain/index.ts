@@ -20,6 +20,7 @@ import { Burn, Mint } from '../types/Reputation/Reputation';
 import { ReputationContract, ReputationHolder } from '../types/schema';
 import { RegisterScheme } from '../types/UController/UController';
 import { equals, eventId, hexToAddress } from '../utils';
+import * as daoModule from './dao';
 import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {
   getProposal,
@@ -50,7 +51,6 @@ import {
 import { insertStake } from './stake';
 import { getToken, insertToken, updateTokenTotalSupply } from './token';
 import { insertVote } from './vote';
-import * as daoModule from './dao';
 
 export function handleNewProposal(event: NewProposal): void {
   updateGPProposal(

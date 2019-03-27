@@ -14,6 +14,7 @@ const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.j
 const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
 const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
 const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
+const DAORegistry = require('@daostack/arc-hive/build/contracts/DAORegistry.json');
 const REAL_FBITS = 40;
 describe('Domain Layer', () => {
   let web3;
@@ -49,7 +50,7 @@ describe('Domain Layer', () => {
         membersCount
       }
     }`;
-    let dao = (await sendQuery(getMigrationDao)).dao;
+    let dao = (await sendQuery(getMigrationDao, 5000)).dao;
     expect(dao).toMatchObject({
       id: addresses.Avatar.toLowerCase(),
       name: orgName,
@@ -92,7 +93,37 @@ describe('Domain Layer', () => {
     expect(members).toContainEqual({
       address: addresses.Avatar.toLowerCase(),
     });
-  });
+
+    const getRegister = `{
+      dao(id: "${addresses.Avatar.toLowerCase()}") {
+        register
+      }
+    }`;
+    let register;
+    register = (await sendQuery(getRegister)).dao.register;
+    expect(register).toEqual('na');
+
+    const accounts = web3.eth.accounts.wallet;
+
+    const daoRegistry = new web3.eth.Contract(
+      DAORegistry.abi,
+      addresses.DAORegistry,
+      opts,
+    );
+
+    await daoRegistry.methods.propose(addresses.Avatar).send();
+    register = (await sendQuery(getRegister, 2000)).dao.register;
+    expect(register).toEqual('proposed');
+
+    await daoRegistry.methods.register(addresses.Avatar, 'test').send();
+    register = (await sendQuery(getRegister, 2000)).dao.register;
+    expect(register).toEqual('registered');
+
+    await daoRegistry.methods.unRegister(addresses.Avatar).send();
+    register = (await sendQuery(getRegister, 2000)).dao.register;
+    expect(register).toEqual('unRegistered');
+
+  }, 20000);
 
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;

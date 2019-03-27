@@ -19,6 +19,7 @@ type DAO @entity {
 	members: [Member!] @derivedFrom(field: "dao")
 	membersCount: BigInt!
 	rewards: [GPReward!] @derivedFrom(field: "dao")
+	register: String!
 }
 
 type GPQueue @entity {

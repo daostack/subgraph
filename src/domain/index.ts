@@ -20,7 +20,7 @@ import { Burn, Mint } from '../types/Reputation/Reputation';
 import { ReputationContract, ReputationHolder } from '../types/schema';
 import { RegisterScheme } from '../types/UController/UController';
 import { equals, eventId, hexToAddress } from '../utils';
-import { insertNewDAO } from './dao';
+import * as daoModule from './dao';
 import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {
   getProposal,
@@ -166,7 +166,7 @@ export function handleRegisterScheme(avatar: Address,
     avatar.toHex(),
   );
   if (isFirstRegister == null) {
-    let dao = insertNewDAO(avatar, nativeTokenAddress , nativeReputationAddress);
+    let dao = daoModule.insertNewDAO(avatar, nativeTokenAddress , nativeReputationAddress);
     insertToken(hexToAddress(dao.nativeToken), avatar.toHex());
     insertReputation(
       hexToAddress(dao.nativeReputation),
@@ -248,4 +248,8 @@ export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , tim
    } else {
        daoBountyRedemption(proposalId, beneficiary, timestamp);
    }
+}
+
+export function daoRegister(dao: Address, tag: string): void {
+   daoModule.register(dao, tag);
 }

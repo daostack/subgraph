@@ -70,3 +70,15 @@ export function equalsBytes(a: Bytes, b: Bytes): boolean {
   }
   return true;
 }
+
+export function equalStrings(a: string, b: string): boolean {
+  if (a.length !== b.length) {
+    return false;
+  }
+  for (let i = 0; i < a.length; i++) {
+    if (a[i].charCodeAt(0) !== b[i].charCodeAt(0)) {
+      return false;
+    }
+  }
+  return true;
+}

@@ -975,6 +975,13 @@ describe('Domain Layer', () => {
     beneficiary: accounts[1].address,
     });
 
+    await stake({
+      proposalId: p2,
+      outcome: PASS,
+      amount: web3.utils.toWei('1'),
+      staker: accounts[0].address, // staker needs to be the proposer
+    });
+
     const getExpiredProposal = `{
     proposal(id: "${p2}") {
         stage
@@ -984,7 +991,7 @@ describe('Domain Layer', () => {
     await genesisProtocol.methods.execute(p2).send();
 
     let stage = (await sendQuery(getExpiredProposal)).proposal.stage;
-    expect(stage).toEqual('ExpiredInQueue');
+    expect(stage).toEqual('Boosted');
 
   }, 100000);
 });

@@ -2,7 +2,7 @@ import { Address, BigInt, Bytes , crypto, EthereumValue, SmartContract , store} 
 import { GenesisProtocol__voteInfoResult } from '../types/GenesisProtocol/GenesisProtocol';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { GPReward, GPRewardsHelper, PreGPReward } from '../types/schema';
-import { concat , equals, equalsBytes } from '../utils';
+import { concat , equals, equalsBytes, equalStrings } from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 
 function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
@@ -22,7 +22,7 @@ export function insertGPRewardsToHelper(proposalId: Bytes, beneficiary: Address)
   // check if already exist
   let i = 0;
   for (i; i < gpRewards.length; i++) {
-       if ((gpRewards as string[])[i]  === rewardId) {
+       if (equalStrings((gpRewards as string[])[i], rewardId)) {
            break;
        }
   }
@@ -176,8 +176,7 @@ function updateGPReward(id: string,
 }
 
 function updatePreGPReward(id: string, beneficiary: Bytes): PreGPReward {
-  let reward = store.get('PreGPReward', id) as PreGPReward;
-  reward = new PreGPReward(id);
+  let reward = new PreGPReward(id);
   reward.beneficiary = beneficiary;
 
   reward.save();

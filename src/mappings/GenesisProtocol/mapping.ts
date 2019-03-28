@@ -7,7 +7,6 @@ import {
   Bytes,
   crypto,
   EthereumValue,
-  SmartContract,
   store,
 } from '@graphprotocol/graph-ts';
 
@@ -116,6 +115,8 @@ export function handleStake(event: Stake): void {
 }
 
 export function handleGPExecuteProposal(event: GPExecuteProposal): void {
+  domain.handleExecutionStateChange(event);
+
   let proposal = store.get(
     'GenesisProtocolProposal',
     event.params._proposalId.toHex(),

@@ -352,6 +352,7 @@ describe('Domain Layer', () => {
             description
             url
             stage
+            executionState
             createdAt
             preBoostedAt
             boostedAt
@@ -435,6 +436,7 @@ describe('Domain Layer', () => {
       description: proposalDescription,
       url: proposalUrl,
       stage: 'Queued',
+      executionState: 'None',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
@@ -495,6 +497,7 @@ describe('Domain Layer', () => {
       id: p1,
       descriptionHash: descHash,
       stage: 'Queued',
+      executionState: 'None',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
@@ -541,6 +544,7 @@ describe('Domain Layer', () => {
       id: p1,
       descriptionHash: descHash,
       stage: 'Queued',
+      executionState: 'None',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
@@ -599,6 +603,7 @@ describe('Domain Layer', () => {
       id: p1,
       descriptionHash: descHash,
       stage: 'Queued',
+      executionState: 'None',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
@@ -718,6 +723,7 @@ describe('Domain Layer', () => {
       id: p1,
       descriptionHash: descHash,
       stage: 'Executed',
+      executionState: 'BoostedBarCrossed',
       createdAt: p1Creation.toString(),
       boostedAt: v2Timestamp.toString(),
       quietEndingPeriodBeganAt: null,

@@ -40,15 +40,14 @@ import {
 import * as domain from '../../domain';
 
 export function handleNewProposal(event: NewProposal): void {
-  domain.handleNewProposal(event);
-
   let ent = new GenesisProtocolProposal(event.params._proposalId.toHex());
   ent.proposalId = event.params._proposalId;
   ent.submittedTime = event.block.timestamp;
   ent.proposer = event.params._proposer;
   ent.daoAvatarAddress = event.params._organization;
   ent.numOfChoices = event.params._numOfChoices;
-
+  ent.address = event.address;
+  ent.paramsHash = event.params._paramsHash;
   store.set('GenesisProtocolProposal', ent.id, ent);
 }
 

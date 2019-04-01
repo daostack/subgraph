@@ -155,7 +155,7 @@ describe('GenesisProtocol', () => {
         executionState
         state
       }
-    }`);
+    }`, 2000);
 
     expect(genesisProtocolProposals).toContainEqual({
       proposalId,

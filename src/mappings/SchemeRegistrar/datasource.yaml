@@ -1,3 +1,6 @@
+abis:
+  - SchemeRegistrar
+  - GenesisProtocol
 entities:
   - SchemeRegistrarNewSchemeProposal
   - SchemeRegistrarRemoveSchemeProposal

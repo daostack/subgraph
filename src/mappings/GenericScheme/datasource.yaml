@@ -1,3 +1,6 @@
+abis:
+  - GenericScheme
+  - GenesisProtocol
 entities:
   - GenericSchemeProposal
 eventHandlers:

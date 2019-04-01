@@ -17,7 +17,7 @@ import {
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
-import { ReputationContract, ReputationHolder } from '../types/schema';
+import { ReputationContract, ReputationHolder, GenesisProtocolProposal } from '../types/schema';
 import { RegisterScheme } from '../types/UController/UController';
 import { equals, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
@@ -52,21 +52,33 @@ import { insertStake } from './stake';
 import { getToken, insertToken, updateTokenTotalSupply } from './token';
 import { insertVote } from './vote';
 
-export function handleNewProposal(event: NewProposal): void {
-  updateGPProposal(
-    event.address,
-    event.params._proposalId,
-    event.params._proposer,
-    event.params._organization,
-    event.params._paramsHash,
-    event.block.timestamp,
-  );
-  insertGPRewardsToHelper(event.params._proposalId, event.params._proposer);
-}
+// export function handleNewProposal(event: NewProposal): void {
+//   updateGPProposal(
+//     event.address,
+//     event.params._proposalId,
+//     event.params._proposer,
+//     event.params._organization,
+//     event.params._paramsHash,
+//     event.block.timestamp,
+//   );
+//   insertGPRewardsToHelper(event.params._proposalId, event.params._proposer);
+// }
 
 export function handleNewContributionProposal(
   event: NewContributionProposal,
 ): void {
+  let gpProposal = GenesisProtocolProposal.load(event.params._proposalId.toHex());
+  if (gpProposal != null) {
+    updateGPProposal(
+      gpProposal.address as Address,
+      gpProposal.proposalId,
+      gpProposal.proposer as Address,
+      gpProposal.daoAvatarAddress as Address,
+      gpProposal.paramsHash,
+      gpProposal.submittedTime,
+    );
+    insertGPRewardsToHelper(gpProposal.proposalId, gpProposal.proposer as Address);
+  }
   updateCRProposal(
     event.params._proposalId,
     event.block.timestamp,

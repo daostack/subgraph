@@ -52,6 +52,11 @@ import { insertStake } from './stake';
 import { getToken, insertToken, updateTokenTotalSupply } from './token';
 import { insertVote } from './vote';
 
+function isProposalValid(proposalId: string ): boolean {
+  let p = Proposal.load(proposalId);
+  return  ((p != null) && (equalsBytes(p.paramsHash, new Bytes()) === false));
+}
+
 function handleGPProposalPrivate(proposalId: string ): void {
    let gpProposal = GenesisProtocolProposal.load(proposalId);
    if (gpProposal != null) {
@@ -112,6 +117,9 @@ export function handleNewCallProposal(
 
 export function handleStake(event: Stake): void {
   let proposal = getProposal(event.params._proposalId.toHex());
+  if (equalsBytes(proposal.paramsHash, new Bytes())) {
+    return;
+  }
   updateProposal(proposal, event.address, event.params._proposalId);
   if (equals(event.params._vote, BigInt.fromI32(1))) {
     proposal.stakesFor = proposal.stakesFor.plus(event.params._amount);
@@ -134,6 +142,9 @@ export function handleStake(event: Stake): void {
 
 export function handleVoteProposal(event: VoteProposal): void {
   let proposal = getProposal(event.params._proposalId.toHex());
+  if (equalsBytes(proposal.paramsHash, new Bytes())) {
+    return;
+  }
   updateProposal(proposal, event.address, event.params._proposalId);
   if (equals(event.params._vote, BigInt.fromI32(1))) {
     proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
@@ -161,7 +172,9 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
 }
 
 export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {
-  updateProposalconfidence(proposalId, confidenceThreshold);
+  if (isProposalValid(proposalId.toHex())) {
+      updateProposalconfidence(proposalId, confidenceThreshold);
+  }
 }
 
 export function handleRegisterScheme(avatar: Address,
@@ -232,12 +245,13 @@ export function handleNativeTokenTransfer(event: Transfer): void {
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
-   updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
+   if (isProposalValid(event.params._proposalId.toHex())) {
+       updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
+    }
 }
 
 export function handleStateChange(event: StateChange): void {
-  let p = Proposal.load(event.params._proposalId.toHex());
-  if ((p != null) && (equalsBytes(p.paramsHash, new Bytes()) === false)) {
+  if (isProposalValid(event.params._proposalId.toHex())) {
       updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
       if ((event.params._proposalState === 1) ||
           (event.params._proposalState === 2)) {
@@ -248,12 +262,13 @@ export function handleStateChange(event: StateChange): void {
 }
 
 export function handleExecutionStateChange(event: GPExecuteProposal): void {
-  updateProposalExecutionState(event.params._proposalId.toHex(), event.params._executionState);
+  if (isProposalValid(event.params._proposalId.toHex())) {
+    updateProposalExecutionState(event.params._proposalId.toHex(), event.params._executionState);
+  }
 }
 
 export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): void {
-   let p = Proposal.load(proposalId.toHex());
-   if ((p != null) && (equalsBytes(p.paramsHash, new Bytes()) === false)) {
+   if (isProposalValid(proposalId.toHex())) {
        if (type === 'token') {
            tokenRedemption(proposalId, beneficiary, timestamp);
        } else if (type === 'reputation') {

@@ -40,8 +40,6 @@ import {
 import * as domain from '../../domain';
 
 export function handleNewProposal(event: NewProposal): void {
-  //domain.handleNewProposal(event);
-
   let ent = new GenesisProtocolProposal(event.params._proposalId.toHex());
   ent.proposalId = event.params._proposalId;
   ent.submittedTime = event.block.timestamp;

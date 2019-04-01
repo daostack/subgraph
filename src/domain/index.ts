@@ -17,9 +17,9 @@ import {
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
-import { ReputationContract, ReputationHolder, GenesisProtocolProposal } from '../types/schema';
+import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
 import { RegisterScheme } from '../types/UController/UController';
-import { equals, eventId, hexToAddress } from '../utils';
+import { equals, equalsBytes, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
 import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {
@@ -52,33 +52,26 @@ import { insertStake } from './stake';
 import { getToken, insertToken, updateTokenTotalSupply } from './token';
 import { insertVote } from './vote';
 
-// export function handleNewProposal(event: NewProposal): void {
-//   updateGPProposal(
-//     event.address,
-//     event.params._proposalId,
-//     event.params._proposer,
-//     event.params._organization,
-//     event.params._paramsHash,
-//     event.block.timestamp,
-//   );
-//   insertGPRewardsToHelper(event.params._proposalId, event.params._proposer);
-// }
+function handleGPProposalPrivate(proposalId: string ): void {
+   let gpProposal = GenesisProtocolProposal.load(proposalId);
+   if (gpProposal != null) {
+     updateGPProposal(
+       gpProposal.address as Address,
+       gpProposal.proposalId,
+       gpProposal.proposer as Address,
+       gpProposal.daoAvatarAddress as Address,
+       gpProposal.paramsHash,
+       gpProposal.submittedTime,
+     );
+     insertGPRewardsToHelper(gpProposal.proposalId, gpProposal.proposer as Address);
+   }
+}
 
 export function handleNewContributionProposal(
   event: NewContributionProposal,
 ): void {
-  let gpProposal = GenesisProtocolProposal.load(event.params._proposalId.toHex());
-  if (gpProposal != null) {
-    updateGPProposal(
-      gpProposal.address as Address,
-      gpProposal.proposalId,
-      gpProposal.proposer as Address,
-      gpProposal.daoAvatarAddress as Address,
-      gpProposal.paramsHash,
-      gpProposal.submittedTime,
-    );
-    insertGPRewardsToHelper(gpProposal.proposalId, gpProposal.proposer as Address);
-  }
+
+  handleGPProposalPrivate(event.params._proposalId.toHex());
   updateCRProposal(
     event.params._proposalId,
     event.block.timestamp,
@@ -95,6 +88,7 @@ export function handleNewSchemeRegisterProposal(
    votingMachine: Bytes,
    descriptionHash: string,
  ): void {
+    handleGPProposalPrivate(proposalId);
     updateSRProposal(
       proposalId,
       timestamp,
@@ -107,6 +101,7 @@ export function handleNewSchemeRegisterProposal(
 export function handleNewCallProposal(
   event: NewCallProposal,
 ): void {
+  handleGPProposalPrivate(event.params._proposalId.toHex());
   updateGSProposal(
     event.params._proposalId,
     event.block.timestamp,
@@ -241,11 +236,15 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
 }
 
 export function handleStateChange(event: StateChange): void {
-  updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
-  if ((event.params._proposalState === 1) ||
-      (event.params._proposalState === 2)) {
-      insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
+  let p = Proposal.load(event.params._proposalId.toHex());
+  if ((p != null) && (equalsBytes(p.paramsHash, new Bytes()) === false)) {
+      updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
+      if ((event.params._proposalState === 1) ||
+          (event.params._proposalState === 2)) {
+          insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
+      }
   }
+
 }
 
 export function handleExecutionStateChange(event: GPExecuteProposal): void {
@@ -253,13 +252,16 @@ export function handleExecutionStateChange(event: GPExecuteProposal): void {
 }
 
 export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): void {
-   if (type === 'token') {
-       tokenRedemption(proposalId, beneficiary, timestamp);
-   } else if (type === 'reputation') {
-       reputationRedemption(proposalId, beneficiary, timestamp);
-   } else {
-       daoBountyRedemption(proposalId, beneficiary, timestamp);
-   }
+   let p = Proposal.load(proposalId.toHex());
+   if ((p != null) && (equalsBytes(p.paramsHash, new Bytes()) === false)) {
+       if (type === 'token') {
+           tokenRedemption(proposalId, beneficiary, timestamp);
+       } else if (type === 'reputation') {
+           reputationRedemption(proposalId, beneficiary, timestamp);
+       } else {
+           daoBountyRedemption(proposalId, beneficiary, timestamp);
+       }
+    }
 }
 
 export function daoRegister(dao: Address, tag: string): void {

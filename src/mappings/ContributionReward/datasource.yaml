@@ -1,3 +1,6 @@
+abis:
+  - ContributionReward
+  - GenesisProtocol
 entities:
   - ContributionRewardRedeemReputation
   - ContributionRewardRedeemNativeToken

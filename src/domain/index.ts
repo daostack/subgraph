@@ -17,9 +17,9 @@ import {
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
-import { ReputationContract, ReputationHolder } from '../types/schema';
+import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
 import { RegisterScheme } from '../types/UController/UController';
-import { equals, eventId, hexToAddress } from '../utils';
+import { equals, equalsBytes, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
 import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {
@@ -52,21 +52,31 @@ import { insertStake } from './stake';
 import { getToken, insertToken, updateTokenTotalSupply } from './token';
 import { insertVote } from './vote';
 
-export function handleNewProposal(event: NewProposal): void {
-  updateGPProposal(
-    event.address,
-    event.params._proposalId,
-    event.params._proposer,
-    event.params._organization,
-    event.params._paramsHash,
-    event.block.timestamp,
-  );
-  insertGPRewardsToHelper(event.params._proposalId, event.params._proposer);
+function isProposalValid(proposalId: string ): boolean {
+  let p = Proposal.load(proposalId);
+  return  ((p != null) && (equalsBytes(p.paramsHash, new Bytes()) === false));
+}
+
+function handleGPProposalPrivate(proposalId: string ): void {
+   let gpProposal = GenesisProtocolProposal.load(proposalId);
+   if (gpProposal != null) {
+     updateGPProposal(
+       gpProposal.address as Address,
+       gpProposal.proposalId,
+       gpProposal.proposer as Address,
+       gpProposal.daoAvatarAddress as Address,
+       gpProposal.paramsHash,
+       gpProposal.submittedTime,
+     );
+     insertGPRewardsToHelper(gpProposal.proposalId, gpProposal.proposer as Address);
+   }
 }
 
 export function handleNewContributionProposal(
   event: NewContributionProposal,
 ): void {
+
+  handleGPProposalPrivate(event.params._proposalId.toHex());
   updateCRProposal(
     event.params._proposalId,
     event.block.timestamp,
@@ -83,6 +93,7 @@ export function handleNewSchemeRegisterProposal(
    votingMachine: Bytes,
    descriptionHash: string,
  ): void {
+    handleGPProposalPrivate(proposalId);
     updateSRProposal(
       proposalId,
       timestamp,
@@ -95,6 +106,7 @@ export function handleNewSchemeRegisterProposal(
 export function handleNewCallProposal(
   event: NewCallProposal,
 ): void {
+  handleGPProposalPrivate(event.params._proposalId.toHex());
   updateGSProposal(
     event.params._proposalId,
     event.block.timestamp,
@@ -105,6 +117,9 @@ export function handleNewCallProposal(
 
 export function handleStake(event: Stake): void {
   let proposal = getProposal(event.params._proposalId.toHex());
+  if (equalsBytes(proposal.paramsHash, new Bytes())) {
+    return;
+  }
   updateProposal(proposal, event.address, event.params._proposalId);
   if (equals(event.params._vote, BigInt.fromI32(1))) {
     proposal.stakesFor = proposal.stakesFor.plus(event.params._amount);
@@ -127,6 +142,9 @@ export function handleStake(event: Stake): void {
 
 export function handleVoteProposal(event: VoteProposal): void {
   let proposal = getProposal(event.params._proposalId.toHex());
+  if (equalsBytes(proposal.paramsHash, new Bytes())) {
+    return;
+  }
   updateProposal(proposal, event.address, event.params._proposalId);
   if (equals(event.params._vote, BigInt.fromI32(1))) {
     proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
@@ -154,7 +172,9 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
 }
 
 export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {
-  updateProposalconfidence(proposalId, confidenceThreshold);
+  if (isProposalValid(proposalId.toHex())) {
+      updateProposalconfidence(proposalId, confidenceThreshold);
+  }
 }
 
 export function handleRegisterScheme(avatar: Address,
@@ -225,29 +245,38 @@ export function handleNativeTokenTransfer(event: Transfer): void {
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
-   updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
+   if (isProposalValid(event.params._proposalId.toHex())) {
+       updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
+    }
 }
 
 export function handleStateChange(event: StateChange): void {
-  updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
-  if ((event.params._proposalState === 1) ||
-      (event.params._proposalState === 2)) {
-      insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
+  if (isProposalValid(event.params._proposalId.toHex())) {
+      updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
+      if ((event.params._proposalState === 1) ||
+          (event.params._proposalState === 2)) {
+          insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
+      }
   }
+
 }
 
 export function handleExecutionStateChange(event: GPExecuteProposal): void {
-  updateProposalExecutionState(event.params._proposalId.toHex(), event.params._executionState);
+  if (isProposalValid(event.params._proposalId.toHex())) {
+    updateProposalExecutionState(event.params._proposalId.toHex(), event.params._executionState);
+  }
 }
 
 export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): void {
-   if (type === 'token') {
-       tokenRedemption(proposalId, beneficiary, timestamp);
-   } else if (type === 'reputation') {
-       reputationRedemption(proposalId, beneficiary, timestamp);
-   } else {
-       daoBountyRedemption(proposalId, beneficiary, timestamp);
-   }
+   if (isProposalValid(proposalId.toHex())) {
+       if (type === 'token') {
+           tokenRedemption(proposalId, beneficiary, timestamp);
+       } else if (type === 'reputation') {
+           reputationRedemption(proposalId, beneficiary, timestamp);
+       } else {
+           daoBountyRedemption(proposalId, beneficiary, timestamp);
+       }
+    }
 }
 
 export function daoRegister(dao: Address, tag: string): void {

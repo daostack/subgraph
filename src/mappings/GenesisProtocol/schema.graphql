@@ -10,6 +10,8 @@ type GenesisProtocolProposal @entity {
 	decision: BigInt
 	executionTime: BigInt
 	totalReputation: BigInt
+	paramsHash: Bytes!
+	address: Bytes!
 }
 
 type GenesisProtocolVote @entity {

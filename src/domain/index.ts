@@ -19,7 +19,7 @@ import {
 import { Burn, Mint } from '../types/Reputation/Reputation';
 import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
 import { RegisterScheme } from '../types/UController/UController';
-import { equals, equalsBytes, eventId, hexToAddress } from '../utils';
+import { equals, equalsBytes, eventId, hexToAddress, debug } from '../utils';
 import * as daoModule from './dao';
 import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {
@@ -57,7 +57,7 @@ function isProposalValid(proposalId: string ): boolean {
   return  ((p != null) && (equalsBytes(p.paramsHash, new Bytes()) === false));
 }
 
-function handleGPProposalPrivate(proposalId: string ): void {
+function handleGPProposalPrivate(proposalId: string): void {
    let gpProposal = GenesisProtocolProposal.load(proposalId);
    if (gpProposal != null) {
      updateGPProposal(
@@ -69,6 +69,12 @@ function handleGPProposalPrivate(proposalId: string ): void {
        gpProposal.submittedTime,
      );
      insertGPRewardsToHelper(gpProposal.proposalId, gpProposal.proposer as Address);
+     handleStateChange(
+      gpProposal.proposalId,
+      3,
+      gpProposal.address as Address,
+      gpProposal.submittedTime,
+    );
    }
 }
 
@@ -250,12 +256,18 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
     }
 }
 
-export function handleStateChange(event: StateChange): void {
-  if (isProposalValid(event.params._proposalId.toHex())) {
-      updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
-      if ((event.params._proposalState === 1) ||
-          (event.params._proposalState === 2)) {
-          insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
+export function handleStateChange(
+  proposalId: Bytes,
+  proposalState: number,
+  gpAddress: Address,
+  timestamp: BigInt,
+): void {
+  if (isProposalValid(proposalId.toHex())) {
+      debug(proposalId.toHex());
+      updateProposalState(proposalId, proposalState, gpAddress);
+      if ((proposalState === 1) ||
+          (proposalState === 2)) {
+          insertGPRewards(proposalId, timestamp, gpAddress, proposalState);
       }
   }
 

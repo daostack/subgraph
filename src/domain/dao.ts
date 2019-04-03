@@ -1,9 +1,6 @@
-import { Address, BigInt, Entity, store, Value } from '@graphprotocol/graph-ts';
-import { DAOToken } from '../types/DAOToken/DAOToken';
-import { Reputation } from '../types/Reputation/Reputation';
-import { DAO , GPQueue } from '../types/schema';
+import { Address, BigInt, store } from '@graphprotocol/graph-ts';
+import { DAO } from '../types/schema';
 import { Avatar } from '../types/UController/Avatar';
-import { UController } from '../types/UController/UController';
 import { getMember } from './member';
 
 export function getDAO(id: string): DAO {

@@ -11,15 +11,12 @@ import { NewCallProposal } from '../types/GenericScheme/GenericScheme';
 import {
   ExecuteProposal,
   GPExecuteProposal,
-  NewProposal,
   Stake,
-  StateChange,
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
 import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
-import { RegisterScheme } from '../types/UController/UController';
-import { equals, equalsBytes, eventId, hexToAddress, debug } from '../utils';
+import { equals, equalsBytes, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
 import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {

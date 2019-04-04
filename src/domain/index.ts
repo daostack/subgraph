@@ -260,7 +260,6 @@ export function handleStateChange(
   timestamp: BigInt,
 ): void {
   if (isProposalValid(proposalId.toHex())) {
-      debug(proposalId.toHex());
       updateProposalState(proposalId, proposalState, gpAddress);
       if ((proposalState === 1) ||
           (proposalState === 2)) {

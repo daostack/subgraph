@@ -967,7 +967,7 @@ describe('Domain Layer', () => {
 
     let gpQueues = (await sendQuery(getGPQueues)).gpqueues;
 
-    expect(gpQueues).toMatchObject([
+    expect(gpQueues).toEqual(new Set([
       {
         threshold: Math.pow(2, REAL_FBITS).toString(),
       },
@@ -977,7 +977,7 @@ describe('Domain Layer', () => {
       {
         threshold: Math.pow(2, REAL_FBITS + 1).toString(),
       },
-    ]);
+    ]));
 
     const { proposalId: p2 } = await propose({
     rep: 10,

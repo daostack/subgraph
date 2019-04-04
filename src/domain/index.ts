@@ -11,14 +11,12 @@ import { NewCallProposal } from '../types/GenericScheme/GenericScheme';
 import {
   ExecuteProposal,
   GPExecuteProposal,
-  NewProposal,
   Stake,
   StateChange,
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
 import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
-import { RegisterScheme } from '../types/UController/UController';
 import { equals, equalsBytes, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
 import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
@@ -57,18 +55,23 @@ function isProposalValid(proposalId: string ): boolean {
   return  ((p != null) && (equalsBytes(p.paramsHash, new Bytes()) === false));
 }
 
-function handleGPProposalPrivate(proposalId: string ): void {
+function handleGPProposalPrivate(proposalId: string): void {
    let gpProposal = GenesisProtocolProposal.load(proposalId);
    if (gpProposal != null) {
-     updateGPProposal(
-       gpProposal.address as Address,
-       gpProposal.proposalId,
-       gpProposal.proposer as Address,
-       gpProposal.daoAvatarAddress as Address,
-       gpProposal.paramsHash,
-       gpProposal.submittedTime,
-     );
-     insertGPRewardsToHelper(gpProposal.proposalId, gpProposal.proposer as Address);
+    updateGPProposal(
+      gpProposal.address as Address,
+      gpProposal.proposalId,
+      gpProposal.proposer as Address,
+      gpProposal.daoAvatarAddress as Address,
+      gpProposal.paramsHash,
+      gpProposal.submittedTime,
+    );
+    insertGPRewardsToHelper(gpProposal.proposalId, gpProposal.proposer as Address);
+    updateProposalState(
+      gpProposal.proposalId,
+      3, // Queued
+      gpProposal.address as Address,
+    );
    }
 }
 
@@ -258,7 +261,6 @@ export function handleStateChange(event: StateChange): void {
           insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
       }
   }
-
 }
 
 export function handleExecutionStateChange(event: GPExecuteProposal): void {

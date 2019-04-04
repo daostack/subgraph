@@ -68,7 +68,7 @@ function handleGPProposalPrivate(proposalId: string): void {
      insertGPRewardsToHelper(gpProposal.proposalId, gpProposal.proposer as Address);
      handleStateChange(
       gpProposal.proposalId,
-      3,
+      3, // Queued
       gpProposal.address as Address,
       gpProposal.submittedTime,
     );

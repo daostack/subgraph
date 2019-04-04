@@ -967,7 +967,7 @@ describe('Domain Layer', () => {
 
     let gpQueues = (await sendQuery(getGPQueues)).gpqueues;
 
-    expect(gpQueues).toEqual(new Set([
+    expect(new Set(gpQueues)).toEqual(new Set([
       {
         threshold: Math.pow(2, REAL_FBITS).toString(),
       },

@@ -960,16 +960,24 @@ describe('Domain Layer', () => {
     expect(proposal).toMatchObject({ accountsWithUnclaimedRewards: [] });
 
     const getGPQueues = `{
-    gpqueues {
-        threshold
-    }
+      gpqueues {
+          threshold
+      }
     }`;
 
     let gpQueues = (await sendQuery(getGPQueues)).gpqueues;
 
-    expect(gpQueues).toContainEqual({
-    threshold: Math.pow(2, REAL_FBITS).toString(),
-    });
+    expect(gpQueues).toEqual([
+      {
+        threshold: Math.pow(2, REAL_FBITS).toString(),
+      },
+      {
+        threshold: Math.pow(2, REAL_FBITS).toString(),
+      },
+      {
+        threshold: Math.pow(2, REAL_FBITS + 1).toString(),
+      },
+    ]);
 
     const { proposalId: p2 } = await propose({
     rep: 10,

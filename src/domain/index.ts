@@ -12,6 +12,7 @@ import {
   ExecuteProposal,
   GPExecuteProposal,
   Stake,
+  StateChange,
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
@@ -57,20 +58,19 @@ function isProposalValid(proposalId: string ): boolean {
 function handleGPProposalPrivate(proposalId: string): void {
    let gpProposal = GenesisProtocolProposal.load(proposalId);
    if (gpProposal != null) {
-     updateGPProposal(
-       gpProposal.address as Address,
-       gpProposal.proposalId,
-       gpProposal.proposer as Address,
-       gpProposal.daoAvatarAddress as Address,
-       gpProposal.paramsHash,
-       gpProposal.submittedTime,
-     );
-     insertGPRewardsToHelper(gpProposal.proposalId, gpProposal.proposer as Address);
-     handleStateChange(
+    updateGPProposal(
+      gpProposal.address as Address,
+      gpProposal.proposalId,
+      gpProposal.proposer as Address,
+      gpProposal.daoAvatarAddress as Address,
+      gpProposal.paramsHash,
+      gpProposal.submittedTime,
+    );
+    insertGPRewardsToHelper(gpProposal.proposalId, gpProposal.proposer as Address);
+    updateProposalState(
       gpProposal.proposalId,
       3, // Queued
       gpProposal.address as Address,
-      gpProposal.submittedTime,
     );
    }
 }
@@ -253,20 +253,14 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
     }
 }
 
-export function handleStateChange(
-  proposalId: Bytes,
-  proposalState: number,
-  gpAddress: Address,
-  timestamp: BigInt,
-): void {
-  if (isProposalValid(proposalId.toHex())) {
-      updateProposalState(proposalId, proposalState, gpAddress);
-      if ((proposalState === 1) ||
-          (proposalState === 2)) {
-          insertGPRewards(proposalId, timestamp, gpAddress, proposalState);
+export function handleStateChange(event: StateChange): void {
+  if (isProposalValid(event.params._proposalId.toHex())) {
+      updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
+      if ((event.params._proposalState === 1) ||
+          (event.params._proposalState === 2)) {
+          insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
       }
   }
-
 }
 
 export function handleExecutionStateChange(event: GPExecuteProposal): void {

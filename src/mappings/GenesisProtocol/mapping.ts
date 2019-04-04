@@ -194,12 +194,7 @@ export function handleRedeem(event: Redeem): void {
 }
 
 export function handleStateChange(event: StateChange): void {
-  domain.handleStateChange(
-    event.params._proposalId,
-    event.params._proposalState,
-    event.address,
-    event.block.timestamp,
-  );
+  domain.handleStateChange(event);
 }
 
 export function handleExpirationCallBounty(event: ExpirationCallBounty): void {

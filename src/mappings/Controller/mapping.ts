@@ -49,7 +49,7 @@ function insertScheme(
   let perms = controller.getSchemePermissions(scheme, avatarAddress);
 
   let ent = new ControllerScheme(crypto.keccak256(concat(avatarAddress, scheme)).toHex());
-  ent.avatarAddress = avatarAddress;
+  ent.dao = avatarAddress.toHex();
   ent.address = scheme;
   ent.paramsHash = paramsHash;
   /* tslint:disable:no-bitwise */

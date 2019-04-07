@@ -1,18 +1,6 @@
 import {
-  getContractAddresses,
-  getOptions,
-  getWeb3,
-  hashLength,
-  nullParamsHash,
-  padZeros,
   sendQuery,
 } from './util';
-
-const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
-const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
-const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
-const TokenCapGC = require('@daostack/arc/build/contracts/TokenCapGC.json');
-const Controller = require('@daostack/arc/build/contracts/Controller.json');
 
 function getControllerDAOAddresses() {
   const controllerDao = require(`../../daos/private/testdao.json`);

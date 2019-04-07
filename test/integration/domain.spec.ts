@@ -226,6 +226,17 @@ describe('Domain Layer', () => {
           }
           totalSupply
         }
+        schemes {
+          address
+          dao {
+            id
+          }
+        }
+        gpQueues {
+          dao {
+            id
+          }
+        }
       }
     }`;
     let dao;
@@ -253,6 +264,33 @@ describe('Domain Layer', () => {
         },
         totalSupply: totalRep,
       },
+      schemes: [
+        {
+          address: addresses.UpgradeScheme.toLowerCase(),
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
+          },
+        },
+        {
+          address: addresses.GlobalConstraintRegistrar.toLowerCase(),
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
+          },
+        },
+        {
+          address: addresses.ContributionReward.toLowerCase(),
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
+          },
+        },
+        {
+          address: addresses.SchemeRegistrar.toLowerCase(),
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
+          },
+        },
+      ],
+      gpQueues: [],
     });
     // check reputation reputationHolders
     const { reputationHolders } = await sendQuery(`{
@@ -393,26 +431,31 @@ describe('Domain Layer', () => {
 
             winningOutcome
 
-            queuedVoteRequiredPercentage,
-            queuedVotePeriodLimit,
-            boostedVotePeriodLimit,
-            preBoostedVotePeriodLimit,
-            thresholdConst,
-            quietEndingPeriod,
-            proposingRepReward,
-            votersReputationLossRatio,
-            minimumDaoBounty,
-            daoBountyConst,
-            activationTime,
-            voteOnBehalf,
-            expiresInQueueAt,
+            queuedVoteRequiredPercentage
+            queuedVotePeriodLimit
+            boostedVotePeriodLimit
+            preBoostedVotePeriodLimit
+            thresholdConst
+            quietEndingPeriod
+            proposingRepReward
+            votersReputationLossRatio
+            minimumDaoBounty
+            daoBountyConst
+            activationTime
+            voteOnBehalf
+            expiresInQueueAt
+            gpqueues {
+              dao {
+                id
+              }
+            }
             contributionReward {
-              beneficiary,
-              ethReward,
-              externalToken,
-              externalTokenReward,
-              nativeTokenReward,
-              reputationReward,
+              beneficiary
+              ethReward
+              externalToken
+              externalTokenReward
+              nativeTokenReward
+              reputationReward
             }
         }
     }`;
@@ -477,6 +520,11 @@ describe('Domain Layer', () => {
       activationTime: gpParams.activationTime,
       voteOnBehalf: gpParams.voteOnBehalf,
       expiresInQueueAt: (Number(gpParams.queuedVotePeriodLimit) + p1Creation).toString(),
+      gpQueue: {
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
+        },
+      },
     });
 
     const address0Rep = await reputation.methods.balanceOf(accounts[0].address).call();

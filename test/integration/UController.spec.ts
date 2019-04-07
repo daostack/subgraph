@@ -203,8 +203,10 @@ describe('UController', () => {
     });
 
     const { ucontrollerSchemes } = await sendQuery(`{
-      ucontrollerSchemes {
-        avatarAddress
+      controllerSchemes {
+        dao {
+          id
+        }
         address
         paramsHash
         canRegisterSchemes
@@ -215,7 +217,9 @@ describe('UController', () => {
     }`);
 
     expect(ucontrollerSchemes).toContainEqual({
-      avatarAddress: avatar.options.address.toLowerCase(),
+      dao: {
+        id: avatar.options.address.toLowerCase(),
+      },
       address: accounts[0].address.toLowerCase(),
       paramsHash: nullParamsHash,
       canRegisterSchemes: true,
@@ -224,7 +228,9 @@ describe('UController', () => {
       canDelegateCall: true,
     });
     expect(ucontrollerSchemes).toContainEqual({
-      avatarAddress: avatar.options.address.toLowerCase(),
+      dao: {
+        id: avatar.options.address.toLowerCase(),
+      },
       address: accounts[2].address.toLowerCase(),
       paramsHash: '0x' + padZeros('123', hashLength),
       canRegisterSchemes: true,

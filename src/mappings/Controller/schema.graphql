@@ -8,7 +8,7 @@ type ControllerOrganization @entity {
 
 type ControllerScheme @entity {
 	id: ID!
-	avatarAddress: Bytes!
+	dao: DAO!
 	address: Bytes!
 	paramsHash: Bytes!
 	canRegisterSchemes: Boolean

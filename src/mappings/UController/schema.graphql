@@ -6,17 +6,6 @@ type UControllerOrganization @entity {
 	controller: Bytes!
 }
 
-type UControllerScheme @entity {
-	id: ID!
-	avatarAddress: Bytes!
-	address: Bytes!
-	paramsHash: Bytes!
-	canRegisterSchemes: Boolean
-	canManageGlobalConstraints: Boolean
-	canUpgradeController: Boolean
-	canDelegateCall: Boolean
-}
-
 type UControllerGlobalConstraint @entity {
 	id: ID!
 	avatarAddress: Bytes!

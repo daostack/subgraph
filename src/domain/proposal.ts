@@ -50,7 +50,7 @@ export function updateProposal(
   proposal.votingMachine = gpAddress;
   // proposal.winningVote
   proposal.winningOutcome = parseOutcome(gpProposal.value3);
-  }
+}
 
 export function updateProposalconfidence(id: Bytes, confidence: BigInt): void {
    let proposal = getProposal(id.toHex());
@@ -134,6 +134,13 @@ export function updateGPProposal(
   proposal.organizationId = gpProposal.value0;
   proposal.expiresInQueueAt = timestamp.plus(params.value1);
   proposal.createdAt = timestamp;
+  updateThreshold(
+    proposal.dao.toString(),
+    gp.threshold(proposal.paramsHash, proposal.organizationId),
+    proposal.paramsHash,
+    proposal.organizationId,
+  );
+  proposal.gpQueue = proposal.organizationId.toHex();
   saveProposal(proposal);
 }
 

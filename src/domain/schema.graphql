@@ -20,6 +20,8 @@ type DAO @entity {
 	membersCount: BigInt!
 	rewards: [GPReward!] @derivedFrom(field: "dao")
 	register: String!
+	schemes: [ControllerScheme!] @derivedFrom(field: "dao")
+	gpQueues: [GPQueue!] @derivedFrom(field: "dao")
 }
 
 type GPQueue @entity {
@@ -92,6 +94,7 @@ type Proposal @entity {
 	daoBountyConst: BigInt!
 	activationTime: BigInt!
 	voteOnBehalf: Bytes!
+	gpQueue: GPQueue!
 
 	# Contribution Reward params
 	contributionReward: ContributionRewardProposal
@@ -100,7 +103,7 @@ type Proposal @entity {
 	genericScheme : GenericSchemeProposal
 
 	# SchemeRegistrar proposal
-  schemeRegistrar : SchemeRegistrarProposal
+  	schemeRegistrar : SchemeRegistrarProposal
 }
 
 type ProposalStake @entity {

@@ -171,7 +171,7 @@ describe('SchemeRegistrar', () => {
 
         const executedIsIndexed = async () => {
           return (await sendQuery(getSchemeRegistrarProposalExecuteds)).schemeRegistrarProposalExecuteds.length
-           > prevExecutedsLength;
+           > prevExecutedsLength + 1;
         };
 
         await waitUntilTrue(executedIsIndexed);

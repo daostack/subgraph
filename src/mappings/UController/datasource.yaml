@@ -5,7 +5,7 @@ abis:
   - DAOToken
 entities:
   - UControllerOrganization
-  - UControllerScheme
+  - ControllerScheme
   - UControllerGlobalConstraint
   - UControllerRegisterScheme
   - UControllerUnregisterScheme

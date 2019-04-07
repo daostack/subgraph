@@ -19,6 +19,7 @@ import * as domain from '../../domain';
 
 import {
   AvatarContract,
+  ControllerScheme,
   ReputationContract,
   TokenContract,
   UControllerAddGlobalConstraint,
@@ -26,7 +27,6 @@ import {
   UControllerOrganization,
   UControllerRegisterScheme,
   UControllerRemoveGlobalConstraint,
-  UControllerScheme,
   UControllerUnregisterScheme,
   UControllerUpgradeController,
 } from '../../types/schema';
@@ -49,8 +49,8 @@ function insertScheme(
   let paramsHash = uController.getSchemeParameters(scheme, avatarAddress);
   let perms = uController.getSchemePermissions(scheme, avatarAddress);
 
-  let ent = new UControllerScheme(crypto.keccak256(concat(avatarAddress, scheme)).toHex());
-  ent.avatarAddress = avatarAddress;
+  let ent = new ControllerScheme(crypto.keccak256(concat(avatarAddress, scheme)).toHex());
+  ent.dao = avatarAddress.toHex();
   ent.address = scheme;
   ent.paramsHash = paramsHash;
   /* tslint:disable:no-bitwise */
@@ -62,12 +62,12 @@ function insertScheme(
   /* tslint:disable:no-bitwise */
   ent.canDelegateCall = (perms[3] & 16) === 16;
 
-  store.set('UControllerScheme', ent.id, ent);
+  store.set('ControllerScheme', ent.id, ent);
 }
 
 function deleteScheme(avatarAddress: Address, scheme: Address): void {
   store.remove(
-    'UControllerScheme',
+    'ControllerScheme',
     crypto.keccak256(concat(avatarAddress, scheme)).toHex(),
   );
 }

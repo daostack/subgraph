@@ -2,7 +2,7 @@ import { Address, BigInt, Bytes, ipfs, json, JSONValueKind, store } from '@graph
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
 import { equals, equalsBytes } from '../utils';
-import { getGPQueue, updateThreshold } from './gpqueue';
+import { updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
   if (equals(num, BigInt.fromI32(1))) {
@@ -134,7 +134,13 @@ export function updateGPProposal(
   proposal.organizationId = gpProposal.value0;
   proposal.expiresInQueueAt = timestamp.plus(params.value1);
   proposal.createdAt = timestamp;
-  proposal.gpQueue = gpProposal.value0.toHex();
+  updateThreshold(
+    proposal.dao.toString(),
+    gp.threshold(proposal.paramsHash, proposal.organizationId),
+    proposal.paramsHash,
+    proposal.organizationId,
+  );
+  proposal.gpQueue = proposal.organizationId.toHex();
   saveProposal(proposal);
 }
 

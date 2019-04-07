@@ -444,7 +444,7 @@ describe('Domain Layer', () => {
             activationTime
             voteOnBehalf
             expiresInQueueAt
-            gpqueues {
+            gpQueue {
               dao {
                 id
               }

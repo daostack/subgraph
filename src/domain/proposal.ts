@@ -1,7 +1,7 @@
 import { Address, BigInt, Bytes, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
-import { bytesFromString, equals, equalsBytes } from '../utils';
+import { equals, equalsBytes } from '../utils';
 import { updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
@@ -62,9 +62,9 @@ export function updateProposalState(id: Bytes, state: number, gpAddress: Address
    let gp = GenesisProtocol.bind(gpAddress);
    let proposal = getProposal(id.toHex());
    updateThreshold(proposal.dao.toString(),
-                    gp.threshold(proposal.paramsHash, bytesFromString(proposal.gpQueue)),
+                    gp.threshold(proposal.paramsHash, proposal.organizationId),
                     proposal.paramsHash,
-                    bytesFromString(proposal.gpQueue),
+                    proposal.organizationId,
                     );
    setProposalState(proposal, state, gp.getProposalTimes(id));
    if (state === 4) {
@@ -131,15 +131,16 @@ export function updateGPProposal(
   proposal.stakesAgainst = gp.voteStake(proposalId, BigInt.fromI32(2));
   proposal.confidenceThreshold = gpProposal.value10;
   proposal.paramsHash = paramsHash;
+  proposal.organizationId = gpProposal.value0;
   proposal.expiresInQueueAt = timestamp.plus(params.value1);
   proposal.createdAt = timestamp;
   updateThreshold(
     proposal.dao.toString(),
-    gp.threshold(proposal.paramsHash, gpProposal.value0),
+    gp.threshold(proposal.paramsHash, proposal.organizationId),
     proposal.paramsHash,
-    gpProposal.value0,
+    proposal.organizationId,
   );
-  proposal.gpQueue = gpProposal.value0.toHex();
+  proposal.gpQueue = proposal.organizationId.toHex();
   saveProposal(proposal);
 }
 

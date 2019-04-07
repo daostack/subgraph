@@ -82,11 +82,3 @@ export function equalStrings(a: string, b: string): boolean {
   }
   return true;
 }
-
-export function bytesFromString(s: string): Bytes {
-  let bytes = new Bytes();
-  for (let i = 0; i < s.length; i++) {
-    bytes.fill(s.charCodeAt(i));
-  }
-  return bytes;
-}

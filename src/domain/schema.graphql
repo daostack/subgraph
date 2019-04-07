@@ -16,12 +16,14 @@ type DAO @entity {
 	nativeToken: Token!
 	nativeReputation: Rep!
 	proposals: [Proposal!] @derivedFrom(field: "dao")
+	activeProposalsCount: BigInt!
 	members: [Member!] @derivedFrom(field: "dao")
 	membersCount: BigInt!
 	rewards: [GPReward!] @derivedFrom(field: "dao")
 	register: String!
 	schemes: [ControllerScheme!] @derivedFrom(field: "dao")
 	gpQueues: [GPQueue!] @derivedFrom(field: "dao")
+	activeStakes: BigInt!
 }
 
 type GPQueue @entity {

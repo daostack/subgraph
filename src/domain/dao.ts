@@ -24,6 +24,18 @@ export function decreaseDAOmembersCount(id: string): void {
   saveDAO(dao);
 }
 
+export function increaseActiveProposalsCount(id: string): void {
+  let dao = getDAO(id);
+  dao.activeProposalsCount = dao.activeProposalsCount.plus(BigInt.fromI32(1));
+  saveDAO(dao);
+}
+
+export function decreaseActiveProposalsCount(id: string): void {
+  let dao = getDAO(id);
+  dao.activeProposalsCount = dao.activeProposalsCount.minus(BigInt.fromI32(1));
+  saveDAO(dao);
+}
+
 export function saveDAO(dao: DAO): void {
   store.set('DAO', dao.id, dao);
 }
@@ -39,6 +51,7 @@ export function insertNewDAO(
   dao.nativeToken = nativeTokenAddress.toHex();
   dao.nativeReputation = nativeReputationAddress.toHex();
   dao.membersCount = BigInt.fromI32(0);
+  dao.activeProposalsCount = BigInt.fromI32(0);
   dao.register = 'na';
   saveDAO(dao);
   // add the avatar as a member so we can track its balance

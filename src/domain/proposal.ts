@@ -2,6 +2,7 @@ import { Address, BigInt, Bytes, ipfs, json, JSONValueKind, store } from '@graph
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
 import { equals, equalsBytes } from '../utils';
+import { decreaseActiveProposalsCount, increaseActiveProposalsCount } from './dao';
 import { updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
@@ -78,12 +79,15 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
   if (state === 1) {
     // Closed
     proposal.stage = 'ExpiredInQueue';
+    decreaseActiveProposalsCount(proposal.dao);
   } else if (state === 2) {
     // Executed
     proposal.stage = 'Executed';
+    decreaseActiveProposalsCount(proposal.dao);
   } else if (state === 3) {
     // Queued
     proposal.stage = 'Queued';
+    increaseActiveProposalsCount(proposal.dao);
   } else if (state === 4) {
     // PreBoosted
     proposal.stage = 'PreBoosted';

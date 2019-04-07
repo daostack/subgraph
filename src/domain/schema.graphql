@@ -59,7 +59,6 @@ type Proposal @entity {
 	votingMachine: Bytes!
 	executionState: String!
 	paramsHash: Bytes!
-	organizationId: Bytes!
 	confidenceThreshold: BigInt!
 
 	descriptionHash: String!

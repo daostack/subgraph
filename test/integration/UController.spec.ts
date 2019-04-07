@@ -202,7 +202,7 @@ describe('UController', () => {
       controller: uController.options.address.toLowerCase(),
     });
 
-    const { ucontrollerSchemes } = await sendQuery(`{
+    const { controllerSchemes } = await sendQuery(`{
       controllerSchemes {
         dao {
           id
@@ -216,7 +216,7 @@ describe('UController', () => {
       }
     }`);
 
-    expect(ucontrollerSchemes).toContainEqual({
+    expect(controllerSchemes).toContainEqual({
       dao: {
         id: avatar.options.address.toLowerCase(),
       },
@@ -227,7 +227,7 @@ describe('UController', () => {
       canUpgradeController: true,
       canDelegateCall: true,
     });
-    expect(ucontrollerSchemes).toContainEqual({
+    expect(controllerSchemes).toContainEqual({
       dao: {
         id: avatar.options.address.toLowerCase(),
       },

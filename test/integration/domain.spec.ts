@@ -49,6 +49,7 @@ describe('Domain Layer', () => {
         }
         membersCount
         activeProposalsCount
+        activeStakes
       }
     }`;
     let dao = (await sendQuery(getMigrationDao, 5000)).dao;
@@ -69,6 +70,7 @@ describe('Domain Layer', () => {
       },
       membersCount: '6',
       activeProposalsCount: '0',
+      activeStakes: '0',
     });
 
     const getMigrationDaoMembers = `{

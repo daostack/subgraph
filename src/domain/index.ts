@@ -130,6 +130,8 @@ export function handleStake(event: Stake): void {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
 
+  daoModule.increaseActiveStakesAmount(proposal.dao, event.params._amount);
+
   saveProposal(proposal);
   insertStake(
     eventId(event),

@@ -36,6 +36,18 @@ export function decreaseActiveProposalsCount(id: string): void {
   saveDAO(dao);
 }
 
+export function increaseActiveStakesAmount(id: string, amount: BigInt): void {
+  let dao = getDAO(id);
+  dao.activeStakes = dao.activeStakes.plus(amount);
+  saveDAO(dao);
+}
+
+export function decreaseActiveStakesAmount(id: string, amount: BigInt): void {
+  let dao = getDAO(id);
+  dao.activeStakes = dao.activeStakes.minus(amount);
+  saveDAO(dao);
+}
+
 export function saveDAO(dao: DAO): void {
   store.set('DAO', dao.id, dao);
 }
@@ -52,6 +64,7 @@ export function insertNewDAO(
   dao.nativeReputation = nativeReputationAddress.toHex();
   dao.membersCount = BigInt.fromI32(0);
   dao.activeProposalsCount = BigInt.fromI32(0);
+  dao.activeStakes = BigInt.fromI32(0);
   dao.register = 'na';
   saveDAO(dao);
   // add the avatar as a member so we can track its balance

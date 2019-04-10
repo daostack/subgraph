@@ -1,5 +1,3 @@
-import 'allocator/arena';
-
 import {
   Address,
   BigInt,

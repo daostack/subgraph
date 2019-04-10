@@ -1,5 +1,3 @@
-import 'allocator/arena';
-
 import { Address, BigInt, Bytes, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Reputation contract ABI

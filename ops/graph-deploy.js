@@ -30,7 +30,6 @@ async function deploy (cwd) {
       }
     }
   }
-
   result = await runGraphCli([
     'deploy',
     '--access-token "${access_token-""}"',
@@ -40,7 +39,7 @@ async function deploy (cwd) {
     subgraphLocation
   ], cwd)
   msg = result[1] + result[2]
-  if (result[0] === 1) {
+  if ((result[0] === 1)|| (result[0] === 127)){
     throw Error(`Deployment failed! ${msg}`)
   }
   if (msg.toLowerCase().indexOf('error') > 0) {

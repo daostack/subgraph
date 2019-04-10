@@ -1,6 +1,3 @@
-// Required for dynamic memory allocation in WASM / AssemblyScript
-import 'allocator/arena';
-
 import { Address, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
 import {
   NewContributionProposal,

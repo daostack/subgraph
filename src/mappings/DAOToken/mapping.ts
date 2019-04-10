@@ -1,5 +1,3 @@
-import 'allocator/arena';
-
 import { Address, BigInt, Bytes, crypto, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Token contract ABI

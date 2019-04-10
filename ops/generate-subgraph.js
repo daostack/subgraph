@@ -13,22 +13,18 @@ async function generateSubgraph () {
 
   const dataSources = mappings.map(mapping => {
     var contract = mapping.name
-    var abis
-    var entities
-    var eventHandlers
-    var file
-    var yamlLoad
+    var abis, entities, eventHandler, file, yamlLoad
     if (fs.existsSync('src/mappings/' + mapping.mapping + '/datasource.yaml')) {
         yamlLoad = yaml.safeLoad(fs.readFileSync('src/mappings/' + mapping.mapping + '/datasource.yaml', 'utf-8'))
         file = `src/mappings/${mapping.mapping}/mapping.ts`
         eventHandlers = yamlLoad.eventHandlers
+        abis = yamlLoad.abis
+        entities = yamlLoad.entities
     } else {
-       yamlLoad = yaml.safeLoad(fs.readFileSync(`./ops/DummyMapping/datasource.yaml`, 'utf-8'))
-       file = `./ops/DummyMapping/mapping.ts`
+       file = `ops/emptymapping.ts`
        eventHandlers = []
+       entities = ['nothing']
     }
-    abis = yamlLoad.abis
-    entities = yamlLoad.entities
 
     const contractAddress = addresses[network][mapping.dao][mapping.contractName]
 

@@ -264,34 +264,45 @@ describe('Domain Layer', () => {
         },
         totalSupply: totalRep,
       },
-      schemes: [
-        {
+      gpQueues: [],
+    });
+
+    expect(dao.schemes).toContainEqual(
+      {
           address: addresses.UpgradeScheme.toLowerCase(),
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
         },
-        {
+    );
+
+    expect(dao.schemes).toContainEqual(
+      {
           address: addresses.GlobalConstraintRegistrar.toLowerCase(),
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
         },
-        {
+    );
+
+    expect(dao.schemes).toContainEqual(
+      {
           address: addresses.ContributionReward.toLowerCase(),
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
         },
-        {
+    );
+
+    expect(dao.schemes).toContainEqual(
+      {
           address: addresses.SchemeRegistrar.toLowerCase(),
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
         },
-      ],
-      gpQueues: [],
-    });
+    );
+
     // check reputation reputationHolders
     const { reputationHolders } = await sendQuery(`{
       reputationHolders (where: {contract: "${NativeReputation.toLowerCase()}"}){

@@ -162,7 +162,7 @@ export function updateCRProposal(
 
   let ipfsData = ipfs.cat('/ipfs/' + descriptionHash);
   if (ipfsData != null && ipfsData.toString() !== '{}') {
-    let descJson = json.fromBytes(ipfsData);
+    let descJson = json.fromBytes(ipfsData as Bytes);
     if (descJson.kind !== JSONValueKind.OBJECT) {
       saveProposal(proposal);
       return;

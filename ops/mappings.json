@@ -9,6 +9,12 @@
         "mapping": "DAOToken"
       },
       {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer"
+      },
+      {
         "name": "DAOToken",
         "contractName": "DAOToken",
         "dao": "dao",
@@ -98,6 +104,12 @@
         "mapping": "DAOToken"
       },
       {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer"
+      },
+      {
         "name": "DAOToken",
         "contractName": "DAOToken",
         "dao": "dao",
@@ -163,6 +175,12 @@
         "mapping": "DAOToken"
       },
       {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer"
+      },
+      {
         "name": "DAOToken",
         "contractName": "DAOToken",
         "dao": "dao",
@@ -226,6 +244,12 @@
       "contractName": "GEN",
       "dao": "base",
       "mapping": "DAOToken"
+    },
+    {
+      "name": "Redeemer",
+      "contractName": "Redeemer",
+      "dao": "base",
+      "mapping": "Redeemer"
     },
     {
       "name": "DAOToken",

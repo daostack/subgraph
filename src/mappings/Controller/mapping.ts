@@ -256,3 +256,12 @@ export function handleRemoveGlobalConstraint(
   ent.isPre = event.params._isPre;
   store.set('ControllerRemoveGlobalConstraint', ent.id, ent);
 }
+
+export function setSchemeName(
+  schemeId: string,
+  name: string,
+): void {
+  let scheme = ControllerScheme.load(schemeId);
+  scheme.name = name;
+  scheme.save();
+}

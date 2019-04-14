@@ -28,7 +28,11 @@ type GPQueue @entity {
  	id: ID!
  	paramsHash: Bytes!
  	threshold: BigInt!
+	scheme: ControllerScheme!
  	dao: DAO!
+	queuedProposalsCount: BigInt
+	preBoostedProposalsCount: BigInt
+	boostedProposalsCount: BigInt
 }
 
 type Rep @entity {
@@ -96,7 +100,7 @@ type Proposal @entity {
 	voteOnBehalf: Bytes!
 	gpQueue: GPQueue!
 
-	scheme: String!
+	scheme: ControllerScheme!
 
 	# Contribution Reward params
 	contributionReward: ContributionRewardProposal

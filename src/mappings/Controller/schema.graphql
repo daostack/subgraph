@@ -15,6 +15,7 @@ type ControllerScheme @entity {
 	canManageGlobalConstraints: Boolean
 	canUpgradeController: Boolean
 	canDelegateCall: Boolean
+	name: String
 }
 
 type ControllerGlobalConstraint @entity {

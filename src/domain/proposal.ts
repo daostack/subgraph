@@ -1,8 +1,9 @@
-import { Address, BigInt, Bytes, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { setSchemeName } from '../mappings/Controller/mapping';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
-import { equals, equalsBytes } from '../utils';
-import { updateThreshold } from './gpqueue';
+import { concat, equals, equalsBytes } from '../utils';
+import { countProposalInQueue, setScheme, updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
   if (equals(num, BigInt.fromI32(1))) {
@@ -61,6 +62,7 @@ export function updateProposalconfidence(id: Bytes, confidence: BigInt): void {
 export function updateProposalState(id: Bytes, state: number, gpAddress: Address): void {
    let gp = GenesisProtocol.bind(gpAddress);
    let proposal = getProposal(id.toHex());
+   countProposalInQueue(proposal.organizationId, stageToNumber(proposal.stage), state);
    updateThreshold(proposal.dao.toString(),
                     gp.threshold(proposal.paramsHash, proposal.organizationId),
                     proposal.paramsHash,
@@ -97,6 +99,30 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     proposal.quietEndingPeriodBeganAt = gpTimes[1];
     proposal.stage = 'QuietEndingPeriod';
   }
+}
+
+function stageToNumber(stage: string): number {
+  // enum ProposalState { None, ExpiredInQueue, Executed, Queued, PreBoosted, Boosted, QuietEndingPeriod}
+  if (stage === 'ExpiredInQueue') {
+    // Closed
+    return 1;
+  } else if (stage === 'Executed') {
+    // Executed
+    return 2;
+  } else if (stage === 'Queued') {
+    // Queued
+    return 3;
+  } else if (stage === 'PreBoosted') {
+    // PreBoosted
+    return 4;
+  } else if (stage === 'Boosted') {
+    // Boosted
+    return 5;
+  } else if (stage === 'QuietEndingPeriod') {
+    // QuietEndingPeriod
+    return 6;
+  }
+  return 0;
 }
 
 export function updateGPProposal(
@@ -150,6 +176,7 @@ export function updateCRProposal(
   avatarAddress: Address,
   votingMachine: Address,
   descriptionHash: string,
+  schemeAddress: Address,
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.dao = avatarAddress.toHex();
@@ -157,7 +184,9 @@ export function updateCRProposal(
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
-  proposal.scheme = 'ContributionReward';
+  proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
+  setScheme(proposal.organizationId, proposal.scheme);
+  setSchemeName(proposal.scheme, 'ContributionReward');
 
   // IPFS reading
 
@@ -187,13 +216,16 @@ export function updateGSProposal(
   createdAt: BigInt,
   avatarAddress: Address,
   descriptionHash: string,
+  schemeAddress: Address,
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.dao = avatarAddress.toHex();
   proposal.genericScheme = proposalId.toHex();
   proposal.createdAt = createdAt;
   proposal.descriptionHash = descriptionHash;
-  proposal.scheme = 'GenericScheme';
+  proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
+  setScheme(proposal.organizationId, proposal.scheme);
+  setSchemeName(proposal.scheme, 'GenericScheme');
   saveProposal(proposal);
 }
 
@@ -203,6 +235,7 @@ export function updateSRProposal(
   avatarAddress: Address,
   votingMachine: Address,
   descriptionHash: string,
+  schemeAddress: Address,
 ): void {
   let proposal = getProposal(proposalId);
   proposal.dao = avatarAddress.toHex();
@@ -210,7 +243,9 @@ export function updateSRProposal(
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
-  proposal.scheme = 'SchemeRegistrar';
+  proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
+  setScheme(proposal.organizationId, proposal.scheme);
+  setSchemeName(proposal.scheme, 'SchemeRegistrar');
   saveProposal(proposal);
 }
 

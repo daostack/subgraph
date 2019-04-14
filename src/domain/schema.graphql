@@ -96,6 +96,8 @@ type Proposal @entity {
 	voteOnBehalf: Bytes!
 	gpQueue: GPQueue!
 
+	scheme: String!
+
 	# Contribution Reward params
 	contributionReward: ContributionRewardProposal
 

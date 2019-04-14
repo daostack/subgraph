@@ -157,6 +157,7 @@ export function updateCRProposal(
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
+  proposal.scheme = 'ContributionReward';
 
   // IPFS reading
 
@@ -192,6 +193,7 @@ export function updateGSProposal(
   proposal.genericScheme = proposalId.toHex();
   proposal.createdAt = createdAt;
   proposal.descriptionHash = descriptionHash;
+  proposal.scheme = 'GenericScheme';
   saveProposal(proposal);
 }
 
@@ -208,6 +210,7 @@ export function updateSRProposal(
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
+  proposal.scheme = 'SchemeRegistrar';
   saveProposal(proposal);
 }
 

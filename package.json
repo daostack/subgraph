@@ -1,6 +1,6 @@
 {
 	"name": "@daostack/subgraph",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"author": "DAOstack (https://www.daostack.io)",
 	"license": "GPL-3.0",
 	"description": "A caching layer for daostack using The Graph",
@@ -30,7 +30,7 @@
 		"test:watch": "npm run test -- --watch"
 	},
 	"devDependencies": {
-		"@daostack/migration": "0.0.1-rc.16-v0",
+		"@daostack/migration": "0.0.1-rc.16-v1",
 		"@types/graphql": "^14.2.0",
 		"@types/jest": "^23.3.7",
 		"@types/mocha": "^5.2.5",
@@ -46,8 +46,8 @@
 		"watch": "^1.0.2"
 	},
 	"dependencies": {
-		"@graphprotocol/graph-cli": "^0.8.0",
-		"@graphprotocol/graph-ts": "^0.6.0",
+		"@graphprotocol/graph-cli": "^0.9.0",
+		"@graphprotocol/graph-ts": "^0.9.0",
 		"@types/node": "^10.14.4",
 		"apollo-client": "^2.4.5",
 		"apollo-link-ws": "^1.0.9",

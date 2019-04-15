@@ -1023,6 +1023,9 @@ describe('Domain Layer', () => {
     const getGPQueues = `{
       gpqueues {
           threshold
+          queuedProposalsCount
+          preBoostedProposalsCount
+          boostedProposalsCount
       }
     }`;
 
@@ -1031,12 +1034,21 @@ describe('Domain Layer', () => {
     expect(new Set(gpQueues)).toEqual(new Set([
       {
         threshold: Math.pow(2, REAL_FBITS).toString(),
+        queuedProposalsCount: '0',
+        preBoostedProposalsCount: '0',
+        boostedProposalsCount: '1',
       },
       {
         threshold: Math.pow(2, REAL_FBITS).toString(),
+        queuedProposalsCount: '1',
+        preBoostedProposalsCount: '0',
+        boostedProposalsCount: '0',
       },
       {
         threshold: Math.pow(2, REAL_FBITS + 1).toString(),
+        queuedProposalsCount: '1',
+        preBoostedProposalsCount: '1',
+        boostedProposalsCount: '1',
       },
     ]));
 

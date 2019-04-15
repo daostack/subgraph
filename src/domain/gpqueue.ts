@@ -1,12 +1,16 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { GPQueue } from '../types/schema';
+import { debug } from '../utils';
 
 export function getGPQueue(id: string): GPQueue {
   let gpQueue = GPQueue.load(id) ;
   if (gpQueue == null) {
     gpQueue = new GPQueue(id);
     gpQueue.votingMachine = null;
+    gpQueue.queuedProposalsCount = BigInt.fromI32(0);
+    gpQueue.preBoostedProposalsCount = BigInt.fromI32(0);
+    gpQueue.boostedProposalsCount = BigInt.fromI32(0);
   }
   return gpQueue as GPQueue;
 }
@@ -58,7 +62,7 @@ export function countProposalInQueue(
   let gpQueue = getGPQueue(organizationId.toHex());
   if (state === 1 || state === 2) {
     // Closed or Executed
-    if (previousState === 0 || previousState === 3) {
+    if (previousState === 3) {
       gpQueue.queuedProposalsCount = gpQueue.queuedProposalsCount.minus(BigInt.fromI32(1));
     } else if (previousState === 4) {
       gpQueue.preBoostedProposalsCount = gpQueue.preBoostedProposalsCount.minus(BigInt.fromI32(1));

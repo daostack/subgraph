@@ -125,7 +125,7 @@ function stageToNumber(stage: string): number {
     // QuietEndingPeriod
     return 6;
   }
-  return 0;
+  return 3;
 }
 
 export function updateGPProposal(

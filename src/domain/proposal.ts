@@ -2,7 +2,7 @@ import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from
 import { setSchemeName } from '../mappings/Controller/mapping';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
-import { concat, equals, equalsBytes, debug } from '../utils';
+import { concat, equals, equalsBytes } from '../utils';
 import { countProposalInQueue, setScheme, updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
@@ -221,6 +221,26 @@ export function updateGSProposal(
     setScheme(proposal.organizationId, proposal.scheme);
     setSchemeName(proposal.scheme, 'GenericScheme');
   }
+  // IPFS reading
+
+  let ipfsData = ipfs.cat('/ipfs/' + descriptionHash);
+  if (ipfsData != null && ipfsData.toString() !== '{}') {
+    let descJson = json.fromBytes(ipfsData as Bytes);
+    if (descJson.kind !== JSONValueKind.OBJECT) {
+      saveProposal(proposal);
+      return;
+    }
+    if (descJson.toObject().get('title') != null) {
+      proposal.title = descJson.toObject().get('title').toString();
+    }
+    if (descJson.toObject().get('description') != null) {
+      proposal.description = descJson.toObject().get('description').toString();
+    }
+    if (descJson.toObject().get('url') != null) {
+      proposal.url = descJson.toObject().get('url').toString();
+    }
+  }
+
   saveProposal(proposal);
 }
 
@@ -243,6 +263,27 @@ export function updateSRProposal(
     setScheme(proposal.organizationId, proposal.scheme);
     setSchemeName(proposal.scheme, 'SchemeRegistrar');
   }
+
+  // IPFS reading
+
+  let ipfsData = ipfs.cat('/ipfs/' + descriptionHash);
+  if (ipfsData != null && ipfsData.toString() !== '{}') {
+    let descJson = json.fromBytes(ipfsData as Bytes);
+    if (descJson.kind !== JSONValueKind.OBJECT) {
+      saveProposal(proposal);
+      return;
+    }
+    if (descJson.toObject().get('title') != null) {
+      proposal.title = descJson.toObject().get('title').toString();
+    }
+    if (descJson.toObject().get('description') != null) {
+      proposal.description = descJson.toObject().get('description').toString();
+    }
+    if (descJson.toObject().get('url') != null) {
+      proposal.url = descJson.toObject().get('url').toString();
+    }
+  }
+  
   saveProposal(proposal);
 }
 

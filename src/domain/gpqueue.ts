@@ -77,7 +77,9 @@ export function countProposalInQueue(
     }
   } else if (state === 4) {
     // PreBoosted
-    gpQueue.queuedProposalsCount = gpQueue.queuedProposalsCount.minus(BigInt.fromI32(1));
+    if (previousState === 3) {
+      gpQueue.queuedProposalsCount = gpQueue.queuedProposalsCount.minus(BigInt.fromI32(1));
+    }
     gpQueue.preBoostedProposalsCount = gpQueue.preBoostedProposalsCount.plus(BigInt.fromI32(1));
   } else if (state === 5) {
     // Boosted

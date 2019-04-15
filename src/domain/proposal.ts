@@ -283,7 +283,7 @@ export function updateSRProposal(
       proposal.url = descJson.toObject().get('url').toString();
     }
   }
-  
+
   saveProposal(proposal);
 }
 

@@ -2,7 +2,7 @@ import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from
 import { setSchemeName } from '../mappings/Controller/mapping';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
-import { concat, equals, equalsBytes } from '../utils';
+import { concat, equals, equalsBytes, debug } from '../utils';
 import { countProposalInQueue, setScheme, updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
@@ -32,6 +32,8 @@ export function getProposal(id: string): Proposal {
     proposal.confidenceThreshold = BigInt.fromI32(0);
     proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
     proposal.paramsHash = new Bytes();
+    proposal.organizationId = null;
+    proposal.scheme = null;
   }
 
   return proposal;
@@ -64,6 +66,7 @@ export function updateProposalState(id: Bytes, state: number, gpAddress: Address
    let proposal = getProposal(id.toHex());
    countProposalInQueue(proposal.organizationId, stageToNumber(proposal.stage), state);
    updateThreshold(proposal.dao.toString(),
+                    gpAddress,
                     gp.threshold(proposal.paramsHash, proposal.organizationId),
                     proposal.paramsHash,
                     proposal.organizationId,
@@ -141,19 +144,6 @@ export function updateGPProposal(
   let gpProposal = gp.proposals(proposalId);
 
   proposal.votingMachine = gpAddress;
-  proposal.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
-  proposal.queuedVotePeriodLimit = params.value1; // queuedVotePeriodLimit
-  proposal.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
-  proposal.preBoostedVotePeriodLimit = params.value3; // preBoostedVotePeriodLimit
-  proposal.thresholdConst = params.value4; // thresholdConst
-  proposal.limitExponentValue = params.value5; // limitExponentValue
-  proposal.quietEndingPeriod = params.value6; // quietEndingPeriod
-  proposal.proposingRepReward = params.value7;
-  proposal.votersReputationLossRatio = params.value8; // votersReputationLossRatio
-  proposal.minimumDaoBounty = params.value9; // minimumDaoBounty
-  proposal.daoBountyConst = params.value10; // daoBountyConst
-  proposal.activationTime = params.value11; // activationTime
-  proposal.voteOnBehalf = params.value12; // voteOnBehalf
   proposal.stakesAgainst = gp.voteStake(proposalId, BigInt.fromI32(2));
   proposal.confidenceThreshold = gpProposal.value10;
   proposal.paramsHash = paramsHash;
@@ -162,6 +152,7 @@ export function updateGPProposal(
   proposal.createdAt = timestamp;
   updateThreshold(
     proposal.dao.toString(),
+    gpAddress,
     gp.threshold(proposal.paramsHash, proposal.organizationId),
     proposal.paramsHash,
     proposal.organizationId,
@@ -185,8 +176,10 @@ export function updateCRProposal(
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
-  setScheme(proposal.organizationId, proposal.scheme);
-  setSchemeName(proposal.scheme, 'ContributionReward');
+  if (proposal.organizationId != null && proposal.scheme != null) {
+    setScheme(proposal.organizationId, proposal.scheme);
+    setSchemeName(proposal.scheme, 'ContributionReward');
+  }
 
   // IPFS reading
 
@@ -224,8 +217,10 @@ export function updateGSProposal(
   proposal.createdAt = createdAt;
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
-  setScheme(proposal.organizationId, proposal.scheme);
-  setSchemeName(proposal.scheme, 'GenericScheme');
+  if (proposal.organizationId != null && proposal.scheme != null) {
+    setScheme(proposal.organizationId, proposal.scheme);
+    setSchemeName(proposal.scheme, 'GenericScheme');
+  }
   saveProposal(proposal);
 }
 
@@ -244,8 +239,10 @@ export function updateSRProposal(
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
-  setScheme(proposal.organizationId, proposal.scheme);
-  setSchemeName(proposal.scheme, 'SchemeRegistrar');
+  if (proposal.organizationId != null && proposal.scheme != null) {
+    setScheme(proposal.organizationId, proposal.scheme);
+    setSchemeName(proposal.scheme, 'SchemeRegistrar');
+  }
   saveProposal(proposal);
 }
 

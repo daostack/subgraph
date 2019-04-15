@@ -442,23 +442,24 @@ describe('Domain Layer', () => {
 
             winningOutcome
 
-            queuedVoteRequiredPercentage
-            queuedVotePeriodLimit
-            boostedVotePeriodLimit
-            preBoostedVotePeriodLimit
-            thresholdConst
-            quietEndingPeriod
-            proposingRepReward
-            votersReputationLossRatio
-            minimumDaoBounty
-            daoBountyConst
-            activationTime
-            voteOnBehalf
             expiresInQueueAt
             gpQueue {
               dao {
                 id
               }
+              votingMachine
+              queuedVoteRequiredPercentage
+              queuedVotePeriodLimit
+              boostedVotePeriodLimit
+              preBoostedVotePeriodLimit
+              thresholdConst
+              quietEndingPeriod
+              proposingRepReward
+              votersReputationLossRatio
+              minimumDaoBounty
+              daoBountyConst
+              activationTime
+              voteOnBehalf
             }
             contributionReward {
               beneficiary
@@ -518,23 +519,24 @@ describe('Domain Layer', () => {
         reputationReward: '10',
       },
 
-      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
-      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
-      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
-      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
-      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** REAL_FBITS).toString(),
-      quietEndingPeriod: gpParams.quietEndingPeriod,
-      proposingRepReward: gpParams.proposingRepReward,
-      votersReputationLossRatio: gpParams.votersReputationLossRatio,
-      minimumDaoBounty: gpParams.minimumDaoBounty,
-      daoBountyConst: gpParams.daoBountyConst,
-      activationTime: gpParams.activationTime,
-      voteOnBehalf: gpParams.voteOnBehalf,
       expiresInQueueAt: (Number(gpParams.queuedVotePeriodLimit) + p1Creation).toString(),
       gpQueue: {
         dao: {
           id: addresses.Avatar.toLowerCase(),
         },
+        votingMachine: genesisProtocol.options.address.toLowerCase(),
+        queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
+        queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
+        boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
+        preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
+        thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** REAL_FBITS).toString(),
+        quietEndingPeriod: gpParams.quietEndingPeriod,
+        proposingRepReward: gpParams.proposingRepReward,
+        votersReputationLossRatio: gpParams.votersReputationLossRatio,
+        minimumDaoBounty: gpParams.minimumDaoBounty,
+        daoBountyConst: gpParams.daoBountyConst,
+        activationTime: gpParams.activationTime,
+        voteOnBehalf: gpParams.voteOnBehalf,
       },
     });
 

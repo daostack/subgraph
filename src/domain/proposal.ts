@@ -3,7 +3,7 @@ import { setSchemeName } from '../mappings/Controller/mapping';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
 import { concat, equals, equalsBytes } from '../utils';
-import { countProposalInQueue, setScheme, updateThreshold } from './gpqueue';
+import { setScheme, updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
   if (equals(num, BigInt.fromI32(1))) {
@@ -64,7 +64,6 @@ export function updateProposalconfidence(id: Bytes, confidence: BigInt): void {
 export function updateProposalState(id: Bytes, state: number, gpAddress: Address): void {
    let gp = GenesisProtocol.bind(gpAddress);
    let proposal = getProposal(id.toHex());
-   countProposalInQueue(proposal.organizationId, stageToNumber(proposal.stage), state);
    updateThreshold(proposal.dao.toString(),
                     gpAddress,
                     gp.threshold(proposal.paramsHash, proposal.organizationId),

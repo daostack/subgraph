@@ -31,10 +31,6 @@ type GPQueue @entity {
 	scheme: ControllerScheme!
  	dao: DAO!
 	votingMachine: Bytes!
-	
-	queuedProposalsCount: BigInt
-	preBoostedProposalsCount: BigInt
-	boostedProposalsCount: BigInt
 
 	# Genesis Protocol params
 	queuedVoteRequiredPercentage: BigInt!

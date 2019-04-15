@@ -469,6 +469,10 @@ describe('Domain Layer', () => {
               nativeTokenReward
               reputationReward
             }
+            scheme {
+              address
+              name
+            }
         }
     }`;
     let expectedVotesCount = 0;
@@ -537,6 +541,10 @@ describe('Domain Layer', () => {
         daoBountyConst: gpParams.daoBountyConst,
         activationTime: gpParams.activationTime,
         voteOnBehalf: gpParams.voteOnBehalf,
+      },
+      scheme: {
+        address: addresses.ContributionReward.toLowerCase(),
+        name: 'ContributionReward',
       },
     });
 
@@ -1026,6 +1034,9 @@ describe('Domain Layer', () => {
           queuedProposalsCount
           preBoostedProposalsCount
           boostedProposalsCount
+          scheme {
+            name
+          }
       }
     }`;
 
@@ -1037,18 +1048,27 @@ describe('Domain Layer', () => {
         queuedProposalsCount: '0',
         preBoostedProposalsCount: '0',
         boostedProposalsCount: '1',
+        scheme: {
+          name: 'ContributionReward',
+        },
       },
       {
         threshold: Math.pow(2, REAL_FBITS).toString(),
         queuedProposalsCount: '1',
         preBoostedProposalsCount: '0',
         boostedProposalsCount: '0',
+        scheme: {
+          name: 'GenericScheme',
+        },
       },
       {
         threshold: Math.pow(2, REAL_FBITS + 1).toString(),
         queuedProposalsCount: '1',
         preBoostedProposalsCount: '1',
         boostedProposalsCount: '1',
+        scheme: {
+          name: 'ContributionReward',
+        },
       },
     ]));
 

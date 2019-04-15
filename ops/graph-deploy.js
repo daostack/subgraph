@@ -10,26 +10,25 @@ async function deploy (cwd) {
   let result
   let msg
 
-  if (graphNode == 'http://127.0.0.1:8020/') {
-    /* create the subgraph */
-    result = await runGraphCli([
-      'create',
-      '--access-token ""',
-      '--node ' + graphNode,
-      subgraphName
-    ], cwd)
-    msg = result[1] + result[2]
-    if (result[0] === 1) {
+  /* create the subgraph */
+  result = await runGraphCli([
+    'create',
+    '--access-token ""',
+    '--node ' + graphNode,
+    subgraphName
+  ], cwd)
+  msg = result[1] + result[2]
+  if (result[0] === 1) {
+    throw Error(`Create failed! ${msg}`)
+  }
+  if (msg.toLowerCase().indexOf('error') > 0) {
+    if (msg.match(/subgraph already exists/)) {
+      // the subgraph was already created before -we're ok
+    } else {
       throw Error(`Create failed! ${msg}`)
     }
-    if (msg.toLowerCase().indexOf('error') > 0) {
-      if (msg.match(/subgraph already exists/)) {
-        // the subgraph was already created before -we're ok
-      } else {
-        throw Error(`Create failed! ${msg}`)
-      }
-    }
   }
+
   result = await runGraphCli([
     'deploy',
     '--access-token "${access_token-""}"',

@@ -62,7 +62,7 @@ export function countProposalInQueue(
   let gpQueue = getGPQueue(organizationId.toHex());
   if (state === 1 || state === 2) {
     // Closed or Executed
-    if (previousState === 3) {
+    if (previousState === 0 || previousState === 3) {
       gpQueue.queuedProposalsCount = gpQueue.queuedProposalsCount.minus(BigInt.fromI32(1));
     } else if (previousState === 4) {
       gpQueue.preBoostedProposalsCount = gpQueue.preBoostedProposalsCount.minus(BigInt.fromI32(1));
@@ -77,9 +77,7 @@ export function countProposalInQueue(
     }
   } else if (state === 4) {
     // PreBoosted
-    if (previousState === 3) {
-      gpQueue.queuedProposalsCount = gpQueue.queuedProposalsCount.minus(BigInt.fromI32(1));
-    }
+    gpQueue.queuedProposalsCount = gpQueue.queuedProposalsCount.minus(BigInt.fromI32(1));
     gpQueue.preBoostedProposalsCount = gpQueue.preBoostedProposalsCount.plus(BigInt.fromI32(1));
   } else if (state === 5) {
     // Boosted

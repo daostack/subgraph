@@ -34,9 +34,36 @@ export function getProposal(id: string): Proposal {
     proposal.paramsHash = new Bytes();
     proposal.organizationId = null;
     proposal.scheme = null;
+    proposal.descriptionHash = null;
+    proposal.title = null;
   }
 
+  getProposalIPFSData(proposal);
+
   return proposal;
+}
+
+export function getProposalIPFSData(proposal: Proposal): Proposal {
+    // IPFS reading
+    if (proposal.descriptionHash != null && proposal.title == null) {
+      let ipfsData = ipfs.cat('/ipfs/' + proposal.descriptionHash);
+      if (ipfsData != null && ipfsData.toString() !== '{}') {
+        let descJson = json.fromBytes(ipfsData as Bytes);
+        if (descJson.kind !== JSONValueKind.OBJECT) {
+          return proposal;
+        }
+        if (descJson.toObject().get('title') != null) {
+          proposal.title = descJson.toObject().get('title').toString();
+        }
+        if (descJson.toObject().get('description') != null) {
+          proposal.description = descJson.toObject().get('description').toString();
+        }
+        if (descJson.toObject().get('url') != null) {
+          proposal.url = descJson.toObject().get('url').toString();
+        }
+      }
+    }
+    return proposal;
 }
 
 export function saveProposal(proposal: Proposal): void {
@@ -179,26 +206,7 @@ export function updateCRProposal(
     setScheme(proposal.organizationId, proposal.scheme);
     setSchemeName(proposal.scheme, 'ContributionReward');
   }
-
-  // IPFS reading
-
-  let ipfsData = ipfs.cat('/ipfs/' + descriptionHash);
-  if (ipfsData != null && ipfsData.toString() !== '{}') {
-    let descJson = json.fromBytes(ipfsData as Bytes);
-    if (descJson.kind !== JSONValueKind.OBJECT) {
-      saveProposal(proposal);
-      return;
-    }
-    if (descJson.toObject().get('title') != null) {
-      proposal.title = descJson.toObject().get('title').toString();
-    }
-    if (descJson.toObject().get('description') != null) {
-      proposal.description = descJson.toObject().get('description').toString();
-    }
-    if (descJson.toObject().get('url') != null) {
-      proposal.url = descJson.toObject().get('url').toString();
-    }
-  }
+  getProposalIPFSData(proposal);
 
   saveProposal(proposal);
 }
@@ -220,25 +228,7 @@ export function updateGSProposal(
     setScheme(proposal.organizationId, proposal.scheme);
     setSchemeName(proposal.scheme, 'GenericScheme');
   }
-  // IPFS reading
-
-  let ipfsData = ipfs.cat('/ipfs/' + descriptionHash);
-  if (ipfsData != null && ipfsData.toString() !== '{}') {
-    let descJson = json.fromBytes(ipfsData as Bytes);
-    if (descJson.kind !== JSONValueKind.OBJECT) {
-      saveProposal(proposal);
-      return;
-    }
-    if (descJson.toObject().get('title') != null) {
-      proposal.title = descJson.toObject().get('title').toString();
-    }
-    if (descJson.toObject().get('description') != null) {
-      proposal.description = descJson.toObject().get('description').toString();
-    }
-    if (descJson.toObject().get('url') != null) {
-      proposal.url = descJson.toObject().get('url').toString();
-    }
-  }
+  getProposalIPFSData(proposal);
 
   saveProposal(proposal);
 }
@@ -262,26 +252,7 @@ export function updateSRProposal(
     setScheme(proposal.organizationId, proposal.scheme);
     setSchemeName(proposal.scheme, 'SchemeRegistrar');
   }
-
-  // IPFS reading
-
-  let ipfsData = ipfs.cat('/ipfs/' + descriptionHash);
-  if (ipfsData != null && ipfsData.toString() !== '{}') {
-    let descJson = json.fromBytes(ipfsData as Bytes);
-    if (descJson.kind !== JSONValueKind.OBJECT) {
-      saveProposal(proposal);
-      return;
-    }
-    if (descJson.toObject().get('title') != null) {
-      proposal.title = descJson.toObject().get('title').toString();
-    }
-    if (descJson.toObject().get('description') != null) {
-      proposal.description = descJson.toObject().get('description').toString();
-    }
-    if (descJson.toObject().get('url') != null) {
-      proposal.url = descJson.toObject().get('url').toString();
-    }
-  }
+  getProposalIPFSData(proposal);
 
   saveProposal(proposal);
 }

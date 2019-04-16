@@ -37,7 +37,7 @@ import {
   UpgradeController,
 } from '../../types/Controller/Controller';
 
-import { concat, eventId } from '../../utils';
+import { concat, equalStrings, eventId } from '../../utils';
 
 function insertScheme(
   controllerAddress: Address,
@@ -262,6 +262,8 @@ export function setSchemeName(
   name: string,
 ): void {
   let scheme = ControllerScheme.load(schemeId);
-  scheme.name = name;
-  scheme.save();
+  if (!equalStrings(scheme.name, name)) {
+    scheme.name = name;
+    scheme.save();
+  }
 }

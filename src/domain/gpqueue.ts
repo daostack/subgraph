@@ -1,7 +1,7 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { GPQueue } from '../types/schema';
-import { debug } from '../utils';
+import { equalStrings } from '../utils';
 
 export function getGPQueue(id: string): GPQueue {
   let gpQueue = GPQueue.load(id) ;
@@ -47,6 +47,8 @@ export function setScheme(
   organizationId: Bytes,
   scheme: string): void {
   let gpQueue = getGPQueue(organizationId.toHex());
-  gpQueue.scheme = scheme;
-  gpQueue.save();
+  if (!equalStrings(gpQueue.scheme, scheme)) {
+    gpQueue.scheme = scheme;
+    gpQueue.save();
+  }
 }

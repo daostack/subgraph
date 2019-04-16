@@ -8,6 +8,7 @@ export function getGPQueue(id: string): GPQueue {
   if (gpQueue == null) {
     gpQueue = new GPQueue(id);
     gpQueue.votingMachine = null;
+    gpQueue.scheme = '';
   }
   return gpQueue as GPQueue;
 }

@@ -60,6 +60,7 @@ function insertScheme(
   ent.canUpgradeController = (perms[3] & 8) === 8;
   /* tslint:disable:no-bitwise */
   ent.canDelegateCall = (perms[3] & 16) === 16;
+  ent.name = '';
 
   store.set('ControllerScheme', ent.id, ent);
 }

@@ -3,7 +3,7 @@ import { setSchemeName } from '../mappings/Controller/mapping';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
 import { concat, equals, equalsBytes, equalStrings } from '../utils';
-import { setScheme, updateThreshold } from './gpqueue';
+import { updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
   if (equals(num, BigInt.fromI32(1))) {
@@ -96,6 +96,7 @@ export function updateProposalState(id: Bytes, state: number, gpAddress: Address
                     gp.threshold(proposal.paramsHash, proposal.organizationId),
                     proposal.paramsHash,
                     proposal.organizationId,
+                    proposal.scheme,
                     );
    setProposalState(proposal, state, gp.getProposalTimes(id));
    if (state === 4) {
@@ -176,12 +177,14 @@ export function updateGPProposal(
   proposal.organizationId = gpProposal.value0;
   proposal.expiresInQueueAt = timestamp.plus(params.value1);
   proposal.createdAt = timestamp;
+  proposal.scheme = crypto.keccak256(concat(avatarAddress, gpProposal.value1)).toHex();
   updateThreshold(
     proposal.dao.toString(),
     gpAddress,
     gp.threshold(proposal.paramsHash, proposal.organizationId),
     proposal.paramsHash,
     proposal.organizationId,
+    proposal.scheme,
   );
   proposal.gpQueue = proposal.organizationId.toHex();
   saveProposal(proposal);
@@ -202,10 +205,7 @@ export function updateCRProposal(
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
-  if (proposal.organizationId != null && proposal.scheme != null) {
-    setScheme(proposal.organizationId, proposal.scheme);
-    setSchemeName(proposal.scheme, 'ContributionReward');
-  }
+  setSchemeName(proposal.scheme, 'ContributionReward');
   getProposalIPFSData(proposal);
 
   saveProposal(proposal);
@@ -224,10 +224,7 @@ export function updateGSProposal(
   proposal.createdAt = createdAt;
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
-  if (proposal.organizationId != null && proposal.scheme != null) {
-    setScheme(proposal.organizationId, proposal.scheme);
-    setSchemeName(proposal.scheme, 'GenericScheme');
-  }
+  setSchemeName(proposal.scheme, 'GenericScheme');
   getProposalIPFSData(proposal);
 
   saveProposal(proposal);
@@ -248,10 +245,7 @@ export function updateSRProposal(
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
-  if (proposal.organizationId != null && proposal.scheme != null) {
-    setScheme(proposal.organizationId, proposal.scheme);
-    setSchemeName(proposal.scheme, 'SchemeRegistrar');
-  }
+  setSchemeName(proposal.scheme, 'SchemeRegistrar');
   getProposalIPFSData(proposal);
 
   saveProposal(proposal);

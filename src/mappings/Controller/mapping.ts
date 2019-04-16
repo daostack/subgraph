@@ -263,8 +263,10 @@ export function setSchemeName(
   name: string,
 ): void {
   let scheme = ControllerScheme.load(schemeId);
-  if (!equalStrings(scheme.name, name)) {
-    scheme.name = name;
-    scheme.save();
+  if (scheme != null) {
+    if (!equalStrings(scheme.name, name)) {
+      scheme.name = name;
+      scheme.save();
+    }
   }
 }

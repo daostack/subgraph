@@ -17,7 +17,8 @@ export function updateThreshold(dao: string,
                                 gpAddress: Address,
                                 threshold: BigInt,
                                 paramsHash: Bytes,
-                                organizationId: Bytes): void {
+                                organizationId: Bytes,
+                                scheme: string ): void {
   let gpQueue = getGPQueue(organizationId.toHex());
   gpQueue.threshold =  threshold;
   gpQueue.paramsHash = paramsHash;
@@ -39,17 +40,8 @@ export function updateThreshold(dao: string,
     gpQueue.daoBountyConst = params.value10; // daoBountyConst
     gpQueue.activationTime = params.value11; // activationTime
     gpQueue.voteOnBehalf = params.value12; // voteOnBehalf
+    gpQueue.scheme = scheme;
   }
   gpQueue.dao = dao;
   gpQueue.save();
-}
-
-export function setScheme(
-  organizationId: Bytes,
-  scheme: string): void {
-  let gpQueue = getGPQueue(organizationId.toHex());
-  if (!equalStrings(gpQueue.scheme, scheme)) {
-    gpQueue.scheme = scheme;
-    gpQueue.save();
-  }
 }

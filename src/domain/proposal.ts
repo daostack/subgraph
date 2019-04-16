@@ -1,7 +1,8 @@
-import { Address, BigInt, Bytes, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { setSchemeName } from '../mappings/Controller/mapping';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
-import { equals, equalsBytes } from '../utils';
+import { concat, equals, equalsBytes, equalStrings } from '../utils';
 import { updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
@@ -31,9 +32,38 @@ export function getProposal(id: string): Proposal {
     proposal.confidenceThreshold = BigInt.fromI32(0);
     proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
     proposal.paramsHash = new Bytes();
+    proposal.organizationId = null;
+    proposal.scheme = null;
+    proposal.descriptionHash = '';
+    proposal.title = '';
   }
 
+  getProposalIPFSData(proposal);
+
   return proposal;
+}
+
+export function getProposalIPFSData(proposal: Proposal): Proposal {
+    // IPFS reading
+    if (!equalStrings(proposal.descriptionHash, '') && equalStrings(proposal.title, '')) {
+      let ipfsData = ipfs.cat('/ipfs/' + proposal.descriptionHash);
+      if (ipfsData != null && ipfsData.toString() !== '{}') {
+        let descJson = json.fromBytes(ipfsData as Bytes);
+        if (descJson.kind !== JSONValueKind.OBJECT) {
+          return proposal;
+        }
+        if (descJson.toObject().get('title') != null) {
+          proposal.title = descJson.toObject().get('title').toString();
+        }
+        if (descJson.toObject().get('description') != null) {
+          proposal.description = descJson.toObject().get('description').toString();
+        }
+        if (descJson.toObject().get('url') != null) {
+          proposal.url = descJson.toObject().get('url').toString();
+        }
+      }
+    }
+    return proposal;
 }
 
 export function saveProposal(proposal: Proposal): void {
@@ -62,9 +92,11 @@ export function updateProposalState(id: Bytes, state: number, gpAddress: Address
    let gp = GenesisProtocol.bind(gpAddress);
    let proposal = getProposal(id.toHex());
    updateThreshold(proposal.dao.toString(),
+                    gpAddress,
                     gp.threshold(proposal.paramsHash, proposal.organizationId),
                     proposal.paramsHash,
                     proposal.organizationId,
+                    proposal.scheme,
                     );
    setProposalState(proposal, state, gp.getProposalTimes(id));
    if (state === 4) {
@@ -99,6 +131,30 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
   }
 }
 
+function stageToNumber(stage: string): number {
+  // enum ProposalState { None, ExpiredInQueue, Executed, Queued, PreBoosted, Boosted, QuietEndingPeriod}
+  if (stage === 'ExpiredInQueue') {
+    // Closed
+    return 1;
+  } else if (stage === 'Executed') {
+    // Executed
+    return 2;
+  } else if (stage === 'Queued') {
+    // Queued
+    return 3;
+  } else if (stage === 'PreBoosted') {
+    // PreBoosted
+    return 4;
+  } else if (stage === 'Boosted') {
+    // Boosted
+    return 5;
+  } else if (stage === 'QuietEndingPeriod') {
+    // QuietEndingPeriod
+    return 6;
+  }
+  return 0;
+}
+
 export function updateGPProposal(
   gpAddress: Address,
   proposalId: Bytes,
@@ -115,30 +171,20 @@ export function updateGPProposal(
   let gpProposal = gp.proposals(proposalId);
 
   proposal.votingMachine = gpAddress;
-  proposal.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
-  proposal.queuedVotePeriodLimit = params.value1; // queuedVotePeriodLimit
-  proposal.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
-  proposal.preBoostedVotePeriodLimit = params.value3; // preBoostedVotePeriodLimit
-  proposal.thresholdConst = params.value4; // thresholdConst
-  proposal.limitExponentValue = params.value5; // limitExponentValue
-  proposal.quietEndingPeriod = params.value6; // quietEndingPeriod
-  proposal.proposingRepReward = params.value7;
-  proposal.votersReputationLossRatio = params.value8; // votersReputationLossRatio
-  proposal.minimumDaoBounty = params.value9; // minimumDaoBounty
-  proposal.daoBountyConst = params.value10; // daoBountyConst
-  proposal.activationTime = params.value11; // activationTime
-  proposal.voteOnBehalf = params.value12; // voteOnBehalf
   proposal.stakesAgainst = gp.voteStake(proposalId, BigInt.fromI32(2));
   proposal.confidenceThreshold = gpProposal.value10;
   proposal.paramsHash = paramsHash;
   proposal.organizationId = gpProposal.value0;
   proposal.expiresInQueueAt = timestamp.plus(params.value1);
   proposal.createdAt = timestamp;
+  proposal.scheme = crypto.keccak256(concat(avatarAddress, gpProposal.value1)).toHex();
   updateThreshold(
     proposal.dao.toString(),
+    gpAddress,
     gp.threshold(proposal.paramsHash, proposal.organizationId),
     proposal.paramsHash,
     proposal.organizationId,
+    proposal.scheme,
   );
   proposal.gpQueue = proposal.organizationId.toHex();
   saveProposal(proposal);
@@ -150,6 +196,7 @@ export function updateCRProposal(
   avatarAddress: Address,
   votingMachine: Address,
   descriptionHash: string,
+  schemeAddress: Address,
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.dao = avatarAddress.toHex();
@@ -157,26 +204,9 @@ export function updateCRProposal(
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
-
-  // IPFS reading
-
-  let ipfsData = ipfs.cat('/ipfs/' + descriptionHash);
-  if (ipfsData != null && ipfsData.toString() !== '{}') {
-    let descJson = json.fromBytes(ipfsData as Bytes);
-    if (descJson.kind !== JSONValueKind.OBJECT) {
-      saveProposal(proposal);
-      return;
-    }
-    if (descJson.toObject().get('title') != null) {
-      proposal.title = descJson.toObject().get('title').toString();
-    }
-    if (descJson.toObject().get('description') != null) {
-      proposal.description = descJson.toObject().get('description').toString();
-    }
-    if (descJson.toObject().get('url') != null) {
-      proposal.url = descJson.toObject().get('url').toString();
-    }
-  }
+  proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
+  setSchemeName(proposal.scheme, 'ContributionReward');
+  getProposalIPFSData(proposal);
 
   saveProposal(proposal);
 }
@@ -186,12 +216,17 @@ export function updateGSProposal(
   createdAt: BigInt,
   avatarAddress: Address,
   descriptionHash: string,
+  schemeAddress: Address,
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.dao = avatarAddress.toHex();
   proposal.genericScheme = proposalId.toHex();
   proposal.createdAt = createdAt;
   proposal.descriptionHash = descriptionHash;
+  proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
+  setSchemeName(proposal.scheme, 'GenericScheme');
+  getProposalIPFSData(proposal);
+
   saveProposal(proposal);
 }
 
@@ -201,6 +236,7 @@ export function updateSRProposal(
   avatarAddress: Address,
   votingMachine: Address,
   descriptionHash: string,
+  schemeAddress: Address,
 ): void {
   let proposal = getProposal(proposalId);
   proposal.dao = avatarAddress.toHex();
@@ -208,6 +244,10 @@ export function updateSRProposal(
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
+  proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
+  setSchemeName(proposal.scheme, 'SchemeRegistrar');
+  getProposalIPFSData(proposal);
+
   saveProposal(proposal);
 }
 

@@ -37,7 +37,7 @@ import {
   UpgradeController,
 } from '../../types/Controller/Controller';
 
-import { concat, eventId } from '../../utils';
+import { concat, equalStrings, eventId } from '../../utils';
 
 function insertScheme(
   controllerAddress: Address,
@@ -60,6 +60,7 @@ function insertScheme(
   ent.canUpgradeController = (perms[3] & 8) === 8;
   /* tslint:disable:no-bitwise */
   ent.canDelegateCall = (perms[3] & 16) === 16;
+  ent.name = '';
 
   store.set('ControllerScheme', ent.id, ent);
 }
@@ -255,4 +256,17 @@ export function handleRemoveGlobalConstraint(
   ent.globalConstraint = event.params._globalConstraint;
   ent.isPre = event.params._isPre;
   store.set('ControllerRemoveGlobalConstraint', ent.id, ent);
+}
+
+export function setSchemeName(
+  schemeId: string,
+  name: string,
+): void {
+  let scheme = ControllerScheme.load(schemeId);
+  if (scheme != null) {
+    if (!equalStrings(scheme.name, name)) {
+      scheme.name = name;
+      scheme.save();
+    }
+  }
 }

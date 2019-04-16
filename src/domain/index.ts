@@ -83,6 +83,7 @@ export function handleNewContributionProposal(
     event.params._avatar,
     event.params._intVoteInterface,
     event.params._descriptionHash,
+    event.address,
   );
 }
 
@@ -92,6 +93,7 @@ export function handleNewSchemeRegisterProposal(
    avatar: Bytes,
    votingMachine: Bytes,
    descriptionHash: string,
+   schemeAddress: Address,
  ): void {
     handleGPProposalPrivate(proposalId);
     updateSRProposal(
@@ -100,6 +102,7 @@ export function handleNewSchemeRegisterProposal(
       avatar as Address,
       votingMachine as Address,
       descriptionHash,
+      schemeAddress,
     );
  }
 
@@ -112,6 +115,7 @@ export function handleNewCallProposal(
     event.block.timestamp,
     event.params._avatar,
     event.params._descriptionHash,
+    event.address,
   );
 }
 

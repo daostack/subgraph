@@ -39,7 +39,8 @@ export function handleNewSchemeProposal(event: NewSchemeProposal): void {
                                          event.block.timestamp,
                                          ent.avatar,
                                          ent.votingMachine,
-                                         ent.descriptionHash);
+                                         ent.descriptionHash,
+                                         event.address);
   insertNewProposalRegister(ent.avatar as Address,
                           ent.proposalId,
                           ent.scheme,
@@ -70,7 +71,8 @@ export function handleRemoveSchemeProposal(event: RemoveSchemeProposal): void {
                                          event.block.timestamp,
                                          ent.avatar,
                                          ent.votingMachine,
-                                         ent.descriptionHash);
+                                         ent.descriptionHash,
+                                         event.address);
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {

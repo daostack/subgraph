@@ -1,12 +1,9 @@
 import {
   Address,
   BigInt,
-  ByteArray,
-  Bytes,
   crypto,
   Entity,
   store,
-  Value,
 } from '@graphprotocol/graph-ts';
 
 import { Avatar } from '../../types/UController/Avatar';

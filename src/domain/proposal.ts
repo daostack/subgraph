@@ -2,7 +2,7 @@ import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from
 import { setSchemeName } from '../mappings/Controller/mapping';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { Proposal } from '../types/schema';
-import { concat, equals, equalsBytes } from '../utils';
+import { concat, equals, equalsBytes, equalStrings } from '../utils';
 import { setScheme, updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
@@ -34,8 +34,8 @@ export function getProposal(id: string): Proposal {
     proposal.paramsHash = new Bytes();
     proposal.organizationId = null;
     proposal.scheme = null;
-    proposal.descriptionHash = null;
-    proposal.title = null;
+    proposal.descriptionHash = '';
+    proposal.title = '';
   }
 
   getProposalIPFSData(proposal);
@@ -45,7 +45,7 @@ export function getProposal(id: string): Proposal {
 
 export function getProposalIPFSData(proposal: Proposal): Proposal {
     // IPFS reading
-    if (proposal.descriptionHash != null && proposal.title == null) {
+    if (!equalStrings(proposal.descriptionHash, '') && equalStrings(proposal.title, '')) {
       let ipfsData = ipfs.cat('/ipfs/' + proposal.descriptionHash);
       if (ipfsData != null && ipfsData.toString() !== '{}') {
         let descJson = json.fromBytes(ipfsData as Bytes);

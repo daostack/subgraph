@@ -168,7 +168,7 @@ describe('Domain Layer', () => {
     expect(proposal).toMatchObject({
       id: p3,
       descriptionHash: descHash,
-      title: null,
+      title: '',
       description: null,
       url: null,
     });
@@ -201,7 +201,7 @@ describe('Domain Layer', () => {
     expect(proposal).toMatchObject({
       id: p4,
       descriptionHash: descHash,
-      title: null,
+      title: '',
       description: null,
       url: null,
     });
@@ -236,7 +236,7 @@ describe('Domain Layer', () => {
     expect(proposal).toMatchObject({
       id: p5,
       descriptionHash: descHash,
-      title: null,
+      title: '',
       description: null,
       url: null,
     });
@@ -271,7 +271,7 @@ describe('Domain Layer', () => {
     expect(proposal).toMatchObject({
       id: p6,
       descriptionHash: descHash,
-      title: null,
+      title: '',
       description: null,
       url: null,
     });

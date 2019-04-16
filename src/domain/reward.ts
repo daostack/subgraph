@@ -36,27 +36,36 @@ export function insertGPRewardsToHelper(proposalId: Bytes, beneficiary: Address)
 
 export function daoBountyRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt): void {
    let id = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
-   let reward = store.get('GPReward', id) as GPReward;
+   let reward = store.get('GPReward', id) as GPReward | null;
+   if (reward == null) {
+     return;
+   }
    reward.daoBountyForStakerRedeemedAt = timestamp;
    reward.save();
-   if (shouldRemoveAccountFromUnclaimed(reward)) {
+   if (shouldRemoveAccountFromUnclaimed(reward as GPReward)) {
       removeRedeemableRewardOwner(proposalId, beneficiary);
    }
 }
 
 export function tokenRedemption(proposalId: Bytes, beneficiary: Address, timestamp: BigInt): void {
    let id = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
-   let reward = store.get('GPReward', id) as GPReward;
+   let reward = store.get('GPReward', id) as GPReward | null;
+   if (reward == null) {
+     return;
+   }
    reward.tokensForStakerRedeemedAt = timestamp;
    reward.save();
-   if (shouldRemoveAccountFromUnclaimed(reward)) {
+   if (shouldRemoveAccountFromUnclaimed(reward as GPReward)) {
     removeRedeemableRewardOwner(proposalId, beneficiary);
    }
 }
 
 export function reputationRedemption(proposalId: Bytes, beneficiary: Address, timestamp: BigInt): void {
    let id = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
-   let reward = store.get('GPReward', id) as GPReward;
+   let reward = store.get('GPReward', id) as GPReward | null;
+   if (reward == null) {
+     return;
+   }
 
    if (reward.reputationForProposer != null) {
        reward.reputationForProposerRedeemedAt = timestamp;
@@ -66,7 +75,7 @@ export function reputationRedemption(proposalId: Bytes, beneficiary: Address, ti
    }
 
    reward.save();
-   if (shouldRemoveAccountFromUnclaimed(reward)) {
+   if (shouldRemoveAccountFromUnclaimed(reward as GPReward)) {
       removeRedeemableRewardOwner(proposalId, beneficiary);
    }
 }

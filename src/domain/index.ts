@@ -75,7 +75,9 @@ function handleGPProposalPrivate(proposalId: string): void {
 export function handleNewContributionProposal(
   event: NewContributionProposal,
 ): void {
-
+  if (!daoModule.exists(event.params._avatar)) {
+    return;
+  }
   handleGPProposalPrivate(event.params._proposalId.toHex());
   updateCRProposal(
     event.params._proposalId,
@@ -95,6 +97,9 @@ export function handleNewSchemeRegisterProposal(
    descriptionHash: string,
    schemeAddress: Address,
  ): void {
+    if (!daoModule.exists(avatar as Address)) {
+      return;
+    }
     handleGPProposalPrivate(proposalId);
     updateSRProposal(
       proposalId,
@@ -109,6 +114,9 @@ export function handleNewSchemeRegisterProposal(
 export function handleNewCallProposal(
   event: NewCallProposal,
 ): void {
+  if (!daoModule.exists(event.params._avatar)) {
+    return;
+  }
   handleGPProposalPrivate(event.params._proposalId.toHex());
   updateGSProposal(
     event.params._proposalId,

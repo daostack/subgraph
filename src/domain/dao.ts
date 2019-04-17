@@ -58,3 +58,9 @@ export function register(
     dao.save();
   }
 }
+
+export function isExist(
+  avatar: Address,
+): boolean {
+  return (DAO.load(avatar.toHex()) != null);
+}

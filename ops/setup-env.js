@@ -5,8 +5,6 @@ const migration = require('@daostack/migration/migration.json')
 const fs = require('fs')
 
 async function setupenv () {
-  // const provider = 'http://ganach:8545';
-  let result
   fs.writeFileSync(migrationFileLocation, JSON.stringify(migration, undefined, 2), 'utf-8')
   console.log(`Generating ABI files`)
   // node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js
@@ -23,7 +21,8 @@ async function setupenv () {
 
   const cwd = subgraphRepo
   console.log('Calling graph-codegen')
-  result = await require(`../ops/graph-codegen`)(cwd)
+  await require(`../ops/graph-codegen`)(cwd)
+
 
   console.log('Deploying subgraph configuration')
   await require(`${subgraphRepo}/ops/graph-deploy`)()

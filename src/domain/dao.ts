@@ -59,7 +59,7 @@ export function register(
   }
 }
 
-export function isExist(
+export function exists(
   avatar: Address,
 ): boolean {
   return (DAO.load(avatar.toHex()) != null);

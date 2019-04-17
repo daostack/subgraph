@@ -75,7 +75,7 @@ function handleGPProposalPrivate(proposalId: string): void {
 export function handleNewContributionProposal(
   event: NewContributionProposal,
 ): void {
-  if (!daoModule.isExist(event.params._avatar)) {
+  if (!daoModule.exists(event.params._avatar)) {
     return;
   }
   handleGPProposalPrivate(event.params._proposalId.toHex());
@@ -97,7 +97,7 @@ export function handleNewSchemeRegisterProposal(
    descriptionHash: string,
    schemeAddress: Address,
  ): void {
-    if (!daoModule.isExist(avatar as Address)) {
+    if (!daoModule.exists(avatar as Address)) {
       return;
     }
     handleGPProposalPrivate(proposalId);
@@ -114,7 +114,7 @@ export function handleNewSchemeRegisterProposal(
 export function handleNewCallProposal(
   event: NewCallProposal,
 ): void {
-  if (!daoModule.isExist(event.params._avatar)) {
+  if (!daoModule.exists(event.params._avatar)) {
     return;
   }
   handleGPProposalPrivate(event.params._proposalId.toHex());

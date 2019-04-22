@@ -168,12 +168,12 @@ export function handleVoteProposal(event: VoteProposal): void {
       event.params._reputation,
     );
   }
+  saveProposal(proposal);
   if (equalStrings(proposal.stage, 'Boosted') && !equalStrings(proposal.winningOutcome, prevOutcome)) {
     let gp = GenesisProtocol.bind(event.address);
     let gpProposal = gp.proposals(event.params._proposalId);
     updateProposalState(event.params._proposalId, gpProposal.value2, event.address);
   }
-  saveProposal(proposal);
   insertVote(
     eventId(event),
     event.block.timestamp,

@@ -7,6 +7,7 @@ import { Transfer } from '../types/DAOToken/DAOToken';
 import { NewCallProposal } from '../types/GenericScheme/GenericScheme';
 import {
   ExecuteProposal,
+  GenesisProtocol,
   GPExecuteProposal,
   Stake,
   StateChange,
@@ -14,7 +15,7 @@ import {
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
 import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
-import { equals, equalsBytes, eventId, hexToAddress } from '../utils';
+import { equals, equalsBytes, equalStrings, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
 import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {
@@ -154,6 +155,8 @@ export function handleStake(event: Stake): void {
 
 export function handleVoteProposal(event: VoteProposal): void {
   let proposal = getProposal(event.params._proposalId.toHex());
+  let prevOutcome = proposal.winningOutcome;
+
   if (equalsBytes(proposal.paramsHash, new Bytes())) {
     return;
   }
@@ -166,6 +169,13 @@ export function handleVoteProposal(event: VoteProposal): void {
     );
   }
   saveProposal(proposal);
+  if (equalStrings(proposal.stage, 'Boosted') && !equalStrings(proposal.winningOutcome, prevOutcome)) {
+    let gp = GenesisProtocol.bind(event.address);
+    let gpProposal = gp.proposals(event.params._proposalId);
+    if (gpProposal.value2 === 6) {
+      updateProposalState(event.params._proposalId, gpProposal.value2, event.address);
+    }
+  }
   insertVote(
     eventId(event),
     event.block.timestamp,

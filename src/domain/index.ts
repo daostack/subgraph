@@ -172,7 +172,9 @@ export function handleVoteProposal(event: VoteProposal): void {
   if (equalStrings(proposal.stage, 'Boosted') && !equalStrings(proposal.winningOutcome, prevOutcome)) {
     let gp = GenesisProtocol.bind(event.address);
     let gpProposal = gp.proposals(event.params._proposalId);
-    updateProposalState(event.params._proposalId, gpProposal.value2, event.address);
+    if (gpProposal.value2 === 6) {
+      updateProposalState(event.params._proposalId, gpProposal.value2, event.address);
+    }
   }
   insertVote(
     eventId(event),

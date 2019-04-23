@@ -155,7 +155,6 @@ export function handleStake(event: Stake): void {
 
 export function handleVoteProposal(event: VoteProposal): void {
   let proposal = getProposal(event.params._proposalId.toHex());
-  let prevOutcome = proposal.winningOutcome;
 
   if (equalsBytes(proposal.paramsHash, new Bytes())) {
     return;
@@ -169,14 +168,6 @@ export function handleVoteProposal(event: VoteProposal): void {
     );
   }
   saveProposal(proposal);
-  if ((equalStrings(proposal.stage, 'Boosted') || equalStrings(proposal.stage, 'QuietEndingPeriod'))
-   && !equalStrings(proposal.winningOutcome, prevOutcome)) {
-    let gp = GenesisProtocol.bind(event.address);
-    let gpProposal = gp.proposals(event.params._proposalId);
-    if (gpProposal.value2 === 6) {
-      updateProposalState(event.params._proposalId, gpProposal.value2, event.address);
-    }
-  }
   insertVote(
     eventId(event),
     event.block.timestamp,

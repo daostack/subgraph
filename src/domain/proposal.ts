@@ -77,9 +77,16 @@ export function updateProposal(
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let gpProposal = gp.proposals(proposalId);
+  let prevOutcome = proposal.winningOutcome;
   proposal.votingMachine = gpAddress;
   // proposal.winningVote
   proposal.winningOutcome = parseOutcome(gpProposal.value3);
+  if ((equalStrings(proposal.stage, 'Boosted') || equalStrings(proposal.stage, 'QuietEndingPeriod'))
+   && !equalStrings(proposal.winningOutcome, prevOutcome)) {
+    if (gpProposal.value2 === 6) {
+      updateProposalState(proposalId, gpProposal.value2, gpAddress);
+    }
+  }
 }
 
 export function updateProposalconfidence(id: Bytes, confidence: BigInt): void {

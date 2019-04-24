@@ -25,7 +25,7 @@ import {
   updateCRProposal,
   updateGPProposal,
   updateGSProposal,
-  updateProposal,
+  updateProposalAfterVote,
   updateProposalconfidence,
   updateProposalExecution,
   updateProposalExecutionState,
@@ -133,7 +133,6 @@ export function handleStake(event: Stake): void {
   if (equalsBytes(proposal.paramsHash, new Bytes())) {
     return;
   }
-  updateProposal(proposal, event.address, event.params._proposalId);
   if (equals(event.params._vote, BigInt.fromI32(1))) {
     proposal.stakesFor = proposal.stakesFor.plus(event.params._amount);
   } else {
@@ -159,7 +158,7 @@ export function handleVoteProposal(event: VoteProposal): void {
   if (equalsBytes(proposal.paramsHash, new Bytes())) {
     return;
   }
-  updateProposal(proposal, event.address, event.params._proposalId);
+  updateProposalAfterVote(proposal, event.address, event.params._proposalId);
   if (equals(event.params._vote, BigInt.fromI32(1))) {
     proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
   } else {

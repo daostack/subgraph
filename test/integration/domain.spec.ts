@@ -1080,13 +1080,33 @@ describe('Domain Layer', () => {
     const getExpiredProposal = `{
     proposal(id: "${p2}") {
         stage
+        quietEndingPeriodBeganAt
     }}`;
 
     increaseTime(1814400 + 1 , web3);
     await genesisProtocol.methods.execute(p2).send();
 
     let stage = (await sendQuery(getExpiredProposal)).proposal.stage;
-    expect(stage).toEqual('Boosted');
+    expect((await sendQuery(getExpiredProposal)).proposal.stage).toEqual('Boosted');
+    increaseTime((+gpParams.boostedVotePeriodLimit) - (+gpParams.quietEndingPeriod) + 1 , web3);
+    let quietEndingPeriodBeganAt = await vote({
+      proposalId: p2,
+      outcome: PASS,
+      voter: accounts[1].address,
+    });
+
+    expect((await sendQuery(getExpiredProposal)).proposal.stage).toEqual('QuietEndingPeriod');
+    expect((await sendQuery(getExpiredProposal)).proposal.quietEndingPeriodBeganAt)
+           .toEqual(quietEndingPeriodBeganAt.toString());
+    increaseTime(1 , web3);
+    quietEndingPeriodBeganAt = await vote({
+      proposalId: p2,
+      outcome: FAIL,
+      voter: accounts[2].address,
+    });
+    expect((await sendQuery(getExpiredProposal)).proposal.stage).toEqual('QuietEndingPeriod');
+    expect((await sendQuery(getExpiredProposal)).proposal.quietEndingPeriodBeganAt)
+           .toEqual(quietEndingPeriodBeganAt.toString());
 
   }, 100000);
 });

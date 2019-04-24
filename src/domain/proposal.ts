@@ -70,7 +70,7 @@ export function saveProposal(proposal: Proposal): void {
   store.set('Proposal', proposal.id, proposal);
 }
 
-export function updateProposal(
+export function updateProposalAfterVote(
   proposal: Proposal,
   gpAddress: Address,
   proposalId: Bytes,
@@ -81,11 +81,8 @@ export function updateProposal(
   proposal.votingMachine = gpAddress;
   // proposal.winningVote
   proposal.winningOutcome = parseOutcome(gpProposal.value3);
-  if ((equalStrings(proposal.stage, 'Boosted') || equalStrings(proposal.stage, 'QuietEndingPeriod'))
-   && !equalStrings(proposal.winningOutcome, prevOutcome)) {
-    if (gpProposal.value2 === 6) {
-      updateProposalState(proposalId, gpProposal.value2, gpAddress);
-    }
+  if ((gpProposal.value2 === 6) && !equalStrings(proposal.winningOutcome, prevOutcome)) {
+    setProposalState(proposal, 6, gp.getProposalTimes(proposalId));
   }
 }
 
@@ -136,30 +133,6 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     proposal.quietEndingPeriodBeganAt = gpTimes[1];
     proposal.stage = 'QuietEndingPeriod';
   }
-}
-
-function stageToNumber(stage: string): number {
-  // enum ProposalState { None, ExpiredInQueue, Executed, Queued, PreBoosted, Boosted, QuietEndingPeriod}
-  if (stage === 'ExpiredInQueue') {
-    // Closed
-    return 1;
-  } else if (stage === 'Executed') {
-    // Executed
-    return 2;
-  } else if (stage === 'Queued') {
-    // Queued
-    return 3;
-  } else if (stage === 'PreBoosted') {
-    // PreBoosted
-    return 4;
-  } else if (stage === 'Boosted') {
-    // Boosted
-    return 5;
-  } else if (stage === 'QuietEndingPeriod') {
-    // QuietEndingPeriod
-    return 6;
-  }
-  return 0;
 }
 
 export function updateGPProposal(

@@ -43,7 +43,8 @@
 		"eslint-plugin-standard": "^4.0.0",
 		"ipfs-http-client": "^29.1.1",
 		"spawn-command": "0.0.2-1",
-		"watch": "^1.0.2"
+		"watch": "^1.0.2",
+		"ws": "^6.2.1"
 	},
 	"dependencies": {
 		"@graphprotocol/graph-cli": "^0.10.0",

@@ -50,7 +50,7 @@ import { insertVote } from './vote';
 
 function isProposalValid(proposalId: string ): boolean {
   let p = Proposal.load(proposalId);
-  return  ((p != null) && (equalsBytes(p.paramsHash, new Bytes()) === false));
+  return  ((p != null) && (equalsBytes(p.paramsHash, new Bytes(32)) === false));
 }
 
 function handleGPProposalPrivate(proposalId: string): void {
@@ -130,7 +130,7 @@ export function handleNewCallProposal(
 
 export function handleStake(event: Stake): void {
   let proposal = getProposal(event.params._proposalId.toHex());
-  if (equalsBytes(proposal.paramsHash, new Bytes())) {
+  if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
   if (equals(event.params._vote, BigInt.fromI32(1))) {
@@ -155,7 +155,7 @@ export function handleStake(event: Stake): void {
 export function handleVoteProposal(event: VoteProposal): void {
   let proposal = getProposal(event.params._proposalId.toHex());
 
-  if (equalsBytes(proposal.paramsHash, new Bytes())) {
+  if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
   updateProposalAfterVote(proposal, event.address, event.params._proposalId);

@@ -4,4 +4,4 @@
 # It uses the same pattern rule for gitignore file
 # https://git-scm.com/docs/gitignore#_pattern_format
 
-@orenyodfat @ben-kaufman
+*   @orenyodfat @ben-kaufman

@@ -5,3 +5,5 @@ eventHandlers:
     handler: handleSendEth
   - event: ReceiveEther(address,uint256)
     handler: handleReceiveEth
+  - event: OwnershipTransferred(address,address)
+    handler: handleOwnershipTransferred

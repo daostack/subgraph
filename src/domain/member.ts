@@ -13,6 +13,7 @@ export function getMember(address: Address, daoAddress: Address): Member {
     member.address = address;
     member.dao = daoAddress.toHex();
     member.reputation = BigInt.fromI32(0);
+    member.tokens = BigInt.fromI32(0);
     saveMember(member);
     increaseDAOmembersCount(member.dao);
   }
@@ -36,7 +37,7 @@ export function updateMemberReputation(
   let reputation = Reputation.bind(hexToAddress(dao.nativeReputation));
   let member = getMember(address, daoAddress);
   member.reputation = reputation.balanceOf(address);
-  if (equals(member.reputation as BigInt, BigInt.fromI32(0))) {
+  if (equals(member.reputation, BigInt.fromI32(0)) && equals(member.tokens, BigInt.fromI32(0))) {
     deleteMember(member);
   } else {
     saveMember(member);
@@ -50,7 +51,7 @@ export function updateMemberReputationWithValue(
 ): void {
   let member = getMember(address, daoAddress);
   member.reputation = value;
-  if (equals(member.reputation as BigInt, BigInt.fromI32(0))) {
+  if (equals(member.reputation, BigInt.fromI32(0)) && equals(member.tokens, BigInt.fromI32(0))) {
     deleteMember(member);
   } else {
     saveMember(member);
@@ -64,8 +65,10 @@ export function updateMemberTokens(
   let dao = getDAO(daoAddress.toHex());
   let token = DAOToken.bind(hexToAddress(dao.nativeToken));
   let member = getMember(address, daoAddress);
-  if (member.reputation.toString().charAt(0) !== '0') {
-    member.tokens = token.balanceOf(address);
+  member.tokens = token.balanceOf(address);
+  if (equals(member.reputation, BigInt.fromI32(0)) && equals(member.tokens, BigInt.fromI32(0))) {
+    deleteMember(member);
+  } else {
     saveMember(member);
   }
 }

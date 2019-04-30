@@ -135,7 +135,7 @@ type Member @entity {
 	dao: DAO!
 	address: Bytes!
 	reputation: BigInt!
-	tokens: BigInt
+	tokens: BigInt!
 }
 
 enum RewardReason {

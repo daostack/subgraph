@@ -158,6 +158,21 @@ export function updateGPProposal(
   proposal.expiresInQueueAt = timestamp.plus(params.value1);
   proposal.createdAt = timestamp;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, gpProposal.value1)).toHex();
+
+  proposal.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
+  proposal.queuedVotePeriodLimit = params.value1; // queuedVotePeriodLimit
+  proposal.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
+  proposal.preBoostedVotePeriodLimit = params.value3; // preBoostedVotePeriodLimit
+  proposal.thresholdConst = params.value4; // thresholdConst
+  proposal.limitExponentValue = params.value5; // limitExponentValue
+  proposal.quietEndingPeriod = params.value6; // quietEndingPeriod
+  proposal.proposingRepReward = params.value7;
+  proposal.votersReputationLossRatio = params.value8; // votersReputationLossRatio
+  proposal.minimumDaoBounty = params.value9; // minimumDaoBounty
+  proposal.daoBountyConst = params.value10; // daoBountyConst
+  proposal.activationTime = params.value11; // activationTime
+  proposal.voteOnBehalf = params.value12; // voteOnBehalf
+
   updateThreshold(
     proposal.dao.toString(),
     gpAddress,
@@ -167,6 +182,7 @@ export function updateGPProposal(
     proposal.scheme,
   );
   proposal.gpQueue = proposal.organizationId.toHex();
+
   saveProposal(proposal);
 }
 

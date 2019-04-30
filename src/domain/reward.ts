@@ -90,13 +90,17 @@ function shouldRemoveAccountFromUnclaimed(reward: GPReward): boolean {
     if (equalsBytes(crProposal.beneficiary, reward.beneficiary)) {
       if (
         (equals(crProposal.reputationReward, BigInt.fromI32(0)) ||
-        equals(crProposal.alreadyRedeemedReputationPeriods, crProposal.periods)) &&
+        (crProposal.alreadyRedeemedReputationPeriods !== null &&
+         equals(crProposal.alreadyRedeemedReputationPeriods as BigInt, crProposal.periods))) &&
         (equals(crProposal.nativeTokenReward, BigInt.fromI32(0)) ||
-        equals(crProposal.alreadyRedeemedNativeTokenPeriods, crProposal.periods)) &&
+        (crProposal.alreadyRedeemedNativeTokenPeriods !== null &&
+        equals(crProposal.alreadyRedeemedNativeTokenPeriods as BigInt, crProposal.periods))) &&
         (equals(crProposal.externalTokenReward, BigInt.fromI32(0)) ||
-        equals(crProposal.alreadyRedeemedExternalTokenPeriods, crProposal.periods)) &&
+        (crProposal.alreadyRedeemedExternalTokenPeriods !== null &&
+        equals(crProposal.alreadyRedeemedExternalTokenPeriods as BigInt, crProposal.periods))) &&
         (equals(crProposal.ethReward, BigInt.fromI32(0)) ||
-        equals(crProposal.alreadyRedeemedEthPeriods, crProposal.periods))) {
+        (crProposal.alreadyRedeemedEthPeriods !== null &&
+        equals(crProposal.alreadyRedeemedEthPeriods as BigInt, crProposal.periods)))) {
           // Note: This doesn't support the period feature of ContributionReward
           return false;
       }

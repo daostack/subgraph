@@ -192,6 +192,7 @@ export function updateCRProposal(
   avatarAddress: Address,
   votingMachine: Address,
   descriptionHash: string,
+  beneficiary: Address,
   schemeAddress: Address,
 ): void {
   let proposal = getProposal(proposalId.toHex());
@@ -203,6 +204,8 @@ export function updateCRProposal(
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
   setSchemeName(proposal.scheme, 'ContributionReward');
   getProposalIPFSData(proposal);
+
+  addRedeemableRewardOwner(proposalId, beneficiary);
 
   saveProposal(proposal);
 }

@@ -86,6 +86,7 @@ export function handleNewContributionProposal(
     event.params._avatar,
     event.params._intVoteInterface,
     event.params._descriptionHash,
+    event.params._beneficiary,
     event.address,
   );
 }

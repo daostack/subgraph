@@ -1,7 +1,7 @@
 import { Address, BigInt, Bytes , crypto, EthereumValue, SmartContract , store} from '@graphprotocol/graph-ts';
 import { GenesisProtocol__voteInfoResult } from '../types/GenesisProtocol/GenesisProtocol';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { GPReward, GPRewardsHelper, PreGPReward } from '../types/schema';
+import { ContributionRewardProposal, GPReward, GPRewardsHelper, PreGPReward } from '../types/schema';
 import { concat , equals, equalsBytes, equalStrings } from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 
@@ -81,6 +81,28 @@ export function reputationRedemption(proposalId: Bytes, beneficiary: Address, ti
 }
 
 function shouldRemoveAccountFromUnclaimed(reward: GPReward): boolean {
+  let proposal = getProposal(reward.proposal);
+  if (proposal.contributionReward !== null) {
+    let crProposal = store.get(
+      'ContributionRewardProposal',
+      proposal.contributionReward,
+    ) as ContributionRewardProposal;
+    if (equalsBytes(crProposal.beneficiary, reward.beneficiary)) {
+      if (
+        (equals(crProposal.reputationReward, BigInt.fromI32(0)) ||
+        equals(crProposal.alreadyRedeemedReputationPeriods, crProposal.periods)) &&
+        (equals(crProposal.nativeTokenReward, BigInt.fromI32(0)) ||
+        equals(crProposal.alreadyRedeemedNativeTokenPeriods, crProposal.periods)) &&
+        (equals(crProposal.externalTokenReward, BigInt.fromI32(0)) ||
+        equals(crProposal.alreadyRedeemedExternalTokenPeriods, crProposal.periods)) &&
+        (equals(crProposal.ethReward, BigInt.fromI32(0)) ||
+        equals(crProposal.alreadyRedeemedEthPeriods, crProposal.periods))) {
+          // Note: This doesn't support the period feature of ContributionReward
+          return false;
+      }
+    }
+  }
+
   return ((reward.reputationForVoter == null ||
     equals(reward.reputationForVoterRedeemedAt, BigInt.fromI32(0)) === false) &&
      (reward.reputationForProposer == null ||

@@ -371,6 +371,43 @@ describe('UController', () => {
       nativeReputation: { address: reputation.options.address.toLowerCase() },
       controller: uController2.options.address.toLowerCase(),
     });
+
+    // verify that none indexed avatar will not create dao entity.
+    const testReputation = await new web3.eth.Contract(Reputation.abi, undefined, opts).deploy({
+      data: Reputation.bytecode,
+      arguments: [],
+    }).send();
+
+    const testDaoToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
+    .deploy({
+      data: DAOToken.bytecode,
+      arguments: ['TEST', 'TST', 1000000000],
+    })
+    .send();
+
+    const testAvatar = await new web3.eth.Contract(Avatar.abi, undefined, opts)
+      .deploy({
+        data: Avatar.bytecode,
+        arguments: [
+          'testAvatar',
+          testDaoToken.options.address,
+          testReputation.options.address,
+        ],
+      })
+      .send();
+
+    await testAvatar.methods.transferOwnership(uController.options.address).send();
+    await testReputation.methods.transferOwnership(uController.options.address).send();
+    await testDaoToken.methods.transferOwnership(uController.options.address).send();
+    await uController.methods.newOrganization(testAvatar.options.address).send();
+
+    const { dao } = await sendQuery(`{
+      dao(id: "${testAvatar.options.address.toLowerCase()}") {
+        id
+      }
+    }`);
+
+    expect(dao).toBeNull();
     await uController2.methods.newOrganization(avatar.options.address).send();
     await uController2.methods.upgradeController(uController.options.address, avatar.options.address).send();
   }, 20000);

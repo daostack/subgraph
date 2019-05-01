@@ -1,6 +1,6 @@
 import 'allocator/arena';
 
-import { Address, BigInt, Bytes, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, crypto, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Reputation contract ABI
 import {
@@ -15,6 +15,10 @@ import {
 
 import * as domain from '../../domain';
 
+import { removeRedeemableRewardOwner } from '../../domain/proposal';
+
+import { shouldRemoveAccountFromUnclaimed, shouldRemoveContributorFromUnclaimed } from '../../domain/reward';
+
 // Import entity types generated from the GraphQL schema
 import {
   ContributionRewardNewContributionProposal,
@@ -24,11 +28,12 @@ import {
   ContributionRewardRedeemExternalToken,
   ContributionRewardRedeemNativeToken,
   ContributionRewardRedeemReputation,
+  GPReward,
 } from '../../types/schema';
-import { equals, eventId } from '../../utils';
+import { concat, equals, eventId } from '../../utils';
 
 export function handleRedeemReputation(event: RedeemReputation): void {
-  updateProposalafterRedemption(event.address, event.params._proposalId, 0);
+  updateProposalAfterRedemption(event.address, event.params._proposalId, 0);
   let ent = new ContributionRewardRedeemReputation(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -40,7 +45,7 @@ export function handleRedeemReputation(event: RedeemReputation): void {
 }
 
 export function handleRedeemNativeToken(event: RedeemNativeToken): void {
-  updateProposalafterRedemption(event.address, event.params._proposalId, 1);
+  updateProposalAfterRedemption(event.address, event.params._proposalId, 1);
   let ent = new ContributionRewardRedeemNativeToken(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -52,7 +57,7 @@ export function handleRedeemNativeToken(event: RedeemNativeToken): void {
 }
 
 export function handleRedeemEther(event: RedeemEther): void {
-  updateProposalafterRedemption(event.address, event.params._proposalId, 2);
+  updateProposalAfterRedemption(event.address, event.params._proposalId, 2);
   let ent = new ContributionRewardRedeemEther(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -64,7 +69,7 @@ export function handleRedeemEther(event: RedeemEther): void {
 }
 
 export function handleRedeemExternalToken(event: RedeemExternalToken): void {
-  updateProposalafterRedemption(event.address, event.params._proposalId, 3);
+  updateProposalAfterRedemption(event.address, event.params._proposalId, 3);
   let ent = new ContributionRewardRedeemExternalToken(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -94,7 +99,7 @@ function insertNewProposal(event: NewContributionProposal): void {
   store.set('ContributionRewardProposal', ent.id, ent);
 }
 
-function updateProposalafterRedemption(
+function updateProposalAfterRedemption(
   contributionRewardAddress: Address,
   proposalId: Bytes,
   type: number,
@@ -131,6 +136,11 @@ function updateProposalafterRedemption(
       );
     }
     store.set('ContributionRewardProposal', proposalId.toHex(), ent);
+    let reward = GPReward.load(crypto.keccak256(concat(proposalId, ent.beneficiary)).toHex());
+    if ((reward !== null && shouldRemoveAccountFromUnclaimed(reward as GPReward)) ||
+    (reward === null && shouldRemoveContributorFromUnclaimed(ent))) {
+      removeRedeemableRewardOwner(proposalId, ent.beneficiary);
+    }
   }
 }
 

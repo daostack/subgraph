@@ -386,11 +386,11 @@ describe('Domain Layer', () => {
     const { proposalId: p1, timestamp: p1Creation } = await propose({
       rep: 10,
       tokens: 10,
-      eth: 10,
-      external: 10,
+      eth: 0,
+      external: 0,
       periodLength: 0,
       periods: 1,
-      beneficiary: accounts[1].address,
+      beneficiary: accounts[5].address,
     });
 
     const getProposal = `{
@@ -517,10 +517,10 @@ describe('Domain Layer', () => {
       confidenceThreshold: '0',
 
       contributionReward: {
-        beneficiary: accounts[1].address.toLowerCase(),
-        ethReward: '10',
+        beneficiary: accounts[5].address.toLowerCase(),
+        ethReward: '0',
         externalToken: addresses.GEN.toLowerCase(),
-        externalTokenReward: '10',
+        externalTokenReward: '0',
         nativeTokenReward: '10',
         reputationReward: '10',
       },
@@ -927,7 +927,7 @@ describe('Domain Layer', () => {
     }`;
 
     const proposalIsIndexed = async () => {
-      return (await sendQuery(getProposalRewards)).proposal.accountsWithUnclaimedRewards.length === 2;
+      return (await sendQuery(getProposalRewards)).proposal.accountsWithUnclaimedRewards.length === 3;
     };
 
     await waitUntilTrue(proposalIsIndexed);
@@ -960,6 +960,7 @@ describe('Domain Layer', () => {
   });
     expect(proposal).toMatchObject({
     accountsWithUnclaimedRewards: [
+      accounts[5].address.toLowerCase(),
       accounts[0].address.toLowerCase(),
       accounts[1].address.toLowerCase(),
     ]});
@@ -1024,11 +1025,25 @@ describe('Domain Layer', () => {
   tokensForStaker: null,
 });
 
-    const accountsWithUnclaimedRewardsIsIndexed = async () => {
+    let accountsWithUnclaimedRewardsIsIndexed = async () => {
+      return (await sendQuery(getProposalRewards)).proposal.accountsWithUnclaimedRewards.length === 1;
+    };
+
+    await waitUntilTrue(accountsWithUnclaimedRewardsIsIndexed);
+
+    expect(proposal).toMatchObject({ accountsWithUnclaimedRewards: [
+      accounts[5].address.toLowerCase(),
+    ]});
+
+    await contributionReward.methods.redeem(p1, avatar.options.address, [true, true, true, true]).send();
+
+    accountsWithUnclaimedRewardsIsIndexed = async () => {
       return (await sendQuery(getProposalRewards)).proposal.accountsWithUnclaimedRewards.length === 0;
     };
 
     await waitUntilTrue(accountsWithUnclaimedRewardsIsIndexed);
+
+    proposal = (await sendQuery(getProposalRewards)).proposal;
 
     expect(proposal).toMatchObject({ accountsWithUnclaimedRewards: [] });
 
@@ -1067,8 +1082,8 @@ describe('Domain Layer', () => {
     const { proposalId: p2 } = await propose({
     rep: 10,
     tokens: 10,
-    eth: 10,
-    external: 10,
+    eth: 0,
+    external: 0,
     periodLength: 0,
     periods: 1,
     beneficiary: accounts[1].address,

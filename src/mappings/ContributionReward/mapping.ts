@@ -1,6 +1,6 @@
 import 'allocator/arena';
 
-import { Address, BigInt, Bytes, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, crypto, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Reputation contract ABI
 import {
@@ -15,6 +15,10 @@ import {
 
 import * as domain from '../../domain';
 
+import { removeRedeemableRewardOwner } from '../../domain/proposal';
+
+import { shouldRemoveAccountFromUnclaimed, shouldRemoveContributorFromUnclaimed } from '../../domain/reward';
+
 // Import entity types generated from the GraphQL schema
 import {
   ContributionRewardNewContributionProposal,
@@ -24,8 +28,9 @@ import {
   ContributionRewardRedeemExternalToken,
   ContributionRewardRedeemNativeToken,
   ContributionRewardRedeemReputation,
+  GPReward,
 } from '../../types/schema';
-import { equals, eventId } from '../../utils';
+import { concat, equals, eventId } from '../../utils';
 
 export function handleRedeemReputation(event: RedeemReputation): void {
   updateProposalAfterRedemption(event.address, event.params._proposalId, 0);
@@ -131,6 +136,11 @@ function updateProposalAfterRedemption(
       );
     }
     store.set('ContributionRewardProposal', proposalId.toHex(), ent);
+    let reward = GPReward.load(crypto.keccak256(concat(proposalId, ent.beneficiary)).toHex());
+    if ((reward !== null && shouldRemoveAccountFromUnclaimed(reward as GPReward)) ||
+    (reward === null && shouldRemoveContributorFromUnclaimed(ent))) {
+      removeRedeemableRewardOwner(proposalId, ent.beneficiary);
+    }
   }
 }
 

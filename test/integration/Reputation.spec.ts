@@ -2,21 +2,58 @@ import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
 
 const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
 const UController = require('@daostack/arc/build/contracts/UController.json');
+const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
+const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
 
 describe('Reputation', () => {
   let web3;
   let addresses;
   let reputation;
+  let opts;
+  let uController;
+  let daoToken;
+  let accounts;
 
   beforeAll(async () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
-    const opts = await getOptions(web3);
+    opts = await getOptions(web3);
+    accounts = web3.eth.accounts.wallet;
+    uController = new web3.eth.Contract(
+      UController.abi,
+      addresses.UController,
+      opts,
+    );
     reputation = new web3.eth.Contract(
       Reputation.abi,
       addresses.DemoReputation,
       opts,
     );
+    daoToken = new web3.eth.Contract(
+      DAOToken.abi,
+      addresses.DemoDAOToken,
+      opts,
+    );
+    const avatar = new web3.eth.Contract(
+      Avatar.abi,
+      addresses.DemoAvatar,
+      opts,
+    );
+
+    if (await avatar.methods.owner().call() === accounts[0].address) {
+        await avatar.methods.transferOwnership(uController.options.address).send({from: accounts[0].address});
+
+    }
+    if (await reputation.methods.owner().call() === accounts[0].address) {
+       await reputation.methods.transferOwnership(uController.options.address).send();
+    }
+    if (await daoToken.methods.owner().call() === accounts[0].address) {
+       await daoToken.methods.transferOwnership(uController.options.address).send();
+    }
+    let organs = await uController.methods.organizations(avatar.options.address).call();
+    if (organs[0] !== daoToken.options.address) {
+        await uController.methods.newOrganization(avatar.options.address).send();
+    }
   });
 
   async function checkTotalSupply(value) {
@@ -33,23 +70,23 @@ describe('Reputation', () => {
   }
 
   it('Sanity', async () => {
-    const accounts = web3.eth.accounts.wallet;
     let txs = [];
 
-    txs.push(await reputation.methods.mint(accounts[0].address, '100').send());
+    txs.push(await uController.methods.mintReputation(100, accounts[0].address, addresses.DemoAvatar)
+    .send({from : accounts[0].address}));
 
     await checkTotalSupply(100);
-    txs.push(await reputation.methods.mint(accounts[1].address, '100').send());
+    txs.push(await uController.methods.mintReputation('100' , accounts[1].address, addresses.DemoAvatar).send());
 
     await checkTotalSupply(200);
-    txs.push(await reputation.methods.burn(accounts[0].address, '30').send());
+    txs.push(await uController.methods.burnReputation('30', accounts[0].address, addresses.DemoAvatar).send());
     await checkTotalSupply(170);
 
-    txs.push(await reputation.methods.mint(accounts[2].address, '300').send());
+    txs.push(await uController.methods.mintReputation('300', accounts[2].address, addresses.DemoAvatar).send());
     await checkTotalSupply(470);
-    txs.push(await reputation.methods.burn(accounts[1].address, '100').send());
+    txs.push(await uController.methods.burnReputation('100' , accounts[1].address, addresses.DemoAvatar).send());
     await checkTotalSupply(370);
-    txs.push(await reputation.methods.burn(accounts[2].address, '1').send());
+    txs.push(await uController.methods.burnReputation( '1', accounts[2].address, addresses.DemoAvatar).send());
     await checkTotalSupply(369);
 
     txs = txs.map(({ transactionHash }) => transactionHash);

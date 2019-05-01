@@ -27,6 +27,12 @@
         "mapping": "DAOToken"
       },
       {
+        "name": "Avatar",
+        "contractName": "Avatar",
+        "dao": "test",
+        "mapping": "Avatar"
+      },
+      {
         "name": "Reputation",
         "contractName": "Reputation",
         "dao": "dao",
@@ -43,6 +49,12 @@
         "contractName": "DemoDAOToken",
         "dao": "organs",
         "mapping": "DAOToken"
+      },
+      {
+        "name": "Avatar",
+        "contractName": "DemoAvatar",
+        "dao": "organs",
+        "mapping": "Avatar"
       },
       {
         "name": "Reputation",

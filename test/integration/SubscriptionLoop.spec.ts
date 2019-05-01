@@ -7,6 +7,9 @@ import {
 } from './util';
 
 const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
+const UController = require('@daostack/arc/build/contracts/UController.json');
+const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
+const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
 const gql = require('graphql-tag');
 
 describe('Subscriptions Loop', () => {
@@ -14,18 +17,56 @@ describe('Subscriptions Loop', () => {
   let addresses;
   let opts;
   let reputation;
+  let uController;
+  let accounts;
   beforeAll(async () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
     opts = await getOptions(web3);
+    accounts = web3.eth.accounts.wallet;
+
     reputation = new web3.eth.Contract(
       Reputation.abi,
       addresses.DemoReputation,
       opts,
     );
+    uController = new web3.eth.Contract(
+      UController.abi,
+      addresses.UController,
+      opts,
+    );
+    reputation = new web3.eth.Contract(
+      Reputation.abi,
+      addresses.DemoReputation,
+      opts,
+    );
+    const daoToken = new web3.eth.Contract(
+      DAOToken.abi,
+      addresses.DemoDAOToken,
+      opts,
+    );
+    const avatar = new web3.eth.Contract(
+      Avatar.abi,
+      addresses.DemoAvatar,
+      opts,
+    );
+
+    if (await avatar.methods.owner().call() === accounts[0].address) {
+        await avatar.methods.transferOwnership(uController.options.address).send({from: accounts[0].address});
+
+    }
+    if (await reputation.methods.owner().call() === accounts[0].address) {
+       await reputation.methods.transferOwnership(uController.options.address).send();
+    }
+    if (await daoToken.methods.owner().call() === accounts[0].address) {
+       await daoToken.methods.transferOwnership(uController.options.address).send();
+    }
+    let organs = await uController.methods.organizations(avatar.options.address).call();
+    if (organs[0] !== daoToken.options.address) {
+        await uController.methods.newOrganization(avatar.options.address).send();
+    }
   });
   it('Run 10 subscriptions and test for updates', async () => {
-    const accounts = web3.eth.accounts.wallet;
     const SUBSCRIBE_QUERY = gql`
       subscription {
         reputationMints {
@@ -56,8 +97,8 @@ describe('Subscriptions Loop', () => {
         },
       );
 
-      await reputation.methods.mint(accounts[4].address, i.toString()).send();
-
+      await uController.methods.mintReputation(i.toString(), accounts[4].address, addresses.DemoAvatar)
+      .send({from: accounts[0].address});
       // wait until the subscription callback has been called
       await waitUntilTrue(() => nextWasCalled);
 

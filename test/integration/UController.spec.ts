@@ -30,31 +30,25 @@ describe('UController', () => {
       addresses.UController,
       opts,
     );
-    reputation = await new web3.eth.Contract(Reputation.abi, undefined, opts).deploy({
-      data: Reputation.bytecode,
-      arguments: [],
-    }).send();
-
-    daoToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-    .deploy({
-      data: DAOToken.bytecode,
-      arguments: ['TEST', 'TST', 1000000000],
-    })
-    .send();
+    reputation = new web3.eth.Contract(
+      Reputation.abi,
+      addresses.DemoReputation,
+      opts,
+    );
+    daoToken = new web3.eth.Contract(
+      DAOToken.abi,
+      addresses.DemoDAOToken,
+      opts,
+    );
   });
 
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
-    const avatar = await new web3.eth.Contract(Avatar.abi, undefined, opts)
-      .deploy({
-        data: Avatar.bytecode,
-        arguments: [
-          'Test',
-          daoToken.options.address,
-          reputation.options.address,
-        ],
-      })
-      .send();
+    const avatar = new web3.eth.Contract(
+      Avatar.abi,
+      addresses.DemoAvatar,
+      opts,
+    );
 
     const tokenCap1 = await new web3.eth.Contract(
       TokenCapGC.abi,
@@ -71,14 +65,27 @@ describe('UController', () => {
     )
       .deploy({ data: TokenCapGC.bytecode, arguments: [] })
       .send();
+    if (await avatar.methods.owner().call() === accounts[0].address) {
+      await avatar.methods.transferOwnership(uController.options.address).send({from: accounts[0].address});
 
-    await avatar.methods.transferOwnership(uController.options.address).send();
-    await reputation.methods.transferOwnership(uController.options.address).send();
-    await daoToken.methods.transferOwnership(uController.options.address).send();
+    }
+    if (await reputation.methods.owner().call() === accounts[0].address) {
+      await reputation.methods.transferOwnership(uController.options.address).send();
+    }
+    if (await daoToken.methods.owner().call() === accounts[0].address) {
+      await daoToken.methods.transferOwnership(uController.options.address).send();
+    }
+
     let txs = [];
-    txs.push(
-      await uController.methods.newOrganization(avatar.options.address).send(),
-    );
+    let organs = await uController.methods.organizations(avatar.options.address).call();
+    if (organs[0] !== daoToken.options.address) {
+      txs.push(
+          await uController.methods.newOrganization(avatar.options.address).send(),
+      );
+    } else {
+      txs.push('0');
+    }
+
     txs.push(
       await uController.methods
         .registerScheme(
@@ -89,6 +96,7 @@ describe('UController', () => {
         )
         .send(),
     );
+
     txs.push(
       await uController.methods
         .addGlobalConstraint(
@@ -98,6 +106,7 @@ describe('UController', () => {
         )
         .send(),
     );
+
     txs.push(
       await uController.methods
         .registerScheme(
@@ -108,6 +117,7 @@ describe('UController', () => {
         )
         .send(),
     );
+
     txs.push(
       await uController.methods
         .addGlobalConstraint(
@@ -117,11 +127,13 @@ describe('UController', () => {
         )
         .send(),
     );
+
     txs.push(
       await uController.methods
         .unregisterScheme(accounts[3].address, avatar.options.address)
         .send(),
     );
+
     txs.push(
       await uController.methods
         .removeGlobalConstraint(
@@ -130,6 +142,7 @@ describe('UController', () => {
         )
         .send(),
     );
+
     txs = txs.map(({ transactionHash }) => transactionHash);
 
     const { ucontrollerRegisterSchemes } = await sendQuery(`{
@@ -142,8 +155,16 @@ describe('UController', () => {
       }
     }`);
 
-    expect(ucontrollerRegisterSchemes).toContainEqual({
-      txHash: txs[0],
+    const getRegisterSchemes = `{
+      ucontrollerRegisterSchemes {
+        controller,
+        contract,
+        avatarAddress,
+        scheme
+      }
+    }`;
+
+    expect((await sendQuery(getRegisterSchemes)).ucontrollerRegisterSchemes).toContainEqual({
       controller: uController.options.address.toLowerCase(),
       contract: accounts[0].address.toLowerCase(),
       avatarAddress: avatar.options.address.toLowerCase(),
@@ -301,9 +322,15 @@ describe('UController', () => {
       type: 'Post',
     });
 
+    let uController2 = await new web3.eth.Contract(
+      UController.abi,
+      undefined,
+      opts,
+    ).deploy({data: UController.bytecode, arguments: []}).send();
+
     txs.push(
       (await uController.methods
-        .upgradeController(accounts[4].address, avatar.options.address)
+        .upgradeController(uController2.options.address, avatar.options.address)
         .send()).transactionHash,
     );
 
@@ -320,7 +347,7 @@ describe('UController', () => {
       txHash: txs[7],
       controller: uController.options.address.toLowerCase(),
       avatarAddress: avatar.options.address.toLowerCase(),
-      newController: accounts[4].address.toLowerCase(),
+      newController: uController2.options.address.toLowerCase(),
     });
 
     const {
@@ -342,7 +369,46 @@ describe('UController', () => {
       avatarAddress: avatar.options.address.toLowerCase(),
       nativeToken: { address: daoToken.options.address.toLowerCase() },
       nativeReputation: { address: reputation.options.address.toLowerCase() },
-      controller: accounts[4].address.toLowerCase(),
+      controller: uController2.options.address.toLowerCase(),
     });
+
+    // verify that none indexed avatar will not create dao entity.
+    const testReputation = await new web3.eth.Contract(Reputation.abi, undefined, opts).deploy({
+      data: Reputation.bytecode,
+      arguments: [],
+    }).send();
+
+    const testDaoToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
+    .deploy({
+      data: DAOToken.bytecode,
+      arguments: ['TEST', 'TST', 1000000000],
+    })
+    .send();
+
+    const testAvatar = await new web3.eth.Contract(Avatar.abi, undefined, opts)
+      .deploy({
+        data: Avatar.bytecode,
+        arguments: [
+          'testAvatar',
+          testDaoToken.options.address,
+          testReputation.options.address,
+        ],
+      })
+      .send();
+
+    await testAvatar.methods.transferOwnership(uController.options.address).send();
+    await testReputation.methods.transferOwnership(uController.options.address).send();
+    await testDaoToken.methods.transferOwnership(uController.options.address).send();
+    await uController.methods.newOrganization(testAvatar.options.address).send();
+
+    const { dao } = await sendQuery(`{
+      dao(id: "${testAvatar.options.address.toLowerCase()}") {
+        id
+      }
+    }`);
+
+    expect(dao).toBeNull();
+    await uController2.methods.newOrganization(avatar.options.address).send();
+    await uController2.methods.upgradeController(uController.options.address, avatar.options.address).send();
   }, 20000);
 });

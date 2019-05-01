@@ -71,6 +71,7 @@ function insertOrganization(
   uControllerAddress: Address,
   avatarAddress: Address,
 ): void {
+
   let uController = UController.bind(uControllerAddress);
   let org = uController.organizations(avatarAddress);
 
@@ -87,22 +88,22 @@ function insertOrganization(
   tokenContract.owner = uControllerAddress;
   store.set('TokenContract', tokenContract.id, tokenContract);
 
+  let avatar = AvatarContract.load(avatarAddress.toHex());
+  if (avatar != null) {
+    let avatarSC = Avatar.bind(avatarAddress);
+    avatar.address = avatarAddress;
+    avatar.name = avatarSC.orgName();
+    avatar.nativeReputation = avatarSC.nativeReputation();
+    avatar.nativeToken = avatarSC.nativeToken();
+    avatar.balance = BigInt.fromI32(0);
+    store.set('AvatarContract', avatar.id, avatar as AvatarContract);
+  }
+
   let ent = new UControllerOrganization(avatarAddress.toHex());
   ent.avatarAddress = avatarAddress;
   ent.nativeToken = org.value0.toHex();
   ent.nativeReputation = org.value1.toHex();
   ent.controller = uControllerAddress;
-
-  let avatarSC = Avatar.bind(avatarAddress);
-  let avatar = new AvatarContract(avatarAddress.toHex());
-  avatar.address = avatarAddress;
-  avatar.name = avatarSC.orgName();
-  avatar.nativeReputation = avatarSC.nativeReputation();
-  avatar.nativeToken = avatarSC.nativeToken();
-  avatar.owner = avatarSC.owner();
-  avatar.balance = BigInt.fromI32(0);
-  store.set('AvatarContract', avatar.id, avatar);
-
   store.set('UControllerOrganization', ent.id, ent);
 }
 
@@ -153,6 +154,10 @@ function deleteGlobalConstraint(
 
 export function handleRegisterScheme(event: RegisterScheme): void {
   let uController = UController.bind(event.address);
+  if (AvatarContract.load(event.params._avatar.toHex()) == null) {
+     return;
+  }
+
   let org = uController.organizations(event.params._avatar);
   domain.handleRegisterScheme(event.params._avatar, org.value0 , org.value1);
 

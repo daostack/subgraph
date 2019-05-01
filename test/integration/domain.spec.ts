@@ -390,7 +390,7 @@ describe('Domain Layer', () => {
       external: 10,
       periodLength: 0,
       periods: 1,
-      beneficiary: accounts[1].address,
+      beneficiary: accounts[5].address,
     });
 
     const getProposal = `{
@@ -517,7 +517,7 @@ describe('Domain Layer', () => {
       confidenceThreshold: '0',
 
       contributionReward: {
-        beneficiary: accounts[1].address.toLowerCase(),
+        beneficiary: accounts[5].address.toLowerCase(),
         ethReward: '10',
         externalToken: addresses.GEN.toLowerCase(),
         externalTokenReward: '10',
@@ -927,7 +927,7 @@ describe('Domain Layer', () => {
     }`;
 
     const proposalIsIndexed = async () => {
-      return (await sendQuery(getProposalRewards)).proposal.accountsWithUnclaimedRewards.length === 2;
+      return (await sendQuery(getProposalRewards)).proposal.accountsWithUnclaimedRewards.length === 3;
     };
 
     await waitUntilTrue(proposalIsIndexed);
@@ -960,6 +960,7 @@ describe('Domain Layer', () => {
   });
     expect(proposal).toMatchObject({
     accountsWithUnclaimedRewards: [
+      accounts[5].address.toLowerCase(),
       accounts[0].address.toLowerCase(),
       accounts[1].address.toLowerCase(),
     ]});
@@ -1025,12 +1026,14 @@ describe('Domain Layer', () => {
 });
 
     const accountsWithUnclaimedRewardsIsIndexed = async () => {
-      return (await sendQuery(getProposalRewards)).proposal.accountsWithUnclaimedRewards.length === 0;
+      return (await sendQuery(getProposalRewards)).proposal.accountsWithUnclaimedRewards.length === 1;
     };
 
     await waitUntilTrue(accountsWithUnclaimedRewardsIsIndexed);
 
-    expect(proposal).toMatchObject({ accountsWithUnclaimedRewards: [] });
+    expect(proposal).toMatchObject({ accountsWithUnclaimedRewards: [
+      accounts[5].address.toLowerCase(),
+    ] });
 
     const getGPQueues = `{
       gpqueues {
@@ -1071,7 +1074,7 @@ describe('Domain Layer', () => {
     external: 10,
     periodLength: 0,
     periods: 1,
-    beneficiary: accounts[1].address,
+    beneficiary: accounts[5].address,
     });
 
     await stake({

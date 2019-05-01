@@ -81,26 +81,22 @@ export function reputationRedemption(proposalId: Bytes, beneficiary: Address, ti
 }
 
 function shouldRemoveAccountFromUnclaimed(reward: GPReward): boolean {
-  let proposal = getProposal(reward.proposal);
-  if (proposal.contributionReward !== null) {
-    let crProposal = store.get(
-      'ContributionRewardProposal',
-      proposal.contributionReward,
-    ) as ContributionRewardProposal;
-    if (equalsBytes(crProposal.beneficiary, reward.beneficiary)) {
+  let proposal = ContributionRewardProposal.load(reward.proposal);
+  if (proposal !== null) {
+    if (equalsBytes(proposal.beneficiary, reward.beneficiary)) {
       if (
-        (equals(crProposal.reputationReward, BigInt.fromI32(0)) ||
-        (crProposal.alreadyRedeemedReputationPeriods !== null &&
-         equals(crProposal.alreadyRedeemedReputationPeriods as BigInt, crProposal.periods))) &&
-        (equals(crProposal.nativeTokenReward, BigInt.fromI32(0)) ||
-        (crProposal.alreadyRedeemedNativeTokenPeriods !== null &&
-        equals(crProposal.alreadyRedeemedNativeTokenPeriods as BigInt, crProposal.periods))) &&
-        (equals(crProposal.externalTokenReward, BigInt.fromI32(0)) ||
-        (crProposal.alreadyRedeemedExternalTokenPeriods !== null &&
-        equals(crProposal.alreadyRedeemedExternalTokenPeriods as BigInt, crProposal.periods))) &&
-        (equals(crProposal.ethReward, BigInt.fromI32(0)) ||
-        (crProposal.alreadyRedeemedEthPeriods !== null &&
-        equals(crProposal.alreadyRedeemedEthPeriods as BigInt, crProposal.periods)))) {
+        (equals(proposal.reputationReward, BigInt.fromI32(0)) ||
+        (proposal.alreadyRedeemedReputationPeriods !== null &&
+         equals(proposal.alreadyRedeemedReputationPeriods as BigInt, proposal.periods))) &&
+        (equals(proposal.nativeTokenReward, BigInt.fromI32(0)) ||
+        (proposal.alreadyRedeemedNativeTokenPeriods !== null &&
+        equals(proposal.alreadyRedeemedNativeTokenPeriods as BigInt, proposal.periods))) &&
+        (equals(proposal.externalTokenReward, BigInt.fromI32(0)) ||
+        (proposal.alreadyRedeemedExternalTokenPeriods !== null &&
+        equals(proposal.alreadyRedeemedExternalTokenPeriods as BigInt, proposal.periods))) &&
+        (equals(proposal.ethReward, BigInt.fromI32(0)) ||
+        (proposal.alreadyRedeemedEthPeriods !== null &&
+        equals(proposal.alreadyRedeemedEthPeriods as BigInt, proposal.periods)))) {
           // Note: This doesn't support the period feature of ContributionReward
           return false;
       }

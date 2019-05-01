@@ -148,14 +148,14 @@ export function insertGPRewards(
                   );
         let idx = 0;
         let accountsWithUnclaimedRewards: Bytes[] =
-          getProposal(proposalId.toHex()).accountsWithUnclaimedRewards as Bytes[];
+           proposal.accountsWithUnclaimedRewards as Bytes[];
         for (idx; idx < accountsWithUnclaimedRewards.length; idx++) {
             if (equalsBytes(accountsWithUnclaimedRewards[idx], gpReward.beneficiary)) {
               break;
             }
         }
         if (idx === accountsWithUnclaimedRewards.length) {
-          addRedeemableRewardOwner(proposalId, gpReward.beneficiary);
+          addRedeemableRewardOwner(proposal, gpReward.beneficiary);
         }
     } else {
       // remove the gpReward entity
@@ -163,6 +163,7 @@ export function insertGPRewards(
     }
   }
   store.remove('GPRewardsHelper' , proposalId.toHex());
+  proposal.save();
 }
 
 function updateGPReward(id: string,

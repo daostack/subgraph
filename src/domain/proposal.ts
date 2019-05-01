@@ -204,10 +204,9 @@ export function updateCRProposal(
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
   setSchemeName(proposal.scheme, 'ContributionReward');
   getProposalIPFSData(proposal);
-
+  addRedeemableRewardOwner(proposal, beneficiary);
   saveProposal(proposal);
 
-  addRedeemableRewardOwner(proposalId, beneficiary);
 }
 
 export function updateGSProposal(
@@ -281,14 +280,13 @@ export function updateProposalExecutionState(id: string, executionState: number)
 }
 
 export function addRedeemableRewardOwner(
-  proposalId: Bytes,
+  proposal: Proposal,
   redeemer: Bytes,
-): void {
-  let proposal = getProposal(proposalId.toHex());
+): Proposal {
   let accounts = proposal.accountsWithUnclaimedRewards;
   accounts.push(redeemer);
   proposal.accountsWithUnclaimedRewards = accounts;
-  saveProposal(proposal);
+  return proposal;
 }
 
 export function removeRedeemableRewardOwner(

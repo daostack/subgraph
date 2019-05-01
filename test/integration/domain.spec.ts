@@ -1074,7 +1074,7 @@ describe('Domain Layer', () => {
     external: 10,
     periodLength: 0,
     periods: 1,
-    beneficiary: accounts[5].address,
+    beneficiary: accounts[1].address,
     });
 
     await stake({

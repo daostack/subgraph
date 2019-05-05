@@ -101,16 +101,6 @@ function insertOrganization(
   ent.nativeReputation = reputation.toHex();
   ent.controller = controllerAddress;
 
-  let avatar = AvatarContract.load(avatarAddress.toHex());
-  if (avatar != null) {
-    let avatarSC = Avatar.bind(avatarAddress);
-    avatar.address = avatarAddress;
-    avatar.name = avatarSC.orgName();
-    avatar.nativeReputation = avatarSC.nativeReputation();
-    avatar.nativeToken = avatarSC.nativeToken();
-    avatar.balance = BigInt.fromI32(0);
-    store.set('AvatarContract', avatar.id, avatar as AvatarContract);
-  }
   store.set('ControllerOrganization', ent.id, ent);
 }
 

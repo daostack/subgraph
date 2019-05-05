@@ -37,7 +37,13 @@ export function handleReceiveEth(event: ReceiveEther): void {
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   let avatar = AvatarContract.load(event.address.toHex());
   if (avatar == null) {
-      avatar = new AvatarContract(event.address.toHex());
+    avatar = new AvatarContract(event.address.toHex());
+    let avatarSC = Avatar.bind(event.address);
+    avatar.address = event.address;
+    avatar.name = avatarSC.orgName();
+    avatar.nativeReputation = avatarSC.nativeReputation();
+    avatar.nativeToken = avatarSC.nativeToken();
+    avatar.balance = BigInt.fromI32(0);
   }
   avatar.owner = event.params.newOwner;
   avatar.save();

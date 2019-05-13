@@ -1,7 +1,7 @@
 import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { setSchemeName } from '../mappings/Controller/mapping';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { Proposal } from '../types/schema';
+import { ControllerScheme, Proposal } from '../types/schema';
 import { concat, equals, equalsBytes, equalStrings } from '../utils';
 import { updateThreshold } from './gpqueue';
 
@@ -31,7 +31,6 @@ export function getProposal(id: string): Proposal {
     proposal.stakesAgainst = BigInt.fromI32(0);
     proposal.confidenceThreshold = BigInt.fromI32(0);
     proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
-    proposal.paramsHash = new Bytes();
     proposal.organizationId = null;
     proposal.scheme = null;
     proposal.descriptionHash = '';
@@ -98,7 +97,6 @@ export function updateProposalState(id: Bytes, state: number, gpAddress: Address
    updateThreshold(proposal.dao.toString(),
                     gpAddress,
                     gp.threshold(proposal.paramsHash, proposal.organizationId),
-                    proposal.paramsHash,
                     proposal.organizationId,
                     proposal.scheme,
                     );
@@ -177,12 +175,15 @@ export function updateGPProposal(
     proposal.dao.toString(),
     gpAddress,
     gp.threshold(proposal.paramsHash, proposal.organizationId),
-    proposal.paramsHash,
     proposal.organizationId,
     proposal.scheme,
   );
   proposal.gpQueue = proposal.organizationId.toHex();
-
+  let scheme = ControllerScheme.load(proposal.scheme);
+  if (scheme.gpQueue == null) {
+    scheme.gpQueue = proposal.organizationId.toHex();
+    scheme.save();
+  }
   saveProposal(proposal);
 }
 

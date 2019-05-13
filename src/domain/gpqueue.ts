@@ -16,7 +16,6 @@ export function getGPQueue(id: string): GPQueue {
 export function updateThreshold(dao: string,
                                 gpAddress: Address,
                                 threshold: BigInt,
-                                paramsHash: Bytes,
                                 organizationId: Bytes,
                                 scheme: string ): void {
   let gpQueue = getGPQueue(organizationId.toHex());

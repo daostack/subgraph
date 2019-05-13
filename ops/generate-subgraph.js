@@ -13,17 +13,21 @@ async function generateSubgraph () {
 
   const dataSources = mappings.map(mapping => {
     var contract = mapping.name
-    var abis, entities, eventHandler, file, yamlLoad
+    var abis, entities, eventHandler, file, yamlLoad, abi
     if (fs.existsSync('src/mappings/' + mapping.mapping + '/datasource.yaml')) {
         yamlLoad = yaml.safeLoad(fs.readFileSync('src/mappings/' + mapping.mapping + '/datasource.yaml', 'utf-8'))
         file = `src/mappings/${mapping.mapping}/mapping.ts`
         eventHandlers = yamlLoad.eventHandlers
-        abis = yamlLoad.abis
         entities = yamlLoad.entities
+        abis = (yamlLoad.abis || [contract]).map(contract => ({ name: contract, file: `./abis/${contract}.json` })),
+        abi = yamlLoad.abis && yamlLoad.abis.length ? yamlLoad.abis [0] : contract
+
     } else {
        file = `ops/emptymapping.ts`
-       eventHandlers = []
+       eventHandlers = [{ event: 'Dummy()',handler: 'handleDummy' } ]
        entities = ['nothing']
+       abis = [{ name: contract, file: `./ops/dummyabi.json` }],
+       abi = contract
     }
 
     const contractAddress = addresses[network][mapping.dao][mapping.contractName]
@@ -37,7 +41,7 @@ async function generateSubgraph () {
       network: `${network}`,
       source: {
         address: contractAddress,
-        abi: abis && abis.length ? abis[0] : contract
+        abi
       },
       mapping: {
         kind: 'ethereum/events',
@@ -45,8 +49,7 @@ async function generateSubgraph () {
         language: 'wasm/assemblyscript',
         file: file,
         entities,
-        abis: (abis || [contract]).map(contract => ({ name: contract, file: `./abis/${contract}.json` })),
-
+        abis,
         eventHandlers
       }
     }

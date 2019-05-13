@@ -2,7 +2,7 @@ version: '3'
 services:
   graph-node:
     image: >-
-      graphprotocol/graph-node:latest@sha256:9a9e379c685c676e67be476a9fe9d22e0282764405900585f5c1f2ca53b9384f
+      graphprotocol/graph-node:v0.11.0
     ports:
       - '8000:8000'
       - '8001:8001'

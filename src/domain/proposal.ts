@@ -31,7 +31,7 @@ export function getProposal(id: string): Proposal {
     proposal.stakesAgainst = BigInt.fromI32(0);
     proposal.confidenceThreshold = BigInt.fromI32(0);
     proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
-    proposal.paramsHash = new Bytes();
+    proposal.paramsHash = new Bytes(32);
     proposal.organizationId = null;
     proposal.scheme = null;
     proposal.descriptionHash = '';

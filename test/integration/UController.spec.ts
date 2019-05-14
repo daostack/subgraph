@@ -234,6 +234,9 @@ describe('UController', () => {
         canManageGlobalConstraints
         canUpgradeController
         canDelegateCall
+        gpQueue {
+          id
+        }
       }
     }`);
 
@@ -247,6 +250,7 @@ describe('UController', () => {
       canManageGlobalConstraints: true,
       canUpgradeController: true,
       canDelegateCall: true,
+      gpQueue: null,
     });
     expect(controllerSchemes).toContainEqual({
       dao: {
@@ -258,6 +262,7 @@ describe('UController', () => {
       canManageGlobalConstraints: true,
       canUpgradeController: false,
       canDelegateCall: false,
+      gpQueue: null,
     });
 
     const { ucontrollerAddGlobalConstraints } = await sendQuery(`{

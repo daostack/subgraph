@@ -27,7 +27,7 @@ type DAO @entity {
 type GPQueue @entity {
  	id: ID!
  	threshold: BigInt!
-	scheme: ControllerScheme!
+	scheme: ControllerScheme
  	dao: DAO!
 	votingMachine: Bytes!
 }
@@ -83,7 +83,7 @@ type Proposal @entity {
 
 	gpQueue: GPQueue!
 
-	scheme: ControllerScheme!
+	scheme: ControllerScheme
 
 	# Contribution Reward params
 	contributionReward: ContributionRewardProposal

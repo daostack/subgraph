@@ -1,7 +1,8 @@
 {
-  "name": "Turbulent Banjo",
-  "Avatar": "0x86072CbFF48dA3C1F01824a6761A03F105BCC697",
-  "DAOToken": "0x7C728214be9A0049e6a86f2137ec61030D0AA964",
-  "Reputation": "0x5017A545b09ab9a30499DE7F431DF0855bCb7275",
-  "Controller": "0x4bf3A7dFB3b76b5B3E169ACE65f888A4b4FCa5Ee"
+  "name": "Fulsome Wheelwright",
+  "Avatar": "0x102EB6c9895955Ce780508f1e9ee7Ac2bdd1CE57",
+  "DAOToken": "0x3c3d89322de3aC6D5BCBD10801BbB2C68f5AC5f1",
+  "Reputation": "0x126CF548F9110Ed46FA3021E8AEAaC2Ba4538896",
+  "Controller": "0x0d31fD995E1540CE90Fd98462Cf3284b1693Ad8C",
+  "arcVersion": "0.0.1-rc.18"
 }

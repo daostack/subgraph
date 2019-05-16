@@ -1,6 +1,7 @@
 import {
   getContractAddresses,
   getOptions,
+  getOrgName,
   getWeb3,
   increaseTime,
   sendQuery,
@@ -20,7 +21,7 @@ describe('Domain Layer', () => {
   let web3;
   let addresses;
   let opts;
-  const orgName = require(`@daostack/migration/migration.json`).private.dao.name;
+  const orgName = getOrgName();
   const tokenName = orgName + ' Token';
   const tokenSymbol = orgName[0] + orgName.split(' ')[1][0] + 'T';
 
@@ -181,11 +182,11 @@ describe('Domain Layer', () => {
     let gpParams =  {
       boostedVotePeriodLimit: '600',
       daoBountyConst: '10',
-      minimumDaoBounty: web3.utils.toWei('100', 'gwei'),
+      minimumDaoBounty: web3.utils.toWei('100'),
       queuedVotePeriodLimit: '1800',
       queuedVoteRequiredPercentage: '50',
       preBoostedVotePeriodLimit: '600',
-      proposingRepReward: web3.utils.toWei('5', 'gwei'),
+      proposingRepReward: web3.utils.toWei('5'),
       quietEndingPeriod: '300',
       thresholdConst: '2000',
       voteOnBehalf: '0x0000000000000000000000000000000000000000',
@@ -513,7 +514,7 @@ describe('Domain Layer', () => {
 
       stakes: [],
       stakesFor: '0',
-      stakesAgainst: '100000000000',
+      stakesAgainst: '100000000000000000000',
       confidenceThreshold: '0',
 
       contributionReward: {

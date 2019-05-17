@@ -80,7 +80,7 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       }
     }
 
-    const sourceAbi = abis && abis.length ? abis[0] : contract
+    const sourceAbi = abis && abis.length ? abis[0].name : contract
     const source = isTemplate ? {
       abi: sourceAbi
     } : {

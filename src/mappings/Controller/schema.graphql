@@ -16,6 +16,7 @@ type ControllerScheme @entity {
 	canUpgradeController: Boolean
 	canDelegateCall: Boolean
 	name: String
+	gpQueue: GPQueue
 }
 
 type ControllerGlobalConstraint @entity {

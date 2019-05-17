@@ -43,19 +43,25 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
   return fragments.map(mapping => {
     const contract = mapping.name
     const fragment = `src/mappings/${mapping.mapping}/datasource.yaml`
-    var abis, entities, eventHandlers, templates, file, yamlLoad
+    var abis, entities, eventHandlers, templates, file, yamlLoad, abi
 
     if (fs.existsSync(fragment)) {
       yamlLoad = yaml.safeLoad(fs.readFileSync(fragment))
       file = `src/mappings/${mapping.mapping}/mapping.ts`
       eventHandlers = yamlLoad.eventHandlers
-      abis = yamlLoad.abis
       entities = yamlLoad.entities
       templates = yamlLoad.templates
+      abis = (yamlLoad.abis || [contract]).map(contract => ({
+        name: contract,
+        file: `./abis/${contract}.json`
+      })),
+      abi = yamlLoad.abis && yamlLoad.abis.length ? yamlLoad.abis [0] : contract
     } else {
       file = 'ops/emptymapping.ts'
-      eventHandlers = []
+      eventHandlers = [{ event: 'Dummy()',handler: 'handleDummy' } ]
       entities = ['nothing']
+      abis = [{ name: contract, file: `./ops/dummyabi.json` }],
+      abi = contract
     }
 
     var contractAddress
@@ -93,10 +99,7 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
         language: 'wasm/assemblyscript',
         file: file,
         entities,
-        abis: (abis || [contract]).map(contract => ({
-          name: contract,
-          file: `./abis/${contract}.json`
-        })),
+        abis,
         eventHandlers
       }
     }

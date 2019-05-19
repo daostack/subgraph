@@ -233,11 +233,6 @@ describe('Domain Layer', () => {
             id
           }
         }
-        gpQueues {
-          dao {
-            id
-          }
-        }
       }
     }`;
     let dao;
@@ -265,7 +260,6 @@ describe('Domain Layer', () => {
         },
         totalSupply: totalRep,
       },
-      gpQueues: [],
     });
 
     expect(dao.schemes).toContainEqual(

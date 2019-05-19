@@ -16,8 +16,8 @@ type DAO @entity {
 	nativeToken: Token!
 	nativeReputation: Rep!
 	proposals: [Proposal!] @derivedFrom(field: "dao")
-	members: [Member!] @derivedFrom(field: "dao")
-	membersCount: BigInt!
+	reputationHolders: [ReputationHolder!] @derivedFrom(field: "dao")
+	reputationHoldersCount: BigInt!
 	rewards: [GPReward!] @derivedFrom(field: "dao")
 	register: String!
 	schemes: [ControllerScheme!] @derivedFrom(field: "dao")
@@ -128,14 +128,6 @@ type ProposalVote @entity {
 	dao: DAO!
 	outcome: Outcome!
 	reputation: BigInt!
-}
-
-type Member @entity {
-	id: ID!
-	dao: DAO!
-	address: Bytes!
-	reputation: BigInt!
-	tokens: BigInt
 }
 
 enum RewardReason {

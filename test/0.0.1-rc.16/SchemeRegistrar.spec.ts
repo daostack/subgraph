@@ -32,16 +32,6 @@ describe('SchemeRegistrar', () => {
         const descHash = '0x0000000000000000000000000000000000000000000000000000000000000123';
         const registerSchemeParamsHash = '0x0000000000000000000000000000000000000000000000000000000000001234';
 
-        let propose = schemeRegistrar.methods.proposeScheme(
-            addresses.Avatar,
-            accounts[0].address,
-            registerSchemeParamsHash,
-            '0x0000001f',
-            descHash,
-        );
-        const proposalId = await propose.call();
-        let { transactionHash: proposaTxHash } = await propose.send();
-
         const schemeRegistrarNewSchemeProposalsQuery = `{
           schemeRegistrarNewSchemeProposals {
             txHash,
@@ -56,9 +46,23 @@ describe('SchemeRegistrar', () => {
           }
         }`;
 
+        let prevProposalsLength = (
+          await sendQuery(schemeRegistrarNewSchemeProposalsQuery)
+        ).schemeRegistrarNewSchemeProposals.length;
+
+        let propose = schemeRegistrar.methods.proposeScheme(
+            addresses.Avatar,
+            accounts[0].address,
+            registerSchemeParamsHash,
+            '0x0000001f',
+            descHash,
+        );
+        const proposalId = await propose.call();
+        let { transactionHash: proposaTxHash } = await propose.send();
+
         const proposalIsIndexed = async () => {
-          let query = (await sendQuery(schemeRegistrarNewSchemeProposalsQuery)).schemeRegistrarNewSchemeProposals;
-          return query.length > 0 && query[query.length - 1].txHash === proposaTxHash;
+          return (await sendQuery(schemeRegistrarNewSchemeProposalsQuery)).schemeRegistrarNewSchemeProposals.length
+           > prevProposalsLength;
         };
 
         await waitUntilTrue(proposalIsIndexed);

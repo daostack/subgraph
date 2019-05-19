@@ -6,6 +6,7 @@ import {
   increaseTime,
   sendQuery,
   toFixed,
+  waitUntilSynced,
   waitUntilTrue,
   writeProposalIPFS,
 } from './util';
@@ -32,6 +33,7 @@ describe('Domain Layer', () => {
   });
 
   it('migration dao', async () => {
+    await waitUntilSynced();
     const getMigrationDao = `{
       dao(id: "${addresses.Avatar.toLowerCase()}") {
         id
@@ -118,7 +120,7 @@ describe('Domain Layer', () => {
     register = (await sendQuery(getRegister, 2000)).dao.register;
     expect(register).toEqual('unRegistered');
 
-  }, 20000);
+  }, 120000);
 
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;

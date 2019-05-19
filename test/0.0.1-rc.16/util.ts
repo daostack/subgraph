@@ -21,11 +21,11 @@ const Web3 = require('web3');
 
 const { node_ws, node_http, ethereum, ipfs, test_mnemonic } = process.env;
 
-export async function sendQuery(q: string, maxDelay = 1000) {
+export async function sendQuery(q: string, maxDelay = 1000, url = node_http) {
   await new Promise((res, rej) => setTimeout(res, maxDelay));
   const {
     data: { data },
-  } = await axios.post(node_http, {
+  } = await axios.post(url, {
     query: q,
   });
 
@@ -107,6 +107,21 @@ export async function waitUntilTrue(test: () => Promise<boolean> | boolean) {
       setTimeout(waitForIt, 30);
     })();
   });
+}
+
+export async function waitUntilSynced() {
+  const getGraphsSynced = `{
+    subgraphDeployments {
+      synced
+    }
+  }`;
+  const graphIsSynced = async () => {
+    return (await sendQuery(
+      getGraphsSynced,
+      1000,
+      'http://127.0.0.1:8000/subgraphs')).subgraphDeployments[0].synced;
+  };
+  return waitUntilTrue(graphIsSynced);
 }
 
 export const increaseTime = async function(duration, web3) {

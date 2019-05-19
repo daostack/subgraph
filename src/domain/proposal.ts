@@ -1,6 +1,7 @@
 import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { setSchemeName } from '../mappings/Controller/mapping';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
+import { VotingMachineCallbacks } from '../types/GenesisProtocol/VotingMachineCallbacks';
 import { ControllerScheme, Proposal } from '../types/schema';
 import { concat, equals, equalsBytes, equalStrings } from '../utils';
 import { updateThreshold } from './gpqueue';
@@ -171,6 +172,9 @@ export function updateGPProposal(
   proposal.daoBountyConst = params.value10; // daoBountyConst
   proposal.activationTime = params.value11; // activationTime
   proposal.voteOnBehalf = params.value12; // voteOnBehalf
+
+  let callbacks = VotingMachineCallbacks.bind(gpProposal.value1);
+  proposal.totalReputation = callbacks.getTotalReputationSupply(proposalId);
 
   updateThreshold(
     proposal.dao.toString(),

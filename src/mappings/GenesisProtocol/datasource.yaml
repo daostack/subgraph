@@ -1,3 +1,6 @@
+abis:
+  - GenesisProtocol
+  - VotingMachineCallbacks
 entities:
   - Proposal
   - Vote

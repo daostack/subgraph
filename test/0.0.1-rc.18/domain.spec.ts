@@ -388,6 +388,9 @@ describe('Domain Layer', () => {
       beneficiary: accounts[5].address,
     });
 
+    // Get total reputation for the proposal
+    const totalReputation = await contributionReward.methods.getTotalReputationSupply(p1).call();
+
     const getProposal = `{
         proposal(id: "${p1}") {
             id
@@ -451,6 +454,7 @@ describe('Domain Layer', () => {
             daoBountyConst
             activationTime
             voteOnBehalf
+            totalReputation
 
             gpQueue {
               dao {
@@ -534,6 +538,7 @@ describe('Domain Layer', () => {
       daoBountyConst: gpParams.daoBountyConst,
       activationTime: gpParams.activationTime,
       voteOnBehalf: gpParams.voteOnBehalf,
+      totalReputation,
 
       gpQueue: {
         dao: {

@@ -62,6 +62,7 @@ type Proposal @entity {
 	paramsHash: Bytes!
 	organizationId: Bytes!
 	confidenceThreshold: BigInt!
+	totalReputation: BigInt!
 
 	descriptionHash: String!
 	title: String

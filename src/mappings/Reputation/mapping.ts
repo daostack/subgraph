@@ -20,12 +20,6 @@ import {
 
 function update(contract: Address, owner: Address): void {
   let rep = Reputation.bind(contract);
-  let ent = new ReputationHolder(crypto.keccak256(concat(contract, owner)).toHex());
-  ent.contract = contract;
-  ent.address = owner;
-  let balance = rep.balanceOf(owner);
-  ent.balance = balance;
-
   let reputationContract = ReputationContract.load(contract.toHex());
 
   if (reputationContract == null) {
@@ -36,12 +30,34 @@ function update(contract: Address, owner: Address): void {
 
   let reputationHolders = reputationContract.reputationHolders;
 
-  if (!equals(balance, BigInt.fromI32(0))) {
-    store.set('ReputationHolder', ent.id, ent);
-    reputationHolders.push(ent.id);
+  let repHolderId = crypto.keccak256(concat(contract, owner)).toHex();
+  let repHolder = ReputationHolder.load(repHolderId);
+  let balance = rep.balanceOf(owner);
+  if (repHolder == null) {
+    repHolder = new ReputationHolder(repHolderId);
+    repHolder.contract = contract;
+    repHolder.address = owner;
+    repHolder.balance = balance;
+    if (!equals(balance, BigInt.fromI32(0))) {
+      repHolder.save();
+      reputationHolders.push(repHolder.id);
+      domain.addDaoMember(repHolder as ReputationHolder);
+      // create a new one
+    }
   } else {
-    store.remove('ReputationHolder', ent.id);
+
+    repHolder.balance = balance;
+    if (!equals(balance, BigInt.fromI32(0))) {
+      // update
+      repHolder.save();
+      reputationHolders.push(repHolder.id);
+    } else {
+      // remove
+      store.remove('ReputationHolder', repHolder.id);
+      domain.removeDaoMember(repHolder as ReputationHolder);
+    }
   }
+
   reputationContract.reputationHolders = reputationHolders;
   reputationContract.address = contract;
   reputationContract.totalSupply = rep.totalSupply();

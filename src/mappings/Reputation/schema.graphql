@@ -10,6 +10,7 @@ type ReputationHolder @entity {
 	contract: Bytes!
 	address: Bytes!
 	balance: BigInt!
+	dao: DAO
 }
 
 type ReputationMint @entity {

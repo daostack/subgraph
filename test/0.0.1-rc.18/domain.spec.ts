@@ -48,7 +48,7 @@ describe('Domain Layer', () => {
             id
           }
         }
-        membersCount
+        reputationHoldersCount
       }
     }`;
     let dao = (await sendQuery(getMigrationDao, 5000)).dao;
@@ -67,33 +67,27 @@ describe('Domain Layer', () => {
           id: addresses.Avatar.toLowerCase(),
         },
       },
-      membersCount: '6',
+      reputationHoldersCount: '5',
     });
 
     const getMigrationDaoMembers = `{
       dao(id: "${addresses.Avatar.toLowerCase()}") {
-        members {
-          reputation
-          tokens
+        reputationHolders {
+          balance
         }
       }
     }`;
-    let members = (await sendQuery(getMigrationDaoMembers)).dao.members;
-    expect(members).toContainEqual({
-      reputation: '1000000000000000000000',
-      tokens: '1000000000000000000000',
+    let reputationHolders = (await sendQuery(getMigrationDaoMembers)).dao.reputationHolders;
+    expect(reputationHolders).toContainEqual({
+      balance: '1000000000000000000000',
     });
     const getMigrationDaoMembersAddress = `{
       dao(id: "${addresses.Avatar.toLowerCase()}") {
-        members {
+        reputationHolders {
           address
         }
       }
     }`;
-    members = (await sendQuery(getMigrationDaoMembersAddress)).dao.members;
-    expect(members).toContainEqual({
-      address: addresses.Avatar.toLowerCase(),
-    });
 
     const getRegister = `{
       dao(id: "${addresses.Avatar.toLowerCase()}") {

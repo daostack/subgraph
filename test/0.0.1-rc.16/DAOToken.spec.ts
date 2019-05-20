@@ -89,7 +89,7 @@ describe('DAOToken', () => {
     });
 
     const { tokenTransfers } = await sendQuery(`{
-      tokenTransfers(where:{contract: ${daotoken.options.address.toLowerCase()}}) {
+      tokenTransfers(where: {contract: "${daotoken.options.address.toLowerCase()}"}) {
         txHash
         contract
         from

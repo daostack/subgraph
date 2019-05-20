@@ -1,4 +1,4 @@
-import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
+import { getContractAddresses, getOptions, getOrgName, getWeb3, sendQuery } from './util';
 
 const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
 
@@ -6,7 +6,7 @@ describe('Avatar', () => {
   let web3;
   let addresses;
   let avatar;
-  const orgName = require(`@daostack/migration/migration.json`).private.dao.name;
+  const orgName = getOrgName();
 
   beforeAll(async () => {
     web3 = await getWeb3();

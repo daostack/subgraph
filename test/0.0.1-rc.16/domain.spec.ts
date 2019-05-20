@@ -1,10 +1,12 @@
 import {
   getContractAddresses,
   getOptions,
+  getOrgName,
   getWeb3,
   increaseTime,
   sendQuery,
   toFixed,
+  waitUntilSynced,
   waitUntilTrue,
   writeProposalIPFS,
 } from './util';
@@ -20,7 +22,7 @@ describe('Domain Layer', () => {
   let web3;
   let addresses;
   let opts;
-  const orgName = require(`@daostack/migration/migration.json`).private.dao.name;
+  const orgName = getOrgName();
   const tokenName = orgName + ' Token';
   const tokenSymbol = orgName[0] + orgName.split(' ')[1][0] + 'T';
 
@@ -31,6 +33,7 @@ describe('Domain Layer', () => {
   });
 
   it('migration dao', async () => {
+    await waitUntilSynced();
     const getMigrationDao = `{
       dao(id: "${addresses.Avatar.toLowerCase()}") {
         id
@@ -117,7 +120,7 @@ describe('Domain Layer', () => {
     register = (await sendQuery(getRegister, 2000)).dao.register;
     expect(register).toEqual('unRegistered');
 
-  }, 20000);
+  }, 120000);
 
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
@@ -175,11 +178,11 @@ describe('Domain Layer', () => {
     let gpParams =  {
       boostedVotePeriodLimit: '600',
       daoBountyConst: '10',
-      minimumDaoBounty: web3.utils.toWei('100', 'gwei'),
+      minimumDaoBounty: web3.utils.toWei('100'),
       queuedVotePeriodLimit: '1800',
       queuedVoteRequiredPercentage: '50',
       preBoostedVotePeriodLimit: '600',
-      proposingRepReward: web3.utils.toWei('5', 'gwei'),
+      proposingRepReward: web3.utils.toWei('5'),
       quietEndingPeriod: '300',
       thresholdConst: '2000',
       voteOnBehalf: '0x0000000000000000000000000000000000000000',
@@ -226,11 +229,6 @@ describe('Domain Layer', () => {
             id
           }
         }
-        gpQueues {
-          dao {
-            id
-          }
-        }
       }
     }`;
     let dao;
@@ -258,7 +256,6 @@ describe('Domain Layer', () => {
         },
         totalSupply: totalRep,
       },
-      gpQueues: [],
     });
 
     expect(dao.schemes).toContainEqual(
@@ -507,7 +504,7 @@ describe('Domain Layer', () => {
 
       stakes: [],
       stakesFor: '0',
-      stakesAgainst: '100000000000',
+      stakesAgainst: '100000000000000000000',
       confidenceThreshold: '0',
 
       contributionReward: {
@@ -591,7 +588,7 @@ describe('Domain Layer', () => {
 
       stakes: [],
       stakesFor: '0',
-      stakesAgainst: '100000000000',
+      stakesAgainst: '100000000000000000000',
       confidenceThreshold: '0',
 
     });
@@ -651,7 +648,7 @@ describe('Domain Layer', () => {
         },
       ],
       stakesFor: '0',
-      stakesAgainst: '100000000100000000000',
+      stakesAgainst: '200000000000000000000',
       confidenceThreshold: '0',
     });
 
@@ -695,7 +692,7 @@ describe('Domain Layer', () => {
       votesAgainst: '0',
       winningOutcome: 'Pass',
       stakesFor: '100000000000000000000',
-      stakesAgainst: '100000000100000000000',
+      stakesAgainst: '200000000000000000000',
       confidenceThreshold: '0',
     });
     expect(new Set(proposal.stakes)).toEqual(new Set([
@@ -803,7 +800,7 @@ describe('Domain Layer', () => {
       winningOutcome: 'Pass',
 
       stakesFor: '400000000000000000000',
-      stakesAgainst: '100000000100000000000',
+      stakesAgainst: '200000000000000000000',
       confidenceThreshold: Math.pow(2, REAL_FBITS).toString(),
     });
 
@@ -930,7 +927,7 @@ describe('Domain Layer', () => {
     let gpRewards = proposal.gpRewards;
     expect(gpRewards).toContainEqual({
     beneficiary: accounts[1].address.toLowerCase(),
-    daoBountyForStaker: '100000000000',
+    daoBountyForStaker: '100000000000000000000',
     daoBountyForStakerRedeemedAt: '0',
     reputationForProposerRedeemedAt: '0',
     reputationForVoterRedeemedAt: '0',
@@ -947,7 +944,7 @@ describe('Domain Layer', () => {
     reputationForProposerRedeemedAt: '0',
     reputationForVoterRedeemedAt: '0',
     tokensForStakerRedeemedAt: '0',
-    reputationForProposer: '5000000000',
+    reputationForProposer: '5000000000000000000',
     reputationForVoter: '10000000000000000000',
     tokenAddress: null,
     tokensForStaker: null,
@@ -985,7 +982,7 @@ describe('Domain Layer', () => {
   });
 
     // mint gen to avatr for the daoBounty
-    await stakingToken.methods.mint(addresses.Avatar, '100000000000').send();
+    await stakingToken.methods.mint(addresses.Avatar, '100000000000000000000').send();
 
     const rd1Timestamp = await redeemDaoBounty({
     proposalId: p1,
@@ -996,7 +993,7 @@ describe('Domain Layer', () => {
     gpRewards = proposal.gpRewards;
     expect(gpRewards).toContainEqual({
   beneficiary: accounts[1].address.toLowerCase(),
-  daoBountyForStaker: '100000000000',
+  daoBountyForStaker: '100000000000000000000',
   daoBountyForStakerRedeemedAt: rd1Timestamp.toString(),
   reputationForProposerRedeemedAt: '0',
   reputationForVoterRedeemedAt: '0',
@@ -1013,7 +1010,7 @@ describe('Domain Layer', () => {
   reputationForProposerRedeemedAt: r1Timestamp.toString(),
   reputationForVoterRedeemedAt: r1Timestamp.toString(),
   tokensForStakerRedeemedAt: '0',
-  reputationForProposer: '5000000000',
+  reputationForProposer: '5000000000000000000',
   reputationForVoter: '10000000000000000000',
   tokenAddress: null,
   tokensForStaker: null,
@@ -1052,26 +1049,26 @@ describe('Domain Layer', () => {
 
     let gpQueues = (await sendQuery(getGPQueues)).gpqueues;
 
-    expect(new Set(gpQueues)).toEqual(new Set([
-      {
+    expect(gpQueues).toContainEqual({
         threshold: Math.pow(2, REAL_FBITS).toString(),
         scheme: {
           name: 'ContributionReward',
         },
-      },
-      {
+    });
+
+    expect(gpQueues).toContainEqual({
         threshold: Math.pow(2, REAL_FBITS).toString(),
         scheme: {
           name: 'GenericScheme',
         },
-      },
-      {
+    });
+
+    expect(gpQueues).toContainEqual({
         threshold: Math.pow(2, REAL_FBITS + 1).toString(),
         scheme: {
           name: 'ContributionReward',
         },
-      },
-    ]));
+    });
 
     const { proposalId: p2 } = await propose({
     rep: 10,
@@ -1086,7 +1083,7 @@ describe('Domain Layer', () => {
     await stake({
       proposalId: p2,
       outcome: PASS,
-      amount: web3.utils.toWei('1'),
+      amount: web3.utils.toWei('101'),
       staker: accounts[0].address, // staker needs to be the proposer
     });
 

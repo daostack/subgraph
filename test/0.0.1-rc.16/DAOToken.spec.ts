@@ -89,7 +89,7 @@ describe('DAOToken', () => {
     });
 
     const { tokenTransfers } = await sendQuery(`{
-      tokenTransfers {
+      tokenTransfers(where:{txHash: ${txs[6]}}) {
         txHash
         contract
         from

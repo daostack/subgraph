@@ -1,5 +1,4 @@
 import { Address, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
-import { log } from '@graphprotocol/graph-ts';
 import {
   NewContributionProposal,
   ProposalExecuted,
@@ -139,15 +138,7 @@ export function handleStake(event: Stake): void {
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
-
   saveProposal(proposal);
-  log.debug(
-   'event.params._vote: {}, parse: {}',
-   [
-     event.params._vote.toHex(),       // "47596000"
-     parseOutcome(event.params._vote),      // "0x..."
-   ],
- );
   insertStake(
     eventId(event),
     event.block.timestamp,

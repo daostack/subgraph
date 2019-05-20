@@ -1,6 +1,6 @@
 {
 	"name": "@daostack/subgraph",
-	"version": "0.0.18",
+	"version": "0.0.19",
 	"author": "DAOstack (https://www.daostack.io)",
 	"license": "GPL-3.0",
 	"description": "A caching layer for daostack using The Graph",
@@ -46,8 +46,8 @@
 		"watch": "^1.0.2"
 	},
 	"dependencies": {
-		"@graphprotocol/graph-cli": "^0.11.2",
-		"@graphprotocol/graph-ts": "^0.11.0",
+		"@graphprotocol/graph-cli": "^0.12.00",
+		"@graphprotocol/graph-ts": "^0.12.0",
 		"@types/node": "^10.14.4",
 		"apollo-client": "^2.4.5",
 		"apollo-link-ws": "^1.0.9",

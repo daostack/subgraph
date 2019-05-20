@@ -7,7 +7,7 @@ import {
   OwnershipTransferred,
   Transfer,
 } from '../../types/DAOToken/DAOToken';
-import { concat, equals, eventId } from '../../utils';
+import { concat, eventId } from '../../utils';
 
 // Import entity types generated from the GraphQL schema
 import {
@@ -28,7 +28,7 @@ function update(contract: Address, owner: Address): void {
   let balance = token.balanceOf(owner);
   ent.balance = balance;
 
-  if (!equals(balance, BigInt.fromI32(0))) {
+  if (!balance.isZero()) {
     store.set('TokenHolder', ent.id, ent);
   } else {
     store.remove('TokenHolder', ent.id);
@@ -76,7 +76,7 @@ export function updateAllowance(contract: Bytes, owner: Bytes, spender: Bytes): 
   let token = DAOToken.bind(contract as Address);
   let allowanceAmount = token.allowance(owner as Address, spender as Address);
 
-  if (equals(allowanceAmount, BigInt.fromI32(0))) {
+  if (allowanceAmount.isZero()) {
     store.remove('Allowance', id);
     return;
   }

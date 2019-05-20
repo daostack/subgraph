@@ -47,18 +47,6 @@ export function debug(msg: string): void {
   debugId++;
 }
 
-export function equals(a: BigInt, b: BigInt): boolean {
-  if (a.length !== b.length) {
-    return false;
-  }
-  for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) {
-      return false;
-    }
-  }
-  return true;
-}
-
 export function equalsBytes(a: Bytes, b: Bytes): boolean {
   if (a.length !== b.length) {
     return false;

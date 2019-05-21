@@ -6,7 +6,7 @@ import {
   Mint,
   Reputation,
 } from '../../types/Reputation/Reputation';
-import { concat, equals, eventId } from '../../utils';
+import { concat, eventId } from '../../utils';
 
 import * as domain from '../../domain';
 
@@ -38,7 +38,7 @@ function update(contract: Address, owner: Address): void {
     repHolder.contract = contract;
     repHolder.address = owner;
     repHolder.balance = balance;
-    if (!equals(balance, BigInt.fromI32(0))) {
+    if (!balance.isZero()) {
       repHolder.save();
       reputationHolders.push(repHolder.id);
       domain.addDaoMember(repHolder as ReputationHolder);
@@ -47,7 +47,7 @@ function update(contract: Address, owner: Address): void {
   } else {
 
     repHolder.balance = balance;
-    if (!equals(balance, BigInt.fromI32(0))) {
+    if (!balance.isZero()) {
       // update
       repHolder.save();
       reputationHolders.push(repHolder.id);

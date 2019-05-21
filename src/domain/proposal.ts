@@ -2,11 +2,11 @@ import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from
 import { setSchemeName } from '../mappings/Controller/mapping';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ControllerScheme, Proposal } from '../types/schema';
-import { concat, equals, equalsBytes, equalStrings } from '../utils';
+import { concat, equalsBytes, equalStrings } from '../utils';
 import { updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
-  if (equals(num, BigInt.fromI32(1))) {
+  if (num.toI32() === 1) {
     // Yes
     return 'Pass';
   } else {

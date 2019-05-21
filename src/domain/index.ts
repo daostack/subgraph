@@ -15,7 +15,7 @@ import {
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
 import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
-import { equals, equalsBytes, equalStrings, eventId, hexToAddress } from '../utils';
+import { equalsBytes, equalStrings, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
 import {
   getProposal,
@@ -133,12 +133,11 @@ export function handleStake(event: Stake): void {
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  if (equals(event.params._vote, BigInt.fromI32(1))) {
+  if (event.params._vote.toI32() ===  1) {
     proposal.stakesFor = proposal.stakesFor.plus(event.params._amount);
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
-
   saveProposal(proposal);
   insertStake(
     eventId(event),
@@ -159,7 +158,7 @@ export function handleVoteProposal(event: VoteProposal): void {
     return;
   }
   updateProposalAfterVote(proposal, event.address, event.params._proposalId);
-  if (equals(event.params._vote, BigInt.fromI32(1))) {
+  if (event.params._vote.toI32() === 1) {
     proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
   } else {
     proposal.votesAgainst = proposal.votesAgainst.plus(

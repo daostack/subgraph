@@ -30,7 +30,7 @@ import {
   ContributionRewardRedeemReputation,
   GPReward,
 } from '../../types/schema';
-import { concat, equals, eventId } from '../../utils';
+import { concat, eventId } from '../../utils';
 
 export function handleRedeemReputation(event: RedeemReputation): void {
   updateProposalAfterRedemption(event.address, event.params._proposalId, 0);
@@ -163,7 +163,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
-  ent.passed = equals(event.params._param, BigInt.fromI32(1));
+  ent.passed = (event.params._param.toI32() === 1);
   ent.proposalId = event.params._proposalId;
   store.set('ContributionRewardProposalResolved', ent.id, ent);
 }

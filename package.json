@@ -54,9 +54,10 @@
 		"axios": "^0.18.0",
 		"chalk": "^2.4.1",
 		"docker-compose": "^0.9.1",
-		"dotenv": "^6.1.0",
+		"dotenv": "^6.2.0",
 		"ethereumjs-wallet": "^0.6.0",
 		"fs-extra": "^8.0.1",
+		"fstream": "^1.0.12",
 		"ganache-cli": "6.4.1",
 		"glob": "^7.1.3",
 		"graphql": "^14.2.1",
@@ -70,6 +71,7 @@
 		"mustache": "^3.0.0",
 		"shell-exec": "^1.0.2",
 		"subscriptions-transport-ws": "^0.9.15",
+		"tar": "^4.4.8",
 		"ts-jest": "^23.10.4",
 		"tslint": "^5.15.0",
 		"typedarray-to-buffer": "^3.1.5",
@@ -77,9 +79,7 @@
 		"web3": "1.0.0-beta.37",
 		"winston": "^3.1.0",
 		"yaeti": "^1.0.2",
-		"yargs": "^12.0.2",
-		"tar": "^4.4.8",
-		"fstream": "^1.0.12"
+		"yargs": "^12.0.2"
 	},
 	"jest": {
 		"roots": [

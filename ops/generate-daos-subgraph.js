@@ -9,7 +9,7 @@ function daoYaml(contract, contractAddress, arcVersion) {
   );
   return {
     kind: "ethereum/contract",
-    name: `${contract}`,
+    name: `${contract}/${arcVersion}`,
     network: `${network}`,
     source: {
       address: contractAddress,

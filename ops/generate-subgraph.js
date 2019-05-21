@@ -54,7 +54,7 @@ async function generateSubgraph() {
     }
     return {
       kind: "ethereum/contract",
-      name: `${contract}`,
+      name: `${contract}/${mapping.arcVersion}`,
       network: `${network}`,
       source: {
         address: contractAddress,

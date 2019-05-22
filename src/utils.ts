@@ -71,11 +71,6 @@ export function equalStrings(a: string, b: string): boolean {
   return true;
 }
 
-export function setContractsInfo(): void {
-  let i = 0;
-
-}
-
 export function setContractInfo(address: string, name: string, version: string): void {
     let contractInfo = ContractInfo.load(address);
     if (contractInfo == null) {

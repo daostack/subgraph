@@ -26,7 +26,7 @@ async function generateContractInfo() {
   }
   buffer += "}\n";
   fs.writeFileSync(
-    "src/contractInfo.ts",
+    "src/contractsInfo.ts",
     buffer,
     "utf-8"
   );

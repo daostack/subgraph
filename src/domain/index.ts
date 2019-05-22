@@ -1,5 +1,5 @@
 import { Address, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
-import {  setContractsInfo } from '../contractInfo';
+import {  setContractsInfo } from '../contractsInfo';
 import {
   NewContributionProposal,
   ProposalExecuted,

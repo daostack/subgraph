@@ -1,4 +1,5 @@
 import { Address, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
+import {  setContractsInfo } from '../contractInfo';
 import {
   NewContributionProposal,
   ProposalExecuted,
@@ -198,6 +199,7 @@ export function handleRegisterScheme(avatar: Address,
     avatar.toHex(),
   );
   if (isFirstRegister == null) {
+    setContractsInfo();
     let dao = daoModule.insertNewDAO(avatar, nativeTokenAddress , nativeReputationAddress);
     insertToken(hexToAddress(dao.nativeToken), avatar.toHex());
     insertReputation(

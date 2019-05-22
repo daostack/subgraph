@@ -8,7 +8,7 @@ import {
   store,
   Value,
 } from '@graphprotocol/graph-ts';
-import { Debug } from './types/schema';
+import { ContractInfo, Debug } from './types/schema';
 
 export function concat(a: ByteArray, b: ByteArray): ByteArray {
   let out = new Uint8Array(a.length + b.length);
@@ -69,4 +69,20 @@ export function equalStrings(a: string, b: string): boolean {
     }
   }
   return true;
+}
+
+export function setContractsInfo(): void {
+  let i = 0;
+
+}
+
+export function setContractInfo(address: string, name: string, version: string): void {
+    let contractInfo = ContractInfo.load(address);
+    if (contractInfo == null) {
+        contractInfo = new  ContractInfo(address);
+        contractInfo.address = Address.fromString(address);
+        contractInfo.name =  name;
+        contractInfo.version = version;
+        contractInfo.save();
+    }
 }

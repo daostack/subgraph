@@ -15,9 +15,8 @@ import {
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
 import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
-import { equals, equalsBytes, equalStrings, eventId, hexToAddress } from '../utils';
+import { equalsBytes, equalStrings, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
-import { updateMemberReputation, updateMemberReputationWithValue , updateMemberTokens } from './member';
 import {
   getProposal,
   parseOutcome,
@@ -134,12 +133,11 @@ export function handleStake(event: Stake): void {
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  if (equals(event.params._vote, BigInt.fromI32(1))) {
+  if (event.params._vote.toI32() ===  1) {
     proposal.stakesFor = proposal.stakesFor.plus(event.params._amount);
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
-
   saveProposal(proposal);
   insertStake(
     eventId(event),
@@ -160,7 +158,7 @@ export function handleVoteProposal(event: VoteProposal): void {
     return;
   }
   updateProposalAfterVote(proposal, event.address, event.params._proposalId);
-  if (equals(event.params._vote, BigInt.fromI32(1))) {
+  if (event.params._vote.toI32() === 1) {
     proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
   } else {
     proposal.votesAgainst = proposal.votesAgainst.plus(
@@ -213,10 +211,7 @@ export function handleRegisterScheme(avatar: Address,
     let holders: string[] = repContract.reputationHolders as string[];
     for (let i = 0; i < holders.length; i++) {
       let reputationHolder = store.get('ReputationHolder', holders[i]) as ReputationHolder;
-      updateMemberReputationWithValue(reputationHolder.address as Address,
-                                      avatar,
-                                      reputationHolder.balance);
-      updateMemberTokens(reputationHolder.address as Address, avatar);
+      addDaoMember(reputationHolder);
     }
     updateTokenTotalSupply(hexToAddress(dao.nativeToken));
     let ent = new Entity();
@@ -231,8 +226,6 @@ export function handleMint(event: Mint): void {
     // reputation that's not attached to a DAO
     return;
   }
-
-  updateMemberReputation(event.params._to, hexToAddress(rep.dao));
   updateReputationTotalSupply(event.address);
 }
 
@@ -242,7 +235,6 @@ export function handleBurn(event: Burn): void {
     // reputation that's not attached to a DAO
     return;
   }
-  updateMemberReputation(event.params._from, hexToAddress(dao));
   updateReputationTotalSupply(event.address);
 }
 
@@ -253,8 +245,8 @@ export function handleNativeTokenTransfer(event: Transfer): void {
     return;
   }
 
-  updateMemberTokens(event.params.from, hexToAddress(dao));
-  updateMemberTokens(event.params.to, hexToAddress(dao));
+  // updateMemberTokens(event.params.from, hexToAddress(dao));
+  // updateMemberTokens(event.params.to, hexToAddress(dao));
   updateTokenTotalSupply(event.address);
 }
 
@@ -294,4 +286,26 @@ export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , tim
 
 export function daoRegister(dao: Address, tag: string): void {
    daoModule.register(dao, tag);
+}
+
+export function addDaoMember(reputationHolder: ReputationHolder): void {
+  let dao = getReputation(reputationHolder.contract.toHex()).dao;
+  if (dao == null) {
+    // reputation that's not attached to a DAO
+    return;
+  }
+  if (reputationHolder.dao == null) {
+    reputationHolder.dao = dao;
+    reputationHolder.save();
+  }
+  daoModule.increaseDAOmembersCount(dao);
+}
+
+export function removeDaoMember(reputationHolder: ReputationHolder): void {
+   let dao = getReputation(reputationHolder.contract.toHex()).dao;
+   if (dao == null) {
+     // reputation that's not attached to a DAO
+     return;
+   }
+   daoModule.decreaseDAOmembersCount(dao);
 }

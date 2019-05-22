@@ -2,7 +2,7 @@ import { Address, BigInt, Bytes , crypto, EthereumValue, SmartContract , store} 
 import { GenesisProtocol__voteInfoResult } from '../types/GenesisProtocol/GenesisProtocol';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ContributionRewardProposal, GPReward, GPRewardsHelper, PreGPReward, Proposal } from '../types/schema';
-import { concat , equals, equalsBytes, equalStrings } from '../utils';
+import { concat , equalsBytes, equalStrings } from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 
 function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
@@ -91,30 +91,30 @@ export function shouldRemoveAccountFromUnclaimed(reward: GPReward): boolean {
   }
 
   return ((reward.reputationForVoter == null ||
-    equals(reward.reputationForVoterRedeemedAt, BigInt.fromI32(0)) === false) &&
+    reward.reputationForVoterRedeemedAt.isZero() === false) &&
      (reward.reputationForProposer == null ||
-        equals(reward.reputationForProposerRedeemedAt, BigInt.fromI32(0)) === false) &&
+        reward.reputationForProposerRedeemedAt.isZero() === false) &&
         (reward.tokensForStaker == null ||
-          equals(reward.tokensForStakerRedeemedAt, BigInt.fromI32(0)) === false) &&
+          reward.tokensForStakerRedeemedAt.isZero() === false) &&
           (reward.daoBountyForStaker == null ||
-            equals(reward.daoBountyForStakerRedeemedAt, BigInt.fromI32(0)) === false)
+            reward.daoBountyForStakerRedeemedAt.isZero() === false)
      );
 }
 
 export function shouldRemoveContributorFromUnclaimed(proposal: ContributionRewardProposal): boolean {
   if (
-    (equals(proposal.reputationReward, BigInt.fromI32(0)) ||
+    (proposal.reputationReward.isZero() ||
     (proposal.alreadyRedeemedReputationPeriods !== null &&
-      equals(proposal.alreadyRedeemedReputationPeriods as BigInt, proposal.periods))) &&
-    (equals(proposal.nativeTokenReward, BigInt.fromI32(0)) ||
+      BigInt.compare(proposal.alreadyRedeemedReputationPeriods as BigInt, proposal.periods) === 0)) &&
+    (proposal.nativeTokenReward.isZero() ||
     (proposal.alreadyRedeemedNativeTokenPeriods !== null &&
-    equals(proposal.alreadyRedeemedNativeTokenPeriods as BigInt, proposal.periods))) &&
-    (equals(proposal.externalTokenReward, BigInt.fromI32(0)) ||
+    BigInt.compare(proposal.alreadyRedeemedNativeTokenPeriods as BigInt, proposal.periods) === 0)) &&
+    (proposal.externalTokenReward.isZero() ||
     (proposal.alreadyRedeemedExternalTokenPeriods !== null &&
-    equals(proposal.alreadyRedeemedExternalTokenPeriods as BigInt, proposal.periods))) &&
-    (equals(proposal.ethReward, BigInt.fromI32(0)) ||
+    BigInt.compare(proposal.alreadyRedeemedExternalTokenPeriods as BigInt, proposal.periods) === 0)) &&
+    (proposal.ethReward.isZero() ||
     (proposal.alreadyRedeemedEthPeriods !== null &&
-    equals(proposal.alreadyRedeemedEthPeriods as BigInt, proposal.periods)))) {
+    BigInt.compare(proposal.alreadyRedeemedEthPeriods as BigInt, proposal.periods) === 0))) {
       // Note: This doesn't support the period feature of ContributionReward
       return false;
   }
@@ -139,10 +139,10 @@ export function insertGPRewards(
     if (state === 2) {// call redeemDaoBounty only on execute
        daoBountyForStaker = genesisProtocolExt.redeemDaoBounty(proposalId, gpReward.beneficiary as Address).value1;
     }
-    if (!equals(redeemValues[0], BigInt.fromI32(0)) ||
-        !equals(redeemValues[1], BigInt.fromI32(0)) ||
-        !equals(redeemValues[2], BigInt.fromI32(0)) ||
-        !equals(daoBountyForStaker, BigInt.fromI32(0))) {
+    if (!redeemValues[0].isZero() ||
+        !redeemValues[1].isZero() ||
+        !redeemValues[2].isZero() ||
+        !daoBountyForStaker.isZero()) {
         updateGPReward(gpReward.id,
                      gpReward.beneficiary,
                      proposal.id,
@@ -197,16 +197,16 @@ function updateGPReward(id: string,
         reward.reputationForProposerRedeemedAt = BigInt.fromI32(0);
         reward.daoBountyForStakerRedeemedAt = BigInt.fromI32(0);
       }
-      if (equals(reputationForVoter, BigInt.fromI32(0)) === false) {
+      if (reputationForVoter.isZero() === false) {
           reward.reputationForVoter = reputationForVoter;
       }
-      if (equals(tokensForStaker, BigInt.fromI32(0)) === false) {
+      if (tokensForStaker.isZero() === false) {
           reward.tokensForStaker = tokensForStaker;
       }
-      if (equals(reputationForProposer, BigInt.fromI32(0)) === false) {
+      if (reputationForProposer.isZero() === false) {
           reward.reputationForProposer = reputationForProposer;
       }
-      if (equals(daoBountyForStaker, BigInt.fromI32(0)) === false) {
+      if (daoBountyForStaker.isZero() === false) {
           reward.daoBountyForStaker = daoBountyForStaker;
           let genesisProtocol = GenesisProtocol.bind(gpAddress as Address);
           reward.tokenAddress = genesisProtocol.stakingToken();

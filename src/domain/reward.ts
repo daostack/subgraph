@@ -144,7 +144,7 @@ export function insertGPRewards(
     if (state === 2) {// call redeemDaoBounty only on execute
        daoBountyForStaker = getGPExtRedeemDaoBounty(
          gpAddress, proposalId,
-         gpReward.beneficiary as Address
+         gpReward.beneficiary as Address,
          ).get('value1').toBigInt();
     }
     if (!equals(redeemValues[0], BigInt.fromI32(0)) ||

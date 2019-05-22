@@ -1,6 +1,6 @@
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import { DAO } from '../types/schema';
-import { Avatar } from '../types/UController/Avatar';
+import { getAvatarName } from '../utils';
 
 export function getDAO(id: string): DAO {
   let dao = store.get('DAO', id) as DAO;
@@ -32,9 +32,8 @@ export function insertNewDAO(
   nativeTokenAddress: Address,
   nativeReputationAddress: Address,
 ): DAO {
-  let avatar = Avatar.bind(avatarAddress);
   let dao = getDAO(avatarAddress.toHex());
-  dao.name = avatar.orgName().toString();
+  dao.name = getAvatarName(avatarAddress);
   dao.nativeToken = nativeTokenAddress.toHex();
   dao.nativeReputation = nativeReputationAddress.toHex();
   dao.reputationHoldersCount = BigInt.fromI32(0);

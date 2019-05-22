@@ -1,21 +1,6 @@
 import { Address, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
-import {
-  NewContributionProposal,
-  ProposalExecuted,
-} from '../types/ContributionReward/ContributionReward';
-import { Transfer } from '../types/DAOToken/DAOToken';
-import { NewCallProposal } from '../types/GenericScheme/GenericScheme';
-import {
-  ExecuteProposal,
-  GenesisProtocol,
-  GPExecuteProposal,
-  Stake,
-  StateChange,
-  VoteProposal,
-} from '../types/GenesisProtocol/GenesisProtocol';
-import { Burn, Mint } from '../types/Reputation/Reputation';
 import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
-import { equals, equalsBytes, equalStrings, eventId, hexToAddress } from '../utils';
+import { equals, equalsBytes, hexToAddress } from '../utils';
 import * as daoModule from './dao';
 import {
   getProposal,
@@ -73,20 +58,26 @@ function handleGPProposalPrivate(proposalId: string): void {
 }
 
 export function handleNewContributionProposal(
-  event: NewContributionProposal,
-): void {
-  if (!daoModule.exists(event.params._avatar)) {
+  proposalId: Bytes,
+  timestamp: BigInt,
+  avatar: Address,
+  intVoteInterface: Address,
+  descriptionHash: string,
+  beneficiary: Address,
+  address: Address,
+  ): void {
+  if (!daoModule.exists(avatar)) {
     return;
   }
-  handleGPProposalPrivate(event.params._proposalId.toHex());
+  handleGPProposalPrivate(proposalId.toHex());
   updateCRProposal(
-    event.params._proposalId,
-    event.block.timestamp,
-    event.params._avatar,
-    event.params._intVoteInterface,
-    event.params._descriptionHash,
-    event.params._beneficiary,
-    event.address,
+    proposalId,
+    timestamp,
+    avatar,
+    intVoteInterface,
+    descriptionHash,
+    beneficiary,
+    address,
   );
 }
 
@@ -113,75 +104,91 @@ export function handleNewSchemeRegisterProposal(
  }
 
 export function handleNewCallProposal(
-  event: NewCallProposal,
+  proposalId: Bytes,
+  timestamp: BigInt,
+  avatar: Address,
+  descriptionHash: string,
+  address: Address,
 ): void {
-  if (!daoModule.exists(event.params._avatar)) {
+  if (!daoModule.exists(avatar)) {
     return;
   }
-  handleGPProposalPrivate(event.params._proposalId.toHex());
+  handleGPProposalPrivate(proposalId.toHex());
   updateGSProposal(
-    event.params._proposalId,
-    event.block.timestamp,
-    event.params._avatar,
-    event.params._descriptionHash,
-    event.address,
+    proposalId,
+    timestamp,
+    avatar,
+    descriptionHash,
+    address,
   );
 }
 
-export function handleStake(event: Stake): void {
-  let proposal = getProposal(event.params._proposalId.toHex());
+export function handleStake(
+    eventId: string,
+    timestamp: BigInt,
+    staker: Address,
+    amount: BigInt,
+    proposalId: Bytes,
+    organization: Bytes,
+    vote: BigInt,
+): void {
+  let proposal = getProposal(proposalId.toHex());
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  if (equals(event.params._vote, BigInt.fromI32(1))) {
-    proposal.stakesFor = proposal.stakesFor.plus(event.params._amount);
+  if (equals(vote, BigInt.fromI32(1))) {
+    proposal.stakesFor = proposal.stakesFor.plus(amount);
   } else {
-    proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
+    proposal.stakesAgainst = proposal.stakesAgainst.plus(amount);
   }
 
   saveProposal(proposal);
   insertStake(
-    eventId(event),
-    event.block.timestamp,
-    event.params._staker,
-    event.params._amount,
-    event.params._proposalId.toHex(),
-    event.params._organization.toHex(),
-    parseOutcome(event.params._vote),
+    eventId,
+    timestamp,
+    staker,
+    amount,
+    proposalId.toHex(),
+    organization.toHex(),
+    parseOutcome(vote),
   );
-  insertGPRewardsToHelper(event.params._proposalId, event.params._staker);
+  insertGPRewardsToHelper(proposalId, staker);
 }
 
-export function handleVoteProposal(event: VoteProposal): void {
-  let proposal = getProposal(event.params._proposalId.toHex());
+export function handleVoteProposal(
+  eventId: string,
+  timestamp: BigInt,
+  voter: Address,
+  proposalId: Bytes,
+  organization: Bytes,
+  vote: BigInt,
+  reputation: BigInt,
+  address: Address,
+): void {
+  let proposal = getProposal(proposalId.toHex());
 
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  updateProposalAfterVote(proposal, event.address, event.params._proposalId);
-  if (equals(event.params._vote, BigInt.fromI32(1))) {
-    proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
+  updateProposalAfterVote(proposal, address, proposalId);
+  if (equals(vote, BigInt.fromI32(1))) {
+    proposal.votesFor = proposal.votesFor.plus(reputation);
   } else {
     proposal.votesAgainst = proposal.votesAgainst.plus(
-      event.params._reputation,
+      reputation,
     );
   }
   saveProposal(proposal);
   insertVote(
-    eventId(event),
-    event.block.timestamp,
-    event.params._voter,
-    event.params._proposalId.toHex(),
-    event.params._organization.toHex(),
-    parseOutcome(event.params._vote),
-    event.params._reputation,
+    eventId,
+    timestamp,
+    voter,
+    proposalId.toHex(),
+    organization.toHex(),
+    parseOutcome(vote),
+    reputation,
   );
-  insertGPRewardsToHelper(event.params._proposalId, event.params._voter);
-}
-
-export function handleProposalExecuted(event: ProposalExecuted): void {
-  // this already handled at handleExecuteProposal
-  // updateProposalExecution(event.params._proposalId, null, event.block.timestamp,event.address);
+  insertGPRewardsToHelper(proposalId, voter);
 }
 
 export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {
@@ -221,26 +228,26 @@ export function handleRegisterScheme(avatar: Address,
   }
 }
 
-export function handleMint(event: Mint): void {
-  let rep = getReputation(event.address.toHex());
+export function handleMint(address: Address): void {
+  let rep = getReputation(address.toHex());
   if (rep.dao == null) {
     // reputation that's not attached to a DAO
     return;
   }
-  updateReputationTotalSupply(event.address);
+  updateReputationTotalSupply(address);
 }
 
-export function handleBurn(event: Burn): void {
-  let dao = getReputation(event.address.toHex()).dao;
+export function handleBurn(address: Address): void {
+  let dao = getReputation(address.toHex()).dao;
   if (dao == null) {
     // reputation that's not attached to a DAO
     return;
   }
-  updateReputationTotalSupply(event.address);
+  updateReputationTotalSupply(address);
 }
 
-export function handleNativeTokenTransfer(event: Transfer): void {
-  let dao = getToken(event.address.toHex()).dao;
+export function handleNativeTokenTransfer(address: Address): void {
+  let dao = getToken(address.toHex()).dao;
   if (dao == null) {
     // reputation that's not attached to a DAO
     return;
@@ -248,28 +255,40 @@ export function handleNativeTokenTransfer(event: Transfer): void {
 
   // updateMemberTokens(event.params.from, hexToAddress(dao));
   // updateMemberTokens(event.params.to, hexToAddress(dao));
-  updateTokenTotalSupply(event.address);
+  updateTokenTotalSupply(address);
 }
 
-export function handleExecuteProposal(event: ExecuteProposal): void {
-   if (isProposalValid(event.params._proposalId.toHex())) {
-       updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
+export function handleExecuteProposal(
+  proposalId: Bytes,
+  totalReputation: BigInt,
+  timestamp: BigInt,
+): void {
+   if (isProposalValid(proposalId.toHex())) {
+       updateProposalExecution(proposalId, totalReputation, timestamp);
     }
 }
 
-export function handleStateChange(event: StateChange): void {
-  if (isProposalValid(event.params._proposalId.toHex())) {
-      updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
-      if ((event.params._proposalState === 1) ||
-          (event.params._proposalState === 2)) {
-          insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
+export function handleStateChange(
+  proposalId: Bytes,
+  timestamp: BigInt,
+  address: Address,
+  proposalState: number,
+): void {
+  if (isProposalValid(proposalId.toHex())) {
+      updateProposalState(proposalId, proposalState, address);
+      if ((proposalState === 1) ||
+          (proposalState === 2)) {
+          insertGPRewards(proposalId, timestamp, address, proposalState);
       }
   }
 }
 
-export function handleExecutionStateChange(event: GPExecuteProposal): void {
-  if (isProposalValid(event.params._proposalId.toHex())) {
-    updateProposalExecutionState(event.params._proposalId.toHex(), event.params._executionState);
+export function handleExecutionStateChange(
+  proposalId: Bytes,
+  executionState: number,
+): void {
+  if (isProposalValid(proposalId.toHex())) {
+    updateProposalExecutionState(proposalId.toHex(), executionState);
   }
 }
 

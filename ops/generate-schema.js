@@ -7,7 +7,7 @@ const glob = require('glob')
  */
 async function generateSchema () {
   const files = await new Promise((resolve, reject) =>
-    glob('src/mappings/**/schema.graphql', (err, files) => (err ? reject(err) : resolve(files)))
+    glob('src/schemas/**/schema.graphql', (err, files) => (err ? reject(err) : resolve(files)))
   )
   const schema = [...files, `${__dirname}/../src/domain/schema.graphql`]
     .map(file => {

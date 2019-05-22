@@ -1,7 +1,5 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { GPQueue } from '../types/schema';
-import { equalStrings } from '../utils';
 
 export function getGPQueue(id: string): GPQueue {
   let gpQueue = GPQueue.load(id) ;

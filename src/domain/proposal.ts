@@ -1,8 +1,16 @@
 import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
-import { setSchemeName } from '../mappings/Controller/mapping';
-import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ControllerScheme, Proposal } from '../types/schema';
-import { concat, equals, equalsBytes, equalStrings } from '../utils';
+import {
+  concat,
+  equals,
+  equalsBytes,
+  equalStrings,
+  getGPParameters,
+  getGPProposal,
+  getGPProposalTimes,
+  getGPThreshold,
+  getGPVoteStake,
+} from '../utils';
 import { updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
@@ -75,14 +83,13 @@ export function updateProposalAfterVote(
   gpAddress: Address,
   proposalId: Bytes,
 ): void {
-  let gp = GenesisProtocol.bind(gpAddress);
-  let gpProposal = gp.proposals(proposalId);
+  let gpProposal = getGPProposal(gpAddress, proposalId);
   let prevOutcome = proposal.winningOutcome;
   proposal.votingMachine = gpAddress;
   // proposal.winningVote
-  proposal.winningOutcome = parseOutcome(gpProposal.value3);
-  if ((gpProposal.value2 === 6) && !equalStrings(proposal.winningOutcome, prevOutcome)) {
-    setProposalState(proposal, 6, gp.getProposalTimes(proposalId));
+  proposal.winningOutcome = parseOutcome(gpProposal.get('value3').toBigInt());
+  if ((gpProposal.get('value2').toI32() === 6) && !equalStrings(proposal.winningOutcome, prevOutcome)) {
+    setProposalState(proposal, 6, getGPProposalTimes(gpAddress, proposalId));
   }
 }
 
@@ -93,17 +100,16 @@ export function updateProposalconfidence(id: Bytes, confidence: BigInt): void {
 }
 
 export function updateProposalState(id: Bytes, state: number, gpAddress: Address): void {
-   let gp = GenesisProtocol.bind(gpAddress);
    let proposal = getProposal(id.toHex());
    updateThreshold(proposal.dao.toString(),
                     gpAddress,
-                    gp.threshold(proposal.paramsHash, proposal.organizationId),
+                    getGPThreshold(gpAddress, proposal.paramsHash, proposal.organizationId),
                     proposal.organizationId,
                     proposal.scheme,
                     );
-   setProposalState(proposal, state, gp.getProposalTimes(id));
+   setProposalState(proposal, state, getGPProposalTimes(gpAddress, id));
    if (state === 4) {
-     proposal.confidenceThreshold = gp.proposals(id).value10;
+     proposal.confidenceThreshold = getGPProposal(gpAddress, id).get('value10').toBigInt();
    }
    saveProposal(proposal);
 }
@@ -142,40 +148,39 @@ export function updateGPProposal(
   paramsHash: Bytes,
   timestamp: BigInt,
 ): void {
-  let gp = GenesisProtocol.bind(gpAddress);
   let proposal = getProposal(proposalId.toHex());
   proposal.proposer = proposer;
   proposal.dao = avatarAddress.toHex();
-  let params = gp.parameters(paramsHash);
-  let gpProposal = gp.proposals(proposalId);
+  let params = getGPParameters(gpAddress, paramsHash);
+  let gpProposal = getGPProposal(gpAddress, proposalId);
 
   proposal.votingMachine = gpAddress;
-  proposal.stakesAgainst = gp.voteStake(proposalId, BigInt.fromI32(2));
-  proposal.confidenceThreshold = gpProposal.value10;
+  proposal.stakesAgainst = getGPVoteStake(gpAddress, proposalId, BigInt.fromI32(2));
+  proposal.confidenceThreshold = gpProposal.get('value10').toBigInt();
   proposal.paramsHash = paramsHash;
-  proposal.organizationId = gpProposal.value0;
-  proposal.expiresInQueueAt = timestamp.plus(params.value1);
+  proposal.organizationId = gpProposal.get('value0').toBytes();
+  proposal.expiresInQueueAt = timestamp.plus(params.get('value1').toBigInt());
   proposal.createdAt = timestamp;
-  proposal.scheme = crypto.keccak256(concat(avatarAddress, gpProposal.value1)).toHex();
+  proposal.scheme = crypto.keccak256(concat(avatarAddress, gpProposal.get('value1').toAddress())).toHex();
 
-  proposal.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
-  proposal.queuedVotePeriodLimit = params.value1; // queuedVotePeriodLimit
-  proposal.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
-  proposal.preBoostedVotePeriodLimit = params.value3; // preBoostedVotePeriodLimit
-  proposal.thresholdConst = params.value4; // thresholdConst
-  proposal.limitExponentValue = params.value5; // limitExponentValue
-  proposal.quietEndingPeriod = params.value6; // quietEndingPeriod
-  proposal.proposingRepReward = params.value7;
-  proposal.votersReputationLossRatio = params.value8; // votersReputationLossRatio
-  proposal.minimumDaoBounty = params.value9; // minimumDaoBounty
-  proposal.daoBountyConst = params.value10; // daoBountyConst
-  proposal.activationTime = params.value11; // activationTime
-  proposal.voteOnBehalf = params.value12; // voteOnBehalf
+  proposal.queuedVoteRequiredPercentage = params.get('value0').toBigInt(); // queuedVoteRequiredPercentage
+  proposal.queuedVotePeriodLimit = params.get('value1').toBigInt(); // queuedVotePeriodLimit
+  proposal.boostedVotePeriodLimit = params.get('value2').toBigInt(); // boostedVotePeriodLimit
+  proposal.preBoostedVotePeriodLimit = params.get('value3').toBigInt(); // preBoostedVotePeriodLimit
+  proposal.thresholdConst = params.get('value4').toBigInt(); // thresholdConst
+  proposal.limitExponentValue = params.get('value5').toBigInt(); // limitExponentValue
+  proposal.quietEndingPeriod = params.get('value6').toBigInt(); // quietEndingPeriod
+  proposal.proposingRepReward = params.get('value7').toBigInt();
+  proposal.votersReputationLossRatio = params.get('value8').toBigInt(); // votersReputationLossRatio
+  proposal.minimumDaoBounty = params.get('value9').toBigInt(); // minimumDaoBounty
+  proposal.daoBountyConst = params.get('value10').toBigInt(); // daoBountyConst
+  proposal.activationTime = params.get('value11').toBigInt(); // activationTime
+  proposal.voteOnBehalf = params.get('value12').toAddress(); // voteOnBehalf
 
   updateThreshold(
     proposal.dao.toString(),
     gpAddress,
-    gp.threshold(proposal.paramsHash, proposal.organizationId),
+    getGPThreshold(gpAddress, proposal.paramsHash, proposal.organizationId),
     proposal.organizationId,
     proposal.scheme,
   );
@@ -307,5 +312,18 @@ export function removeRedeemableRewardOwner(
     accounts.splice(idx, 1);
     proposal.accountsWithUnclaimedRewards = accounts;
     saveProposal(proposal);
+  }
+}
+
+export function setSchemeName(
+  schemeId: string,
+  name: string,
+): void {
+  let scheme = ControllerScheme.load(schemeId);
+  if (scheme != null) {
+    if (!equalStrings(scheme.name, name)) {
+      scheme.name = name;
+      scheme.save();
+    }
   }
 }

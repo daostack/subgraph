@@ -1,8 +1,14 @@
 import { Address, BigInt, Bytes , crypto, EthereumValue, SmartContract , store} from '@graphprotocol/graph-ts';
-import { GenesisProtocol__voteInfoResult } from '../types/GenesisProtocol/GenesisProtocol';
-import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ContributionRewardProposal, GPReward, GPRewardsHelper, PreGPReward, Proposal } from '../types/schema';
-import { concat , equals, equalsBytes, equalStrings } from '../utils';
+import {
+  concat,
+  equals,
+  equalsBytes,
+  equalStrings,
+  getGPExtRedeem,
+  getGPExtRedeemDaoBounty,
+  getGPStakingToken,
+} from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 
 function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
@@ -129,15 +135,17 @@ export function insertGPRewards(
   state: number,
 ): void {
   let proposal = getProposal(proposalId.toHex());
-  let genesisProtocolExt = GenesisProtocolExt.bind(gpAddress);
   let i = 0;
   let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];
   for (i = 0; i < gpRewards.length; i++) {
     let gpReward = PreGPReward.load(gpRewards[i]);
-    let redeemValues = genesisProtocolExt.redeem(proposalId, gpReward.beneficiary as Address);
+    let redeemValues = getGPExtRedeem(gpAddress, proposalId, gpReward.beneficiary as Address);
     let daoBountyForStaker: BigInt;
     if (state === 2) {// call redeemDaoBounty only on execute
-       daoBountyForStaker = genesisProtocolExt.redeemDaoBounty(proposalId, gpReward.beneficiary as Address).value1;
+       daoBountyForStaker = getGPExtRedeemDaoBounty(
+         gpAddress, proposalId,
+         gpReward.beneficiary as Address
+         ).get('value1').toBigInt();
     }
     if (!equals(redeemValues[0], BigInt.fromI32(0)) ||
         !equals(redeemValues[1], BigInt.fromI32(0)) ||
@@ -181,7 +189,7 @@ function updateGPReward(id: string,
                         reputationForVoter: BigInt,
                         reputationForProposer: BigInt,
                         daoBountyForStaker: BigInt,
-                        gpAddress: Bytes,
+                        gpAddress: Address,
                         dao: string,
                         createdAt: BigInt,
                         ): GPReward {
@@ -208,8 +216,7 @@ function updateGPReward(id: string,
       }
       if (equals(daoBountyForStaker, BigInt.fromI32(0)) === false) {
           reward.daoBountyForStaker = daoBountyForStaker;
-          let genesisProtocol = GenesisProtocol.bind(gpAddress as Address);
-          reward.tokenAddress = genesisProtocol.stakingToken();
+          reward.tokenAddress = getGPStakingToken(gpAddress);
       }
       reward.save();
       return reward;
@@ -221,30 +228,4 @@ function updatePreGPReward(id: string, beneficiary: Bytes): PreGPReward {
 
   reward.save();
   return reward;
-}
-
-// this is a hack :)
-export class GenesisProtocolExt extends SmartContract {
-  public static bind(address: Address): GenesisProtocolExt {
-    return new GenesisProtocolExt('GenesisProtocol', address);
-  }
-
-  public redeem(proposalId: Bytes, beneficiary: Address): BigInt[] {
-    let result = super.call('redeem', [
-      EthereumValue.fromFixedBytes(proposalId),
-      EthereumValue.fromAddress(beneficiary),
-    ]);
-    return result[0].toBigIntArray();
-  }
-
-  public redeemDaoBounty(proposalId: Bytes, beneficiary: Address): GenesisProtocol__voteInfoResult {
-    let result = super.call('redeemDaoBounty', [
-      EthereumValue.fromFixedBytes(proposalId),
-      EthereumValue.fromAddress(beneficiary),
-    ]);
-    return new GenesisProtocol__voteInfoResult(
-      result[0].toBigInt(),
-      result[1].toBigInt(),
-    );
-  }
 }

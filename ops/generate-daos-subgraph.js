@@ -5,7 +5,7 @@ const daodir = "./daos/" + network + "/";
 
 function daoYaml(contract, contractAddress, arcVersion) {
   const { abis, entities, eventHandlers } = yaml.safeLoad(
-    fs.readFileSync("src/mappings/" + contract + "/datasource.yaml", "utf-8")
+    fs.readFileSync("src/mappings/" + arcVersion + "/" + contract + "/datasource.yaml", "utf-8")
   );
   return {
     kind: "ethereum/contract",
@@ -19,7 +19,7 @@ function daoYaml(contract, contractAddress, arcVersion) {
       kind: "ethereum/events",
       apiVersion: "0.0.1",
       language: "wasm/assemblyscript",
-      file: `src/mappings/${contract}/mapping.ts`,
+      file: `src/mappings/${arcVersion}/${contract}/mapping.ts`,
       entities,
       abis: (abis || [contract]).map(contract => ({
         name: contract,

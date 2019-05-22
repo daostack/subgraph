@@ -55,7 +55,7 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       templates = yamlLoad.templates;
       abis = (yamlLoad.abis || [contract]).map(contract => ({
         name: contract,
-        file: `./abis/${contract}.json`
+        file: `./abis/${mapping.arcVersion}/${contract}.json`
       }));
       abi = yamlLoad.abis && yamlLoad.abis.length ? yamlLoad.abis [0] : contract;
     } else {

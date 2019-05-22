@@ -2,7 +2,6 @@ import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from
 import { ControllerScheme, Proposal } from '../types/schema';
 import {
   concat,
-  equals,
   equalsBytes,
   equalStrings,
   getGPParameters,
@@ -14,7 +13,7 @@ import {
 import { updateThreshold } from './gpqueue';
 
 export function parseOutcome(num: BigInt): string {
-  if (equals(num, BigInt.fromI32(1))) {
+  if (num.toI32() === 1) {
     // Yes
     return 'Pass';
   } else {

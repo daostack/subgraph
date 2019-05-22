@@ -1,6 +1,6 @@
 import { Address, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
 import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
-import { equals, equalsBytes, hexToAddress } from '../utils';
+import { equalsBytes, hexToAddress } from '../utils';
 import * as daoModule from './dao';
 import {
   getProposal,
@@ -136,12 +136,11 @@ export function handleStake(
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  if (equals(vote, BigInt.fromI32(1))) {
+  if (vote.toI32() ===  1) {
     proposal.stakesFor = proposal.stakesFor.plus(amount);
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(amount);
   }
-
   saveProposal(proposal);
   insertStake(
     eventId,
@@ -171,7 +170,7 @@ export function handleVoteProposal(
     return;
   }
   updateProposalAfterVote(proposal, address, proposalId);
-  if (equals(vote, BigInt.fromI32(1))) {
+  if (vote.toI32() === 1) {
     proposal.votesFor = proposal.votesFor.plus(reputation);
   } else {
     proposal.votesAgainst = proposal.votesAgainst.plus(

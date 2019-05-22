@@ -5,8 +5,14 @@ import {
   Entity,
   store,
 } from '@graphprotocol/graph-ts';
+import {
+  getAvatarName,
+  getAvatarReputation,
+  getAvatarToken,
+  getDAOTokenSupply,
+  getRepSupply,
+} from '../../../contractsUtils';
 import * as domain from '../../../domain';
-import { getAvatarName, getAvatarReputation, getAvatarToken, getDAOTokenSupply, getRepSupply } from '../../../utils';
 
 import {
   AvatarContract,

@@ -5,8 +5,14 @@ import {
   Entity,
   store,
 } from '@graphprotocol/graph-ts';
+import {
+  getAvatarName,
+  getAvatarReputation,
+  getAvatarToken,
+  getDAOTokenSupply,
+  getRepSupply,
+} from '../../../contractsUtils';
 import * as domain from '../../../domain';
-import { getAvatarName, getAvatarReputation, getAvatarToken, getDAOTokenSupply, getRepSupply } from '../../../utils';
 
 import {
   AvatarContract,
@@ -28,7 +34,7 @@ import {
   UController,
   UnregisterScheme,
   UpgradeController,
-} from '../../../types/UController/0.0.1-rc.16/UController';
+} from '../../../types/UController/0.0.1-rc.19/UController';
 import { concat, eventId } from '../../../utils';
 
 function insertScheme(

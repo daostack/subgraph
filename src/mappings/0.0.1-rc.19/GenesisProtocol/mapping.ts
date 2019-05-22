@@ -21,7 +21,7 @@ import {
   Stake,
   StateChange,
   VoteProposal,
-} from '../../../types/GenesisProtocol/0.0.1-rc.16/GenesisProtocol';
+} from '../../../types/GenesisProtocol/0.0.1-rc.19/GenesisProtocol';
 
 import { concat, eventId } from '../../../utils';
 

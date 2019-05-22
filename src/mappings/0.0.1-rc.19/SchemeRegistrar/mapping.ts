@@ -5,7 +5,7 @@ import {
   NewSchemeProposal,
   ProposalExecuted,
   RemoveSchemeProposal,
-} from '../../../types/SchemeRegistrar/0.0.1-rc.16/SchemeRegistrar';
+} from '../../../types/SchemeRegistrar/0.0.1-rc.19/SchemeRegistrar';
 
 import * as domain from '../../../domain';
 

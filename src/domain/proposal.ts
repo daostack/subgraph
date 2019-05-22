@@ -1,14 +1,16 @@
 import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
-import { ControllerScheme, Proposal } from '../types/schema';
 import {
-  concat,
-  equalsBytes,
-  equalStrings,
   getGPParameters,
   getGPProposal,
   getGPProposalTimes,
   getGPThreshold,
   getGPVoteStake,
+} from '../contractsUtils';
+import { ControllerScheme, Proposal } from '../types/schema';
+import {
+  concat,
+  equalsBytes,
+  equalStrings,
 } from '../utils';
 import { updateThreshold } from './gpqueue';
 

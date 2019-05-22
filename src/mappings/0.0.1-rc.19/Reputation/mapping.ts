@@ -5,7 +5,7 @@ import {
   Burn,
   Mint,
   Reputation,
-} from '../../../types/Reputation/0.0.1-rc.16/Reputation';
+} from '../../../types/Reputation/0.0.1-rc.19/Reputation';
 import { concat, eventId } from '../../../utils';
 
 import * as domain from '../../../domain';

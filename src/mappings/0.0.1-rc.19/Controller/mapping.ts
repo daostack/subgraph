@@ -8,10 +8,6 @@ import {
   store,
 } from '@graphprotocol/graph-ts';
 
-import { Avatar } from '../../../types/Controller/0.0.1-rc.16/Avatar';
-import { DAOToken } from '../../../types/Controller/0.0.1-rc.16/DAOToken';
-import { Reputation } from '../../../types/Controller/0.0.1-rc.16/Reputation';
-
 import * as domain from '../../../domain';
 
 import {
@@ -35,9 +31,10 @@ import {
   RemoveGlobalConstraint,
   UnregisterScheme,
   UpgradeController,
-} from '../../../types/Controller/0.0.1-rc.16/Controller';
+} from '../../../types/Controller/0.0.1-rc.19/Controller';
 
-import { concat, eventId, getDAOTokenSupply, getRepSupply } from '../../../utils';
+import { getDAOTokenSupply, getRepSupply } from '../../../contractsUtils';
+import { concat, eventId } from '../../../utils';
 
 function insertScheme(
   controllerAddress: Address,
@@ -59,7 +56,7 @@ function insertScheme(
   /* tslint:disable:no-bitwise */
   ent.canUpgradeController = (perms[3] & 8) === 8;
   /* tslint:disable:no-bitwise */
-  ent.canDelegateCall = (perms[3] & 16) === 16;
+  ent.canDelegateCall = (perms[3] & 19) === 19;
   ent.name = '';
 
   store.set('ControllerScheme', ent.id, ent);

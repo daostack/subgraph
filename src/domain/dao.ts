@@ -1,6 +1,6 @@
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
+import { getAvatarName } from '../contractsUtils';
 import { DAO } from '../types/schema';
-import { getAvatarName } from '../utils';
 
 export function getDAO(id: string): DAO {
   let dao = store.get('DAO', id) as DAO;

@@ -37,7 +37,8 @@ import {
   UpgradeController,
 } from '../../../types/Controller/0.0.1-rc.16/Controller';
 
-import { concat, eventId, getDAOTokenSupply, getRepSupply } from '../../../utils';
+import { getDAOTokenSupply, getRepSupply } from '../../../contractsUtils';
+import { concat, eventId } from '../../../utils';
 
 function insertScheme(
   controllerAddress: Address,

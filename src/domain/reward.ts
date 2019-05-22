@@ -1,12 +1,14 @@
 import { Address, BigInt, Bytes , crypto, EthereumValue, SmartContract , store} from '@graphprotocol/graph-ts';
-import { ContributionRewardProposal, GPReward, GPRewardsHelper, PreGPReward, Proposal } from '../types/schema';
+import {
+  getGPExtRedeem,
+  getGPExtRedeemDaoBounty,
+  getGPStakingToken,
+ } from '../contractsUtils';
+import { ContributionRewardProposal, GPReward, GPRewardsHelper, PreGPReward } from '../types/schema';
 import {
   concat,
   equalsBytes,
   equalStrings,
-  getGPExtRedeem,
-  getGPExtRedeemDaoBounty,
-  getGPStakingToken,
 } from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 

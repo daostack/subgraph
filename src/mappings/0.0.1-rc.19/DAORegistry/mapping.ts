@@ -3,7 +3,7 @@ import 'allocator/arena';
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Token contract ABI
-import { DAORegistry, Propose, Register, UnRegister } from '../../../types/DAORegistry/0.0.1-rc.16/DAORegistry';
+import { DAORegistry, Propose, Register, UnRegister } from '../../../types/DAORegistry/0.0.1-rc.19/DAORegistry';
 
 import * as domain from '../../../domain';
 

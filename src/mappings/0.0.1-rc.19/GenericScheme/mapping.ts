@@ -5,7 +5,7 @@ import {
   GenericScheme,
   NewCallProposal,
   ProposalExecuted,
-} from '../../../types/GenericScheme/0.0.1-rc.16/GenericScheme';
+} from '../../../types/GenericScheme/0.0.1-rc.19/GenericScheme';
 
 import * as domain from '../../../domain';
 

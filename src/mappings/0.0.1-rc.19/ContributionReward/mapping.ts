@@ -11,7 +11,7 @@ import {
   RedeemExternalToken,
   RedeemNativeToken,
   RedeemReputation,
-} from '../../../types/ContributionReward/0.0.1-rc.16/ContributionReward';
+} from '../../../types/ContributionReward/0.0.1-rc.19/ContributionReward';
 
 import * as domain from '../../../domain';
 

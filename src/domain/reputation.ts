@@ -1,6 +1,6 @@
 import { Address, store } from '@graphprotocol/graph-ts';
+import { getRepSupply } from '../contractsUtils';
 import { Rep } from '../types/schema';
-import { getRepSupply } from '../utils';
 
 export function getReputation(id: string): Rep {
   let reputation = store.get('Rep', id) as Rep;

@@ -6,7 +6,7 @@ import {
   DAOToken,
   OwnershipTransferred,
   Transfer,
-} from '../../../types/DAOToken/0.0.1-rc.16/DAOToken';
+} from '../../../types/DAOToken/0.0.1-rc.19/DAOToken';
 import { concat, eventId } from '../../../utils';
 
 // Import entity types generated from the GraphQL schema

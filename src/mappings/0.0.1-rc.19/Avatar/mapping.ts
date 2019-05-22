@@ -3,7 +3,7 @@ import 'allocator/arena';
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Avatar contract ABI
-import { Avatar, OwnershipTransferred, ReceiveEther, SendEther } from '../../../types/Avatar/0.0.1-rc.16/Avatar';
+import { Avatar, OwnershipTransferred, ReceiveEther, SendEther } from '../../../types/Avatar/0.0.1-rc.19/Avatar';
 
 // Import entity types generated from the GraphQL schema
 import { AvatarContract } from '../../../types/schema';

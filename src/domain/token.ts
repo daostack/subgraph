@@ -1,6 +1,6 @@
 import { Address, store } from '@graphprotocol/graph-ts';
+import { getDAOTokenName, getDAOTokenSupply, getDAOTokenSymbol } from '../contractsUtils';
 import { Token } from '../types/schema';
-import { getDAOTokenName, getDAOTokenSupply, getDAOTokenSymbol } from '../utils';
 
 export function getToken(id: string): Token {
   let token = store.get('Token', id) as Token;

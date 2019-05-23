@@ -116,11 +116,12 @@ export async function waitUntilSynced() {
     }
   }`;
   const graphIsSynced = async () => {
-    return (await sendQuery(
+    let result = await sendQuery(
       getGraphsSynced,
       1000,
-      'http://127.0.0.1:8000/subgraphs')).subgraphDeployments[0].synced;
-  };
+      'http://127.0.0.1:8000/subgraphs');
+    return ((result.subgraphDeployments.length > 0) && result.subgraphDeployments[0].synced);
+    };
   await waitUntilTrue(graphIsSynced);
 }
 

@@ -8,3 +8,4 @@ src/types
 /schema.graphql
 .env
 build/
+src/contractsInfo.ts

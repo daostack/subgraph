@@ -176,3 +176,10 @@ type GPReward @entity {
 type FirstRegisterSchemeFlag @entity {
 	id: ID!
 }
+
+type ContractInfo @entity {
+	id: ID!
+	name: String!
+	version: String!
+	address: Bytes!
+}

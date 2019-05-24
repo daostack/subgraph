@@ -108,16 +108,16 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
         abis,
         eventHandlers
       }
-    }
+    };
 
     if (templates && templates.length) {
       result.templates = combineFragments(
         templates.map(template => ({ name: template, mapping: template })),
         true, addresses, missingAddresses
-      )
+      );
     }
 
-    return result
+    return result;
   });
 }
 

@@ -87,12 +87,11 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       }
     }
 
-    const sourceAbi = abis && abis.length ? abis[0].name : contract;
     const source = isTemplate ? {
-      abi: sourceAbi
+      abi
     } : {
       address: contractAddress,
-      abi: sourceAbi
+      abi
     };
 
     var result = {
@@ -105,7 +104,7 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
         apiVersion: "0.0.1",
         language: "wasm/assemblyscript",
         file: file,
-        entities,
+        entities: entities ? entities : [],
         abis,
         eventHandlers
       }

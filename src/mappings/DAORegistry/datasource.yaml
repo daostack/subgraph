@@ -7,3 +7,8 @@ eventHandlers:
     handler: handleRegister
   - event: UnRegister(address)
     handler: handleUnRegister
+templates:
+  - Controller
+  - Avatar
+  - Reputation
+  - DAOToken

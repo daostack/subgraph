@@ -112,7 +112,11 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
 
     if (templates && templates.length) {
       result.templates = combineFragments(
-        templates.map(template => ({ name: template, mapping: template })),
+        templates.map(template => ({
+          name: template,
+          mapping: template,
+          arcVersion: mapping.arcVersion
+        })),
         true, addresses, missingAddresses
       );
     }

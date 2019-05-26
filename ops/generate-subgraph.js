@@ -104,7 +104,7 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
         apiVersion: "0.0.1",
         language: "wasm/assemblyscript",
         file: file,
-        entities: entities ? entities : [],
+        entities: entities ? entities : ["nothing"],
         abis,
         eventHandlers
       }

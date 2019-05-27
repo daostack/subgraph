@@ -3,6 +3,10 @@ abis:
   - Avatar
   - Reputation
   - DAOToken
+  - SchemeRegistrar
+  - ContributionReward
+  - GenericScheme
+  - GenesisProtocol
 entities:
   - ControllerOrganization
   - ControllerScheme

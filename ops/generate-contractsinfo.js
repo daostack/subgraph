@@ -10,7 +10,7 @@ async function generateContractInfo() {
   const migration = JSON.parse(fs.readFileSync(migrationFile, "utf-8"));
 
   let versios = migration[network].base
-  let buffer = "import { setContractInfo } from \'./utils\';\n";
+  let buffer = "import { setContractInfo } from './utils';\n";
   buffer += "// this code was generated automaticly . please not edit it -:)\n";
 
   buffer += "export function setContractsInfo(): void {\n";
@@ -19,7 +19,7 @@ async function generateContractInfo() {
         let addresses = migration[network].base[version];
         for (var name in addresses) {
           if (addresses.hasOwnProperty(name)) {
-              buffer += "    setContractInfo("+"\'"+addresses[name]+"\'"+", " +"\'"+name+"\'"+", "+"\'"+version+"\'"+");\n";
+              buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+name+"'"+", "+"'"+version+"'"+");\n";
           }
         }
     }

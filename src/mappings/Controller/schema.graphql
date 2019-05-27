@@ -9,14 +9,19 @@ type ControllerOrganization @entity {
 type ControllerScheme @entity {
 	id: ID!
 	dao: DAO!
-	address: Bytes!
 	paramsHash: Bytes!
 	canRegisterSchemes: Boolean
 	canManageGlobalConstraints: Boolean
 	canUpgradeController: Boolean
 	canDelegateCall: Boolean
-	name: String
 	gpQueue: GPQueue
+	address: Bytes!
+	name: String
+	version: String
+	contributionRewardParams: ContributionRewardParam
+	schemeRegistrarParams: SchemeRegistrarParam
+	genericSchemeParams: GenericSchemeParam
+
 }
 
 type ControllerGlobalConstraint @entity {
@@ -64,4 +69,43 @@ type ControllerRemoveGlobalConstraint @entity {
 	controller: Bytes!
 	globalConstraint: Bytes!
 	isPre: Boolean
+}
+
+
+type ContributionRewardParam @entity {
+	id: ID!
+	votingMachine : Bytes!
+	voteParams: GenesisProtocolParam!
+}
+
+type SchemeRegistrarParam @entity {
+	id: ID!
+	votingMachine : Bytes!
+	voteRegisterParams : GenesisProtocolParam!
+	voteRemoveParams : GenesisProtocolParam!
+}
+
+type GenericSchemeParam @entity {
+	id: ID!
+	votingMachine : Bytes!
+	voteParams: GenesisProtocolParam!
+	contractToCall: Bytes!
+}
+
+type GenesisProtocolParam @entity {
+	id: ID!
+	# Genesis Protocol params
+	queuedVoteRequiredPercentage: BigInt!
+	queuedVotePeriodLimit: BigInt!
+	boostedVotePeriodLimit: BigInt!
+	preBoostedVotePeriodLimit: BigInt!
+	thresholdConst: BigInt!
+	limitExponentValue: BigInt!
+	quietEndingPeriod: BigInt!
+	proposingRepReward: BigInt!
+	votersReputationLossRatio: BigInt!
+	minimumDaoBounty: BigInt!
+	daoBountyConst: BigInt!
+	activationTime: BigInt!
+	voteOnBehalf: Bytes!
 }

@@ -434,19 +434,20 @@ describe('Domain Layer', () => {
             winningOutcome
 
             expiresInQueueAt
-
-            queuedVoteRequiredPercentage
-            queuedVotePeriodLimit
-            boostedVotePeriodLimit
-            preBoostedVotePeriodLimit
-            thresholdConst
-            quietEndingPeriod
-            proposingRepReward
-            votersReputationLossRatio
-            minimumDaoBounty
-            daoBountyConst
-            activationTime
-            voteOnBehalf
+            genesisProtocolParams {
+              queuedVoteRequiredPercentage
+              queuedVotePeriodLimit
+              boostedVotePeriodLimit
+              preBoostedVotePeriodLimit
+              thresholdConst
+              quietEndingPeriod
+              proposingRepReward
+              votersReputationLossRatio
+              minimumDaoBounty
+              daoBountyConst
+              activationTime
+              voteOnBehalf
+            }
 
             gpQueue {
               dao {
@@ -518,19 +519,20 @@ describe('Domain Layer', () => {
 
       expiresInQueueAt: (Number(gpParams.queuedVotePeriodLimit) + p1Creation).toString(),
 
-      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
-      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
-      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
-      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
-      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** REAL_FBITS).toString(),
-      quietEndingPeriod: gpParams.quietEndingPeriod,
-      proposingRepReward: gpParams.proposingRepReward,
-      votersReputationLossRatio: gpParams.votersReputationLossRatio,
-      minimumDaoBounty: gpParams.minimumDaoBounty,
-      daoBountyConst: gpParams.daoBountyConst,
-      activationTime: gpParams.activationTime,
-      voteOnBehalf: gpParams.voteOnBehalf,
-
+      genesisProtocolParams: {
+        queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
+        queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
+        boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
+        preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
+        thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** REAL_FBITS).toString(),
+        quietEndingPeriod: gpParams.quietEndingPeriod,
+        proposingRepReward: gpParams.proposingRepReward,
+        votersReputationLossRatio: gpParams.votersReputationLossRatio,
+        minimumDaoBounty: gpParams.minimumDaoBounty,
+        daoBountyConst: gpParams.daoBountyConst,
+        activationTime: gpParams.activationTime,
+        voteOnBehalf: gpParams.voteOnBehalf,
+      },
       gpQueue: {
         dao: {
           id: addresses.Avatar.toLowerCase(),

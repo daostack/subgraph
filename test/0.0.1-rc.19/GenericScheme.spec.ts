@@ -86,6 +86,11 @@ describe('Generic Scheme', () => {
             executed
             returnValue
           }
+          scheme {
+            genericSchemeParams {
+              contractToCall
+            }
+          }
       }
   }`;
 
@@ -109,6 +114,11 @@ describe('Generic Scheme', () => {
         value: '0',
         executed: false,
         returnValue: null,
+      },
+      scheme: {
+        genericSchemeParams: {
+          contractToCall: actionMock.options.address.toLowerCase(),
+        },
       },
     });
 

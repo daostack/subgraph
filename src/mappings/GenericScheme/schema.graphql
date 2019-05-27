@@ -3,6 +3,7 @@ type GenericSchemeProposal @entity {
  	dao: DAO!
  	contractToCall: Bytes!
     callData: Bytes!
+    value: BigInt!
     executed: Boolean!
     returnValue: Bytes
 }

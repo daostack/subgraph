@@ -20,6 +20,7 @@ function insertNewProposal(event: NewCallProposal): void {
   ent.dao = event.params._avatar.toHex();
   ent.contractToCall = gs.getContractToCall(event.params._avatar);
   ent.callData = event.params._callData;
+  ent.value = event.params._value;
   ent.executed = false;
 
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);

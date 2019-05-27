@@ -19,7 +19,7 @@ async function generateContractInfo() {
         let addresses = migration[network].base[version];
         for (var name in addresses) {
           if (addresses.hasOwnProperty(name)) {
-              buffer += "    setContractInfo("+"\'"+addresses[name]+"\'"+", " +"\'"+name+"\'"+", "+"\'"+version+"\'"+");\n";
+              buffer += "    setContractInfo("+"\'"+addresses[name].toLowerCase()+"\'"+", " +"\'"+name+"\'"+", "+"\'"+version+"\'"+");\n";
           }
         }
     }

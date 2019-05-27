@@ -14,12 +14,12 @@ import { DAOToken } from '../../types/Controller/DAOToken';
 import { Reputation } from '../../types/Controller/Reputation';
 import { GenesisProtocol } from '../../types/GenesisProtocol/GenesisProtocol';
 
-
 import * as domain from '../../domain';
 
 import {
   AvatarContract,
   ContractInfo,
+  ContributionRewardParam,
   ControllerAddGlobalConstraint,
   ControllerGlobalConstraint,
   ControllerOrganization,
@@ -28,11 +28,10 @@ import {
   ControllerScheme,
   ControllerUnregisterScheme,
   ControllerUpgradeController,
-  ContributionRewardParam,
-  SchemeRegistrarParam,
   GenericSchemeParam,
   GenesisProtocolParam,
   ReputationContract,
+  SchemeRegistrarParam,
   TokenContract,
 } from '../../types/schema';
 
@@ -45,13 +44,13 @@ import {
   UpgradeController,
 } from '../../types/Controller/Controller';
 
-import { concat, equalStrings, eventId } from '../../utils';
+import { concat, debug, equalStrings, eventId } from '../../utils';
 
 function insertScheme(
   controllerAddress: Address,
   avatarAddress: Address,
   scheme: Address,
-  paramsHash : Bytes
+  paramsHash: Bytes,
 ): void {
   let controller = Controller.bind(controllerAddress);
   let perms = controller.getSchemePermissions(scheme, avatarAddress);
@@ -68,7 +67,7 @@ function insertScheme(
   /* tslint:disable:no-bitwise */
   ent.canDelegateCall = (perms[3] & 16) === 16;
   ent.address = scheme;
-  let contractInfo = ContractInfo.load(scheme.toHex());insertScheme
+  let contractInfo = ContractInfo.load(scheme.toHex());
   if (contractInfo != null) {
      ent.name = contractInfo.name;
      ent.version = contractInfo.version;
@@ -169,7 +168,9 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   let token = controller.nativeToken();
   let reputation = controller.nativeReputation();
   let paramsHash = controller.getSchemeParameters(event.params._scheme, avatar);
-  domain.handleRegisterScheme(avatar, token, reputation, event.params._scheme,paramsHash);
+  insertScheme(event.address, avatar, event.params._scheme , paramsHash);
+
+  domain.handleRegisterScheme(avatar, token, reputation, event.params._scheme, paramsHash);
 
   // Detect a new organization event by looking for the first register scheme event for that org.
   let isFirstRegister = store.get(
@@ -184,8 +185,6 @@ export function handleRegisterScheme(event: RegisterScheme): void {
       new Entity(),
     );
   }
-
-  insertScheme(event.address, avatar, event.params._scheme , paramsHash);
 
   let ent = new ControllerRegisterScheme(eventId(event));
   ent.txHash = event.transaction.hash;
@@ -265,8 +264,8 @@ export function handleRemoveGlobalConstraint(
   store.set('ControllerRemoveGlobalConstraint', ent.id, ent);
 }
 
-export function setGPParams(gpAddress : Address,
-                            gpParamsHash : Bytes) : void {
+export function setGPParams(gpAddress: Address,
+                            gpParamsHash: Bytes): void {
     let gp = GenesisProtocol.bind(gpAddress);
     let gpParams = GenesisProtocolParam.load(gpParamsHash.toHex());
     if (gpParams == null) {
@@ -284,16 +283,16 @@ export function setGPParams(gpAddress : Address,
         gpParams.minimumDaoBounty = params.value9; // minimumDaoBounty
         gpParams.daoBountyConst = params.value10; // daoBountyConst
         gpParams.activationTime = params.value11; // activationTime
-        gpParams.voteOnBehalf = params.value12; // voteOnBehalf
+        gpParams.voteOnBehalf = params.value12 as Bytes; // voteOnBehalf
         gpParams.save();
   }
 }
 
-export function setContributionRewardParams(avatar : Address,
-                                            scheme : Address,
-                                            vmAddress : Address,
-                                            vmParamsHash : Bytes) : void {
-    setGPParams(vmAddress,vmParamsHash);
+export function setContributionRewardParams(avatar: Address,
+                                            scheme: Address,
+                                            vmAddress: Address,
+                                            vmParamsHash: Bytes): void {
+    setGPParams(vmAddress, vmParamsHash);
     let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
     let contributionRewardParams = new ContributionRewardParam(controllerScheme.paramsHash.toHex());
     contributionRewardParams.votingMachine = vmAddress;
@@ -303,14 +302,15 @@ export function setContributionRewardParams(avatar : Address,
     controllerScheme.save();
 }
 
-export function setSchemeRegistrarParams(avatar : Address,
-                                         scheme : Address,
-                                         vmAddress : Address,
-                                         voteRegisterParams : Bytes,
-                                         voteRemoveParams : Bytes) : void {
-   setGPParams(vmAddress,voteRegisterParams);
-   setGPParams(vmAddress,voteRemoveParams);
+export function setSchemeRegistrarParams(avatar: Address,
+                                         scheme: Address,
+                                         vmAddress: Address,
+                                         voteRegisterParams: Bytes,
+                                         voteRemoveParams: Bytes): void {
+   setGPParams(vmAddress, voteRegisterParams);
+   setGPParams(vmAddress, voteRemoveParams);
    let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
+   debug(controllerScheme.paramsHash.toHex());
    let schemeRegistrarParams = new SchemeRegistrarParam(controllerScheme.paramsHash.toHex());
    schemeRegistrarParams.votingMachine = vmAddress;
    schemeRegistrarParams.voteRegisterParams = voteRegisterParams.toHex();
@@ -321,12 +321,12 @@ export function setSchemeRegistrarParams(avatar : Address,
 
 }
 
-export function setGenericSchemeParams(avatar : Address,
-                                       scheme : Address,
-                                       vmAddress : Address,
-                                       vmParamsHash : Bytes,
-                                       contractToCall: Bytes) : void {
-   setGPParams(vmAddress,vmParamsHash);
+export function setGenericSchemeParams(avatar: Address,
+                                       scheme: Address,
+                                       vmAddress: Address,
+                                       vmParamsHash: Bytes,
+                                       contractToCall: Bytes): void {
+   setGPParams(vmAddress, vmParamsHash);
    let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
    let genericSchemeParams = new GenericSchemeParam(controllerScheme.paramsHash.toHex());
    genericSchemeParams.votingMachine = vmAddress;

@@ -157,7 +157,7 @@ export function updateGPProposal(
   proposal.createdAt = timestamp;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, gpProposal.value1)).toHex();
 
-  proposal.genesisProtocolParams = paramsHash.toHex(); 
+  proposal.genesisProtocolParams = paramsHash.toHex();
 
   updateThreshold(
     proposal.dao.toString(),

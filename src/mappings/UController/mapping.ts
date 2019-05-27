@@ -4,7 +4,7 @@ import {
   Bytes,
   crypto,
   Entity,
-  store
+  store,
 } from '@graphprotocol/graph-ts';
 
 import { Avatar } from '../../types/UController/Avatar';
@@ -25,7 +25,7 @@ import {
   UControllerRegisterScheme,
   UControllerRemoveGlobalConstraint,
   UControllerUnregisterScheme,
-  UControllerUpgradeController
+  UControllerUpgradeController,
 } from '../../types/schema';
 import {
   AddGlobalConstraint,
@@ -41,7 +41,7 @@ function insertScheme(
   uControllerAddress: Address,
   avatarAddress: Address,
   scheme: Address,
-  paramsHash : Bytes
+  paramsHash: Bytes,
 ): void {
   let uController = UController.bind(uControllerAddress);
   let perms = uController.getSchemePermissions(scheme, avatarAddress);
@@ -165,6 +165,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
 
   let org = uController.organizations(event.params._avatar);
   let paramsHash = uController.getSchemeParameters(event.params._scheme, event.params._avatar);
+  insertScheme(event.address, event.params._avatar, event.params._scheme, paramsHash);
   domain.handleRegisterScheme(event.params._avatar, org.value0 , org.value1, event.params._scheme, paramsHash);
 
   // Detect a new organization event by looking for the first register scheme event for that org.
@@ -180,8 +181,6 @@ export function handleRegisterScheme(event: RegisterScheme): void {
       new Entity(),
     );
   }
-
-  insertScheme(event.address, event.params._avatar, event.params._scheme, paramsHash);
 
   let ent = new UControllerRegisterScheme(eventId(event));
   ent.txHash = event.transaction.hash;

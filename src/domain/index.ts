@@ -223,7 +223,7 @@ export function handleRegisterScheme(avatar: Address,
     ent.set('id', Value.fromString(avatar.toHex()));
     store.set('FirstRegisterSchemeFlag', avatar.toHex(), ent);
   }
-  gpqueueModule.create(avatar,scheme,paramsHash);
+  gpqueueModule.create(avatar, scheme, paramsHash);
 }
 
 export function handleMint(event: Mint): void {

@@ -15,9 +15,9 @@ describe('DAORegistry', () => {
     return new web3.eth.Contract(abi.abi, undefined, opts)
       .deploy({
         data: abi.bytecode,
-        arguments: args
+        arguments: args,
       }).send();
-  }
+  };
 
   beforeAll(async () => {
     web3 = await getWeb3();

@@ -8,16 +8,32 @@ import { Avatar, OwnershipTransferred, ReceiveEther, SendEther } from '../../typ
 // Import entity types generated from the GraphQL schema
 import { AvatarContract } from '../../types/schema';
 
+function getAvatar(id: string): AvatarContract {
+  let avatar = store.get('AvatarContract', id) as AvatarContract;
+  if (avatar == null) {
+    const avatarAddress = Address.fromString(id);
+    avatar = new AvatarContract(id);
+    avatar.address = avatarAddress;
+
+    let avatarSC = Avatar.bind(avatarAddress);
+    avatar.name = avatarSC.orgName();
+    avatar.nativeReputation = avatarSC.nativeReputation();
+    avatar.nativeToken = avatarSC.nativeToken();
+    avatar.balance = BigInt.fromI32(0);
+  }
+  return avatar;
+}
+
+function saveAvatar(avatar: AvatarContract): void {
+  store.set('AvatarContract', avatar.id, avatar);
+}
+
 function handleAvatarBalance(
   address: Address,
   value: BigInt,
   received: boolean,
 ): void {
-
-  let avatar = store.get('AvatarContract', address.toHex()) as AvatarContract;
-  if (avatar == null) {
-     return;
-  }
+  let avatar = getAvatar(address.toHex());
 
   if (received) {
     avatar.balance = avatar.balance.plus(value);
@@ -25,26 +41,19 @@ function handleAvatarBalance(
     avatar.balance = avatar.balance.minus(value);
   }
 
-  store.set('AvatarContract', avatar.id, avatar);
+  saveAvatar(avatar);
 }
 
 export function handleSendEth(event: SendEther): void {
   handleAvatarBalance(event.address, event.params._amountInWei, false);
 }
+
 export function handleReceiveEth(event: ReceiveEther): void {
   handleAvatarBalance(event.address, event.params._value, true);
 }
+
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  let avatar = AvatarContract.load(event.address.toHex());
-  if (avatar == null) {
-    avatar = new AvatarContract(event.address.toHex());
-    let avatarSC = Avatar.bind(event.address);
-    avatar.address = event.address;
-    avatar.name = avatarSC.orgName();
-    avatar.nativeReputation = avatarSC.nativeReputation();
-    avatar.nativeToken = avatarSC.nativeToken();
-    avatar.balance = BigInt.fromI32(0);
-  }
+  let avatar = getAvatar(event.address.toHex());
   avatar.owner = event.params.newOwner;
-  avatar.save();
+  saveAvatar(avatar);
 }

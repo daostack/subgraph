@@ -13,7 +13,7 @@ export function handlePropose(event: Propose): void {
   // Start tracking the new avatar template if we aren't already
   // Warning: This is still very WIP. Refer to this thread for more info:
   // https://github.com/daostack/subgraph/issues/197
-  if (store.get("AvatarContract", event.params._avatar.toHex()) == null) {
+  if (store.get('AvatarContract', event.params._avatar.toHex()) == null) {
     Avatar.create(event.params._avatar);
   }
 

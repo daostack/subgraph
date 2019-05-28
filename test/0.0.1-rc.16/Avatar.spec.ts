@@ -36,7 +36,9 @@ describe('Avatar', () => {
         balance
         owner
       }
-    }`, 3000);
+    }`, 5000);
+
+    const newBalance = Number(balance) + 1;
 
     expect(avatarContract).toEqual({
       id: addresses.Avatar.toLowerCase(),
@@ -44,7 +46,7 @@ describe('Avatar', () => {
       name: orgName,
       nativeToken: addresses.NativeToken.toLowerCase(),
       nativeReputation: addresses.NativeReputation.toLowerCase(),
-      balance: `${Number(balance) + 1}`,
+      balance: `${newBalance}`,
       owner: addresses.Controller.toLowerCase(),
     });
   }, 20000);

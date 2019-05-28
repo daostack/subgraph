@@ -10,10 +10,12 @@ import { Avatar } from '../../types/DAORegistry/templates';
 import * as domain from '../../domain';
 
 export function handlePropose(event: Propose): void {
-  // Start tracking the new avatar template
+  // Start tracking the new avatar template if we aren't already
   // Warning: This is still very WIP. Refer to this thread for more info:
   // https://github.com/daostack/subgraph/issues/197
-  Avatar.create(event.params._avatar);
+  if (store.get("AvatarContract", event.params._avatar.toHex()) == null) {
+    Avatar.create(event.params._avatar);
+  }
 
   domain.daoRegister(event.params._avatar, 'proposed');
 }

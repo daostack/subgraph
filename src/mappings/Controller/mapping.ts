@@ -44,7 +44,7 @@ import {
   UpgradeController,
 } from '../../types/Controller/Controller';
 
-import { concat, debug, equalStrings, eventId } from '../../utils';
+import { concat, debug, equalsBytes, eventId } from '../../utils';
 
 function insertScheme(
   controllerAddress: Address,
@@ -268,7 +268,7 @@ export function setGPParams(gpAddress: Address,
                             gpParamsHash: Bytes): void {
     let gp = GenesisProtocol.bind(gpAddress);
     let gpParams = GenesisProtocolParam.load(gpParamsHash.toHex());
-    if (gpParams == null) {
+    if (gpParams == null && !equalsBytes(gpParamsHash, new Bytes(32))) {
         gpParams = new  GenesisProtocolParam(gpParamsHash.toHex());
         let params = gp.parameters(gpParamsHash);
         gpParams.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage

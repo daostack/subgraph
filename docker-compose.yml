@@ -16,7 +16,10 @@ services:
       postgres_pass: letmein
       postgres_db: postgres
       ipfs: 'ipfs:5001'
-      ethereum: 'development:http://ganache:8545'
+      ethereum: 'rinkeby:https://rinkeby.infura.io/v3/69b4a42f71a8446e8b167062e3d5e317'
+      GRAPH_IPFS_TIMEOUT: '2'
+      GRAPH_MAX_IPFS_FILE_BYTES: '102400'
+      RUST_LOG: info
   ipfs:
     build: docker/ipfs
     ports:

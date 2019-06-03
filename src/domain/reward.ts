@@ -1,8 +1,13 @@
 import { Address, BigInt, Bytes , crypto, EthereumValue, SmartContract , store} from '@graphprotocol/graph-ts';
 import { GenesisProtocol__voteInfoResult } from '../types/GenesisProtocol/GenesisProtocol';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { ContributionRewardProposal, GPReward, GPRewardsHelper, PreGPReward, Proposal, ControllerScheme } from '../types/schema';
-import { concat , equalsBytes, equalStrings , debug } from '../utils';
+import { ContributionRewardProposal,
+         ControllerScheme,
+         GPReward,
+         GPRewardsHelper,
+         PreGPReward,
+         Proposal } from '../types/schema';
+import { concat , equalsBytes , equalStrings } from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 
 function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
@@ -134,15 +139,15 @@ export function insertGPRewards(
   let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];
   for (i = 0; i < gpRewards.length; i++) {
     let gpReward = PreGPReward.load(gpRewards[i]);
-    if (gpReward === null) continue;
-    let redeemValues : Array<BigInt>;
+    if (gpReward === null) { continue; }
+    let redeemValues: BigInt[];
     redeemValues[0] = BigInt.fromI32(0);
     redeemValues[1] = BigInt.fromI32(0);
     redeemValues[2] = BigInt.fromI32(0);
     let daoBountyForStaker: BigInt = BigInt.fromI32(0);
     let controllerScheme = ControllerScheme.load(proposal.scheme.toString());
     if (controllerScheme !== null ) {
-        let redeemValues = genesisProtocolExt.redeem(proposalId, gpReward.beneficiary as Address);
+        redeemValues = genesisProtocolExt.redeem(proposalId, gpReward.beneficiary as Address);
         if (state === 2) {// call redeemDaoBounty only on execute
            daoBountyForStaker = genesisProtocolExt.redeemDaoBounty(proposalId, gpReward.beneficiary as Address).value1;
         }

@@ -192,9 +192,7 @@ export function updateCRProposal(
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
   getProposalIPFSData(proposal);
-  addRedeemableRewardOwner(proposal, beneficiary);
   saveProposal(proposal);
-
 }
 
 export function updateGSProposal(

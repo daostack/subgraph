@@ -137,6 +137,7 @@ export function insertGPRewards(
   let genesisProtocolExt = GenesisProtocolExt.bind(gpAddress);
   let i = 0;
   let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];
+  let controllerScheme = ControllerScheme.load(proposal.scheme.toString());
   for (i = 0; i < gpRewards.length; i++) {
     let gpReward = PreGPReward.load(gpRewards[i]);
     if (gpReward === null) { continue; }
@@ -145,7 +146,6 @@ export function insertGPRewards(
     redeemValues[1] = BigInt.fromI32(0);
     redeemValues[2] = BigInt.fromI32(0);
     let daoBountyForStaker: BigInt = BigInt.fromI32(0);
-    let controllerScheme = ControllerScheme.load(proposal.scheme.toString());
     if (controllerScheme !== null ) {
         redeemValues = genesisProtocolExt.redeem(proposalId, gpReward.beneficiary as Address);
         if (state === 2) {// call redeemDaoBounty only on execute

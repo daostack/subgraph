@@ -1,8 +1,13 @@
 import { Address, BigInt, Bytes , crypto, EthereumValue, SmartContract , store} from '@graphprotocol/graph-ts';
 import { GenesisProtocol__voteInfoResult } from '../types/GenesisProtocol/GenesisProtocol';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { ContributionRewardProposal, GPReward, GPRewardsHelper, PreGPReward, Proposal } from '../types/schema';
-import { concat , equalsBytes, equalStrings } from '../utils';
+import { ContributionRewardProposal,
+         ControllerScheme,
+         GPReward,
+         GPRewardsHelper,
+         PreGPReward,
+         Proposal } from '../types/schema';
+import { concat , equalsBytes , equalStrings } from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 
 function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
@@ -132,12 +137,20 @@ export function insertGPRewards(
   let genesisProtocolExt = GenesisProtocolExt.bind(gpAddress);
   let i = 0;
   let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];
+  let controllerScheme = ControllerScheme.load(proposal.scheme.toString());
   for (i = 0; i < gpRewards.length; i++) {
     let gpReward = PreGPReward.load(gpRewards[i]);
-    let redeemValues = genesisProtocolExt.redeem(proposalId, gpReward.beneficiary as Address);
-    let daoBountyForStaker: BigInt;
-    if (state === 2) {// call redeemDaoBounty only on execute
-       daoBountyForStaker = genesisProtocolExt.redeemDaoBounty(proposalId, gpReward.beneficiary as Address).value1;
+    if (gpReward === null) { continue; }
+    let redeemValues: BigInt[];
+    redeemValues[0] = BigInt.fromI32(0);
+    redeemValues[1] = BigInt.fromI32(0);
+    redeemValues[2] = BigInt.fromI32(0);
+    let daoBountyForStaker: BigInt = BigInt.fromI32(0);
+    if (controllerScheme !== null ) {
+        redeemValues = genesisProtocolExt.redeem(proposalId, gpReward.beneficiary as Address);
+        if (state === 2) {// call redeemDaoBounty only on execute
+           daoBountyForStaker = genesisProtocolExt.redeemDaoBounty(proposalId, gpReward.beneficiary as Address).value1;
+        }
     }
     if (!redeemValues[0].isZero() ||
         !redeemValues[1].isZero() ||
@@ -170,8 +183,8 @@ export function insertGPRewards(
       store.remove('PreGPReward', gpReward.id);
     }
   }
-  let contributionRewardProposal = ContributionRewardProposal.load(proposal.contributionReward.toString());
-  if (contributionRewardProposal !== null) {
+  if (proposal.contributionReward !== null) {
+      let contributionRewardProposal = ContributionRewardProposal.load(proposal.contributionReward.toString());
       addRedeemableRewardOwner(proposal, contributionRewardProposal.beneficiary);
   }
   store.remove('GPRewardsHelper' , proposalId.toHex());

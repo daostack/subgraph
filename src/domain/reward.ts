@@ -183,8 +183,8 @@ export function insertGPRewards(
       store.remove('PreGPReward', gpReward.id);
     }
   }
-  let contributionRewardProposal = ContributionRewardProposal.load(proposal.contributionReward.toString());
-  if (contributionRewardProposal !== null) {
+  if (proposal.contributionReward !== null) {
+      let contributionRewardProposal = ContributionRewardProposal.load(proposal.contributionReward.toString());
       addRedeemableRewardOwner(proposal, contributionRewardProposal.beneficiary);
   }
   store.remove('GPRewardsHelper' , proposalId.toHex());

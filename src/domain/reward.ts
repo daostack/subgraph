@@ -170,6 +170,10 @@ export function insertGPRewards(
       store.remove('PreGPReward', gpReward.id);
     }
   }
+  let contributionRewardProposal = ContributionRewardProposal.load(proposal.contributionReward.toString());
+  if (contributionRewardProposal !== null) {
+      addRedeemableRewardOwner(proposal, contributionRewardProposal.beneficiary);
+  }
   store.remove('GPRewardsHelper' , proposalId.toHex());
   proposal.save();
 }

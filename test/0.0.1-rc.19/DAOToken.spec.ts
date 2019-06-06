@@ -51,7 +51,7 @@ describe('DAOToken', () => {
       const contracts = (await sendQuery(tokenContractsQuery)).tokenContracts;
       for (let i in contracts) {
         if (contracts[i].owner === accounts[1].address.toLowerCase() &&
-         contracts[i].address ===  daotoken.options.address.toLowerCase() && 
+         contracts[i].address ===  daotoken.options.address.toLowerCase() &&
          contracts[i].totalSupply === await daotoken.methods.totalSupply().call() + '') {
           return true;
         }

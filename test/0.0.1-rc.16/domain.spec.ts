@@ -731,6 +731,7 @@ describe('Domain Layer', () => {
        staker: accounts[1].address,
      });
 
+    await waitUntilTrue(stakeIsIndexed);
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal.stage).toEqual('PreBoosted');
     expect(proposal.preBoostedAt).toEqual(s3Timestamp.toString());
@@ -991,6 +992,17 @@ describe('Domain Layer', () => {
     beneficiary: accounts[1].address.toLowerCase(),
   });
 
+    const redeemIsIndexed = async () => {
+      const updatedGpRewards = (await sendQuery(getProposalRewards)).proposal.gpRewards;
+      for (let i in updatedGpRewards) {
+        if (updatedGpRewards[i].daoBountyForStakerRedeemedAt === rd1Timestamp.toString()) {
+          return true;
+        }
+      }
+      return false;
+      };
+
+    await waitUntilTrue(redeemIsIndexed);
     proposal = (await sendQuery(getProposalRewards)).proposal;
     gpRewards = proposal.gpRewards;
     expect(gpRewards).toContainEqual({

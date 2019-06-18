@@ -17,7 +17,8 @@ services:
       postgres_db: postgres
       ipfs: 'ipfs:5001'
       ethereum: 'development:http://ganache:8545'
-      RUST_LOG: info
+      GRAPH_IPFS_TIMEOUT: '2'
+      GRAPH_MAX_IPFS_FILE_BYTES: '102400'
   ipfs:
     build: docker/ipfs
     ports:

@@ -3,6 +3,7 @@ import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ControllerScheme, Proposal } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
 import { updateThreshold } from './gpqueue';
+import { getReputation } from './reputation';
 
 export function parseOutcome(num: BigInt): string {
   if (num.toI32() === 1) {
@@ -14,7 +15,7 @@ export function parseOutcome(num: BigInt): string {
   }
 }
 
-export function getProposal(id: string): Proposal {
+export function getProposal(id: string, daoAddress: string): Proposal {
   let proposal = store.get('Proposal', id) as Proposal;
   if (proposal == null) {
     proposal = new Proposal(id);
@@ -24,6 +25,7 @@ export function getProposal(id: string): Proposal {
 
     proposal.votesFor = BigInt.fromI32(0);
     proposal.votesAgainst = BigInt.fromI32(0);
+    proposal.totalReputation = BigInt.fromI32(0);
     proposal.winningOutcome = 'Fail';
 
     proposal.stakesFor = BigInt.fromI32(0);
@@ -35,6 +37,10 @@ export function getProposal(id: string): Proposal {
     proposal.scheme = null;
     proposal.descriptionHash = '';
     proposal.title = '';
+    proposal.dao = daoAddress;
+    if (daoAddress != null) {
+      proposal.totalReputation = getReputation(daoAddress).totalSupply;
+    }
   }
 
   getProposalIPFSData(proposal);
@@ -86,14 +92,14 @@ export function updateProposalAfterVote(
 }
 
 export function updateProposalconfidence(id: Bytes, confidence: BigInt): void {
-   let proposal = getProposal(id.toHex());
+   let proposal = getProposal(id.toHex(), null);
    proposal.confidenceThreshold = confidence;
    saveProposal(proposal);
 }
 
 export function updateProposalState(id: Bytes, state: number, gpAddress: Address): void {
    let gp = GenesisProtocol.bind(gpAddress);
-   let proposal = getProposal(id.toHex());
+   let proposal = getProposal(id.toHex(),  null);
    updateThreshold(proposal.dao.toString(),
                     gpAddress,
                     gp.threshold(proposal.paramsHash, proposal.organizationId),
@@ -142,9 +148,8 @@ export function updateGPProposal(
   timestamp: BigInt,
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
-  let proposal = getProposal(proposalId.toHex());
+  let proposal = getProposal(proposalId.toHex(), avatarAddress.toHex());
   proposal.proposer = proposer;
-  proposal.dao = avatarAddress.toHex();
   let params = gp.parameters(paramsHash);
   let gpProposal = gp.proposals(proposalId);
 
@@ -184,8 +189,7 @@ export function updateCRProposal(
   beneficiary: Address,
   schemeAddress: Address,
 ): void {
-  let proposal = getProposal(proposalId.toHex());
-  proposal.dao = avatarAddress.toHex();
+  let proposal = getProposal(proposalId.toHex(), avatarAddress.toHex());
   proposal.contributionReward = proposalId.toHex();
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
@@ -202,8 +206,7 @@ export function updateGSProposal(
   descriptionHash: string,
   schemeAddress: Address,
 ): void {
-  let proposal = getProposal(proposalId.toHex());
-  proposal.dao = avatarAddress.toHex();
+  let proposal = getProposal(proposalId.toHex(), avatarAddress.toHex());
   proposal.genericScheme = proposalId.toHex();
   proposal.createdAt = createdAt;
   proposal.descriptionHash = descriptionHash;
@@ -221,8 +224,7 @@ export function updateSRProposal(
   descriptionHash: string,
   schemeAddress: Address,
 ): void {
-  let proposal = getProposal(proposalId);
-  proposal.dao = avatarAddress.toHex();
+  let proposal = getProposal(proposalId, avatarAddress.toHex());
   proposal.schemeRegistrar = proposalId;
   proposal.createdAt = createdAt;
   proposal.votingMachine = votingMachine;
@@ -238,7 +240,7 @@ export function updateProposalExecution(
   totalReputation: BigInt,
   timestamp: BigInt,
 ): void {
-  let proposal = getProposal(proposalId.toHex());
+  let proposal = getProposal(proposalId.toHex(), null);
   proposal.executedAt = timestamp;
   if (totalReputation != null) {
     proposal.totalRepWhenExecuted = totalReputation;
@@ -247,7 +249,7 @@ export function updateProposalExecution(
 }
 
 export function updateProposalExecutionState(id: string, executionState: number): void {
-  let proposal = getProposal(id);
+  let proposal = getProposal(id, null);
   // enum ExecutionState { None, QueueBarCrossed, QueueTimeOut, PreBoostedBarCrossed, BoostedTimeOut, BoostedBarCrossed}
   if (executionState === 1) {
     proposal.executionState = 'QueueBarCrossed';
@@ -277,7 +279,7 @@ export function removeRedeemableRewardOwner(
   proposalId: Bytes,
   redeemer: Bytes,
 ): void {
-  let proposal = getProposal(proposalId.toHex());
+  let proposal = getProposal(proposalId.toHex() , null);
   let accounts: Bytes[] = proposal.accountsWithUnclaimedRewards as Bytes[];
   let idx = 0;
   for (idx; idx < accounts.length; idx++) {

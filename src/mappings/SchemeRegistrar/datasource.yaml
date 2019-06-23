@@ -1,6 +1,7 @@
 abis:
   - SchemeRegistrar
   - GenesisProtocol
+  - Reputation
 entities:
   - SchemeRegistrarNewSchemeProposal
   - SchemeRegistrarRemoveSchemeProposal

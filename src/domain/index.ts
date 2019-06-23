@@ -131,7 +131,7 @@ export function handleNewCallProposal(
 }
 
 export function handleStake(event: Stake): void {
-  let proposal = getProposal(event.params._proposalId.toHex());
+  let proposal = getProposal(event.params._proposalId.toHex(), null);
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
@@ -154,7 +154,7 @@ export function handleStake(event: Stake): void {
 }
 
 export function handleVoteProposal(event: VoteProposal): void {
-  let proposal = getProposal(event.params._proposalId.toHex());
+  let proposal = getProposal(event.params._proposalId.toHex(), null);
 
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;

@@ -133,7 +133,7 @@ export function insertGPRewards(
   gpAddress: Address,
   state: number,
 ): void {
-  let proposal = getProposal(proposalId.toHex());
+  let proposal = getProposal(proposalId.toHex(), null);
   let genesisProtocolExt = GenesisProtocolExt.bind(gpAddress);
   let i = 0;
   let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];

@@ -1,4 +1,4 @@
-import { Address, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import { Reputation } from '../types/Reputation/Reputation';
 import { Rep } from '../types/schema';
 
@@ -27,8 +27,11 @@ export function insertReputation(
 }
 
 export function updateReputationTotalSupply(reputationAddress: Address): void {
-  let rep = Reputation.bind(reputationAddress);
   let reputation = getReputation(reputationAddress.toHex());
-  reputation.totalSupply = rep.totalSupply();
+  reputation.totalSupply = getTotalReputationSupply(reputationAddress);
   saveReputation(reputation);
+}
+
+export function getTotalReputationSupply(reputationAddress: Address): BigInt {
+  return  Reputation.bind(reputationAddress).totalSupply();
 }

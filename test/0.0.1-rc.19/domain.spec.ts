@@ -384,6 +384,8 @@ describe('Domain Layer', () => {
       beneficiary: accounts[5].address,
     });
 
+    let totalReputationForProposal = await reputation.methods.totalSupply().call();
+
     const getProposal = `{
         proposal(id: "${p1}") {
             id
@@ -502,6 +504,7 @@ describe('Domain Layer', () => {
       votesFor: '0',
       votesAgainst: '0',
       winningOutcome: 'Fail',
+      totalReputation: totalReputationForProposal,
 
       stakes: [],
       stakesFor: '0',

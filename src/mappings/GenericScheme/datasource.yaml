@@ -1,6 +1,7 @@
 abis:
   - GenericScheme
   - GenesisProtocol
+  - Reputation
 entities:
   - GenericSchemeProposal
 eventHandlers:

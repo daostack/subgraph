@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
 import {  setContractsInfo } from '../contractsInfo';
 import {
   NewContributionProposal,
@@ -140,6 +140,7 @@ export function handleStake(event: Stake): void {
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
+  proposal.confidence =  (new BigDecimal(proposal.stakesFor)) / (new BigDecimal(proposal.stakesAgainst));
   saveProposal(proposal);
   insertStake(
     eventId(event),

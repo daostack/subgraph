@@ -431,6 +431,7 @@ describe('Domain Layer', () => {
             stakesFor
             stakesAgainst
             confidenceThreshold
+            confidence
 
             winningOutcome
 
@@ -509,6 +510,7 @@ describe('Domain Layer', () => {
       stakesFor: '0',
       stakesAgainst: '100000000000000000000',
       confidenceThreshold: '0',
+      confidence: '0',
 
       contributionReward: {
         beneficiary: accounts[5].address.toLowerCase(),
@@ -595,6 +597,7 @@ describe('Domain Layer', () => {
       stakesFor: '0',
       stakesAgainst: '100000000000000000000',
       confidenceThreshold: '0',
+      confidence: '0',
 
     });
 
@@ -701,6 +704,7 @@ describe('Domain Layer', () => {
       stakesFor: '100000000000000000000',
       stakesAgainst: '200000000000000000000',
       confidenceThreshold: '0',
+      confidence: '0.5',
     });
     expect(new Set(proposal.stakes)).toEqual(new Set([
       {
@@ -810,6 +814,7 @@ describe('Domain Layer', () => {
 
       stakesFor: '400000000000000000000',
       stakesAgainst: '200000000000000000000',
+      confidence: '2',
       confidenceThreshold: Math.pow(2, REAL_FBITS).toString(),
     });
 

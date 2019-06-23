@@ -82,6 +82,7 @@ type Proposal @entity {
 	stakes: [ProposalStake!] @derivedFrom(field: "proposal")
 	stakesFor: BigInt!
 	stakesAgainst: BigInt!
+	confidence: BigDecimal!
 
 	gpQueue: GPQueue!
 

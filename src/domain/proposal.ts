@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ControllerScheme, Proposal } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
@@ -30,6 +30,7 @@ export function getProposal(id: string): Proposal {
 
     proposal.stakesFor = BigInt.fromI32(0);
     proposal.stakesAgainst = BigInt.fromI32(0);
+    proposal.confidence = BigDecimal.fromString('0');
     proposal.confidenceThreshold = BigInt.fromI32(0);
     proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
     proposal.paramsHash = new Bytes(32);

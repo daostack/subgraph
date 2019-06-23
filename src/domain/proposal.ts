@@ -2,7 +2,9 @@ import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ControllerScheme, Proposal } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
+import { getDAO } from './dao';
 import { updateThreshold } from './gpqueue';
+import { getReputation } from './reputation';
 
 export function parseOutcome(num: BigInt): string {
   if (num.toI32() === 1) {
@@ -172,6 +174,10 @@ export function updateGPProposal(
     scheme.gpQueue = proposal.organizationId.toHex();
     scheme.save();
   }
+
+  let dao = getDAO(avatarAddress.toHex());
+  let reputation = getReputation(dao.nativeReputation);
+  proposal.totalRepWhenCreated = reputation.totalSupply;
   saveProposal(proposal);
 }
 

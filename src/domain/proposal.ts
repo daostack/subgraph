@@ -1,6 +1,6 @@
 import { Address, BigDecimal, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { ControllerScheme, Proposal } from '../types/schema';
+import { ControllerScheme, GenesisProtocolParam, Proposal } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
 import { getDAO } from './dao';
 import { updateThreshold } from './gpqueue';
@@ -121,17 +121,26 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
   } else if (state === 3) {
     // Queued
     proposal.stage = 'Queued';
+    proposal.closingAt =  proposal.createdAt +
+                          GenesisProtocolParam.load(proposal.genesisProtocolParams).queuedVotePeriodLimit;
   } else if (state === 4) {
     // PreBoosted
     proposal.stage = 'PreBoosted';
     proposal.preBoostedAt = gpTimes[2];
+    proposal.closingAt =  proposal.preBoostedAt +
+                          GenesisProtocolParam.load(proposal.genesisProtocolParams).preBoostedVotePeriodLimit;
   } else if (state === 5) {
     // Boosted
     proposal.boostedAt = gpTimes[1];
     proposal.stage = 'Boosted';
+    proposal.closingAt =  proposal.boostedAt +
+                          GenesisProtocolParam.load(proposal.genesisProtocolParams).boostedVotePeriodLimit;
+
   } else if (state === 6) {
     // QuietEndingPeriod
     proposal.quietEndingPeriodBeganAt = gpTimes[1];
+    proposal.closingAt =  proposal.quietEndingPeriodBeganAt +
+                          GenesisProtocolParam.load(proposal.genesisProtocolParams).quietEndingPeriod;
     proposal.stage = 'QuietEndingPeriod';
   }
 }
@@ -179,6 +188,9 @@ export function updateGPProposal(
   let dao = getDAO(avatarAddress.toHex());
   let reputation = getReputation(dao.nativeReputation);
   proposal.totalRepWhenCreated = reputation.totalSupply;
+  proposal.closingAt =  proposal.createdAt +
+                        GenesisProtocolParam.load(proposal.genesisProtocolParams).queuedVotePeriodLimit;
+
   saveProposal(proposal);
 }
 

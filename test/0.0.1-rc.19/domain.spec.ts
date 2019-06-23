@@ -400,6 +400,7 @@ describe('Domain Layer', () => {
             executedAt
             totalRepWhenExecuted
             totalRepWhenCreated
+            closingAt
             proposer
             votingMachine
             votes {
@@ -431,6 +432,7 @@ describe('Domain Layer', () => {
             stakesFor
             stakesAgainst
             confidenceThreshold
+            confidence
 
             winningOutcome
 
@@ -491,6 +493,7 @@ describe('Domain Layer', () => {
       url: proposalUrl,
       stage: 'Queued',
       executionState: 'None',
+      closingAt: (Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString(),
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
@@ -568,6 +571,7 @@ describe('Domain Layer', () => {
       stage: 'Queued',
       executionState: 'None',
       createdAt: p1Creation.toString(),
+      closingAt: (Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
       executedAt: null,
@@ -615,6 +619,7 @@ describe('Domain Layer', () => {
       id: p1,
       descriptionHash: descHash,
       stage: 'Queued',
+      closingAt: (Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString(),
       executionState: 'None',
       createdAt: p1Creation.toString(),
       boostedAt: null,
@@ -676,6 +681,7 @@ describe('Domain Layer', () => {
       id: p1,
       descriptionHash: descHash,
       stage: 'Queued',
+      closingAt: (Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString(),
       executionState: 'None',
       createdAt: p1Creation.toString(),
       boostedAt: null,
@@ -745,6 +751,7 @@ describe('Domain Layer', () => {
     expect(proposal.stage).toEqual('PreBoosted');
     expect(proposal.preBoostedAt).toEqual(s3Timestamp.toString());
     expect(proposal.confidenceThreshold).toEqual(Math.pow(2, REAL_FBITS).toString());
+    expect(proposal.closingAt).toEqual((Number(gpParams.preBoostedVotePeriodLimit) + Number(s3Timestamp)).toString());
 
     // boost it
     await increaseTime(300000, web3);
@@ -758,6 +765,7 @@ describe('Domain Layer', () => {
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       stage: 'Boosted',
+      closingAt: (Number(gpParams.boostedVotePeriodLimit) + Number(v2Timestamp)).toString(),
     });
 
     expectedVotesCount++;

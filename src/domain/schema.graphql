@@ -58,6 +58,7 @@ type Proposal @entity {
 	quietEndingPeriodBeganAt: BigInt
 	executedAt: BigInt
 	totalRepWhenExecuted: BigInt
+	totalRepWhenCreated: BigInt
 	votingMachine: Bytes!
 	executionState: String!
 	paramsHash: Bytes!

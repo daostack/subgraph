@@ -56,6 +56,7 @@ type Proposal @entity {
 	preBoostedAt: BigInt
 	boostedAt: BigInt
 	quietEndingPeriodBeganAt: BigInt
+	closingAt: BigInt
 	executedAt: BigInt
 	totalRepWhenExecuted: BigInt
 	totalRepWhenCreated: BigInt
@@ -82,6 +83,7 @@ type Proposal @entity {
 	stakes: [ProposalStake!] @derivedFrom(field: "proposal")
 	stakesFor: BigInt!
 	stakesAgainst: BigInt!
+	confidence: BigDecimal!
 
 	gpQueue: GPQueue!
 

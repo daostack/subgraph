@@ -183,7 +183,7 @@ export function insertGPRewards(
       store.remove('PreGPReward', gpReward.id);
     }
   }
-  if (proposal.contributionReward !== null) {
+  if (proposal.contributionReward !== null && equalStrings(proposal.winningOutcome, 'Pass')) {
       let contributionRewardProposal = ContributionRewardProposal.load(proposal.contributionReward.toString());
       addRedeemableRewardOwner(proposal, contributionRewardProposal.beneficiary);
   }

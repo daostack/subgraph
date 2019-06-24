@@ -1123,9 +1123,10 @@ describe('Domain Layer', () => {
     proposal(id: "${p2}") {
         stage
         quietEndingPeriodBeganAt
+        accountsWithUnclaimedRewards
     }}`;
 
-    increaseTime(1814400 + 1 , web3);
+    increaseTime(600 + 1 , web3);
     await genesisProtocol.methods.execute(p2).send();
 
     let stage = (await sendQuery(getExpiredProposal)).proposal.stage;
@@ -1149,6 +1150,9 @@ describe('Domain Layer', () => {
     expect((await sendQuery(getExpiredProposal)).proposal.stage).toEqual('QuietEndingPeriod');
     expect((await sendQuery(getExpiredProposal)).proposal.quietEndingPeriodBeganAt)
            .toEqual(quietEndingPeriodBeganAt.toString());
-
+    increaseTime(300 + 1 , web3);
+    await genesisProtocol.methods.execute(p2).send();
+    expect((await sendQuery(getExpiredProposal)).proposal.accountsWithUnclaimedRewards)
+    .toEqual([]);
   }, 100000);
 });

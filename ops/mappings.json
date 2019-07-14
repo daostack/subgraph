@@ -386,13 +386,6 @@
     {
       "mappings": [
       {
-        "name": "GEN",
-        "contractName": "GEN",
-        "dao": "base",
-        "mapping": "DAOToken",
-        "arcVersion": "0.0.1-rc.19"
-      },
-      {
         "name": "Redeemer",
         "contractName": "Redeemer",
         "dao": "base",
@@ -467,13 +460,6 @@
   "rinkeby":
     {
       "mappings": [
-      {
-        "name": "GEN",
-        "contractName": "GEN",
-        "dao": "base",
-        "mapping": "DAOToken",
-        "arcVersion": "0.0.1-rc.19"
-      },
       {
         "name": "Redeemer",
         "contractName": "Redeemer",
@@ -598,13 +584,6 @@
 "mainnet":
   {
     "mappings": [
-    {
-      "name": "GEN",
-      "contractName": "GEN",
-      "dao": "base",
-      "mapping": "DAOToken",
-      "arcVersion": "0.0.1-rc.16"
-    },
     {
       "name": "Redeemer",
       "contractName": "Redeemer",

@@ -1,8 +1,8 @@
 {
-  "name": "Endemic Bunny",
-  "Avatar": "0x0DB24A927FFC3622884B7A3B6f1C694ED8092A01",
-  "DAOToken": "0x97681569c1007380DEc7075E5aCb6020Be36eC83",
-  "Reputation": "0x06ef7018Af25ec846aDe8f8B5cB591A914a46347",
-  "Controller": "0x141e94d9888F9399891f070aFc8eE76eA08B6DbB",
-  "arcVersion": "0.0.1-rc.19"
+  "name": "Rebarbative Inker",
+  "Avatar": "0x1FCE6Ad3a48168BBA8214aB40ddEa9257C294c9C",
+  "DAOToken": "0xC58F9C1af2ED42B4902Aa59964a761cfa35305C3",
+  "Reputation": "0xe365e88Eb44e10d2a4832198D622A4469F482259",
+  "Controller": "0xe1C915aBa8c97aD03E2803F744302783F7D81324",
+  "arcVersion": "0.0.1-rc.21"
 }

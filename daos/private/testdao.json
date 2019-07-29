@@ -1,8 +1,9 @@
 {
-  "name": "Rebarbative Inker",
-  "Avatar": "0x1FCE6Ad3a48168BBA8214aB40ddEa9257C294c9C",
-  "DAOToken": "0xC58F9C1af2ED42B4902Aa59964a761cfa35305C3",
-  "Reputation": "0xe365e88Eb44e10d2a4832198D622A4469F482259",
-  "Controller": "0xe1C915aBa8c97aD03E2803F744302783F7D81324",
-  "arcVersion": "0.0.1-rc.22"
+  "name": "Querulous Unicorn",
+  "Avatar": "0xA92A766d62318B9c06Eb548753bD34acbD7C5f3c",
+  "DAOToken": "0xf25e92D6092122bd7190BC8aDaF36FcF26aB1110",
+  "Reputation": "0xBeF75D93f5f25da0896e4623783D685eDc6d2FC5",
+  "Controller": "0x4b38ACFF6A4A3FD2D5A53B02b38654078c0Ba752",
+  "Schemes": {},
+  "arcVersion": "0.0.1-rc.23"
 }

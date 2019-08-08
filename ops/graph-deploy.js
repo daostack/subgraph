@@ -1,12 +1,16 @@
 const path = require('path')
-const { runGraphCli, subgraphLocation } = require('./graph-cli.js')
-const { graphNode, ipfsNode, subgraphName } = require('./settings')
+const { runGraphCli, subgraphLocation: defaultSubgraphLocation} = require('./graph-cli.js')
+const { graphNode, ipfsNode, subgraphName: defaultSubgraphName } = require('./settings')
+const cwd = path.resolve(`${__dirname}/..`)
 
-async function deploy (cwd) {
-  if (cwd === undefined) {
-    cwd = path.resolve(`${__dirname}/..`)
+
+async function deploy (opts = {}) {
+  if (!opts.subgraphLocation) {
+    opts.subgraphLocation = defaultSubgraphLocation
   }
-  console.log(`using ${cwd} and ${subgraphLocation}`)
+  if (!opts.subgraphName) {
+    opts.subgraphName = defaultSubgraphName
+  }
   let result
   let msg
 
@@ -15,7 +19,7 @@ async function deploy (cwd) {
     'create',
     '--access-token ""',
     '--node ' + graphNode,
-    subgraphName
+    opts.subgraphName
   ], cwd)
   msg = result[1] + result[2]
   if (result[0] === 1) {
@@ -34,8 +38,8 @@ async function deploy (cwd) {
     '--access-token "${access_token-""}"',
     '--ipfs ' + ipfsNode,
     '--node ' + graphNode,
-    subgraphName,
-    subgraphLocation
+    opts.subgraphName,
+    opts.subgraphLocation
   ], cwd)
   msg = result[1] + result[2]
   if ((result[0] === 1)|| (result[0] === 127)){

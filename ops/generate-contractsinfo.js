@@ -2,6 +2,8 @@ const fs = require("fs");
 const yaml = require("js-yaml");
 const { migrationFileLocation, network } = require("./settings");
 const daodir = "./daos/" + network + "/";
+const path = require("path");
+const currentDir = path.resolve(`${__dirname}`)
 
 /**
  * Generate a `src/contractinfo.js` file from `migration.json`
@@ -43,7 +45,7 @@ async function generateContractInfo() {
     buffer += "}\n";
 
     fs.writeFileSync(
-      "src/contractsInfo.ts",
+      `${currentDir}/../src/contractsInfo.ts`,
       buffer,
       "utf-8"
     );

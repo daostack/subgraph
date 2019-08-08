@@ -1,10 +1,26 @@
 const path = require('path')
 const subgraphRepo = path.resolve(`${__dirname}/..`)
-const { migrationFileLocation } = require('./settings')
-const migration = require('@daostack/migration/migration.json')
+const { migrationFileLocation, subgraphName: defaultSubgraphName } = require('./settings')
 const fs = require('fs')
 
-async function setupenv () {
+/**
+ * probably best renamed to "deploySubgraph"
+ * @param  {[type]} migrationFile [description]
+ * @return {[type]}               [description]
+ */
+async function setupenv (opts) {
+  const defaultMigrationFile = '@daostack/migration/migration.json'
+  if (!opts.migrationFile) {
+    opts.migrationFile = defaultMigrationFile
+  }
+  if (!opts.subgraphName) {
+    opts.subgraphName = defaultSubgraphName
+  }
+
+  console.log(`Deploying a new subgraph using the following settings:`)
+  console.log(opts)
+
+  const migration = require(opts.migrationFile)
   fs.writeFileSync(migrationFileLocation, JSON.stringify(migration, undefined, 2), 'utf-8')
   console.log(`Generating ABI files`)
   // node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js
@@ -28,7 +44,7 @@ async function setupenv () {
 
 
   console.log('Deploying subgraph configuration')
-  await require(`${subgraphRepo}/ops/graph-deploy`)()
+  await require(`${subgraphRepo}/ops/graph-deploy`)(opts)
 
   console.log('Environment setup finished successfully')
   // deploymentResult[0] is the status code
@@ -38,5 +54,7 @@ async function setupenv () {
 if (require.main === module) {
   setupenv().catch((err) => { console.log(err); process.exit(1) })
 } else {
-  module.exports = setupenv
+  module.exports = {
+    setupEnv: setupenv
+  }
 }

@@ -8,7 +8,7 @@ const fs = require('fs')
  * @param  {[type]} migrationFile [description]
  * @return {[type]}               [description]
  */
-async function setupenv (opts) {
+async function setupenv (opts={}) {
   const defaultMigrationFile = '@daostack/migration/migration.json'
   if (!opts.migrationFile) {
     opts.migrationFile = defaultMigrationFile

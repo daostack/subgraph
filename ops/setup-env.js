@@ -36,14 +36,14 @@ async function setupenv (opts={}) {
   await require(`../ops/generate-daos-subgraph`)()
 
   console.log(`Generating contracts info`)
-  await require(`../ops/generate-contractsinfo`)()
+  await require(`../ops/generate-contractsinfo`)(opts)
 
   const cwd = subgraphRepo
   console.log('Calling graph-codegen')
   await require(`../ops/graph-codegen`)(cwd)
 
 
-  console.log('Deploying subgraph configuration')
+  console.log('Deploying subgraph')
   await require(`${subgraphRepo}/ops/graph-deploy`)(opts)
 
   console.log('Environment setup finished successfully')

@@ -1,6 +1,6 @@
 const fs = require("fs");
 const yaml = require("js-yaml");
-const { migrationFileLocation, network } = require("./settings");
+const { migrationFileLocation: defaultMigrationFileLocation, network } = require("./settings");
 const daodir = "./daos/" + network + "/";
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
@@ -45,8 +45,11 @@ function daoYaml(contract, contractAddress, arcVersion) {
  * Generate a `subgraph.yaml` file from `datasource.yaml` fragments in
   `mappings` directory `mappings.json` and migration.json`
  */
-async function generateSubgraph() {
-  const daos = require(migrationFileLocation)[network].dao;
+async function generateSubgraph(opts={}) {
+  if (!opts.migrationFile) {
+    opts.migrationFile = defaultMigrationFileLocation
+  }
+  const daos = require(opts.migrationFile)[network].dao;
   for (let arcVersion in daos) {
     daos[arcVersion].arcVersion = arcVersion;
     if (daos[arcVersion] !== undefined) {

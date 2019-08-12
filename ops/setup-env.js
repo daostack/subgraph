@@ -23,7 +23,6 @@ async function setupenv (opts={}) {
   const migration = require(opts.migrationFile)
   fs.writeFileSync(migrationFileLocation, JSON.stringify(migration, undefined, 2), 'utf-8')
   console.log(`Generating ABI files`)
-  // node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js
   await require(`../ops/generate-abis`)()
 
   console.log(`Generating schemas`)
@@ -46,9 +45,7 @@ async function setupenv (opts={}) {
   console.log('Deploying subgraph')
   await require(`${subgraphRepo}/ops/graph-deploy`)(opts)
 
-  console.log('Environment setup finished successfully')
-  // deploymentResult[0] is the status code
-  // but it is not very helpful, because it returns 0 also on some errors
+  console.log('Subgraph deployed successfully')
 }
 
 if (require.main === module) {

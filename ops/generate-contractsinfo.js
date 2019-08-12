@@ -12,7 +12,7 @@ async function generateContractInfo(opts={}) {
   if (!opts.migrationFile) {
     opts.migrationFile = defaultMigrationFileLocation
   }
-  const migration = JSON.parse(fs.readFileSync(opts.migrationFile, "utf-8"));
+  const migration = JSON.parse(fs.readFileSync(require.resolve(opts.migrationFile), "utf-8"));
 
   let versions = migration[network].base
   let buffer = "import { setContractInfo } from './utils';\n";

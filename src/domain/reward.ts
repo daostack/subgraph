@@ -7,7 +7,7 @@ import { ContributionRewardProposal,
          GPRewardsHelper,
          PreGPReward,
          Proposal } from '../types/schema';
-import { concat , equalsBytes , equalStrings, debug } from '../utils';
+import { concat , equalsBytes , equalStrings } from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 
 function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
@@ -90,16 +90,7 @@ export function shouldRemoveAccountFromUnclaimed(reward: GPReward): boolean {
   if (proposal !== null) {
     if (equalsBytes(proposal.beneficiary, reward.beneficiary)) {
       if (!shouldRemoveContributorFromUnclaimed(proposal as ContributionRewardProposal)) {
-        debug(proposal.id)
-        if (equalStrings(proposal.id, '0xa6e15eb7953a37b753654b3e92b49f1e845634309ea1df4ad0e41371b217fede')) {
-          debug('Should NOT remove')
-        }
         return false;
-      } else {
-        debug(proposal.id)
-        if (equalStrings(proposal.id, '0xa6e15eb7953a37b753654b3e92b49f1e845634309ea1df4ad0e41371b217fede')) {
-          debug('Should remove')
-        }
       }
     }
   }
@@ -116,7 +107,7 @@ export function shouldRemoveAccountFromUnclaimed(reward: GPReward): boolean {
 }
 
 export function shouldRemoveContributorFromUnclaimed(proposal: ContributionRewardProposal): boolean {
-  // Note: This doesn't support the period feature of ContributionReward  
+  // Note: This doesn't support the period feature of ContributionReward
   return (
     (proposal.reputationReward.isZero() ||
     (proposal.alreadyRedeemedReputationPeriods !== null &&
@@ -129,7 +120,7 @@ export function shouldRemoveContributorFromUnclaimed(proposal: ContributionRewar
     BigInt.compare(proposal.alreadyRedeemedExternalTokenPeriods as BigInt, proposal.periods) === 0)) &&
     (proposal.ethReward.isZero() ||
     (proposal.alreadyRedeemedEthPeriods !== null &&
-    BigInt.compare(proposal.alreadyRedeemedEthPeriods as BigInt, proposal.periods) === 0)))
+    BigInt.compare(proposal.alreadyRedeemedEthPeriods as BigInt, proposal.periods) === 0)));
 }
 
 export function insertGPRewards(
@@ -144,7 +135,7 @@ export function insertGPRewards(
   let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];
   let controllerScheme = ControllerScheme.load(proposal.scheme.toString());
   if (proposal.contributionReward !== null && equalStrings(proposal.winningOutcome, 'Pass')) {
-  let contributionRewardProposal = ContributionRewardProposal.load(proposal.contributionReward.toString());
+    let contributionRewardProposal = ContributionRewardProposal.load(proposal.contributionReward.toString());
     addRedeemableRewardOwner(proposal, contributionRewardProposal.beneficiary);
   }
   for (i = 0; i < gpRewards.length; i++) {

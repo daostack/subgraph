@@ -5,16 +5,6 @@ const daodir = "./daos/" + network + "/";
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
 
-/**
- * ?????
- * seems to generate a yaml file on the basis of a provider contract name, address and arc version
- * and the data in src/mappings
- *
- * @param  {[type]} contract        [description]
- * @param  {[type]} contractAddress [description]
- * @param  {[type]} arcVersion      [description]
- * @return {[type]}                 [description]
- */
 function daoYaml(contract, contractAddress, arcVersion) {
   const { abis, entities, eventHandlers } = yaml.safeLoad(
     fs.readFileSync(`${currentDir}/../src/mappings/${contract}/datasource.yaml`, "utf-8")

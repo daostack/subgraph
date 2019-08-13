@@ -30,7 +30,7 @@
     "test:watch": "npm run test -- --watch"
   },
   "devDependencies": {
-    "@daostack/migration": "0.0.1-rc.23-v0",
+    "@daostack/migration": "0.0.1-rc.23-v2",
     "@types/graphql": "^14.2.0",
     "@types/jest": "^23.3.7",
     "@types/mocha": "^5.2.5",
@@ -46,8 +46,8 @@
     "watch": "^1.0.2"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.12.0",
-    "@graphprotocol/graph-ts": "^0.12.0",
+    "@graphprotocol/graph-cli": "^0.14.0",
+    "@graphprotocol/graph-ts": "^0.14.0",
     "@types/node": "^10.14.4",
     "apollo-client": "^2.4.5",
     "apollo-link-ws": "^1.0.9",

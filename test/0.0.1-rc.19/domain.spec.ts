@@ -974,9 +974,9 @@ describe('Domain Layer', () => {
   });
     expect(proposal).toMatchObject({
     accountsWithUnclaimedRewards: [
+      accounts[5].address.toLowerCase(),
       accounts[0].address.toLowerCase(),
       accounts[1].address.toLowerCase(),
-      accounts[5].address.toLowerCase(),
     ]});
     async function redeem({ proposalId, beneficiary }) {
     const { blockNumber } = await genesisProtocol.methods

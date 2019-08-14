@@ -1,6 +1,7 @@
 const fs = require("fs");
 const yaml = require("js-yaml");
 const { migrationFileLocation: defaultMigrationFileLocation, network } = require("./settings");
+const {   subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 const daodir = "./daos/" + network + "/";
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
@@ -21,11 +22,11 @@ function daoYaml(contract, contractAddress, arcVersion) {
       kind: "ethereum/events",
       apiVersion: "0.0.1",
       language: "wasm/assemblyscript",
-      file: `src/mappings/${contract}/mapping.ts`,
+      file: path.resolve(`${__dirname}/../src/mappings/${contract}/mapping.ts`),
       entities,
       abis: (abis || [contract]).map(contract => ({
         name: contract,
-        file: `./abis/${arcVersion}/${contract}.json`
+        file: path.resolve(`./abis/${arcVersion}/${contract}.json`)
       })),
       eventHandlers
     }
@@ -36,9 +37,8 @@ function daoYaml(contract, contractAddress, arcVersion) {
   `mappings` directory `mappings.json` and migration.json`
  */
 async function generateSubgraph(opts={}) {
-  if (!opts.migrationFile) {
-    opts.migrationFile = defaultMigrationFileLocation
-  }
+  opts.migrationFile = opts.migrationFile || defaultMigrationFileLocation;
+  opts.subgraphLocation = opts.subgraphLocation || defaultSubgraphLocation;
   const daos = require(opts.migrationFile)[network].dao;
   for (let arcVersion in daos) {
     daos[arcVersion].arcVersion = arcVersion;
@@ -50,13 +50,14 @@ async function generateSubgraph(opts={}) {
       );
     }
   }
+  // console.log(`reading DAO definitions from ${path.resolve(daodir)}`)
   fs.readdir(daodir, function(err, files) {
     if (err) {
       console.error("Could not list the directory.", err);
       process.exit(1);
     }
     const subgraphYaml = yaml.safeLoad(
-      fs.readFileSync("subgraph.yaml", "utf8")
+      fs.readFileSync(opts.subgraphLocation, "utf8")
     );
     files.forEach(function(file) {
       const dao = JSON.parse(fs.readFileSync(daodir + file, "utf-8"));
@@ -108,7 +109,7 @@ async function generateSubgraph(opts={}) {
       }
     });
     fs.writeFileSync(
-      "subgraph.yaml",
+      opts.subgraphLocation,
       yaml.safeDump(subgraphYaml, { noRefs: true }),
       "utf-8"
     );

@@ -26,10 +26,10 @@ async function setupenv (opts={}) {
   await require(`../ops/generate-abis`)()
 
   console.log(`Generating schemas`)
-  await require(`${subgraphRepo}/ops/generate-schema`)()
+  await require(`../ops/generate-schema`)()
 
   console.log(`Generating subgraph`)
-  await require(`../ops/generate-subgraph`)()
+  await require(`../ops/generate-subgraph`)(opts)
 
   console.log(`Generating daos subgraph`)
   await require(`../ops/generate-daos-subgraph`)()
@@ -37,9 +37,8 @@ async function setupenv (opts={}) {
   console.log(`Generating contracts info`)
   await require(`../ops/generate-contractsinfo`)(opts)
 
-  const cwd = subgraphRepo
   console.log('Calling graph-codegen')
-  await require(`../ops/graph-codegen`)(cwd)
+  await require(`../ops/graph-codegen`)(opts)
 
 
   console.log('Deploying subgraph')

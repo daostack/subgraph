@@ -11,6 +11,7 @@ async function deploy (opts = {}) {
   if (!opts.subgraphName) {
     opts.subgraphName = defaultSubgraphName
   }
+  console.log(opts)
   let result
   let msg
 
@@ -22,14 +23,15 @@ async function deploy (opts = {}) {
     opts.subgraphName
   ], cwd)
   msg = result[1] + result[2]
-  if (result[0] === 1) {
-    throw Error(`Create failed! ${msg}`)
-  }
+  // if (result[0] === 1) {
+  //   console.error(`Create failed! ${msg}`)
+  // }
   if (msg.toLowerCase().indexOf('error') > 0) {
     if (msg.match(/subgraph already exists/)) {
       // the subgraph was already created before -we're ok
+      console.log('subgraph already exists - deploying a new version')
     } else {
-      throw Error(`Create failed! ${msg}`)
+      console.error(`Create failed! ${msg}`)
     }
   }
 

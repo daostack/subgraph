@@ -20,19 +20,19 @@ async function generateSubgraph(opts={}) {
   const dataSources = mappings.map(mapping => {
     var contract = mapping.name;
     var abis, entities, eventHandler, file, yamlLoad, abi;
-    if (fs.existsSync("src/mappings/" + mapping.mapping + "/datasource.yaml")) {
+    if (fs.existsSync(`${__dirname}/../src/mappings/` + mapping.mapping + "/datasource.yaml")) {
       yamlLoad = yaml.safeLoad(
         fs.readFileSync(
-          "src/mappings/" + mapping.mapping + "/datasource.yaml",
+          `${__dirname}/../src/mappings/` + mapping.mapping + "/datasource.yaml",
           "utf-8"
         )
       );
-      file = `src/mappings/${mapping.mapping}/mapping.ts`;
+      file = `${__dirname}/../src/mappings/${mapping.mapping}/mapping.ts`;
       eventHandlers = yamlLoad.eventHandlers;
       entities = yamlLoad.entities;
       (abis = (yamlLoad.abis || [contract]).map(contract => ({
         name: contract,
-        file: `${__dirname}/abis/${mapping.arcVersion}/${contract}.json`
+        file: `${__dirname}/../abis/${mapping.arcVersion}/${contract}.json`
       }))),
         (abi =
           yamlLoad.abis && yamlLoad.abis.length ? yamlLoad.abis[0] : contract);

@@ -32,7 +32,7 @@ async function setupenv (opts={}) {
   await require(`../ops/generate-subgraph`)(opts)
 
   console.log(`Generating daos subgraph`)
-  await require(`../ops/generate-daos-subgraph`)()
+  await require(`../ops/generate-daos-subgraph`)(opts)
 
   console.log(`Generating contracts info`)
   await require(`../ops/generate-contractsinfo`)(opts)

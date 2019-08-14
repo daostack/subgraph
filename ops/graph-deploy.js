@@ -11,7 +11,6 @@ async function deploy (opts = {}) {
   if (!opts.subgraphName) {
     opts.subgraphName = defaultSubgraphName
   }
-  console.log(opts)
   let result
   let msg
 

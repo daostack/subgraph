@@ -2,7 +2,6 @@ const fs = require("fs");
 const yaml = require("js-yaml");
 const { migrationFileLocation: defaultMigrationFileLocation, network } = require("./settings");
 const {   subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
-const daodir = "./daos/" + network + "/";
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
 
@@ -39,6 +38,12 @@ function daoYaml(contract, contractAddress, arcVersion) {
 async function generateSubgraph(opts={}) {
   opts.migrationFile = opts.migrationFile || defaultMigrationFileLocation;
   opts.subgraphLocation = opts.subgraphLocation || defaultSubgraphLocation;
+  let daodir
+  if (opts.daodir) {
+    daodir = path.resolve(`${opts.daodir}/${network}/`)
+  } else {
+    daodir = path.resolve(`./daos/${network}/`)
+  }
   const daos = require(opts.migrationFile)[network].dao;
   for (let arcVersion in daos) {
     daos[arcVersion].arcVersion = arcVersion;
@@ -50,7 +55,6 @@ async function generateSubgraph(opts={}) {
       );
     }
   }
-  // console.log(`reading DAO definitions from ${path.resolve(daodir)}`)
   fs.readdir(daodir, function(err, files) {
     if (err) {
       console.error("Could not list the directory.", err);
@@ -60,7 +64,7 @@ async function generateSubgraph(opts={}) {
       fs.readFileSync(opts.subgraphLocation, "utf8")
     );
     files.forEach(function(file) {
-      const dao = JSON.parse(fs.readFileSync(daodir + file, "utf-8"));
+      const dao = JSON.parse(fs.readFileSync(daodir + '/' + file, "utf-8"));
       let includeRep = false;
       let includeToken = false;
       let includeAvatar = false;

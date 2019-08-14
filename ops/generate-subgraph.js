@@ -13,8 +13,6 @@ const {   subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 async function generateSubgraph(opts={}) {
   const migrationFile = opts.migrationFileLocation || defaultMigrationFileLocation;
   opts.subgraphLocation = opts.subgraphLocation || defaultSubgraphLocation;
-  console.log(defaultSubgraphLocation)
-  console.log(opts)
   const addresses = JSON.parse(fs.readFileSync(migrationFile, "utf-8"));
 
   const dataSources = mappings.map(mapping => {

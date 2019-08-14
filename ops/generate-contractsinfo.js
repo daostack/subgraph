@@ -1,7 +1,6 @@
 const fs = require("fs");
 const yaml = require("js-yaml");
 const { migrationFileLocation: defaultMigrationFileLocation, network } = require("./settings");
-const daodir = "./daos/" + network + "/";
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
 
@@ -11,6 +10,12 @@ const currentDir = path.resolve(`${__dirname}`)
 async function generateContractInfo(opts={}) {
   if (!opts.migrationFile) {
     opts.migrationFile = defaultMigrationFileLocation
+  }
+  let daodir
+  if (opts.daodir) {
+    daodir = path.resolve(`${opts.daodir}/${network}/`)
+  } else {
+    daodir = path.resolve(`./daos/${network}/`)
   }
   const migration = JSON.parse(fs.readFileSync(require.resolve(opts.migrationFile), "utf-8"));
 
@@ -37,7 +42,7 @@ async function generateContractInfo(opts={}) {
       process.exit(1);
     }
     files.forEach(function(file) {
-      const dao = JSON.parse(fs.readFileSync(daodir + file, "utf-8"));
+      const dao = JSON.parse(fs.readFileSync(daodir + '/' + file, "utf-8"));
       if (dao.Schemes !== undefined) {
          for(var key in dao.Schemes) {
            buffer += "    setContractInfo("+"'"+dao.Schemes[key].toLowerCase()+"'"+", " +"'"+key+"'"+", "+"'"+dao.arcVersion+"'"+");\n";

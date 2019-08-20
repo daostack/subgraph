@@ -12,7 +12,7 @@
     "node": ">=10.15.0"
   },
   "scripts": {
-    "codegen": "node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-daos-subgraph.js && node ops/generate-subgraph.js && node ops/graph-codegen.js",
+    "codegen": "node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js && node ops/generate-daos-subgraph.js && node ops/generate-contractsinfo.js && node ops/graph-codegen.js",
     "codegen:watch": "watch 'npm run codegen' src/mappings src/domain",
     "deploy": "node ops/setup-env.js",
     "deploy:watch": "npm run deploy -- --watch",

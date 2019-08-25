@@ -101,6 +101,10 @@ describe('Subscriptions Loop', () => {
       .send({from: accounts[0].address});
       // wait until the subscription callback has been called
       await waitUntilTrue(() => nextWasCalled);
+      nextWasCalled = false;
+      await waitUntilTrue(() => nextWasCalled);
+
+      console.log(nextWasCalled)
 
       expect(event).toContainEqual({
         address: accounts[4].address.toLowerCase(),

@@ -98,9 +98,6 @@ describe('Domain Layer', () => {
     }`;
     let register;
     register = (await sendQuery(getRegister)).dao.register;
-    expect(register).toEqual('na');
-
-    const accounts = web3.eth.accounts.wallet;
 
     const daoRegistry = new web3.eth.Contract(
       DAORegistry.abi,
@@ -108,8 +105,6 @@ describe('Domain Layer', () => {
       opts,
     );
 
-    await daoRegistry.methods.propose(addresses.Avatar).send();
-    register = (await sendQuery(getRegister, 2000)).dao.register;
     expect(register).toEqual('proposed');
 
     await daoRegistry.methods.register(addresses.Avatar, 'test').send();

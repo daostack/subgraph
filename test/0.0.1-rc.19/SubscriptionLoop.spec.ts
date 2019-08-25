@@ -101,7 +101,7 @@ describe('Subscriptions Loop', () => {
       .send({from: accounts[0].address});
       // wait until the subscription callback has been called
       await waitUntilTrue(() => nextWasCalled);
-      //this is done twice due to https://github.com/graphprotocol/graph-node/pull/1062
+      // this is done twice due to https://github.com/graphprotocol/graph-node/pull/1062
       nextWasCalled = false;
       await waitUntilTrue(() => nextWasCalled);
 

@@ -33,7 +33,7 @@ function daoYaml(contract, contractAddress, arcVersion) {
 }
 /**
  * Generate a `subgraph.yaml` file from `datasource.yaml` fragments in
-  `mappings` directory `mappings.json` and migration.json`
+  `mappings` directory and `daos/<network> directory`
  */
 async function generateSubgraph(opts={}) {
   opts.migrationFile = opts.migrationFile || defaultMigrationFileLocation;

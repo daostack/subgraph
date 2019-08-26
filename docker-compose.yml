@@ -1,7 +1,7 @@
 version: '3'
 services:
   graph-node:
-    image: 'graphprotocol/graph-node:v0.12.0'
+    image: 'graphprotocol/graph-node:v0.14.0'
     ports:
       - '8000:8000'
       - '8001:8001'
@@ -16,7 +16,7 @@ services:
       postgres_pass: letmein
       postgres_db: postgres
       ipfs: 'ipfs:5001'
-      ethereum: 'development:http://ganache:8545'
+      ethereum: 'private:http://ganache:8545'
       GRAPH_IPFS_TIMEOUT: '2'
       GRAPH_MAX_IPFS_FILE_BYTES: '102400'
   ipfs:
@@ -30,6 +30,6 @@ services:
     environment:
       POSTGRES_PASSWORD: letmein
   ganache:
-    image: 'daostack/migration:0.0.1-rc.23-v0'
+    image: 'daostack/migration:0.0.1-rc.23-v2'
     ports:
       - '8545:8545'

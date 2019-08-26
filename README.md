@@ -102,7 +102,7 @@ In order to add support for a new contract follow these steps:
 
 ## Add a new dao tracker
 
-Add `<daoname>.json` file to daos directory
+To index a DAO please follow the instructions here: [https://github.com/daostack/subgraph/blob/master/documentations/Deployment.md#indexing-a-new-dao](https://github.com/daostack/subgraph/blob/master/documentations/Deployment.md#indexing-a-new-dao)
 
 ## Deploy Subgraph
 

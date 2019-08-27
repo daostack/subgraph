@@ -55,13 +55,31 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
           return proposal;
         }
         if (descJson.toObject().get('title') != null) {
-          proposal.title = descJson.toObject().get('title').toString();
+          let title = descJson.toObject().get('title').toString();
+          // todo:  this is a temporary workaround till https://github.com/graphprotocol/graph-node/issues/1133
+          // will be fixed.
+          if (title.length > 8191) {
+             title = 'title too long (> 8191 bytes)';
+          }
+          proposal.title = title;
         }
         if (descJson.toObject().get('description') != null) {
-          proposal.description = descJson.toObject().get('description').toString();
+          let description = descJson.toObject().get('description').toString();
+          // todo:  this is a temporary workaround till https://github.com/graphprotocol/graph-node/issues/1133
+          // will be fixed.
+          if (description.length > 8191) {
+             description = 'description too long (> 8191 bytes)';
+          }
+          proposal.description = description;
         }
         if (descJson.toObject().get('url') != null) {
-          proposal.url = descJson.toObject().get('url').toString();
+          let url = descJson.toObject().get('url').toString();
+          // todo:  this is a temporary workaround till https://github.com/graphprotocol/graph-node/issues/1133
+          // will be fixed.
+          if (url.length > 8191) {
+             url = 'url too long (> 8191 bytes)';
+          }
+          proposal.url = url;
         }
       }
     }

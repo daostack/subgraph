@@ -108,7 +108,7 @@ describe('DAOToken', () => {
         to
         value
       }
-    }`, 2000);
+    }`, 5000);
 
     expect(tokenTransfers.length).toBeGreaterThanOrEqual(7);
     expect(tokenTransfers).toContainEqual({

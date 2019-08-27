@@ -49,7 +49,7 @@ async function generateSubgraph(opts={}) {
     daos[arcVersion].arcVersion = arcVersion;
     if (daos[arcVersion] !== undefined) {
       fs.writeFileSync(
-        daodir + "testdao.json",
+        path.resolve(daodir + "/testdao.json"),
         JSON.stringify(daos[arcVersion], undefined, 2),
         "utf-8"
       );

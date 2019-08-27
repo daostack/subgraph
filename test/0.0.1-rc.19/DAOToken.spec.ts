@@ -101,7 +101,7 @@ describe('DAOToken', () => {
     });
 
     const { tokenTransfers } = await sendQuery(`{
-      tokenTransfers(where: {contract: "${daotoken.options.address.toLowerCase()}"}) {
+      tokenTransfers(where: {txHash: "${txs[6]}"}) {
         txHash
         contract
         from
@@ -110,7 +110,6 @@ describe('DAOToken', () => {
       }
     }`, 5000);
 
-    expect(tokenTransfers.length).toBeGreaterThanOrEqual(7);
     expect(tokenTransfers).toContainEqual({
       txHash: txs[6],
       contract: daotoken.options.address.toLowerCase(),

@@ -43,7 +43,9 @@ async function generateSubgraph(opts={}) {
     }
 
     let contractAddress;
-    if (mapping.dao === 'organs') {
+    if (mapping.dao === 'address') {
+      contractAddress = mapping.address
+    } else if (mapping.dao === 'organs') {
       contractAddress = addresses[network].test[mapping.arcVersion][mapping.dao][mapping.contractName];
     } else {
       contractAddress = addresses[network][mapping.dao][mapping.arcVersion][mapping.contractName];

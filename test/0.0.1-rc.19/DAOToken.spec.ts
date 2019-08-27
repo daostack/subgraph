@@ -119,5 +119,5 @@ describe('DAOToken', () => {
       value: '50',
     });
     await daotoken.methods.transferOwnership(tokenOwner).send({from: accounts[1].address});
-  }, 20000);
+  }, 50000);
 });

@@ -15,22 +15,21 @@ async function deploy (opts = {}) {
   let msg
 
   /* create the subgraph */
-  result = await runGraphCli([
-    'create',
-    '--access-token ""',
-    '--node ' + graphNode,
-    opts.subgraphName
-  ], cwd)
-  msg = result[1] + result[2]
-  // if (result[0] === 1) {
-  //   console.error(`Create failed! ${msg}`)
-  // }
-  if (msg.toLowerCase().indexOf('error') > 0) {
-    if (msg.match(/subgraph already exists/)) {
-      // the subgraph was already created before -we're ok
-      console.log('subgraph already exists - deploying a new version')
-    } else {
-      console.error(`Create failed! ${msg}`)
+  if (graphNode !== 'https://api.thegraph.com/deploy/') {
+    result = await runGraphCli([
+      'create',
+      '--access-token ""',
+      '--node ' + graphNode,
+      opts.subgraphName
+    ], cwd)
+    msg = result[1] + result[2]
+    if (msg.toLowerCase().indexOf('error') > 0) {
+      if (msg.match(/subgraph already exists/)) {
+        // the subgraph was already created before -we're ok
+        console.log('subgraph already exists - deploying a new version')
+      } else {
+        console.error(`Create failed! ${msg}`)
+      }
     }
   }
 

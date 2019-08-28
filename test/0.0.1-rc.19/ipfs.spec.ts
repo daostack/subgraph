@@ -131,7 +131,7 @@ describe('Domain Layer', () => {
       id: plong,
       descriptionHash: descHash,
       title: proposalTitle,
-      description: 'description too long (> 8191 bytes)',
+      description: 'description too long (> 2700 bytes)',
       url: proposalUrl,
     });
 

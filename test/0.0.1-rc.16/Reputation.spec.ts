@@ -77,7 +77,7 @@ describe('Reputation', () => {
 
     let firstMemberCreatedAt = (await web3.eth.getBlock(
       txs[0].blockNumber,
-    )).timestamp.toString()
+    )).timestamp.toString();
     await checkTotalSupply(100);
     txs.push(await uController.methods.mintReputation('100' , accounts[1].address, addresses.DemoAvatar).send());
 
@@ -88,7 +88,7 @@ describe('Reputation', () => {
     txs.push(await uController.methods.mintReputation('300', accounts[2].address, addresses.DemoAvatar).send());
     let secondMemberCreatedAt = (await web3.eth.getBlock(
       txs[3].blockNumber,
-    )).timestamp.toString()
+    )).timestamp.toString();
     await checkTotalSupply(470);
     txs.push(await uController.methods.burnReputation('100' , accounts[1].address, addresses.DemoAvatar).send());
     await checkTotalSupply(370);
@@ -117,7 +117,7 @@ describe('Reputation', () => {
       contract: reputation.options.address.toLowerCase(),
       address: accounts[2].address.toLowerCase(),
       balance: parseInt(await reputation.methods.balanceOf(accounts[2].address).call(), 10) + '',
-      createdAt: secondMemberCreatedAt,      
+      createdAt: secondMemberCreatedAt,
     });
 
     const { reputationMints } = await sendQuery(`{

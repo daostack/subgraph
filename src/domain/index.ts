@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
 import {  setContractsInfo } from '../contractsInfo';
 import {
   NewContributionProposal,
@@ -18,6 +18,7 @@ import { Burn, Mint } from '../types/Reputation/Reputation';
 import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
 import { equalsBytes, equalStrings, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
+import * as gpqueueModule from './gpqueue';
 import {
   getProposal,
   parseOutcome,
@@ -139,6 +140,7 @@ export function handleStake(event: Stake): void {
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
+  proposal.confidence =  (new BigDecimal(proposal.stakesFor)) / (new BigDecimal(proposal.stakesAgainst));
   saveProposal(proposal);
   insertStake(
     eventId(event),
@@ -192,7 +194,9 @@ export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: Bi
 
 export function handleRegisterScheme(avatar: Address,
                                      nativeTokenAddress: Address,
-                                     nativeReputationAddress: Address): void {
+                                     nativeReputationAddress: Address,
+                                     scheme: Address ,
+                                     paramsHash: Bytes ): void {
   // Detect the first register scheme event which indicates a new DAO
   let isFirstRegister = store.get(
     'FirstRegisterSchemeFlag',
@@ -220,6 +224,7 @@ export function handleRegisterScheme(avatar: Address,
     ent.set('id', Value.fromString(avatar.toHex()));
     store.set('FirstRegisterSchemeFlag', avatar.toHex(), ent);
   }
+  gpqueueModule.create(avatar, scheme, paramsHash);
 }
 
 export function handleMint(event: Mint): void {

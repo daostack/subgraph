@@ -30,6 +30,7 @@ type GPQueue @entity {
 	scheme: ControllerScheme
  	dao: DAO!
 	votingMachine: Bytes!
+
 }
 
 type Rep @entity {
@@ -55,8 +56,10 @@ type Proposal @entity {
 	preBoostedAt: BigInt
 	boostedAt: BigInt
 	quietEndingPeriodBeganAt: BigInt
+	closingAt: BigInt
 	executedAt: BigInt
 	totalRepWhenExecuted: BigInt
+	totalRepWhenCreated: BigInt
 	votingMachine: Bytes!
 	executionState: String!
 	paramsHash: Bytes!
@@ -80,6 +83,7 @@ type Proposal @entity {
 	stakes: [ProposalStake!] @derivedFrom(field: "proposal")
 	stakesFor: BigInt!
 	stakesAgainst: BigInt!
+	confidence: BigDecimal!
 
 	gpQueue: GPQueue!
 
@@ -92,22 +96,10 @@ type Proposal @entity {
 	genericScheme : GenericSchemeProposal
 
 	# SchemeRegistrar proposal
-  	schemeRegistrar : SchemeRegistrarProposal
+  schemeRegistrar : SchemeRegistrarProposal
 
-	# Genesis Protocol params
-	queuedVoteRequiredPercentage: BigInt!
-	queuedVotePeriodLimit: BigInt!
-	boostedVotePeriodLimit: BigInt!
-	preBoostedVotePeriodLimit: BigInt!
-	thresholdConst: BigInt!
-	limitExponentValue: BigInt!
-	quietEndingPeriod: BigInt!
-	proposingRepReward: BigInt!
-	votersReputationLossRatio: BigInt!
-	minimumDaoBounty: BigInt!
-	daoBountyConst: BigInt!
-	activationTime: BigInt!
-	voteOnBehalf: Bytes!
+	genesisProtocolParams : GenesisProtocolParam!
+
 }
 
 type ProposalStake @entity {

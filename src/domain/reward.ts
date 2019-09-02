@@ -1,8 +1,13 @@
 import { Address, BigInt, Bytes , crypto, EthereumValue, SmartContract , store} from '@graphprotocol/graph-ts';
 import { GenesisProtocol__voteInfoResult } from '../types/GenesisProtocol/GenesisProtocol';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { ContributionRewardProposal, GPReward, GPRewardsHelper, PreGPReward, Proposal } from '../types/schema';
-import { concat , equalsBytes, equalStrings } from '../utils';
+import { ContributionRewardProposal,
+         ControllerScheme,
+         GPReward,
+         GPRewardsHelper,
+         PreGPReward,
+         Proposal } from '../types/schema';
+import { concat , equalsBytes , equalStrings } from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 
 function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
@@ -102,7 +107,8 @@ export function shouldRemoveAccountFromUnclaimed(reward: GPReward): boolean {
 }
 
 export function shouldRemoveContributorFromUnclaimed(proposal: ContributionRewardProposal): boolean {
-  if (
+  // Note: This doesn't support the period feature of ContributionReward
+  return (
     (proposal.reputationReward.isZero() ||
     (proposal.alreadyRedeemedReputationPeriods !== null &&
       BigInt.compare(proposal.alreadyRedeemedReputationPeriods as BigInt, proposal.periods) === 0)) &&
@@ -114,12 +120,7 @@ export function shouldRemoveContributorFromUnclaimed(proposal: ContributionRewar
     BigInt.compare(proposal.alreadyRedeemedExternalTokenPeriods as BigInt, proposal.periods) === 0)) &&
     (proposal.ethReward.isZero() ||
     (proposal.alreadyRedeemedEthPeriods !== null &&
-    BigInt.compare(proposal.alreadyRedeemedEthPeriods as BigInt, proposal.periods) === 0))) {
-      // Note: This doesn't support the period feature of ContributionReward
-      return false;
-  }
-
-  return true;
+    BigInt.compare(proposal.alreadyRedeemedEthPeriods as BigInt, proposal.periods) === 0)));
 }
 
 export function insertGPRewards(
@@ -132,12 +133,24 @@ export function insertGPRewards(
   let genesisProtocolExt = GenesisProtocolExt.bind(gpAddress);
   let i = 0;
   let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];
+  let controllerScheme = ControllerScheme.load(proposal.scheme.toString());
+  if (proposal.contributionReward !== null && equalStrings(proposal.winningOutcome, 'Pass')) {
+    let contributionRewardProposal = ContributionRewardProposal.load(proposal.contributionReward.toString());
+    addRedeemableRewardOwner(proposal, contributionRewardProposal.beneficiary);
+  }
   for (i = 0; i < gpRewards.length; i++) {
     let gpReward = PreGPReward.load(gpRewards[i]);
-    let redeemValues = genesisProtocolExt.redeem(proposalId, gpReward.beneficiary as Address);
-    let daoBountyForStaker: BigInt;
-    if (state === 2) {// call redeemDaoBounty only on execute
-       daoBountyForStaker = genesisProtocolExt.redeemDaoBounty(proposalId, gpReward.beneficiary as Address).value1;
+    if (gpReward === null) { continue; }
+    let redeemValues: BigInt[];
+    redeemValues[0] = BigInt.fromI32(0);
+    redeemValues[1] = BigInt.fromI32(0);
+    redeemValues[2] = BigInt.fromI32(0);
+    let daoBountyForStaker: BigInt = BigInt.fromI32(0);
+    if (controllerScheme !== null ) {
+        redeemValues = genesisProtocolExt.redeem(proposalId, gpReward.beneficiary as Address);
+        if (state === 2) {// call redeemDaoBounty only on execute
+           daoBountyForStaker = genesisProtocolExt.redeemDaoBounty(proposalId, gpReward.beneficiary as Address).value1;
+        }
     }
     if (!redeemValues[0].isZero() ||
         !redeemValues[1].isZero() ||

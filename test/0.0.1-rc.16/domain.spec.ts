@@ -69,7 +69,7 @@ describe('Domain Layer', () => {
           id: addresses.Avatar.toLowerCase(),
         },
       },
-      reputationHoldersCount: '5',
+      reputationHoldersCount: '6',
     });
 
     const getMigrationDaoMembers = `{
@@ -97,10 +97,9 @@ describe('Domain Layer', () => {
       }
     }`;
     let register;
-    register = (await sendQuery(getRegister)).dao.register;
-    expect(register).toEqual('na');
-
     const accounts = web3.eth.accounts.wallet;
+
+    register = (await sendQuery(getRegister)).dao.register;
 
     const daoRegistry = new web3.eth.Contract(
       DAORegistry.abi,
@@ -108,8 +107,6 @@ describe('Domain Layer', () => {
       opts,
     );
 
-    await daoRegistry.methods.propose(addresses.Avatar).send();
-    register = (await sendQuery(getRegister, 2000)).dao.register;
     expect(register).toEqual('proposed');
 
     await daoRegistry.methods.register(addresses.Avatar, 'test').send();
@@ -399,6 +396,8 @@ describe('Domain Layer', () => {
             quietEndingPeriodBeganAt
             executedAt
             totalRepWhenExecuted
+            totalRepWhenCreated
+            closingAt
             proposer
             votingMachine
             votes {
@@ -430,23 +429,25 @@ describe('Domain Layer', () => {
             stakesFor
             stakesAgainst
             confidenceThreshold
+            confidence
 
             winningOutcome
 
             expiresInQueueAt
-
-            queuedVoteRequiredPercentage
-            queuedVotePeriodLimit
-            boostedVotePeriodLimit
-            preBoostedVotePeriodLimit
-            thresholdConst
-            quietEndingPeriod
-            proposingRepReward
-            votersReputationLossRatio
-            minimumDaoBounty
-            daoBountyConst
-            activationTime
-            voteOnBehalf
+            genesisProtocolParams {
+              queuedVoteRequiredPercentage
+              queuedVotePeriodLimit
+              boostedVotePeriodLimit
+              preBoostedVotePeriodLimit
+              thresholdConst
+              quietEndingPeriod
+              proposingRepReward
+              votersReputationLossRatio
+              minimumDaoBounty
+              daoBountyConst
+              activationTime
+              voteOnBehalf
+            }
 
             gpQueue {
               dao {
@@ -488,12 +489,14 @@ describe('Domain Layer', () => {
       description: proposalDescription,
       url: proposalUrl,
       stage: 'Queued',
+      closingAt: (Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString(),
       executionState: 'None',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
       executedAt: null,
       totalRepWhenExecuted: null,
+      totalRepWhenCreated: totalRep,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
 
@@ -506,6 +509,7 @@ describe('Domain Layer', () => {
       stakesFor: '0',
       stakesAgainst: '100000000000000000000',
       confidenceThreshold: '0',
+      confidence: '0',
 
       contributionReward: {
         beneficiary: accounts[5].address.toLowerCase(),
@@ -518,19 +522,20 @@ describe('Domain Layer', () => {
 
       expiresInQueueAt: (Number(gpParams.queuedVotePeriodLimit) + p1Creation).toString(),
 
-      queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
-      queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
-      boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
-      preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
-      thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** REAL_FBITS).toString(),
-      quietEndingPeriod: gpParams.quietEndingPeriod,
-      proposingRepReward: gpParams.proposingRepReward,
-      votersReputationLossRatio: gpParams.votersReputationLossRatio,
-      minimumDaoBounty: gpParams.minimumDaoBounty,
-      daoBountyConst: gpParams.daoBountyConst,
-      activationTime: gpParams.activationTime,
-      voteOnBehalf: gpParams.voteOnBehalf,
-
+      genesisProtocolParams: {
+        queuedVoteRequiredPercentage: gpParams.queuedVoteRequiredPercentage,
+        queuedVotePeriodLimit: gpParams.queuedVotePeriodLimit,
+        boostedVotePeriodLimit: gpParams.boostedVotePeriodLimit,
+        preBoostedVotePeriodLimit: gpParams.preBoostedVotePeriodLimit,
+        thresholdConst: ((Number(gpParams.thresholdConst) / 1000) * 2 ** REAL_FBITS).toString(),
+        quietEndingPeriod: gpParams.quietEndingPeriod,
+        proposingRepReward: gpParams.proposingRepReward,
+        votersReputationLossRatio: gpParams.votersReputationLossRatio,
+        minimumDaoBounty: gpParams.minimumDaoBounty,
+        daoBountyConst: gpParams.daoBountyConst,
+        activationTime: gpParams.activationTime,
+        voteOnBehalf: gpParams.voteOnBehalf,
+      },
       gpQueue: {
         dao: {
           id: addresses.Avatar.toLowerCase(),
@@ -561,12 +566,14 @@ describe('Domain Layer', () => {
       id: p1,
       descriptionHash: descHash,
       stage: 'Queued',
+      closingAt: (Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString(),
       executionState: 'None',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
       executedAt: null,
       totalRepWhenExecuted: null,
+      totalRepWhenCreated: totalRep,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
       votes: [
@@ -590,6 +597,7 @@ describe('Domain Layer', () => {
       stakesFor: '0',
       stakesAgainst: '100000000000000000000',
       confidenceThreshold: '0',
+      confidence: '0',
 
     });
 
@@ -608,12 +616,14 @@ describe('Domain Layer', () => {
       id: p1,
       descriptionHash: descHash,
       stage: 'Queued',
+      closingAt: (Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString(),
       executionState: 'None',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
       executedAt: null,
       totalRepWhenExecuted: null,
+      totalRepWhenCreated: totalRep,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
       votes: [
@@ -667,12 +677,14 @@ describe('Domain Layer', () => {
       id: p1,
       descriptionHash: descHash,
       stage: 'Queued',
+      closingAt: (Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString(),
       executionState: 'None',
       createdAt: p1Creation.toString(),
       boostedAt: null,
       quietEndingPeriodBeganAt: null,
       executedAt: null,
       totalRepWhenExecuted: null,
+      totalRepWhenCreated: totalRep,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
       votes: [
@@ -694,6 +706,7 @@ describe('Domain Layer', () => {
       stakesFor: '100000000000000000000',
       stakesAgainst: '200000000000000000000',
       confidenceThreshold: '0',
+      confidence: '0.5',
     });
     expect(new Set(proposal.stakes)).toEqual(new Set([
       {
@@ -729,10 +742,12 @@ describe('Domain Layer', () => {
        staker: accounts[1].address,
      });
 
+    await waitUntilTrue(stakeIsIndexed);
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal.stage).toEqual('PreBoosted');
     expect(proposal.preBoostedAt).toEqual(s3Timestamp.toString());
     expect(proposal.confidenceThreshold).toEqual(Math.pow(2, REAL_FBITS).toString());
+    expect(proposal.closingAt).toEqual((Number(gpParams.preBoostedVotePeriodLimit) + Number(s3Timestamp)).toString());
 
     // boost it
     await increaseTime(300000, web3);
@@ -746,6 +761,7 @@ describe('Domain Layer', () => {
     proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       stage: 'Boosted',
+      closingAt: (Number(gpParams.boostedVotePeriodLimit) + Number(v2Timestamp)).toString(),
     });
 
     expectedVotesCount++;
@@ -791,8 +807,10 @@ describe('Domain Layer', () => {
       createdAt: p1Creation.toString(),
       boostedAt: v2Timestamp.toString(),
       quietEndingPeriodBeganAt: null,
+      closingAt: v5Timestamp.toString(),
       executedAt: v5Timestamp.toString(),
       totalRepWhenExecuted: totalRep,
+      totalRepWhenCreated: totalRep,
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
       votesFor,
@@ -801,6 +819,7 @@ describe('Domain Layer', () => {
 
       stakesFor: '400000000000000000000',
       stakesAgainst: '200000000000000000000',
+      confidence: '2',
       confidenceThreshold: Math.pow(2, REAL_FBITS).toString(),
     });
 
@@ -989,6 +1008,17 @@ describe('Domain Layer', () => {
     beneficiary: accounts[1].address.toLowerCase(),
   });
 
+    const redeemIsIndexed = async () => {
+      const updatedGpRewards = (await sendQuery(getProposalRewards)).proposal.gpRewards;
+      for (let i in updatedGpRewards) {
+        if (updatedGpRewards[i].daoBountyForStakerRedeemedAt === rd1Timestamp.toString()) {
+          return true;
+        }
+      }
+      return false;
+      };
+
+    await waitUntilTrue(redeemIsIndexed);
     proposal = (await sendQuery(getProposalRewards)).proposal;
     gpRewards = proposal.gpRewards;
     expect(gpRewards).toContainEqual({
@@ -1091,9 +1121,10 @@ describe('Domain Layer', () => {
     proposal(id: "${p2}") {
         stage
         quietEndingPeriodBeganAt
+        accountsWithUnclaimedRewards
     }}`;
 
-    increaseTime(1814400 + 1 , web3);
+    increaseTime(600 + 1 , web3);
     await genesisProtocol.methods.execute(p2).send();
 
     let stage = (await sendQuery(getExpiredProposal)).proposal.stage;
@@ -1117,6 +1148,9 @@ describe('Domain Layer', () => {
     expect((await sendQuery(getExpiredProposal)).proposal.stage).toEqual('QuietEndingPeriod');
     expect((await sendQuery(getExpiredProposal)).proposal.quietEndingPeriodBeganAt)
            .toEqual(quietEndingPeriodBeganAt.toString());
-
+    increaseTime(300 + 1 , web3);
+    await genesisProtocol.methods.execute(p2).send();
+    expect((await sendQuery(getExpiredProposal)).proposal.accountsWithUnclaimedRewards)
+    .toEqual([]);
   }, 100000);
 });

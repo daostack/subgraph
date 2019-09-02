@@ -1,9 +1,10 @@
-import { Address, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
-import { setSchemeName } from '../mappings/Controller/mapping';
+import { Address, BigDecimal, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { ControllerScheme, Proposal } from '../types/schema';
+import { ControllerScheme, GenesisProtocolParam, Proposal } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
+import { getDAO } from './dao';
 import { updateThreshold } from './gpqueue';
+import { getReputation } from './reputation';
 
 export function parseOutcome(num: BigInt): string {
   if (num.toI32() === 1) {
@@ -29,6 +30,7 @@ export function getProposal(id: string): Proposal {
 
     proposal.stakesFor = BigInt.fromI32(0);
     proposal.stakesAgainst = BigInt.fromI32(0);
+    proposal.confidence = BigDecimal.fromString('0');
     proposal.confidenceThreshold = BigInt.fromI32(0);
     proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
     proposal.paramsHash = new Bytes(32);
@@ -53,7 +55,7 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
           return proposal;
         }
         if (descJson.toObject().get('title') != null) {
-          proposal.title = descJson.toObject().get('title').toString();
+           proposal.title = descJson.toObject().get('title').toString();
         }
         if (descJson.toObject().get('description') != null) {
           proposal.description = descJson.toObject().get('description').toString();
@@ -119,17 +121,26 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
   } else if (state === 3) {
     // Queued
     proposal.stage = 'Queued';
+    proposal.closingAt =  proposal.createdAt +
+                          GenesisProtocolParam.load(proposal.genesisProtocolParams).queuedVotePeriodLimit;
   } else if (state === 4) {
     // PreBoosted
     proposal.stage = 'PreBoosted';
     proposal.preBoostedAt = gpTimes[2];
+    proposal.closingAt =  proposal.preBoostedAt +
+                          GenesisProtocolParam.load(proposal.genesisProtocolParams).preBoostedVotePeriodLimit;
   } else if (state === 5) {
     // Boosted
     proposal.boostedAt = gpTimes[1];
     proposal.stage = 'Boosted';
+    proposal.closingAt =  proposal.boostedAt +
+                          GenesisProtocolParam.load(proposal.genesisProtocolParams).boostedVotePeriodLimit;
+
   } else if (state === 6) {
     // QuietEndingPeriod
     proposal.quietEndingPeriodBeganAt = gpTimes[1];
+    proposal.closingAt =  proposal.quietEndingPeriodBeganAt +
+                          GenesisProtocolParam.load(proposal.genesisProtocolParams).quietEndingPeriod;
     proposal.stage = 'QuietEndingPeriod';
   }
 }
@@ -158,19 +169,7 @@ export function updateGPProposal(
   proposal.createdAt = timestamp;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, gpProposal.value1)).toHex();
 
-  proposal.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
-  proposal.queuedVotePeriodLimit = params.value1; // queuedVotePeriodLimit
-  proposal.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
-  proposal.preBoostedVotePeriodLimit = params.value3; // preBoostedVotePeriodLimit
-  proposal.thresholdConst = params.value4; // thresholdConst
-  proposal.limitExponentValue = params.value5; // limitExponentValue
-  proposal.quietEndingPeriod = params.value6; // quietEndingPeriod
-  proposal.proposingRepReward = params.value7;
-  proposal.votersReputationLossRatio = params.value8; // votersReputationLossRatio
-  proposal.minimumDaoBounty = params.value9; // minimumDaoBounty
-  proposal.daoBountyConst = params.value10; // daoBountyConst
-  proposal.activationTime = params.value11; // activationTime
-  proposal.voteOnBehalf = params.value12; // voteOnBehalf
+  proposal.genesisProtocolParams = paramsHash.toHex();
 
   updateThreshold(
     proposal.dao.toString(),
@@ -185,6 +184,13 @@ export function updateGPProposal(
     scheme.gpQueue = proposal.organizationId.toHex();
     scheme.save();
   }
+
+  let dao = getDAO(avatarAddress.toHex());
+  let reputation = getReputation(dao.nativeReputation);
+  proposal.totalRepWhenCreated = reputation.totalSupply;
+  proposal.closingAt =  proposal.createdAt +
+                        GenesisProtocolParam.load(proposal.genesisProtocolParams).queuedVotePeriodLimit;
+
   saveProposal(proposal);
 }
 
@@ -204,11 +210,8 @@ export function updateCRProposal(
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
-  setSchemeName(proposal.scheme, 'ContributionReward');
   getProposalIPFSData(proposal);
-  addRedeemableRewardOwner(proposal, beneficiary);
   saveProposal(proposal);
-
 }
 
 export function updateGSProposal(
@@ -224,7 +227,6 @@ export function updateGSProposal(
   proposal.createdAt = createdAt;
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
-  setSchemeName(proposal.scheme, 'GenericScheme');
   getProposalIPFSData(proposal);
 
   saveProposal(proposal);
@@ -245,7 +247,6 @@ export function updateSRProposal(
   proposal.votingMachine = votingMachine;
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
-  setSchemeName(proposal.scheme, 'SchemeRegistrar');
   getProposalIPFSData(proposal);
 
   saveProposal(proposal);
@@ -258,6 +259,7 @@ export function updateProposalExecution(
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.executedAt = timestamp;
+  proposal.closingAt = timestamp;
   if (totalReputation != null) {
     proposal.totalRepWhenExecuted = totalReputation;
   }

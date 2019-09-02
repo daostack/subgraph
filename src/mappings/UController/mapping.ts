@@ -1,6 +1,7 @@
 import {
   Address,
   BigInt,
+  Bytes,
   crypto,
   Entity,
   store,
@@ -14,6 +15,7 @@ import * as domain from '../../domain';
 
 import {
   AvatarContract,
+  ContractInfo,
   ControllerScheme,
   ReputationContract,
   TokenContract,
@@ -39,14 +41,12 @@ function insertScheme(
   uControllerAddress: Address,
   avatarAddress: Address,
   scheme: Address,
+  paramsHash: Bytes,
 ): void {
   let uController = UController.bind(uControllerAddress);
-  let paramsHash = uController.getSchemeParameters(scheme, avatarAddress);
   let perms = uController.getSchemePermissions(scheme, avatarAddress);
-
   let ent = new ControllerScheme(crypto.keccak256(concat(avatarAddress, scheme)).toHex());
   ent.dao = avatarAddress.toHex();
-  ent.address = scheme;
   ent.paramsHash = paramsHash;
   /* tslint:disable:no-bitwise */
   ent.canRegisterSchemes = (perms[3] & 2) === 2;
@@ -56,7 +56,12 @@ function insertScheme(
   ent.canUpgradeController = (perms[3] & 8) === 8;
   /* tslint:disable:no-bitwise */
   ent.canDelegateCall = (perms[3] & 16) === 16;
-
+  ent.address = scheme;
+  let contractInfo = ContractInfo.load(scheme.toHex());
+  if (contractInfo != null) {
+     ent.name = contractInfo.name;
+     ent.version = contractInfo.version;
+  }
   store.set('ControllerScheme', ent.id, ent);
 }
 
@@ -159,7 +164,9 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   }
 
   let org = uController.organizations(event.params._avatar);
-  domain.handleRegisterScheme(event.params._avatar, org.value0 , org.value1);
+  let paramsHash = uController.getSchemeParameters(event.params._scheme, event.params._avatar);
+  insertScheme(event.address, event.params._avatar, event.params._scheme, paramsHash);
+  domain.handleRegisterScheme(event.params._avatar, org.value0 , org.value1, event.params._scheme, paramsHash);
 
   // Detect a new organization event by looking for the first register scheme event for that org.
   let isFirstRegister = store.get(
@@ -174,8 +181,6 @@ export function handleRegisterScheme(event: RegisterScheme): void {
       new Entity(),
     );
   }
-
-  insertScheme(event.address, event.params._avatar, event.params._scheme);
 
   let ent = new UControllerRegisterScheme(eventId(event));
   ent.txHash = event.transaction.hash;

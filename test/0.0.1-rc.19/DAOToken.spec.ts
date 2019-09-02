@@ -2,10 +2,8 @@ import {
   getContractAddresses,
   getOptions,
   getWeb3,
-  hashLength,
-  nullParamsHash,
-  padZeros,
   sendQuery,
+  waitUntilTrue,
 } from './util';
 
 const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
@@ -41,14 +39,28 @@ describe('DAOToken', () => {
 
     txs = txs.map(({ transactionHash }) => transactionHash);
 
-    const { tokenContracts } = await sendQuery(`{
+    const tokenContractsQuery = `{
       tokenContracts {
         address
         totalSupply
         owner
       }
-    }`);
+    }`;
 
+    const contractIsIndexed = async () => {
+      const contracts = (await sendQuery(tokenContractsQuery)).tokenContracts;
+      for (let i in contracts) {
+        if (contracts[i].owner === accounts[1].address.toLowerCase() &&
+         contracts[i].address ===  daotoken.options.address.toLowerCase() &&
+         contracts[i].totalSupply === await daotoken.methods.totalSupply().call() + '') {
+          return true;
+        }
+      }
+      return false;
+      };
+
+    await waitUntilTrue(contractIsIndexed);
+    const { tokenContracts } = await sendQuery(tokenContractsQuery);
     expect(tokenContracts).toContainEqual({
       address: daotoken.options.address.toLowerCase(),
       totalSupply: await daotoken.methods.totalSupply().call() + '',
@@ -89,16 +101,15 @@ describe('DAOToken', () => {
     });
 
     const { tokenTransfers } = await sendQuery(`{
-      tokenTransfers(where: {contract: "${daotoken.options.address.toLowerCase()}"}) {
+      tokenTransfers(where: {txHash: "${txs[6]}"}) {
         txHash
         contract
         from
         to
         value
       }
-    }`);
+    }`, 5000);
 
-    expect(tokenTransfers.length).toBeGreaterThanOrEqual(7);
     expect(tokenTransfers).toContainEqual({
       txHash: txs[6],
       contract: daotoken.options.address.toLowerCase(),
@@ -107,5 +118,5 @@ describe('DAOToken', () => {
       value: '50',
     });
     await daotoken.methods.transferOwnership(tokenOwner).send({from: accounts[1].address});
-  }, 20000);
+  }, 50000);
 });

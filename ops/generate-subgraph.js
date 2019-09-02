@@ -1,15 +1,19 @@
 const fs = require("fs");
+const path = require("path")
 const yaml = require("js-yaml");
-const { migrationFileLocation, network } = require("./settings");
+const { migrationFileLocation: defaultMigrationFileLocation,
+network } = require("./settings");
 const mappings = require("./mappings.json")[network].mappings;
+const { subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 
 /**
  * Generate a `subgraph.yaml` file from `datasource.yaml` fragments in
  * `mappings` directory `mappings.json` and `migration.json`
  */
-async function generateSubgraph() {
+async function generateSubgraph(opts={}) {
   // Get the addresses of our predeployed contracts
-  const migrationFile = migrationFileLocation;
+  const migrationFile = opts.migrationFileLocation || defaultMigrationFileLocation;
+  opts.subgraphLocation = opts.subgraphLocation || defaultSubgraphLocation;
   const addresses = JSON.parse(fs.readFileSync(migrationFile, "utf-8"));
   const missingAddresses = {};
 
@@ -35,7 +39,7 @@ async function generateSubgraph() {
   };
 
   fs.writeFileSync(
-    "subgraph.yaml",
+    opts.subgraphLocation,
     yaml.safeDump(subgraph, { noRefs: true }),
     "utf-8"
   );
@@ -44,31 +48,33 @@ async function generateSubgraph() {
 function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
   return fragments.map(mapping => {
     const contract = mapping.name;
-    const fragment = `src/mappings/${mapping.mapping}/datasource.yaml`;
+    const fragment = `${__dirname}/../src/mappings/${mapping.mapping}/datasource.yaml`;
     var abis, entities, eventHandlers, templates, file, yamlLoad, abi;
 
     if (fs.existsSync(fragment)) {
       yamlLoad = yaml.safeLoad(fs.readFileSync(fragment));
-      file = `src/mappings/${mapping.mapping}/mapping.ts`;
+      file = `${__dirname}/../src/mappings/${mapping.mapping}/mapping.ts`;
       eventHandlers = yamlLoad.eventHandlers;
       entities = yamlLoad.entities;
       templates = yamlLoad.templates;
       abis = (yamlLoad.abis || [contract]).map(contract => ({
         name: contract,
-        file: `./abis/${mapping.arcVersion}/${contract}.json`
+        file: `${__dirname}/../abis/${mapping.arcVersion}/${contract}.json`
       }));
       abi = yamlLoad.abis && yamlLoad.abis.length ? yamlLoad.abis [0] : contract;
     } else {
-      file = "ops/emptymapping.ts";
+      file = path.resolve(`${__dirname}/emptymapping.ts`);
       eventHandlers = [{ event: "Dummy()",handler: "handleDummy" }];
       entities = ["nothing"];
-      abis = [{ name: contract, file: `./ops/dummyabi.json` }];
+      abis = [{ name: contract, file: path.resolve(`${__dirname}/dummyabi.json`) }];
       abi = contract;
     }
 
     var contractAddress;
     if (isTemplate === false) {
-      if (mapping.dao === 'organs') {
+      if (mapping.dao === 'address') {
+        contractAddress = mapping.address;
+      } else if (mapping.dao === 'organs') {
         contractAddress = addresses[network].test[mapping.arcVersion][mapping.dao][mapping.contractName];
       } else {
         contractAddress = addresses[network][mapping.dao][mapping.arcVersion][mapping.contractName];
@@ -103,7 +109,7 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
         kind: "ethereum/events",
         apiVersion: "0.0.1",
         language: "wasm/assemblyscript",
-        file: file,
+        file: path.resolve(file),
         entities: entities ? entities : ["nothing"],
         abis,
         eventHandlers

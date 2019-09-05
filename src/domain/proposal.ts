@@ -63,6 +63,7 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
         if (descJson.toObject().get('url') != null) {
           proposal.url = descJson.toObject().get('url').toString();
         }
+        proposal.fulltext = proposal.title.split(' ').concat(proposal.description.split(' '))
       }
     }
     return proposal;

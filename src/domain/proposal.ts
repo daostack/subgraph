@@ -55,15 +55,16 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
           return proposal;
         }
         if (descJson.toObject().get('title') != null) {
-           proposal.title = descJson.toObject().get('title').toString();
+          proposal.title = descJson.toObject().get('title').toString();
+          proposal.fulltext = proposal.title.split(' ');
         }
         if (descJson.toObject().get('description') != null) {
           proposal.description = descJson.toObject().get('description').toString();
+          proposal.fulltext = proposal.fulltext.concat(proposal.description.split(' ')); 
         }
         if (descJson.toObject().get('url') != null) {
           proposal.url = descJson.toObject().get('url').toString();
         }
-        proposal.fulltext = proposal.title.split(' ').concat(proposal.description.split(' '));
       }
     }
     return proposal;

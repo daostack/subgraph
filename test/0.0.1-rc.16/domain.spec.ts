@@ -1152,5 +1152,5 @@ describe('Domain Layer', () => {
     await genesisProtocol.methods.execute(p2).send();
     expect((await sendQuery(getExpiredProposal)).proposal.accountsWithUnclaimedRewards)
     .toEqual([]);
-  }, 200000);
+  }, 2000000);
 });

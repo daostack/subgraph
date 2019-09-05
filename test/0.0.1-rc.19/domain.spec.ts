@@ -115,7 +115,7 @@ describe('Domain Layer', () => {
     register = (await sendQuery(getRegister, 2000)).dao.register;
     expect(register).toEqual('unRegistered');
 
-  }, 2000000);
+  }, 120000);
 
   it('Sanity', async () => {
     const accounts = web3.eth.accounts.wallet;
@@ -1151,5 +1151,5 @@ describe('Domain Layer', () => {
     await genesisProtocol.methods.execute(p2).send();
     expect((await sendQuery(getExpiredProposal)).proposal.accountsWithUnclaimedRewards)
     .toEqual([]);
-  }, 2000000);
+  }, 100000);
 });

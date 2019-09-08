@@ -9,14 +9,13 @@ services:
     links:
       - ipfs
       - postgres
-      - ganache
     environment:
       postgres_host: 'postgres:5432'
       postgres_user: postgres
       postgres_pass: letmein
       postgres_db: postgres
       ipfs: 'ipfs:5001'
-      ethereum: 'private:http://ganache:8545'
+      ethereum: 'rinkeby:https://rinkeby.infura.io/v3/69b4a42f71a8446e8b167062e3d5e317'
       GRAPH_IPFS_TIMEOUT: '2'
       GRAPH_MAX_IPFS_FILE_BYTES: '120000'
   ipfs:
@@ -29,7 +28,3 @@ services:
       - '5434:5432'
     environment:
       POSTGRES_PASSWORD: letmein
-  ganache:
-    image: 'daostack/migration:0.0.1-rc.23-v3'
-    ports:
-      - '8545:8545'

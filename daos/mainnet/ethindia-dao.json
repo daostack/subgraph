@@ -5,7 +5,7 @@
         "Reputation": "0x0A45210ca699599fFAA9b4d80b2564704139b0AE",
         "Controller": "0xff58c314F79e55E27Ae83dD220f38Bb49B8A8Fd9",
         "Schemes": {
-          "ReputationFromToken": "0xfD908c16F6D1C731bfca05DE3262E775d63d58D2"
+          "ReputationFromToken": ["0xfD908c16F6D1C731bfca05DE3262E775d63d58D2"]
         },
 "arcVersion": "0.0.1-rc.22"
       }

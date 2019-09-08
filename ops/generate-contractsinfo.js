@@ -45,7 +45,9 @@ async function generateContractInfo(opts={}) {
       const dao = JSON.parse(fs.readFileSync(daodir + '/' + file, "utf-8"));
       if (dao.Schemes !== undefined) {
          for(var key in dao.Schemes) {
-           buffer += "    setContractInfo("+"'"+dao.Schemes[key].toLowerCase()+"'"+", " +"'"+key+"'"+", "+"'"+dao.arcVersion+"'"+");\n";
+           for (let idx in dao.Schemes[key]) {
+            buffer += "    setContractInfo("+"'"+dao.Schemes[key][idx].toLowerCase()+"'"+", " +"'"+key+"'"+", "+"'"+dao.arcVersion+"'"+");\n";
+           }
          }
       }
     });

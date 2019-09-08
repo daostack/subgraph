@@ -70,6 +70,7 @@ type Proposal @entity {
 	title: String
 	description: String
 	url: String
+	fulltext: [String!]
 
 	gpRewards: [GPReward!] @derivedFrom(field: "proposal")
 	accountsWithUnclaimedRewards: [Bytes!]

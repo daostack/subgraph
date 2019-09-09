@@ -18,6 +18,7 @@ type ControllerScheme @entity {
 	address: Bytes!
 	name: String
 	version: String
+	alias: String
 	contributionRewardParams: ContributionRewardParam
 	schemeRegistrarParams: SchemeRegistrarParam
 	genericSchemeParams: GenericSchemeParam

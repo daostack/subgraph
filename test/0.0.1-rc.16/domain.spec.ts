@@ -1129,8 +1129,8 @@ describe('Domain Layer', () => {
     increaseTime(600 + 1 , web3);
     await genesisProtocol.methods.execute(p2).send();
 
-    let stage = (await sendQuery(getExpiredProposal)).proposal.stage;
-    expect((await sendQuery(getExpiredProposal)).proposal.stage).toEqual('Boosted');
+    let stage = (await sendQuery(getExpiredProposal, 3000)).proposal.stage;
+    expect((await sendQuery(getExpiredProposal, 3000)).proposal.stage).toEqual('Boosted');
     increaseTime((+gpParams.boostedVotePeriodLimit) - (+gpParams.quietEndingPeriod) + 1 , web3);
     let quietEndingPeriodBeganAt = await vote({
       proposalId: p2,

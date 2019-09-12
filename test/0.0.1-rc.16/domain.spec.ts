@@ -745,7 +745,7 @@ describe('Domain Layer', () => {
      });
 
     await waitUntilTrue(stakeIsIndexed);
-    proposal = (await sendQuery(getProposal,2000)).proposal;
+    proposal = (await sendQuery(getProposal, 2000)).proposal;
     expect(proposal.stage).toEqual('PreBoosted');
     expect(proposal.preBoostedAt).toEqual(s3Timestamp.toString());
     expect(proposal.confidenceThreshold).toEqual(Math.pow(2, REAL_FBITS).toString());

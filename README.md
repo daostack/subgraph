@@ -2,6 +2,8 @@
 
 DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 
+![image](https://github.com/pat-daostack/subgraph/blob/master/images/190910_DS_SUBGAPH_DIAGRAM_V01-2.jpg)
+
 ## Getting started
 
 1. `git clone https://github.com/daostack/subgraph.git && cd subgraph`

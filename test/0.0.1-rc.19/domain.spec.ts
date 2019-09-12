@@ -105,7 +105,7 @@ describe('Domain Layer', () => {
       opts,
     );
 
-    expect(register).toEqual('proposed');
+    expect(register).toEqual('na');
 
     await daoRegistry.methods.register(addresses.Avatar, 'test').send();
     register = (await sendQuery(getRegister, 2000)).dao.register;
@@ -744,7 +744,7 @@ describe('Domain Layer', () => {
      });
 
     await waitUntilTrue(stakeIsIndexed);
-    proposal = (await sendQuery(getProposal)).proposal;
+    proposal = (await sendQuery(getProposal,2000)).proposal;
     expect(proposal.stage).toEqual('PreBoosted');
     expect(proposal.preBoostedAt).toEqual(s3Timestamp.toString());
     expect(proposal.confidenceThreshold).toEqual(Math.pow(2, REAL_FBITS).toString());

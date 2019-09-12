@@ -15,7 +15,14 @@ async function generateSubgraph(opts={}) {
   opts.subgraphLocation = opts.subgraphLocation || defaultSubgraphLocation;
   const addresses = JSON.parse(fs.readFileSync(migrationFile, "utf-8"));
 
-  const dataSources = mappings.map(mapping => {
+  const dataSources = mappings.filter(function(mapping) {
+            if ((mapping.arcVersion === "0.0.1-rc.18") ||
+                (mapping.arcVersion === "0.0.1-rc.17")) {
+              return false; // skip
+            }
+            return true;
+   }).map(mapping => {
+
     var contract = mapping.name;
     var abis, entities, eventHandler, file, yamlLoad, abi;
     if (fs.existsSync(`${__dirname}/../src/mappings/` + mapping.mapping + "/datasource.yaml")) {
@@ -28,12 +35,20 @@ async function generateSubgraph(opts={}) {
       file = `${__dirname}/../src/mappings/${mapping.mapping}/mapping.ts`;
       eventHandlers = yamlLoad.eventHandlers;
       entities = yamlLoad.entities;
-      (abis = (yamlLoad.abis || [contract]).map(contract => ({
-        name: contract,
-        file: `${__dirname}/../abis/${mapping.arcVersion}/${contract}.json`
-      }))),
-        (abi =
-          yamlLoad.abis && yamlLoad.abis.length ? yamlLoad.abis[0] : contract);
+      abis = (yamlLoad.abis || [contract]).map(contractName => {
+        let _arcVersion = Number(mapping.arcVersion.slice(mapping.arcVersion.length-2,mapping.arcVersion.length));
+
+        if ((_arcVersion < 24) && (contractName === "UGenericScheme")) {
+          return {name: contractName,
+                  file: `${__dirname}/../abis/${mapping.arcVersion}/GenericScheme.json`
+                };
+        }
+        return {name: contractName,
+                file: `${__dirname}/../abis/${mapping.arcVersion}/${contractName}.json`
+              };
+      });
+      abi =
+        yamlLoad.abis && yamlLoad.abis.length ? yamlLoad.abis[0] : contract;
     } else {
       file = path.resolve(`${__dirname}/emptymapping.ts`);
       eventHandlers = [{ event: "Dummy()", handler: "handleDummy" }];

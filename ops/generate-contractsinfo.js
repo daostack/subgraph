@@ -30,7 +30,11 @@ async function generateContractInfo(opts={}) {
         let addresses = migration[network].base[version];
         for (var name in addresses) {
           if (addresses.hasOwnProperty(name)) {
-              buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+name+"'"+", "+"'"+name+"', "+"'"+version+"'"+");\n";
+              if (name === "GenericScheme") {
+                buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+"UGenericScheme"+"'"+", "+"'"+"UGenericScheme"+"', "+"'"+version+"'"+");\n";
+              } else {
+                buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+name+"'"+", "+"'"+name+"', "+"'"+version+"'"+");\n";
+             }
           }
         }
     }
@@ -45,8 +49,9 @@ async function generateContractInfo(opts={}) {
     files.forEach(function(file) {
       const dao = JSON.parse(fs.readFileSync(daodir + '/' + file, "utf-8"));
       if (dao.Schemes !== undefined) {
-         for(var key in dao.Schemes) {
-           buffer += "    setContractInfo("+"'"+dao.Schemes[key].address.toLowerCase()+"'"+", " +"'"+key+"'"+", "+"'"+ dao.Schemes[key].alias +"', "+"'"+dao.arcVersion+"'"+");\n";
+         for (var i = 0, len = dao.Schemes.length; i < len; i++) {
+           var scheme = dao.Schemes[i];
+           buffer += "    setContractInfo("+"'"+scheme.address.toLowerCase()+"'"+", " +"'"+scheme.name+"'"+", "+"'"+ scheme.alias +"', "+"'"+dao.arcVersion+"'"+");\n";
          }
       }
     });

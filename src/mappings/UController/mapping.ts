@@ -61,6 +61,7 @@ function insertScheme(
   if (contractInfo != null) {
      ent.name = contractInfo.name;
      ent.version = contractInfo.version;
+     ent.alias = contractInfo.alias;
   }
   store.set('ControllerScheme', ent.id, ent);
 }

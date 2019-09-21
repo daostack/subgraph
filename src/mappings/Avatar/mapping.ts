@@ -8,32 +8,15 @@ import { Avatar, OwnershipTransferred, ReceiveEther, SendEther } from '../../typ
 // Import entity types generated from the GraphQL schema
 import { AvatarContract } from '../../types/schema';
 
-function getAvatar(id: string): AvatarContract {
-  let avatar = store.get('AvatarContract', id) as AvatarContract;
-  if (avatar == null) {
-    const avatarAddress = Address.fromString(id);
-    avatar = new AvatarContract(id);
-    avatar.address = avatarAddress;
-
-    let avatarSC = Avatar.bind(avatarAddress);
-    avatar.name = avatarSC.orgName();
-    avatar.nativeReputation = avatarSC.nativeReputation();
-    avatar.nativeToken = avatarSC.nativeToken();
-    avatar.balance = BigInt.fromI32(0);
-  }
-  return avatar;
-}
-
-function saveAvatar(avatar: AvatarContract): void {
-  store.set('AvatarContract', avatar.id, avatar);
-}
-
 function handleAvatarBalance(
   address: Address,
   value: BigInt,
   received: boolean,
 ): void {
-  let avatar = getAvatar(address.toHex());
+  let avatar = store.get('AvatarContract', address.toHex()) as AvatarContract;
+  if (avatar == null) {
+     return;
+  }
 
   if (received) {
     avatar.balance = avatar.balance.plus(value);
@@ -41,7 +24,7 @@ function handleAvatarBalance(
     avatar.balance = avatar.balance.minus(value);
   }
 
-  saveAvatar(avatar);
+  store.set('AvatarContract', avatar.id, avatar);
 }
 
 export function handleSendEth(event: SendEther): void {
@@ -53,7 +36,16 @@ export function handleReceiveEth(event: ReceiveEther): void {
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  let avatar = getAvatar(event.address.toHex());
+  let avatar = AvatarContract.load(event.address.toHex());
+  if (avatar == null) {
+    avatar = new AvatarContract(event.address.toHex());
+    let avatarSC = Avatar.bind(event.address);
+    avatar.address = event.address;
+    avatar.name = avatarSC.orgName();
+    avatar.nativeReputation = avatarSC.nativeReputation();
+    avatar.nativeToken = avatarSC.nativeToken();
+    avatar.balance = BigInt.fromI32(0);
+  }
   avatar.owner = event.params.newOwner;
-  saveAvatar(avatar);
+  avatar.save();
 }

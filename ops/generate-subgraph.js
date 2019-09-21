@@ -17,9 +17,15 @@ async function generateSubgraph(opts={}) {
   const addresses = JSON.parse(fs.readFileSync(migrationFile, "utf-8"));
   const missingAddresses = {};
 
+  // Filter out 0.0.1-rc.18 & 0.0.1-rc.17
+  const latestMappings = mappings.filter(mapping =>
+    !(mapping.arcVersion === "0.0.1-rc.18" ||
+      mapping.arcVersion === "0.0.1-rc.17")
+  );
+
   // Build our subgraph's datasources from the mapping fragments
   const dataSources = combineFragments(
-    mappings, false, addresses, missingAddresses
+    latestMappings, false, addresses, missingAddresses
   ).filter(el => el != null);
 
   // Throw an error if there are contracts that're missing an address
@@ -52,16 +58,29 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
     var abis, entities, eventHandlers, templates, file, yamlLoad, abi;
 
     if (fs.existsSync(fragment)) {
-      yamlLoad = yaml.safeLoad(fs.readFileSync(fragment));
+      yamlLoad = yaml.safeLoad(fs.readFileSync(fragment, "utf-8"));
       file = `${__dirname}/../src/mappings/${mapping.mapping}/mapping.ts`;
       eventHandlers = yamlLoad.eventHandlers;
       entities = yamlLoad.entities;
       templates = yamlLoad.templates;
-      abis = (yamlLoad.abis || [contract]).map(contract => ({
-        name: contract,
-        file: `${__dirname}/../abis/${mapping.arcVersion}/${contract}.json`
-      }));
-      abi = yamlLoad.abis && yamlLoad.abis.length ? yamlLoad.abis [0] : contract;
+      abis = (yamlLoad.abis || [contract]).map(contractName => {
+        const version = mapping.arcVersion;
+        const strlen = version.length
+        const versionNum = Number(version.slice(strlen - 2, strlen));
+
+        if ((versionNum < 24) && (contractName === "UGenericScheme")) {
+          return {
+            name: contractName,
+            file: `${__dirname}/../abis/${version}/GenericScheme.json`
+          };
+        }
+
+        return {
+          name: contractName,
+          file: `${__dirname}/../abis/${version}/${contractName}.json`
+        };
+      });
+      abi = yamlLoad.abis && yamlLoad.abis.length ? yamlLoad.abis[0] : contract;
     } else {
       file = path.resolve(`${__dirname}/emptymapping.ts`);
       eventHandlers = [{ event: "Dummy()",handler: "handleDummy" }];

@@ -126,7 +126,7 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
       .numberOfPreBoostedProposals.minus(
         BigInt.fromI32(1),
       );
-    } else if (equalStrings(proposal.stage, 'Boosted') || equalStrings(proposal.stage, 'QuietEndingPeriod')) {
+    } else if (equalStrings(proposal.stage, 'Boosted')) {
       controllerScheme.numberOfBoostedProposals = controllerScheme
       .numberOfBoostedProposals.minus(
         BigInt.fromI32(1),
@@ -174,9 +174,6 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     proposal.closingAt =  proposal.quietEndingPeriodBeganAt +
                           GenesisProtocolParam.load(proposal.genesisProtocolParams).quietEndingPeriod;
     proposal.stage = 'QuietEndingPeriod';
-    if (controllerScheme != null) {
-      controllerScheme.numberOfBoostedProposals = controllerScheme.numberOfBoostedProposals.plus(BigInt.fromI32(1));
-    }
   }
   if (controllerScheme != null) {
     controllerScheme.save();

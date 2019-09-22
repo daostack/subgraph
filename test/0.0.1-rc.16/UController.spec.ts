@@ -224,7 +224,7 @@ describe('UController', () => {
     });
 
     const { controllerSchemes } = await sendQuery(`{
-      controllerSchemes {
+      controllerSchemes(dao: ${avatar.options.address.toLowerCase()}) {
         dao {
           id
         }

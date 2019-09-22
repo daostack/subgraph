@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@daostack/migration": "0.0.1-rc.24-v3",
-    "@types/graphql": "^14.2.0",
     "@types/jest": "^23.3.7",
     "@types/mocha": "^5.2.5",
     "babel-eslint": "^10.0.1",

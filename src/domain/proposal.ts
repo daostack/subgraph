@@ -117,11 +117,20 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
   let controllerScheme = ControllerScheme.load(proposal.scheme);
   if (controllerScheme != null) {
     if (equalStrings(proposal.stage, 'Queued')) {
-      controllerScheme.numberOfQueuedProposals = controllerScheme.numberOfQueuedProposals.minus(BigInt.fromI32(1));
+      controllerScheme.numberOfQueuedProposals = controllerScheme
+      .numberOfQueuedProposals.minus(
+        BigInt.fromI32(1),
+      );
     } else if (equalStrings(proposal.stage, 'PreBoosted')) {
-      controllerScheme.numberOfPreBoostedProposals = controllerScheme.numberOfPreBoostedProposals.minus(BigInt.fromI32(1));
+      controllerScheme.numberOfPreBoostedProposals = controllerScheme
+      .numberOfPreBoostedProposals.minus(
+        BigInt.fromI32(1),
+      );
     } else if (equalStrings(proposal.stage, 'Boosted') || equalStrings(proposal.stage, 'QuietEndingPeriod')) {
-      controllerScheme.numberOfBoostedProposals = controllerScheme.numberOfBoostedProposals.minus(BigInt.fromI32(1));    
+      controllerScheme.numberOfBoostedProposals = controllerScheme
+      .numberOfBoostedProposals.minus(
+        BigInt.fromI32(1),
+      );
     }
   }
   if (state === 1) {
@@ -136,7 +145,8 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     proposal.closingAt =  proposal.createdAt +
                           GenesisProtocolParam.load(proposal.genesisProtocolParams).queuedVotePeriodLimit;
     if (controllerScheme != null) {
-      controllerScheme.numberOfQueuedProposals = controllerScheme.numberOfQueuedProposals.plus(BigInt.fromI32(1));
+      controllerScheme.numberOfQueuedProposals = controllerScheme
+      .numberOfQueuedProposals.plus(BigInt.fromI32(1));
     }
   } else if (state === 4) {
     // PreBoosted
@@ -145,7 +155,8 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     proposal.closingAt =  proposal.preBoostedAt +
                           GenesisProtocolParam.load(proposal.genesisProtocolParams).preBoostedVotePeriodLimit;
     if (controllerScheme != null) {
-      controllerScheme.numberOfPreBoostedProposals = controllerScheme.numberOfPreBoostedProposals.plus(BigInt.fromI32(1));
+      controllerScheme.numberOfPreBoostedProposals = controllerScheme
+      .numberOfPreBoostedProposals.plus(BigInt.fromI32(1));
     }
   } else if (state === 5) {
     // Boosted
@@ -154,8 +165,9 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     proposal.closingAt =  proposal.boostedAt +
                           GenesisProtocolParam.load(proposal.genesisProtocolParams).boostedVotePeriodLimit;
     if (controllerScheme != null) {
-      controllerScheme.numberOfBoostedProposals = controllerScheme.numberOfBoostedProposals.plus(BigInt.fromI32(1));
-    }    
+      controllerScheme.numberOfBoostedProposals = controllerScheme
+      .numberOfBoostedProposals.plus(BigInt.fromI32(1));
+    }
   } else if (state === 6) {
     // QuietEndingPeriod
     proposal.quietEndingPeriodBeganAt = gpTimes[1];
@@ -163,11 +175,11 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
                           GenesisProtocolParam.load(proposal.genesisProtocolParams).quietEndingPeriod;
     proposal.stage = 'QuietEndingPeriod';
     if (controllerScheme != null) {
-      controllerScheme.numberOfBoostedProposals = controllerScheme.numberOfBoostedProposals.plus(BigInt.fromI32(1));    
+      controllerScheme.numberOfBoostedProposals = controllerScheme.numberOfBoostedProposals.plus(BigInt.fromI32(1));
     }
   }
   if (controllerScheme != null) {
-    controllerScheme.save()
+    controllerScheme.save();
   }
 }
 

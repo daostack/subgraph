@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ControllerScheme, GenesisProtocolParam, Proposal } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
@@ -22,6 +22,13 @@ export function getProposal(id: string): Proposal {
     proposal = new Proposal(id);
 
     proposal.stage = 'Queued';
+    let controllerScheme =  ControllerScheme.load(
+      crypto.keccak256(
+        concat(
+          ByteArray.fromHexString(proposal.dao),
+          ByteArray.fromHexString(proposal.scheme))
+      ).toHex());
+    controllerScheme.numberOfQueuedProposals = controllerScheme.numberOfQueuedProposals.plus(BigInt.fromI32(1));    
     proposal.executionState = 'None';
 
     proposal.votesFor = BigInt.fromI32(0);
@@ -114,6 +121,19 @@ export function updateProposalState(id: Bytes, state: number, gpAddress: Address
 
 export function setProposalState(proposal: Proposal, state: number, gpTimes: BigInt[]): void {
   // enum ProposalState { None, ExpiredInQueue, Executed, Queued, PreBoosted, Boosted, QuietEndingPeriod}
+  let controllerScheme =  ControllerScheme.load(
+    crypto.keccak256(
+      concat(
+        ByteArray.fromHexString(proposal.dao),
+        ByteArray.fromHexString(proposal.scheme))
+    ).toHex());
+  if (proposal.stage === 'Queued') {
+    controllerScheme.numberOfQueuedProposals = controllerScheme.numberOfQueuedProposals.minus(BigInt.fromI32(1));
+  } else if (proposal.stage === 'PreBoosted') {
+    controllerScheme.numberOfPreBoostedProposals = controllerScheme.numberOfPreBoostedProposals.minus(BigInt.fromI32(1));
+  } else if (proposal.stage === 'Boosted' || proposal.stage === 'QuietEndingPeriod') {
+    controllerScheme.numberOfBoostedProposals = controllerScheme.numberOfBoostedProposals.minus(BigInt.fromI32(1));    
+  }
   if (state === 1) {
     // Closed
     proposal.stage = 'ExpiredInQueue';
@@ -131,19 +151,21 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     proposal.preBoostedAt = gpTimes[2];
     proposal.closingAt =  proposal.preBoostedAt +
                           GenesisProtocolParam.load(proposal.genesisProtocolParams).preBoostedVotePeriodLimit;
+    controllerScheme.numberOfPreBoostedProposals = controllerScheme.numberOfPreBoostedProposals.plus(BigInt.fromI32(1));    
   } else if (state === 5) {
     // Boosted
     proposal.boostedAt = gpTimes[1];
     proposal.stage = 'Boosted';
     proposal.closingAt =  proposal.boostedAt +
                           GenesisProtocolParam.load(proposal.genesisProtocolParams).boostedVotePeriodLimit;
-
+    controllerScheme.numberOfBoostedProposals = controllerScheme.numberOfBoostedProposals.plus(BigInt.fromI32(1));    
   } else if (state === 6) {
     // QuietEndingPeriod
     proposal.quietEndingPeriodBeganAt = gpTimes[1];
     proposal.closingAt =  proposal.quietEndingPeriodBeganAt +
                           GenesisProtocolParam.load(proposal.genesisProtocolParams).quietEndingPeriod;
     proposal.stage = 'QuietEndingPeriod';
+    controllerScheme.numberOfBoostedProposals = controllerScheme.numberOfBoostedProposals.plus(BigInt.fromI32(1));    
   }
 }
 

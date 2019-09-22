@@ -97,7 +97,7 @@ type Proposal @entity {
 	genericScheme : GenericSchemeProposal
 
 	# SchemeRegistrar proposal
-  schemeRegistrar : SchemeRegistrarProposal
+  	schemeRegistrar : SchemeRegistrarProposal
 
 	genesisProtocolParams : GenesisProtocolParam!
 

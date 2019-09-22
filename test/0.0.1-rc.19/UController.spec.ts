@@ -237,6 +237,9 @@ describe('UController', () => {
         gpQueue {
           id
         }
+        numberOfQueuedProposals
+        numberOfPreBoostedProposals
+        numberOfBoostedProposals
       }
     }`);
 
@@ -251,6 +254,9 @@ describe('UController', () => {
       canUpgradeController: true,
       canDelegateCall: true,
       gpQueue: null,
+      numberOfQueuedProposals: 1,
+      numberOfPreBoostedProposals: 1,
+      numberOfBoostedProposals: 1,
     });
     expect(controllerSchemes).toContainEqual({
       dao: {
@@ -263,6 +269,9 @@ describe('UController', () => {
       canUpgradeController: false,
       canDelegateCall: false,
       gpQueue: null,
+      numberOfQueuedProposals: 1,
+      numberOfPreBoostedProposals: 1,
+      numberOfBoostedProposals: 1,
     });
 
     const { ucontrollerAddGlobalConstraints } = await sendQuery(`{

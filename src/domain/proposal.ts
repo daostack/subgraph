@@ -121,7 +121,7 @@ export function updateProposalState(id: Bytes, state: number, gpAddress: Address
 
 export function setProposalState(proposal: Proposal, state: number, gpTimes: BigInt[]): void {
   // enum ProposalState { None, ExpiredInQueue, Executed, Queued, PreBoosted, Boosted, QuietEndingPeriod}
-  let controllerScheme =  ControllerScheme.load(
+  let controllerScheme = ControllerScheme.load(
     crypto.keccak256(
       concat(
         ByteArray.fromHexString(proposal.dao),
@@ -167,6 +167,8 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     proposal.stage = 'QuietEndingPeriod';
     controllerScheme.numberOfBoostedProposals = controllerScheme.numberOfBoostedProposals.plus(BigInt.fromI32(1));    
   }
+
+  controllerScheme.save()
 }
 
 export function updateGPProposal(

@@ -224,7 +224,7 @@ describe('UController', () => {
     });
 
     const { controllerSchemes } = await sendQuery(`{
-      controllerSchemes(dao: ${avatar.options.address.toLowerCase()}) {
+      controllerSchemes(where: { dao: "${avatar.options.address.toLowerCase()}" }) {
         dao {
           id
         }
@@ -254,9 +254,9 @@ describe('UController', () => {
       canUpgradeController: true,
       canDelegateCall: true,
       gpQueue: null,
-      numberOfQueuedProposals: 1,
-      numberOfPreBoostedProposals: 1,
-      numberOfBoostedProposals: 1,
+      numberOfBoostedProposals: '0',
+      numberOfPreBoostedProposals: '0',
+      numberOfQueuedProposals: '0',
     });
     expect(controllerSchemes).toContainEqual({
       dao: {
@@ -269,9 +269,9 @@ describe('UController', () => {
       canUpgradeController: false,
       canDelegateCall: false,
       gpQueue: null,
-      numberOfQueuedProposals: 1,
-      numberOfPreBoostedProposals: 1,
-      numberOfBoostedProposals: 1,
+      numberOfBoostedProposals: '0',
+      numberOfPreBoostedProposals: '0',
+      numberOfQueuedProposals: '0',
     });
 
     const { ucontrollerAddGlobalConstraints } = await sendQuery(`{

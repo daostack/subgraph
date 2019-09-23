@@ -467,6 +467,9 @@ describe('Domain Layer', () => {
             scheme {
               address
               name
+              numberOfQueuedProposals
+              numberOfPreBoostedProposals
+              numberOfBoostedProposals
             }
         }
     }`;
@@ -547,6 +550,9 @@ describe('Domain Layer', () => {
       scheme: {
         address: addresses.ContributionReward.toLowerCase(),
         name: 'ContributionReward',
+        numberOfBoostedProposals: '0',
+        numberOfPreBoostedProposals: '0',
+        numberOfQueuedProposals: '1',
       },
     });
 
@@ -1075,6 +1081,9 @@ describe('Domain Layer', () => {
           threshold
           scheme {
             name
+            numberOfQueuedProposals
+            numberOfPreBoostedProposals
+            numberOfBoostedProposals
           }
       }
     }`;
@@ -1085,6 +1094,9 @@ describe('Domain Layer', () => {
         threshold: Math.pow(2, REAL_FBITS).toString(),
         scheme: {
           name: 'ContributionReward',
+          numberOfBoostedProposals: '0',
+          numberOfPreBoostedProposals: '0',
+          numberOfQueuedProposals: '0',
         },
     });
 
@@ -1092,6 +1104,9 @@ describe('Domain Layer', () => {
         threshold: Math.pow(2, REAL_FBITS).toString(),
         scheme: {
           name: 'GenericScheme',
+          numberOfBoostedProposals: '0',
+          numberOfPreBoostedProposals: '0',
+          numberOfQueuedProposals: '0',
         },
     });
 
@@ -1099,6 +1114,9 @@ describe('Domain Layer', () => {
         threshold: Math.pow(2, REAL_FBITS + 1).toString(),
         scheme: {
           name: 'ContributionReward',
+          numberOfBoostedProposals: '1',
+          numberOfPreBoostedProposals: '1',
+          numberOfQueuedProposals: '1',
         },
     });
 

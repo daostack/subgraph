@@ -4,6 +4,7 @@
   "author": "DAOstack (https://www.daostack.io)",
   "license": "GPL-3.0",
   "description": "A caching layer for daostack using The Graph",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/daostack/subgraph.git"

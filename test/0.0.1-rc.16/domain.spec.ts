@@ -1085,6 +1085,11 @@ describe('Domain Layer', () => {
             numberOfPreBoostedProposals
             numberOfBoostedProposals
           }
+          dao {
+            numberOfQueuedProposals
+            numberOfPreBoostedProposals
+            numberOfBoostedProposals
+          }
       }
     }`;
 
@@ -1098,6 +1103,11 @@ describe('Domain Layer', () => {
           numberOfPreBoostedProposals: '0',
           numberOfQueuedProposals: '0',
         },
+        dao: {
+          numberOfQueuedProposals: '2',
+          numberOfPreBoostedProposals: '1',
+          numberOfBoostedProposals: '1',
+        },
     });
 
     expect(gpQueues).toContainEqual({
@@ -1108,6 +1118,11 @@ describe('Domain Layer', () => {
           numberOfPreBoostedProposals: '0',
           numberOfQueuedProposals: '0',
         },
+        dao: {
+          numberOfQueuedProposals: '2',
+          numberOfPreBoostedProposals: '1',
+          numberOfBoostedProposals: '1',
+        },
     });
 
     expect(gpQueues).toContainEqual({
@@ -1117,6 +1132,11 @@ describe('Domain Layer', () => {
           numberOfBoostedProposals: '1',
           numberOfPreBoostedProposals: '1',
           numberOfQueuedProposals: '1',
+        },
+        dao: {
+          numberOfQueuedProposals: '2',
+          numberOfPreBoostedProposals: '1',
+          numberOfBoostedProposals: '1',
         },
     });
 

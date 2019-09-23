@@ -25,7 +25,7 @@ async function deploy (opts = {}) {
   let msg
 
   /* create the subgraph */
-  if (graphNode !== 'https://api.thegraph.com/deploy/') {
+  if (graphNode !== 'https://api.thegraph.com/deploy/' && graphNode !== 'https://api.staging.thegraph.com/deploy/') {
     result = await runGraphCli([
       'create',
       '--access-token ""',

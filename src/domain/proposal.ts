@@ -244,7 +244,7 @@ export function updateGPProposal(
 
   let dao = getDAO(avatarAddress.toHex());
   dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.plus(BigInt.fromI32(1));
-  saveDAO(dao)
+  saveDAO(dao);
   let reputation = getReputation(dao.nativeReputation);
   proposal.totalRepWhenCreated = reputation.totalSupply;
   proposal.closingAt =  proposal.createdAt +

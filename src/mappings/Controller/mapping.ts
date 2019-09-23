@@ -33,6 +33,7 @@ import {
   ReputationContract,
   SchemeRegistrarParam,
   TokenContract,
+  UGenericSchemeParam,
 } from '../../types/schema';
 
 import {
@@ -44,7 +45,7 @@ import {
   UpgradeController,
 } from '../../types/Controller/Controller';
 
-import { concat, debug, equalsBytes, eventId } from '../../utils';
+import { concat, equalsBytes, eventId } from '../../utils';
 
 function insertScheme(
   controllerAddress: Address,
@@ -71,6 +72,7 @@ function insertScheme(
   if (contractInfo != null) {
      ent.name = contractInfo.name;
      ent.version = contractInfo.version;
+     ent.alias = contractInfo.alias;
   }
   store.set('ControllerScheme', ent.id, ent);
 }
@@ -310,7 +312,6 @@ export function setSchemeRegistrarParams(avatar: Address,
    setGPParams(vmAddress, voteRegisterParams);
    setGPParams(vmAddress, voteRemoveParams);
    let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
-   debug(controllerScheme.paramsHash.toHex());
    let schemeRegistrarParams = new SchemeRegistrarParam(controllerScheme.paramsHash.toHex());
    schemeRegistrarParams.votingMachine = vmAddress;
    schemeRegistrarParams.voteRegisterParams = voteRegisterParams.toHex();
@@ -328,11 +329,27 @@ export function setGenericSchemeParams(avatar: Address,
                                        contractToCall: Bytes): void {
    setGPParams(vmAddress, vmParamsHash);
    let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
-   let genericSchemeParams = new GenericSchemeParam(controllerScheme.paramsHash.toHex());
+   let genericSchemeParams = new GenericSchemeParam(scheme.toHex());
    genericSchemeParams.votingMachine = vmAddress;
    genericSchemeParams.voteParams = vmParamsHash.toHex();
    genericSchemeParams.contractToCall = contractToCall;
    genericSchemeParams.save();
    controllerScheme.genericSchemeParams = genericSchemeParams.id;
+   controllerScheme.save();
+}
+
+export function setUGenericSchemeParams(avatar: Address,
+                                        scheme: Address,
+                                        vmAddress: Address,
+                                        vmParamsHash: Bytes,
+                                        contractToCall: Bytes): void {
+   setGPParams(vmAddress, vmParamsHash);
+   let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
+   let genericSchemeParams = new UGenericSchemeParam(controllerScheme.paramsHash.toHex());
+   genericSchemeParams.votingMachine = vmAddress;
+   genericSchemeParams.voteParams = vmParamsHash.toHex();
+   genericSchemeParams.contractToCall = contractToCall;
+   genericSchemeParams.save();
+   controllerScheme.uGenericSchemeParams = genericSchemeParams.id;
    controllerScheme.save();
 }

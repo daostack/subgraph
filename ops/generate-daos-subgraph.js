@@ -90,6 +90,7 @@ async function generateSubgraph(opts={}) {
         if (subgraphYaml.dataSources[i].source.address === dao.Controller) {
           includeController = true;
         }
+        if ( dao.Schemes !== undefined) {
         for (var j = 0, schemesLen = dao.Schemes.length; j < schemesLen; j++) {
             let scheme = dao.Schemes[j];
             if (scheme.name == "GenericScheme") {
@@ -103,6 +104,7 @@ async function generateSubgraph(opts={}) {
               }
             }
         }
+       }
       }
       if (includeRep === false) {
         subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml(

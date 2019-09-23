@@ -43,16 +43,16 @@ async function deploy (opts = {}) {
     }
   }
 
-  /* upload subgraph files to the other IPFS node */
+  /* upload subgraph files to the shared IPFS node */
   let builtSubgraphId
   if (graphNode.match(/thegraph\.com/)) {
-    let otherIpfsNode = ipfsNode.match(/staging/)
+    let sharedIpfsNode = ipfsNode.match(/staging/)
       ? 'https://api.thegraph.com/ipfs/'
       : 'https://api.staging.thegraph.com/ipfs/'
-    result = await runGraphCli(['build', '--ipfs', otherIpfsNode, opts.subgraphLocation])
+    result = await runGraphCli(['build', '--ipfs', sharedIpfsNode, opts.subgraphLocation])
     msg = result[1] + result[2]
     if (result[0] === 1 || result[0] === 127) {
-      throw Error(`Failed to upload subgraph files to ${otherIpfsNode}: ${msg}`)
+      throw Error(`Failed to upload subgraph files to ${sharedIpfsNode}: ${msg}`)
     }
 
     builtSubgraphId = extractSubgraphId(result[1])

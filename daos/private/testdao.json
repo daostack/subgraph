@@ -1,9 +1,20 @@
 {
-  "name": "Feckless Artist",
-  "Avatar": "0xA92A766d62318B9c06Eb548753bD34acbD7C5f3c",
-  "DAOToken": "0xf25e92D6092122bd7190BC8aDaF36FcF26aB1110",
-  "Reputation": "0xBeF75D93f5f25da0896e4623783D685eDc6d2FC5",
-  "Controller": "0x4b38ACFF6A4A3FD2D5A53B02b38654078c0Ba752",
-  "Schemes": {},
-  "arcVersion": "0.0.1-rc.23"
+  "name": "Precipitate Inker",
+  "Avatar": "0x8f6Ec2eca7FB7B15df480d1266Ba142aEbfd373D",
+  "DAOToken": "0xf9D3854d8c5ACE915a8a4FfF16253B1CA7CEf0cD",
+  "Reputation": "0x7744cE2c85DCE57d76b17D374397d84387F450eA",
+  "Controller": "0x2f8212Ca2F6c947611ef342Aa231c6eFEd84684F",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0xf6CAd21F949dCdAD487b531361Bb0c6a5e700F88"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias2",
+      "address": "0xe9846aBe8EE7e8f8E371eD17BF3557573Ee34069"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.24"
 }

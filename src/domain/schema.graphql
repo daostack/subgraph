@@ -70,6 +70,7 @@ type Proposal @entity {
 	title: String
 	description: String
 	url: String
+	fulltext: [String!]
 
 	gpRewards: [GPReward!] @derivedFrom(field: "proposal")
 	accountsWithUnclaimedRewards: [Bytes!]
@@ -172,6 +173,7 @@ type FirstRegisterSchemeFlag @entity {
 type ContractInfo @entity {
 	id: ID!
 	name: String!
+	alias: String!
 	version: String!
 	address: Bytes!
 }

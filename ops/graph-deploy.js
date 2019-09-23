@@ -3,6 +3,16 @@ const { runGraphCli, subgraphLocation: defaultSubgraphLocation} = require('./gra
 const { graphNode, ipfsNode, subgraphName: defaultSubgraphName } = require('./settings')
 const cwd = path.resolve(`${__dirname}/..`)
 
+function extractSubgraphId(output) {
+  return output
+    .trim()
+    .split('\n')
+    .reverse()
+    .find(line => line.match(/(Build completed|Subgraph): Qm/))
+    .split(':')
+    .slice(-1)[0]
+    .trim()
+}
 
 async function deploy (opts = {}) {
   if (!opts.subgraphLocation) {
@@ -33,21 +43,53 @@ async function deploy (opts = {}) {
     }
   }
 
-  result = await runGraphCli([
-    'deploy',
-    '--access-token "${access_token-""}"',
-    '--ipfs ' + ipfsNode,
-    '--node ' + graphNode,
-    opts.subgraphName,
-    opts.subgraphLocation
-  ], cwd)
+  /* upload subgraph files to the other IPFS node */
+  let builtSubgraphId
+  if (graphNode.match(/thegraph\.com/)) {
+    let otherIpfsNode = ipfsNode.match(/staging/)
+      ? 'https://api.thegraph.com/ipfs/'
+      : 'https://api.staging.thegraph.com/ipfs/'
+    result = await runGraphCli(['build', '--ipfs', otherIpfsNode, opts.subgraphLocation])
+    msg = result[1] + result[2]
+    if (result[0] === 1 || result[0] === 127) {
+      throw Error(`Failed to upload subgraph files to ${otherIpfsNode}: ${msg}`)
+    }
+
+    builtSubgraphId = extractSubgraphId(result[1])
+    console.log(`Uploaded subgraph: ${builtSubgraphId}`)
+  }
+
+  result = await runGraphCli(
+    [
+      'deploy',
+      '--access-token "${access_token-""}"',
+      '--ipfs ' + ipfsNode,
+      '--node ' + graphNode,
+      opts.subgraphName,
+      opts.subgraphLocation,
+    ],
+    cwd
+  )
   msg = result[1] + result[2]
-  if ((result[0] === 1)|| (result[0] === 127)){
+  if (result[0] === 1 || result[0] === 127) {
     throw Error(`Deployment failed! ${msg}`)
   }
   if (msg.toLowerCase().indexOf('error') > 0) {
     throw Error(`Deployment failed! ${msg}`)
   }
+
+  if (graphNode.match(/thegraph\.com/)) {
+    let deployedSubgraphId = extractSubgraphId(result[1])
+    console.log(`Deployed subgraph: ${deployedSubgraphId}`)
+
+    if (builtSubgraphId !== deployedSubgraphId) {
+      console.error(
+        `Subgraph ID mismatch between 'build' and 'deploy':`,
+        `${builtSubgraphId} !== ${deployedSubgraphId}`
+      )
+    }
+  }
+
   return result
 }
 

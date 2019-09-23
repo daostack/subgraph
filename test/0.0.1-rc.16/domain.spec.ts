@@ -1104,9 +1104,9 @@ describe('Domain Layer', () => {
           numberOfQueuedProposals: '0',
         },
         dao: {
-          numberOfQueuedProposals: '2',
-          numberOfPreBoostedProposals: '1',
-          numberOfBoostedProposals: '1',
+          numberOfQueuedProposals: '0',
+          numberOfPreBoostedProposals: '0',
+          numberOfBoostedProposals: '0',
         },
     });
 
@@ -1119,9 +1119,9 @@ describe('Domain Layer', () => {
           numberOfQueuedProposals: '0',
         },
         dao: {
-          numberOfQueuedProposals: '2',
-          numberOfPreBoostedProposals: '1',
-          numberOfBoostedProposals: '1',
+          numberOfQueuedProposals: '0',
+          numberOfPreBoostedProposals: '0',
+          numberOfBoostedProposals: '0',
         },
     });
 

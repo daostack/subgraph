@@ -22,6 +22,9 @@ type DAO @entity {
 	register: String!
 	schemes: [ControllerScheme!] @derivedFrom(field: "dao")
 	gpQueues: [GPQueue!] @derivedFrom(field: "dao")
+	numberOfQueuedProposals: BigInt!
+	numberOfPreBoostedProposals: BigInt!
+	numberOfBoostedProposals: BigInt!
 }
 
 type GPQueue @entity {
@@ -97,7 +100,7 @@ type Proposal @entity {
 	genericScheme : GenericSchemeProposal
 
 	# SchemeRegistrar proposal
-  schemeRegistrar : SchemeRegistrarProposal
+  	schemeRegistrar : SchemeRegistrarProposal
 
 	genesisProtocolParams : GenesisProtocolParam!
 

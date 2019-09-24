@@ -23,7 +23,9 @@ type ControllerScheme @entity {
 	schemeRegistrarParams: SchemeRegistrarParam
 	uGenericSchemeParams: UGenericSchemeParam
 	genericSchemeParams: GenericSchemeParam
-
+	numberOfQueuedProposals: BigInt!
+	numberOfPreBoostedProposals: BigInt!
+	numberOfBoostedProposals: BigInt!
 }
 
 type ControllerGlobalConstraint @entity {

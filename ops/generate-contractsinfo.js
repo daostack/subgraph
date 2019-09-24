@@ -30,11 +30,7 @@ async function generateContractInfo(opts={}) {
         let addresses = migration[network].base[version];
         for (var name in addresses) {
           if (addresses.hasOwnProperty(name)) {
-              if (name === "GenericScheme") {
-                buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+"UGenericScheme"+"'"+", "+"'"+"UGenericScheme"+"', "+"'"+version+"'"+");\n";
-              } else {
-                buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+name+"'"+", "+"'"+name+"', "+"'"+version+"'"+");\n";
-             }
+              buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+name+"'"+", "+"'"+name+"', "+"'"+version+"'"+");\n";
           }
         }
     }

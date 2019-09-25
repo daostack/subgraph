@@ -1,20 +1,20 @@
 {
-  "name": "Precipitate Inker",
-  "Avatar": "0x8f6Ec2eca7FB7B15df480d1266Ba142aEbfd373D",
-  "DAOToken": "0xf9D3854d8c5ACE915a8a4FfF16253B1CA7CEf0cD",
-  "Reputation": "0x7744cE2c85DCE57d76b17D374397d84387F450eA",
-  "Controller": "0x2f8212Ca2F6c947611ef342Aa231c6eFEd84684F",
+  "name": "Incendiary Dragons",
+  "Avatar": "0x434069DEB794cfb4007109e72bdd0E5aEFacD726",
+  "DAOToken": "0x22bD212931f27bb245da05BC56761dd3B5389854",
+  "Reputation": "0x7861A4BB7746074f6f3AA3739FC475FCB4B52aBa",
+  "Controller": "0x6EeE739c87E72a2215dEFeD3eE4AA1eF23ae59Fc",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0xf6CAd21F949dCdAD487b531361Bb0c6a5e700F88"
+      "address": "0x9c4A615FcD0E4c40FD3614D43a009725c9E53308"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias2",
-      "address": "0xe9846aBe8EE7e8f8E371eD17BF3557573Ee34069"
+      "address": "0xC3CCB5EF552A865F2fb4d26C86eE558A71857a32"
     }
   ],
-  "arcVersion": "0.0.1-rc.24"
+  "arcVersion": "0.0.1-rc.27"
 }

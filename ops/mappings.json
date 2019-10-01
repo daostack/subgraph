@@ -803,6 +803,20 @@
         "dao": "base",
         "mapping": "UGenericScheme",
         "arcVersion": "0.0.1-rc.24"
+      },
+      {
+        "name": "ContributionReward",
+        "contractName": "ContributionReward",
+        "dao": "base",
+        "mapping": "ContributionReward",
+        "arcVersion": "0.0.1-rc.24"
+      },
+      {
+        "name": "SchemeRegistrar",
+        "contractName": "SchemeRegistrar",
+        "dao": "base",
+        "mapping": "SchemeRegistrar",
+        "arcVersion": "0.0.1-rc.24"
       }
     ]
   },

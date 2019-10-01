@@ -817,6 +817,13 @@
         "dao": "base",
         "mapping": "SchemeRegistrar",
         "arcVersion": "0.0.1-rc.24"
+      },
+      {
+        "name": "GenesisProtocol",
+        "contractName": "GenesisProtocol",
+        "dao": "base",
+        "mapping": "GenesisProtocol",
+        "arcVersion": "0.0.1-rc.24"
       }
     ]
   },

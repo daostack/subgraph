@@ -18,21 +18,21 @@ const runGraphCli = async (args = [], cwd = process.cwd()) => {
 
     child.on('error', error => {
       reject(error)
-    });
+    })
 
     child.stdout.on('data', data => {
       stdout += data.toString()
-    });
+    })
 
     child.stderr.on('data', data => {
       stderr += data.toString()
-    });
+    })
 
     child.on('exit', exitCode => {
       resolve([exitCode, stdout, stderr])
-    });
-  });
-};
+    })
+  })
+}
 
 const subgraphLocation = path.resolve(`${__dirname}/../subgraph.yaml`)
 

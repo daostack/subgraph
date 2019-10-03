@@ -1,39 +1,39 @@
 {
   "name": "Nectar DAO",
-  "Avatar": "0x83BaBE9a944837EFF1D7506419D068E512eEFD8d",
-  "DAOToken": "0xcC39fb5EAAa89401D99BAb0e1B1f84d2fb88Fe9B",
-  "Reputation": "0xd4e052fa69A2e7c7e519adc03E5ed2e651AEf356",
-  "Controller": "0xd648A1741c1d4941910f87b52538A5964e293bE4",
+  "Avatar": "0xc9C425e81A1cfd40c126Acb8D7375c25FE9ECdb2",
+  "DAOToken": "0xB6E5205b7969EdB3590384838d646892494eaE96",
+  "Reputation": "0x51303d86C2e2a8374dd64d9F222ec4B88fb4735a",
+  "Controller": "0xB57A31BAaC3A75aae79b6A383adF5c6B57630187",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeENS",
-      "address": "0x052634D68705EE806677B28Ecf1BadA2386672d3"
+      "address": "0x2A7F343c375Ffbb013CBe69d54dccb5fF19eBC8E"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeTrading",
-      "address": "0x75a0b4fE4a21148A04885Eec92DDe8E2AFFA7d2F"
+      "address": "0xB2BFD5A284DAD714EEFf8E34E18CEf62c8Fc0a8C"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeWhitelist",
-      "address": "0x2301cc68d7375D04F0800676D466E9DB6774c294"
+      "address": "0xaFd68D84f109D1853F2F675Bb151a735617171fe"
     },
     {
       "name": "ContinuousLocking4Reputation",
       "alias": "InfiniteReputation4Token",
-      "address": "0x91e1Ce49CeB48c743A45A607a79b14c0450d5A2c"
+      "address": "0x4CFA4ff034e17169D1924026b8c13EF445136B84"
     },
     {
       "name": "Auction4Reputation",
       "alias": "GENAuction",
-      "address": "0xBE959de318f66Ac38015A373F4D3b83d48427D63"
+      "address": "0x7f20bDc690F01f33B2dF3B71Ad706105F8F1119F"
     },
     {
       "name": "ReputationFromToken",
       "alias": "ReputationFromToken",
-      "address": "0x0CB75555e46D8cDe6ddAe6a2c803cecF4aDa70e6"
+      "address": "0x486E2FbF5e63813729D304FA1fbaFF534B49bFAA"
     }
   ],
   "arcVersion": "0.0.1-rc.28"

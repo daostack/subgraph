@@ -1,20 +1,20 @@
 {
-  "name": "Incendiary Dragons",
-  "Avatar": "0x434069DEB794cfb4007109e72bdd0E5aEFacD726",
-  "DAOToken": "0x22bD212931f27bb245da05BC56761dd3B5389854",
-  "Reputation": "0x7861A4BB7746074f6f3AA3739FC475FCB4B52aBa",
-  "Controller": "0x6EeE739c87E72a2215dEFeD3eE4AA1eF23ae59Fc",
+  "name": "Mendacious Banjo",
+  "Avatar": "0xdfd8Af86E45495AD75F5a4c3E3b2D1d39553BE7A",
+  "DAOToken": "0xeB970509386741587E60d49Bb8282E7cB41823c7",
+  "Reputation": "0xBa2BE74eD1519acDd542674089e31804f98a6A47",
+  "Controller": "0xD5627474E3021446E95637eaE4a8C6Dee81826CD",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0x9c4A615FcD0E4c40FD3614D43a009725c9E53308"
+      "address": "0x82997520a1E581FD8ef467Bba2Bf4767a7bd0A26"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias2",
-      "address": "0xC3CCB5EF552A865F2fb4d26C86eE558A71857a32"
+      "address": "0xD2146301137f2A1B175aA9947a4BAF3811De4c34"
     }
   ],
-  "arcVersion": "0.0.1-rc.27"
+  "arcVersion": "0.0.1-rc.28"
 }

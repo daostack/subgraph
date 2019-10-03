@@ -1,0 +1,40 @@
+{
+  "name": "Nectar DAO",
+  "Avatar": "0xc9C425e81A1cfd40c126Acb8D7375c25FE9ECdb2",
+  "DAOToken": "0xB6E5205b7969EdB3590384838d646892494eaE96",
+  "Reputation": "0x51303d86C2e2a8374dd64d9F222ec4B88fb4735a",
+  "Controller": "0xB57A31BAaC3A75aae79b6A383adF5c6B57630187",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeENS",
+      "address": "0x2A7F343c375Ffbb013CBe69d54dccb5fF19eBC8E"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeTrading",
+      "address": "0xB2BFD5A284DAD714EEFf8E34E18CEf62c8Fc0a8C"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeWhitelist",
+      "address": "0xaFd68D84f109D1853F2F675Bb151a735617171fe"
+    },
+    {
+      "name": "ContinuousLocking4Reputation",
+      "alias": "InfiniteReputation4Token",
+      "address": "0x4CFA4ff034e17169D1924026b8c13EF445136B84"
+    },
+    {
+      "name": "Auction4Reputation",
+      "alias": "GENAuction",
+      "address": "0x7f20bDc690F01f33B2dF3B71Ad706105F8F1119F"
+    },
+    {
+      "name": "ReputationFromToken",
+      "alias": "ReputationFromToken",
+      "address": "0x486E2FbF5e63813729D304FA1fbaFF534B49bFAA"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.28"
+}

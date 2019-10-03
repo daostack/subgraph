@@ -1094,7 +1094,7 @@ describe('Domain Layer', () => {
             numberOfExpiredInQueueProposals
           }
       }
-    }s`;
+    }`;
 
     const { proposalId: expiredInQueueProposal } = await propose({
       rep: 10,

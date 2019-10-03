@@ -1,39 +1,39 @@
 {
   "name": "Nectar DAO",
-  "Avatar": "0xd04FaA2AFdb34575F10B116361d19A394965f858",
-  "DAOToken": "0x932170dFe646D908371E099DB51FdfF582f2de75",
-  "Reputation": "0x91adb655CB783d9Ff6324E1f8b105b8FA8C765a1",
-  "Controller": "0x0b7583C19FaeF378eD254Fb5111DaBE77022bdDF",
+  "Avatar": "0x83BaBE9a944837EFF1D7506419D068E512eEFD8d",
+  "DAOToken": "0xcC39fb5EAAa89401D99BAb0e1B1f84d2fb88Fe9B",
+  "Reputation": "0xd4e052fa69A2e7c7e519adc03E5ed2e651AEf356",
+  "Controller": "0xd648A1741c1d4941910f87b52538A5964e293bE4",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeENS",
-      "address": "0x84dc738B6bc14952d4aaa098E4085D913777F4D0"
+      "address": "0x052634D68705EE806677B28Ecf1BadA2386672d3"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeTrading",
-      "address": "0x8f3D6363b891e6286490336AefcC0Fd5E9091DD2"
+      "address": "0x75a0b4fE4a21148A04885Eec92DDe8E2AFFA7d2F"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeWhitelist",
-      "address": "0x4169DbB4E024d605423B943f7373Abd2E0D3D006"
+      "address": "0x2301cc68d7375D04F0800676D466E9DB6774c294"
     },
     {
       "name": "ContinuousLocking4Reputation",
       "alias": "InfiniteReputation4Token",
-      "address": "0x9a3dfb05d46357D88273EC14B664214a2237dC5b"
+      "address": "0x91e1Ce49CeB48c743A45A607a79b14c0450d5A2c"
     },
     {
       "name": "Auction4Reputation",
       "alias": "GENAuction",
-      "address": "0x1f75634317f108dAeF3Db3B6bedc767667464583"
+      "address": "0xBE959de318f66Ac38015A373F4D3b83d48427D63"
     },
     {
       "name": "ReputationFromToken",
       "alias": "ReputationFromToken",
-      "address": "0x8401576723F4c4840f465b30e1F0a4A51508874c"
+      "address": "0x0CB75555e46D8cDe6ddAe6a2c803cecF4aDa70e6"
     }
   ],
   "arcVersion": "0.0.1-rc.28"

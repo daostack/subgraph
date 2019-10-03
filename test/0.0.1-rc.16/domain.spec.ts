@@ -1097,6 +1097,19 @@ describe('Domain Layer', () => {
       }
     }`;
 
+    const { proposalId: expiredInQueueProposal } = await propose({
+      rep: 10,
+      tokens: 10,
+      eth: 0,
+      external: 0,
+      periodLength: 0,
+      periods: 1,
+      beneficiary: accounts[1].address,
+      });
+
+    increaseTime(1800 + 1 , web3);
+    await genesisProtocol.methods.execute(expiredInQueueProposal).send();
+
     let gpQueues = (await sendQuery(getGPQueues)).gpqueues;
 
     expect(gpQueues).toContainEqual({
@@ -1104,7 +1117,7 @@ describe('Domain Layer', () => {
         scheme: {
           name: 'ContributionReward',
           numberOfBoostedProposals: '0',
-          numberOfExpiredInQueueProposals: '0',
+          numberOfExpiredInQueueProposals: '1',
           numberOfPreBoostedProposals: '0',
           numberOfQueuedProposals: '0',
         },
@@ -1112,7 +1125,7 @@ describe('Domain Layer', () => {
           numberOfQueuedProposals: '0',
           numberOfPreBoostedProposals: '0',
           numberOfBoostedProposals: '0',
-          numberOfExpiredInQueueProposals: '0',
+          numberOfExpiredInQueueProposals: '1',
         },
     });
 

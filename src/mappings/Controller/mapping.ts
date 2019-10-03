@@ -71,6 +71,7 @@ function insertScheme(
   ent.numberOfQueuedProposals = BigInt.fromI32(0);
   ent.numberOfPreBoostedProposals = BigInt.fromI32(0);
   ent.numberOfBoostedProposals = BigInt.fromI32(0);
+  ent.numberOfExpiredInQueueProposals = BigInt.fromI32(0);
   let contractInfo = ContractInfo.load(scheme.toHex());
   if (contractInfo != null) {
      ent.name = contractInfo.name;

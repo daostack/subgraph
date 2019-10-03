@@ -25,6 +25,7 @@ type DAO @entity {
 	numberOfQueuedProposals: BigInt!
 	numberOfPreBoostedProposals: BigInt!
 	numberOfBoostedProposals: BigInt!
+	numberOfExpiredInQueueProposals: BigInt!
 }
 
 type GPQueue @entity {

@@ -468,6 +468,7 @@ describe('Domain Layer', () => {
               numberOfQueuedProposals
               numberOfPreBoostedProposals
               numberOfBoostedProposals
+              numberOfExpiredInQueueProposals
             }
         }
     }`;
@@ -549,6 +550,7 @@ describe('Domain Layer', () => {
         address: addresses.ContributionReward.toLowerCase(),
         name: 'ContributionReward',
         numberOfBoostedProposals: '0',
+        numberOfExpiredInQueueProposals: '0',
         numberOfPreBoostedProposals: '0',
         numberOfQueuedProposals: '1',
       },
@@ -1083,11 +1085,13 @@ describe('Domain Layer', () => {
             numberOfQueuedProposals
             numberOfPreBoostedProposals
             numberOfBoostedProposals
+            numberOfExpiredInQueueProposals
           }
           dao {
             numberOfQueuedProposals
             numberOfPreBoostedProposals
             numberOfBoostedProposals
+            numberOfExpiredInQueueProposals
           }
       }
     }`;
@@ -1099,6 +1103,7 @@ describe('Domain Layer', () => {
         scheme: {
           name: 'ContributionReward',
           numberOfBoostedProposals: '0',
+          numberOfExpiredInQueueProposals: '0',
           numberOfPreBoostedProposals: '0',
           numberOfQueuedProposals: '0',
         },
@@ -1106,6 +1111,7 @@ describe('Domain Layer', () => {
           numberOfQueuedProposals: '0',
           numberOfPreBoostedProposals: '0',
           numberOfBoostedProposals: '0',
+          numberOfExpiredInQueueProposals: '0',
         },
     });
 
@@ -1114,6 +1120,7 @@ describe('Domain Layer', () => {
         scheme: {
           name: 'GenericScheme',
           numberOfBoostedProposals: '0',
+          numberOfExpiredInQueueProposals: '0',
           numberOfPreBoostedProposals: '0',
           numberOfQueuedProposals: '0',
         },
@@ -1121,6 +1128,7 @@ describe('Domain Layer', () => {
           numberOfQueuedProposals: '0',
           numberOfPreBoostedProposals: '0',
           numberOfBoostedProposals: '0',
+          numberOfExpiredInQueueProposals: '0',
         },
     });
 
@@ -1129,6 +1137,7 @@ describe('Domain Layer', () => {
         scheme: {
           name: 'ContributionReward',
           numberOfBoostedProposals: '1',
+          numberOfExpiredInQueueProposals: '0',
           numberOfPreBoostedProposals: '1',
           numberOfQueuedProposals: '1',
         },
@@ -1136,6 +1145,7 @@ describe('Domain Layer', () => {
           numberOfQueuedProposals: '2',
           numberOfPreBoostedProposals: '1',
           numberOfBoostedProposals: '1',
+          numberOfExpiredInQueueProposals: '0',
         },
     });
 

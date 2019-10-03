@@ -1158,7 +1158,7 @@ describe('Domain Layer', () => {
           numberOfQueuedProposals: '2',
           numberOfPreBoostedProposals: '1',
           numberOfBoostedProposals: '1',
-          numberOfExpiredInQueueProposals: '1',
+          numberOfExpiredInQueueProposals: '0',
         },
     });
 

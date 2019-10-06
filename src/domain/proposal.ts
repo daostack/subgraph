@@ -146,6 +146,13 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
   if (state === 1) {
     // Closed
     proposal.stage = 'ExpiredInQueue';
+    if (controllerScheme != null) {
+      controllerScheme.numberOfExpiredInQueueProposals = controllerScheme
+      .numberOfExpiredInQueueProposals.plus(BigInt.fromI32(1));
+    }
+    if (dao != null) {
+      dao.numberOfExpiredInQueueProposals = dao.numberOfExpiredInQueueProposals.plus(BigInt.fromI32(1));
+    }
   } else if (state === 2) {
     // Executed
     proposal.stage = 'Executed';

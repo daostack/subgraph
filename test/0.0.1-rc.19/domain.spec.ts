@@ -468,6 +468,7 @@ describe('Domain Layer', () => {
               numberOfQueuedProposals
               numberOfPreBoostedProposals
               numberOfBoostedProposals
+              numberOfExpiredInQueueProposals
             }
         }
     }`;
@@ -549,6 +550,7 @@ describe('Domain Layer', () => {
         address: addresses.ContributionReward.toLowerCase(),
         name: 'ContributionReward',
         numberOfBoostedProposals: '0',
+        numberOfExpiredInQueueProposals: '0',
         numberOfPreBoostedProposals: '0',
         numberOfQueuedProposals: '1',
       },
@@ -1083,14 +1085,29 @@ describe('Domain Layer', () => {
             numberOfQueuedProposals
             numberOfPreBoostedProposals
             numberOfBoostedProposals
+            numberOfExpiredInQueueProposals
           }
           dao {
             numberOfQueuedProposals
             numberOfPreBoostedProposals
             numberOfBoostedProposals
+            numberOfExpiredInQueueProposals
           }
       }
     }`;
+
+    const { proposalId: expiredInQueueProposal } = await propose({
+      rep: 10,
+      tokens: 10,
+      eth: 0,
+      external: 0,
+      periodLength: 0,
+      periods: 1,
+      beneficiary: accounts[1].address,
+      });
+
+    increaseTime(1800 + 1 , web3);
+    await genesisProtocol.methods.execute(expiredInQueueProposal).send();
 
     let gpQueues = (await sendQuery(getGPQueues)).gpqueues;
 
@@ -1099,6 +1116,7 @@ describe('Domain Layer', () => {
         scheme: {
           name: 'ContributionReward',
           numberOfBoostedProposals: '0',
+          numberOfExpiredInQueueProposals: '1',
           numberOfPreBoostedProposals: '0',
           numberOfQueuedProposals: '0',
         },
@@ -1106,6 +1124,7 @@ describe('Domain Layer', () => {
           numberOfQueuedProposals: '0',
           numberOfPreBoostedProposals: '0',
           numberOfBoostedProposals: '0',
+          numberOfExpiredInQueueProposals: '1',
         },
     });
 
@@ -1114,6 +1133,7 @@ describe('Domain Layer', () => {
         scheme: {
           name: 'GenericScheme',
           numberOfBoostedProposals: '0',
+          numberOfExpiredInQueueProposals: '0',
           numberOfPreBoostedProposals: '0',
           numberOfQueuedProposals: '0',
         },
@@ -1121,6 +1141,7 @@ describe('Domain Layer', () => {
           numberOfQueuedProposals: '0',
           numberOfPreBoostedProposals: '0',
           numberOfBoostedProposals: '0',
+          numberOfExpiredInQueueProposals: '0',
         },
     });
 
@@ -1129,6 +1150,7 @@ describe('Domain Layer', () => {
         scheme: {
           name: 'ContributionReward',
           numberOfBoostedProposals: '1',
+          numberOfExpiredInQueueProposals: '0',
           numberOfPreBoostedProposals: '1',
           numberOfQueuedProposals: '1',
         },
@@ -1136,6 +1158,7 @@ describe('Domain Layer', () => {
           numberOfQueuedProposals: '2',
           numberOfPreBoostedProposals: '1',
           numberOfBoostedProposals: '1',
+          numberOfExpiredInQueueProposals: '0',
         },
     });
 

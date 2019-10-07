@@ -65,7 +65,7 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
         if (descJson.toObject().get('url') != null) {
           proposal.url = descJson.toObject().get('url').toString();
         }
-        let tags: string[] = []
+        let tags: string[] = [];
         if (descJson.toObject().get('tags') != null && descJson.toObject().get('tags').kind === JSONValueKind.ARRAY) {
           let tagsObjects = descJson.toObject().get('tags').toArray();
           for (let i = 0; i < tagsObjects.length; i++) {

@@ -1,6 +1,6 @@
 import { Address, BigDecimal, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { ControllerScheme, DAO, GenesisProtocolParam, Proposal } from '../types/schema';
+import { ControllerScheme, DAO, GenesisProtocolParam, Proposal, Tag } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
 import { getDAO, saveDAO } from './dao';
 import { updateThreshold } from './gpqueue';
@@ -64,6 +64,16 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
         }
         if (descJson.toObject().get('url') != null) {
           proposal.url = descJson.toObject().get('url').toString();
+        }
+        let tags: string[] = []
+        if (descJson.toObject().get('tags') != null && descJson.toObject().get('tags').kind === JSONValueKind.ARRAY) {
+          let tagsObjects = descJson.toObject().get('tags').toArray();
+          for (let i = 0; i < tagsObjects.length; i++) {
+            tags.push(tagsObjects[i].toString());
+            let tagEnt = new Tag(tagsObjects[i].toString());
+            tagEnt.save();
+          }
+          proposal.tags = tags;
         }
       }
     }

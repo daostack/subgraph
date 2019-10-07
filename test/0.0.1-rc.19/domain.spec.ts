@@ -317,11 +317,13 @@ describe('Domain Layer', () => {
       description: 'Just eat them',
       title: 'A modest proposal',
       url: 'http://swift.org/modest',
+      tags: ['test', 'proposal'],
     };
 
     let proposalDescription = proposalIPFSData.description;
     let proposalTitle = proposalIPFSData.title;
     let proposalUrl = proposalIPFSData.url;
+    let proposalTags = proposalIPFSData.tags;
 
     const descHash = await writeProposalIPFS(proposalIPFSData);
 
@@ -387,6 +389,7 @@ describe('Domain Layer', () => {
             description
             fulltext
             url
+            tags
             stage
             executionState
             createdAt
@@ -492,6 +495,7 @@ describe('Domain Layer', () => {
       description: proposalDescription,
       fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),
       url: proposalUrl,
+      tags: proposalTags,
       stage: 'Queued',
       executionState: 'None',
       closingAt: (Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString(),

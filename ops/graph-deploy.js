@@ -45,7 +45,7 @@ async function deploy (opts = {}) {
   /* upload subgraph files to the shared IPFS node */
   let builtSubgraphId
   if (graphNode.match(/thegraph\.com/)) {
-    let sharedIpfsNode = ipfsNode.match(/staging/)
+    let sharedIpfsNode = graphNode.match(/staging/)
       ? 'https://api.staging.thegraph.com/ipfs/'
       : 'https://api.thegraph.com/ipfs/'
     result = await runGraphCli(['build', '--ipfs', sharedIpfsNode, opts.subgraphLocation])

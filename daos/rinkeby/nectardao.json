@@ -1,40 +1,35 @@
 {
-  "name": "Nectar DAO",
-  "Avatar": "0xc9C425e81A1cfd40c126Acb8D7375c25FE9ECdb2",
-  "DAOToken": "0xB6E5205b7969EdB3590384838d646892494eaE96",
-  "Reputation": "0x51303d86C2e2a8374dd64d9F222ec4B88fb4735a",
-  "Controller": "0xB57A31BAaC3A75aae79b6A383adF5c6B57630187",
-  "Schemes": [
-    {
-      "name": "GenericScheme",
-      "alias": "GenericSchemeENS",
-      "address": "0x2A7F343c375Ffbb013CBe69d54dccb5fF19eBC8E"
-    },
-    {
-      "name": "GenericScheme",
-      "alias": "GenericSchemeTrading",
-      "address": "0xB2BFD5A284DAD714EEFf8E34E18CEf62c8Fc0a8C"
-    },
-    {
-      "name": "GenericScheme",
-      "alias": "GenericSchemeWhitelist",
-      "address": "0xaFd68D84f109D1853F2F675Bb151a735617171fe"
-    },
-    {
-      "name": "ContinuousLocking4Reputation",
-      "alias": "InfiniteReputation4Token",
-      "address": "0x4CFA4ff034e17169D1924026b8c13EF445136B84"
-    },
-    {
-      "name": "Auction4Reputation",
-      "alias": "GENAuction",
-      "address": "0x7f20bDc690F01f33B2dF3B71Ad706105F8F1119F"
-    },
-    {
-      "name": "ReputationFromToken",
-      "alias": "ReputationFromToken",
-      "address": "0x486E2FbF5e63813729D304FA1fbaFF534B49bFAA"
-    }
-  ],
-  "arcVersion": "0.0.1-rc.28"
-}
+        "name": "Nectar DAO",
+        "arcVersion": "0.0.1-rc.28",
+        "Avatar": "0xB48A33Ad7342D2541113f4B89D259062ec149b76",
+        "DAOToken": "0xDD82C14Cb195B230f6598cA721faF5Dd0D411721",
+        "Reputation": "0x53766C238B152360b4b79539C23FDAa348Eb953d",
+        "Controller": "0xE8e0050Ca4971b77c582DA3b08A9C9bEd93E92E0",
+        "Schemes": [
+          {
+            "name": "GenericScheme",
+            "alias": "GenericSchemeENS",
+            "address": "0xf586F7134f6A74E26be61105F7B73F8129aBBd84"
+          },
+          {
+            "name": "GenericScheme",
+            "alias": "GenericSchemeRegistryLookup",
+            "address": "0x94f524370F3fa61E2B8D358b9556f263957eD750"
+          },
+          {
+            "name": "ContinuousLocking4Reputation",
+            "alias": "InfiniteReputation4Token",
+            "address": "0x28D8ce7be90035cC70adD2B4933c0d538fF2a189"
+          },
+          {
+            "name": "Auction4Reputation",
+            "alias": "GENAuction",
+            "address": "0x060e45Ca2427F6992720AdDb0788d17D2B2E31bc"
+          },
+          {
+            "name": "ReputationFromToken",
+            "alias": "ReputationFromToken",
+            "address": "0xFeaa17d6c0B3A4Ebf1952D1714403D7a2026e357"
+          }
+        ]
+      }

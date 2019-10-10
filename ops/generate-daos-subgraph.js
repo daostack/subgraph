@@ -144,7 +144,6 @@ async function generateSubgraph(opts={}) {
         "0x1234000000000000000000000000000000000000",
         "0.0.1-rc.28"
       );
-      console.log("genericScheme")
     }
 
     fs.writeFileSync(

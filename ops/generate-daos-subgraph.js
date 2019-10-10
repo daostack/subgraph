@@ -71,6 +71,7 @@ async function generateSubgraph(opts={}) {
       fs.readFileSync(opts.subgraphLocation, "utf8")
     );
     var genericSchemeAddresses = {};
+    var genericScheme = false;
     files.forEach(function(file) {
       const dao = JSON.parse(fs.readFileSync(daodir + '/' + file, "utf-8"));
       let includeRep = false;
@@ -101,6 +102,7 @@ async function generateSubgraph(opts={}) {
                   dao.arcVersion
                 );
                 genericSchemeAddresses[scheme.address] = true;
+                genericScheme = true;
               }
             }
         }
@@ -135,6 +137,16 @@ async function generateSubgraph(opts={}) {
         );
       }
     });
+
+    if (!genericScheme) {
+      subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml(
+        "GenericScheme",
+        "0x1234000000000000000000000000000000000000",
+        "0.0.1-rc.28"
+      );
+      console.log("genericScheme")
+    }
+
     fs.writeFileSync(
       opts.subgraphLocation,
       yaml.safeDump(subgraphYaml, { noRefs: true }),

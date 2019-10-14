@@ -66,12 +66,15 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
           proposal.url = descJson.toObject().get('url').toString();
         }
         let tags: string[] = [];
-        if (descJson.toObject().get('tags') != null && descJson.toObject().get('tags').kind === JSONValueKind.ARRAY) {
-          let tagsObjects = descJson.toObject().get('tags').toArray();
+        let tagsData =  descJson.toObject().get('tags');
+        if (tagsData != null && tagsData.kind === JSONValueKind.ARRAY) {
+          let tagsObjects = tagsData.toArray();
           for (let i = 0; i < tagsObjects.length; i++) {
             tags.push(tagsObjects[i].toString());
             let tagEnt = new Tag(tagsObjects[i].toString());
-            tagEnt.save();
+            if (Tag.load(tagsObjects[i].toString()) == null) {
+              tagEnt.save();
+            }
           }
           proposal.tags = tags;
         }

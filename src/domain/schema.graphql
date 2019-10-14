@@ -74,7 +74,7 @@ type Proposal @entity {
 	title: String
 	description: String
 	url: String
-	tags: [String!]
+	tags: [Tag!]
 	fulltext: [String!]
 
 	gpRewards: [GPReward!] @derivedFrom(field: "proposal")

@@ -70,6 +70,9 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
         if (tagsData != null && tagsData.kind === JSONValueKind.ARRAY) {
           let tagsObjects = tagsData.toArray();
           for (let i = 0; i < tagsObjects.length; i++) {
+            if (i === 100) {
+              break;
+            }
             tags.push(tagsObjects[i].toString());
             let tagEnt = new Tag(tagsObjects[i].toString());
             if (Tag.load(tagsObjects[i].toString()) == null) {

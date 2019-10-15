@@ -319,11 +319,13 @@ describe('Domain Layer', () => {
       description: 'Just eat them',
       title: 'A modest proposal',
       url: 'http://swift.org/modest',
+      tags: ['test', 'proposal'],
     };
 
     let proposalDescription = proposalIPFSData.description;
     let proposalTitle = proposalIPFSData.title;
     let proposalUrl = proposalIPFSData.url;
+    let proposalTags = proposalIPFSData.tags;
 
     const descHash = await writeProposalIPFS(proposalIPFSData);
 
@@ -389,6 +391,9 @@ describe('Domain Layer', () => {
             description
             fulltext
             url
+            tags {
+              id
+            }
             stage
             executionState
             createdAt
@@ -486,6 +491,12 @@ describe('Domain Layer', () => {
 
     await waitUntilTrue(voteIsIndexed);
     await waitUntilTrue(stakeIsIndexed);
+
+    let tagsList = [];
+    for (let tag of proposalTags) {
+      tagsList.unshift({ id: tag });
+    }
+
     let proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
@@ -494,6 +505,7 @@ describe('Domain Layer', () => {
       description: proposalDescription,
       fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),
       url: proposalUrl,
+      tags: tagsList,
       stage: 'Queued',
       closingAt: (Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString(),
       executionState: 'None',

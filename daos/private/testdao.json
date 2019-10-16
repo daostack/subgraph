@@ -1,20 +1,20 @@
 {
-  "name": "Mendacious Banjo",
-  "Avatar": "0xdfd8Af86E45495AD75F5a4c3E3b2D1d39553BE7A",
-  "DAOToken": "0xeB970509386741587E60d49Bb8282E7cB41823c7",
-  "Reputation": "0xBa2BE74eD1519acDd542674089e31804f98a6A47",
-  "Controller": "0xD5627474E3021446E95637eaE4a8C6Dee81826CD",
+  "name": "Crapulous Musician",
+  "Avatar": "0x54B6f621e8c8dD2Cfcd49f2E7aD1dF19E60bf4B9",
+  "DAOToken": "0xd2D6A0481c3d7c7c4250d0F3C9AAdb2a44964197",
+  "Reputation": "0x25E2cB1BDF0196bC65d2C613501faecaf211685e",
+  "Controller": "0x28Cf74E0Fa8D518a854044cE044f135700482b91",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0x82997520a1E581FD8ef467Bba2Bf4767a7bd0A26"
+      "address": "0x6Fac9942E36dF72Dd89C1E942B8477Cd4F940cb8"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias2",
-      "address": "0xD2146301137f2A1B175aA9947a4BAF3811De4c34"
+      "address": "0x20b28EebFa7Be6a4a4e0B8719845ce9e2C0345cb"
     }
   ],
-  "arcVersion": "0.0.1-rc.28"
+  "arcVersion": "0.0.1-rc.30"
 }

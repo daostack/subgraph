@@ -178,7 +178,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   let isFirstRegister = FirstRegisterScheme.load(event.params._avatar.toHex());
   if (isFirstRegister == null) {
     insertOrganization(event.address, event.params._avatar);
-    new FirstRegisterScheme(event.params._avatar.toHex()).save()
+    isFirstRegister.save();
   }
 
   let ent = new UControllerRegisterScheme(eventId(event));

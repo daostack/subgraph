@@ -17,6 +17,7 @@ import {
   AvatarContract,
   ContractInfo,
   ControllerScheme,
+  FirstRegisterScheme,
   ReputationContract,
   TokenContract,
   UControllerAddGlobalConstraint,
@@ -174,17 +175,10 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   domain.handleRegisterScheme(event.params._avatar, org.value0 , org.value1, event.params._scheme, paramsHash);
 
   // Detect a new organization event by looking for the first register scheme event for that org.
-  let isFirstRegister = store.get(
-    'FirstRegisterScheme',
-    event.params._avatar.toHex(),
-  );
+  let isFirstRegister = FirstRegisterScheme.load(event.params._avatar.toHex());
   if (isFirstRegister == null) {
     insertOrganization(event.address, event.params._avatar);
-    store.set(
-      'FirstRegisterScheme',
-      event.params._avatar.toHex(),
-      new Entity(),
-    );
+    new FirstRegisterScheme(event.params._avatar.toHex()).save()
   }
 
   let ent = new UControllerRegisterScheme(eventId(event));

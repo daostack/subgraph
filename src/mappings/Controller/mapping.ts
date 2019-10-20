@@ -28,6 +28,7 @@ import {
   ControllerScheme,
   ControllerUnregisterScheme,
   ControllerUpgradeController,
+  FirstRegisterScheme,
   GenericSchemeParam,
   GenesisProtocolParam,
   ReputationContract,
@@ -179,17 +180,10 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   domain.handleRegisterScheme(avatar, token, reputation, event.params._scheme, paramsHash);
 
   // Detect a new organization event by looking for the first register scheme event for that org.
-  let isFirstRegister = store.get(
-    'FirstRegisterScheme',
-    avatar.toHex(),
-  );
+  let isFirstRegister = FirstRegisterScheme.load(avatar.toHex());
   if (isFirstRegister == null) {
     insertOrganization(event.address, avatar);
-    store.set(
-      'FirstRegisterScheme',
-      avatar.toHex(),
-      new Entity(),
-    );
+    new FirstRegisterScheme(avatar.toHex()).save()
   }
 
   let ent = new ControllerRegisterScheme(eventId(event));

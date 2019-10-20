@@ -4,14 +4,26 @@ const { migrationFileLocation: defaultMigrationFileLocation, network } = require
 const {   subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
+let ids = [];
 
 function daoYaml(contract, contractAddress, arcVersion) {
   const { abis, entities, eventHandlers } = yaml.safeLoad(
     fs.readFileSync(`${currentDir}/../src/mappings/${contract}/datasource.yaml`, "utf-8")
   );
+
+  let name = contract;
+  if (ids.indexOf(contract) == -1) {
+    ids.push(contract);
+  } else if (ids.indexOf(contract+contractAddress) == -1) {
+    ids.push(contract+contractAddress);
+    name = contract+contractAddress;
+  } else {
+    return;
+  }
+
   return {
     kind: "ethereum/contract",
-    name: `${contract}`,
+    name: `${name}`,
     network: `${network}`,
     source: {
       address: contractAddress,
@@ -45,6 +57,14 @@ function daoYaml(contract, contractAddress, arcVersion) {
 async function generateSubgraph(opts={}) {
   opts.migrationFile = opts.migrationFile || defaultMigrationFileLocation;
   opts.subgraphLocation = opts.subgraphLocation || defaultSubgraphLocation;
+  const subgraphYaml = yaml.safeLoad(
+    fs.readFileSync(opts.subgraphLocation, "utf8")
+  );
+
+  for (var i = 0, len = subgraphYaml.dataSources.length; i < len; i++) {
+    ids.push(subgraphYaml.dataSources[i].name)
+  }
+
   let daodir
   if (opts.daodir) {
     daodir = path.resolve(`${opts.daodir}/${network}/`)

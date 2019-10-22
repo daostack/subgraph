@@ -184,7 +184,6 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   if (isFirstRegister == null) {
     insertOrganization(event.address, avatar);
     isFirstRegister = new FirstRegisterScheme(avatar.toHex());
-    isFirstRegister.id = avatar.toHex();
     isFirstRegister.save();
   }
 

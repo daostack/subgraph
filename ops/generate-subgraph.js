@@ -52,6 +52,7 @@ async function generateSubgraph(opts={}) {
 }
 
 function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
+  let ids = [];
   return fragments.map(mapping => {
     const contract = mapping.name;
     const fragment = `${__dirname}/../src/mappings/${mapping.mapping}/datasource.yaml`;
@@ -119,9 +120,19 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       abi
     };
 
+    let name = contract;
+    if (ids.indexOf(contract) == -1) {
+      ids.push(contract);
+    } else if (ids.indexOf(contract+contractAddress) == -1) {
+      ids.push(contract+contractAddress);
+      name = contract+contractAddress;
+    } else {
+      return;
+    }
+
     var result = {
       kind: 'ethereum/contract',
-      name: `${contract}`,
+      name: `${name}`,
       network: `${network}`,
       source,
       mapping: {

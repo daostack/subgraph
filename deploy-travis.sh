@@ -3,6 +3,7 @@
 set -e
 source .env
 
+if [ ! -z "$access_token" ]; then
 # set for production
 export graph_node="https://api.thegraph.com/deploy/"
 export ipfs_node="https://api.thegraph.com/ipfs-daostack/"
@@ -33,3 +34,4 @@ npm run deploy
 export network="rinkeby"
 export subgraph="daostack/master_rinkeby"
 npm run deploy
+fi

@@ -17,6 +17,7 @@
     "codegen:watch": "watch 'npm run codegen' src/mappings src/domain",
     "deploy": "rm -rf src/types && node ops/setup-env.js",
     "deploy:watch": "npm run deploy -- --watch",
+    "deploy-travis": "./deploy-travis.sh",
     "docker:stop": "docker-compose down -v",
     "docker:run": "node ops/set-docker-network.js private && docker-compose up -d",
     "docker:run-kovan": "node ops/set-docker-network.js kovan && docker-compose up -d",

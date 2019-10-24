@@ -36,4 +36,7 @@ script:
 
   - npm run lint
   - npm run jest
-  - npm run deploy-travis
+
+after_success:
+- if [ "$TRAVIS_BRANCH" = "master" ]; then 
+  npm run deploy-travis fi

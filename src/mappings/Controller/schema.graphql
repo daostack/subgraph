@@ -121,3 +121,7 @@ type GenesisProtocolParam @entity {
 	activationTime: BigInt!
 	voteOnBehalf: Bytes!
 }
+
+type FirstRegisterScheme @entity {
+	id: ID!
+}

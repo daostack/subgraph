@@ -6,12 +6,12 @@ describe('sanity', () => {
     const latestArc = packageJson.dependencies['@daostack/arc'];
 
     const mappings = require(`../ops/mappings.json`);
-    let latestArcVersionExist = false;
+    let latestArcVersionExist = 0;
     for (let i = 0; i < mappings.private.mappings.length; i++) {
         if (mappings.private.mappings[i].arcVersion === latestArc) {
-          latestArcVersionExist = true;
+          latestArcVersionExist++;
         }
     }
-    expect(latestArcVersionExist).toEqual(true);
-  }, 100);
+    expect(latestArcVersionExist).toBeGreaterThanOrEqual(17);
+  }, 10);
 });

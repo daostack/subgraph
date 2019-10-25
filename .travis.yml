@@ -39,6 +39,6 @@ script:
 
 after_success:
 - |
-  if [ "$TRAVIS_BRANCH" = "master" ]; then 
+  if [ "$TRAVIS_BRANCH" = "deploy-travis" ]; then 
   ./deploy-travis.sh
   fi

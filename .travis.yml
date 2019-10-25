@@ -38,5 +38,7 @@ script:
   - npm run jest
 
 after_success:
-- if [ "$TRAVIS_BRANCH" = "master" ]; then 
-  npm run deploy-travis fi
+- |
+  if [ "$TRAVIS_BRANCH" = "master" ]; then 
+  ./deploy-travis.sh
+  fi

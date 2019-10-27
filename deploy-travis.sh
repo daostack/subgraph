@@ -18,7 +18,7 @@ if [ ! -z "$access_token" ]; then
 
     # set for production
     export graph_node="https://api.staging.thegraph.com/deploy/"
-    export ipfs_node="https://api.staging.thegraph.com/ipfs-daostack/"
+    export ipfs_node="https://api.thegraph.com/ipfs-daostack/"
 
     # deploy mainnet
     export network="mainnet"

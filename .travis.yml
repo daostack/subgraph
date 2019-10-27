@@ -39,4 +39,4 @@ script:
 
 after_success:
   - chmod +x deploy-travis.sh
-  - ./deploy-travis.sh
+  - travis_wait 30 ./deploy-travis.sh

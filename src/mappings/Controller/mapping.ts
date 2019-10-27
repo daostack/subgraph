@@ -70,7 +70,7 @@ function insertScheme(
   /* tslint:disable:no-bitwise */
   controllerScheme.canRegisterSchemes = (perms[3] & 2) === 2;
   /* tslint:disable:no-bitwise */
-  econtrollerSchement.canManageGlobalConstraints = (perms[3] & 4) === 4;
+  controllerScheme.canManageGlobalConstraints = (perms[3] & 4) === 4;
   /* tslint:disable:no-bitwise */
   controllerScheme.canUpgradeController = (perms[3] & 8) === 8;
   /* tslint:disable:no-bitwise */

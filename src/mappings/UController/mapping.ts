@@ -46,29 +46,33 @@ function insertScheme(
 ): void {
   let uController = UController.bind(uControllerAddress);
   let perms = uController.getSchemePermissions(scheme, avatarAddress);
-  let ent = new ControllerScheme(crypto.keccak256(concat(avatarAddress, scheme)).toHex());
-  ent.dao = avatarAddress.toHex();
-  ent.paramsHash = paramsHash;
+  let controllerSchemeId = crypto.keccak256(concat(avatarAddress, scheme)).toHex();
+  let controllerScheme = ControllerScheme.load(controllerSchemeId);
+  if (controllerScheme === null) {
+     controllerScheme = new ControllerScheme(controllerSchemeId);
+     controllerScheme.numberOfQueuedProposals = BigInt.fromI32(0);
+     controllerScheme.numberOfPreBoostedProposals = BigInt.fromI32(0);
+     controllerScheme.numberOfBoostedProposals = BigInt.fromI32(0);
+     controllerScheme.numberOfExpiredInQueueProposals = BigInt.fromI32(0);
+  }
+  controllerScheme.dao = avatarAddress.toHex();
+  controllerScheme.paramsHash = paramsHash;
   /* tslint:disable:no-bitwise */
-  ent.canRegisterSchemes = (perms[3] & 2) === 2;
+  controllerScheme.canRegisterSchemes = (perms[3] & 2) === 2;
   /* tslint:disable:no-bitwise */
-  ent.canManageGlobalConstraints = (perms[3] & 4) === 4;
+  controllerScheme.canManageGlobalConstraints = (perms[3] & 4) === 4;
   /* tslint:disable:no-bitwise */
-  ent.canUpgradeController = (perms[3] & 8) === 8;
+  controllerScheme.canUpgradeController = (perms[3] & 8) === 8;
   /* tslint:disable:no-bitwise */
-  ent.canDelegateCall = (perms[3] & 16) === 16;
-  ent.address = scheme;
-  ent.numberOfQueuedProposals = BigInt.fromI32(0);
-  ent.numberOfPreBoostedProposals = BigInt.fromI32(0);
-  ent.numberOfBoostedProposals = BigInt.fromI32(0);
-  ent.numberOfExpiredInQueueProposals = BigInt.fromI32(0);
+  controllerScheme.canDelegateCall = (perms[3] & 16) === 16;
+  controllerScheme.address = scheme;
   let contractInfo = ContractInfo.load(scheme.toHex());
   if (contractInfo != null) {
-     ent.name = contractInfo.name;
-     ent.version = contractInfo.version;
-     ent.alias = contractInfo.alias;
+     controllerScheme.name = contractInfo.name;
+     controllerScheme.version = contractInfo.version;
+     controllerScheme.alias = contractInfo.alias;
   }
-  store.set('ControllerScheme', ent.id, ent);
+  controllerScheme.save();
 }
 
 function deleteScheme(avatarAddress: Address, scheme: Address): void {

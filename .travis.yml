@@ -38,8 +38,5 @@ script:
   - npm run jest
 
 after_success:
-- |
-  if [ "$TRAVIS_BRANCH" = "deploy-travis" ]; then
-    chmod +x deploy-travis.sh
-    ./deploy-travis.sh
-  fi
+  - chmod +x deploy-travis.sh
+  - ./deploy-travis.sh

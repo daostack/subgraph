@@ -137,7 +137,8 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     } else if (equalStrings(proposal.stage, 'PreBoosted')) {
       controllerScheme.numberOfPreBoostedProposals = controllerScheme
       .numberOfPreBoostedProposals.minus(BigInt.fromI32(1));
-    } else if (equalStrings(proposal.stage, 'Boosted') && (state !== 6)) {
+    } else if ((equalStrings(proposal.stage, 'Boosted') ||
+                equalStrings(proposal.stage, 'QuietEndingPeriod')) && (state !== 6)) {
       controllerScheme.numberOfBoostedProposals = controllerScheme
       .numberOfBoostedProposals.minus(BigInt.fromI32(1));
     }
@@ -147,7 +148,8 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
       dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.minus(BigInt.fromI32(1));
     } else if (equalStrings(proposal.stage, 'PreBoosted')) {
       dao.numberOfPreBoostedProposals = dao.numberOfPreBoostedProposals.minus(BigInt.fromI32(1));
-    } else if (equalStrings(proposal.stage, 'Boosted') && (state !== 6)) {
+    } else if ((equalStrings(proposal.stage, 'Boosted') ||
+                equalStrings(proposal.stage, 'QuietEndingPeriod')) && (state !== 6)) {
       dao.numberOfBoostedProposals = dao.numberOfBoostedProposals.minus(BigInt.fromI32(1));
     }
   }

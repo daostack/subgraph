@@ -39,6 +39,7 @@ script:
 
 after_success:
 - |
-  if [ "$TRAVIS_BRANCH" = "deploy-travis" ]; then 
-  bash ./deploy-travis.sh
+  if [ "$TRAVIS_BRANCH" = "deploy-travis" ]; then
+    chmod +x deploy-travis.sh
+    ./deploy-travis.sh
   fi

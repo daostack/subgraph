@@ -494,7 +494,7 @@ describe('Domain Layer', () => {
 
     let tagsList = [];
     for (let tag of proposalTags) {
-      tagsList.unshift({ id: tag, numberOfProposals: "1", proposals: [{ id: p1 }] });
+      tagsList.unshift({ id: tag, numberOfProposals: '1', proposals: [{ id: p1 }] });
     }
 
     let proposal = (await sendQuery(getProposal)).proposal;

@@ -71,13 +71,13 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
           let tagsObjects = tagsData.toArray();
           let tagsLength = tagsObjects.length < 100 ? tagsObjects.length : 100;
           for (let i = 0; i < tagsLength; i++) {
-            if (tags.indexOf(tagsObjects[i].toString()) == -1) {
+            if (tags.indexOf(tagsObjects[i].toString()) === -1) {
               tags.push(tagsObjects[i].toString());
-              let tagEnt = Tag.load(tagsObjects[i].toString())
+              let tagEnt = Tag.load(tagsObjects[i].toString());
               if (tagEnt == null) {
                 tagEnt = new Tag(tagsObjects[i].toString());
                 tagEnt.numberOfProposals = BigInt.fromI32(0);
-                tagEnt.proposals = []
+                tagEnt.proposals = [];
               }
               let tagProposals = tagEnt.proposals;
               tagProposals.push(proposal.id);

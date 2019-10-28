@@ -317,7 +317,7 @@ describe('Domain Layer', () => {
       description: 'Just eat them',
       title: 'A modest proposal',
       url: 'http://swift.org/modest',
-      tags: ['test', 'proposal'],
+      tags: ['test2', 'proposal2'],
     };
 
     let proposalDescription = proposalIPFSData.description;
@@ -391,6 +391,8 @@ describe('Domain Layer', () => {
             url
             tags {
               id
+              numberOfProposals
+              proposals { id }
             }
             stage
             executionState
@@ -492,7 +494,7 @@ describe('Domain Layer', () => {
 
     let tagsList = [];
     for (let tag of proposalTags) {
-      tagsList.unshift({ id: tag });
+      tagsList.unshift({ id: tag, numberOfProposals: "1", proposals: [{ id: p1 }] });
     }
 
     let proposal = (await sendQuery(getProposal)).proposal;

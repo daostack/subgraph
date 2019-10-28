@@ -110,6 +110,8 @@ type Proposal @entity {
 
 type Tag @entity {
 	id: ID!
+	proposals: [Proposal!]
+	numberOfProposals: BigInt!
 }
 
 type ProposalStake @entity {

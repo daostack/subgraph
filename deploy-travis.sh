@@ -1,4 +1,4 @@
-if [ "$TRAVIS_BRANCH" = "deploy-travis" ]; then
+if [ "$TRAVIS_BRANCH" = "master" ]; then
     if [ ! -z "$access_token" ]; then
         # set for production
         export graph_node="https://api.thegraph.com/deploy/"

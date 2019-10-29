@@ -1,20 +1,20 @@
 {
-  "name": "Crapulous Musician",
-  "Avatar": "0x54B6f621e8c8dD2Cfcd49f2E7aD1dF19E60bf4B9",
-  "DAOToken": "0xd2D6A0481c3d7c7c4250d0F3C9AAdb2a44964197",
-  "Reputation": "0x25E2cB1BDF0196bC65d2C613501faecaf211685e",
-  "Controller": "0x28Cf74E0Fa8D518a854044cE044f135700482b91",
+  "name": "Ubiquitous Sawfiler",
+  "Avatar": "0xb9e3Dd112BCc6e89546c46ABb1573cf9c62C3241",
+  "DAOToken": "0x22c38638aC5007e1De99fEAB20f664046cB42768",
+  "Reputation": "0xd5866DBDE071F070C254570d1BBbfE732860221e",
+  "Controller": "0x75FDc3D0415ac6EF34A4B619dc376aa0Bab66284",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0x6Fac9942E36dF72Dd89C1E942B8477Cd4F940cb8"
+      "address": "0xc1cDB5D4C5A3e6CAEa193c33219dB90f88eE7Bfc"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias2",
-      "address": "0x20b28EebFa7Be6a4a4e0B8719845ce9e2C0345cb"
+      "address": "0xBC24D5E41c60DD605E24b5AAF7F6dDa6B9a7b5a6"
     }
   ],
-  "arcVersion": "0.0.1-rc.30"
+  "arcVersion": "0.0.1-rc.31"
 }

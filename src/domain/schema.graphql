@@ -10,6 +10,16 @@ enum Outcome {
 	Fail
 }
 
+enum EventType {
+	NewProposal
+	NewReputationHolder
+	ProposalStageChange
+	Vote
+	Stake
+	VoteFlip
+	NewDAO
+}
+
 type DAO @entity {
 	id: ID!
 	name: String!
@@ -187,4 +197,14 @@ type ContractInfo @entity {
 	alias: String!
 	version: String!
 	address: Bytes!
+}
+
+type Event @entity {
+	id: ID!
+	type: EventType!
+	data: String!
+	proposal: Proposal
+	user: Bytes
+	dao: DAO
+	timestamp: BigInt!
 }

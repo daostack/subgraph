@@ -1,6 +1,6 @@
-import { Address, BigDecimal, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { ControllerScheme, DAO, GenesisProtocolParam, Proposal, Tag } from '../types/schema';
+import { ControllerScheme, DAO, Event, GenesisProtocolParam, Proposal, Tag } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
 import { getDAO, saveDAO } from './dao';
 import { updateThreshold } from './gpqueue';
@@ -280,6 +280,20 @@ export function updateGPProposal(
     controllerScheme.numberOfQueuedProposals = controllerScheme.numberOfQueuedProposals.plus(BigInt.fromI32(1));
     controllerScheme.save();
   }
+
+
+  let eventType = 'NewProposal'
+  let eventId = crypto.keccak256(concat(proposalId, timestamp as ByteArray));
+
+  let event = new Event(eventId.toHex());
+  event.type = eventType;
+  event.data = '{}';
+  event.proposal = proposalId.toHex();
+  event.user = proposer;
+  event.dao = avatarAddress.toHex();
+  event.timestamp = timestamp;
+
+  event.save();
 
   saveProposal(proposal);
 }

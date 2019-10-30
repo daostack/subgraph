@@ -101,6 +101,7 @@ export function updateProposalAfterVote(
   proposal: Proposal,
   gpAddress: Address,
   proposalId: Bytes,
+  timestamp: BigInt,
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let gpProposal = gp.proposals(proposalId);
@@ -108,8 +109,23 @@ export function updateProposalAfterVote(
   proposal.votingMachine = gpAddress;
   // proposal.winningVote
   proposal.winningOutcome = parseOutcome(gpProposal.value3);
-  if ((gpProposal.value2 === 6) && !equalStrings(proposal.winningOutcome, prevOutcome)) {
-    setProposalState(proposal, 6, gp.getProposalTimes(proposalId));
+  if (!equalStrings(proposal.winningOutcome, prevOutcome)) {
+    if ((gpProposal.value2 === 6)) {
+      setProposalState(proposal, 6, gp.getProposalTimes(proposalId));
+    }
+    let eventType = 'VoteFlip';
+    let eventId = crypto.keccak256(
+      concat(concat(proposalId, proposal.votesFor as ByteArray), proposal.votesAgainst as ByteArray),
+      );
+
+    let eventEnt = new Event(eventId.toHex());
+    eventEnt.type = eventType;
+    eventEnt.data = '{ "outcome": " ' + proposal.winningOutcome + ' ", "votesFor": " ' + proposal.votesFor.toString() + ' ", "votesAgainst": "' + proposal.votesAgainst.toString() + '" }';
+    eventEnt.proposal = proposal.id;
+    eventEnt.dao = proposal.dao;
+    eventEnt.timestamp = timestamp;
+
+    eventEnt.save();
   }
 }
 
@@ -281,13 +297,12 @@ export function updateGPProposal(
     controllerScheme.save();
   }
 
-
-  let eventType = 'NewProposal'
+  let eventType = 'NewProposal';
   let eventId = crypto.keccak256(concat(proposalId, timestamp as ByteArray));
 
   let event = new Event(eventId.toHex());
   event.type = eventType;
-  event.data = '{}';
+  event.data = '{ "title": " ' + proposal.title + ' " }';
   event.proposal = proposalId.toHex();
   event.user = proposer;
   event.dao = avatarAddress.toHex();

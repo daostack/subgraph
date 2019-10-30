@@ -181,7 +181,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   let paramsHash = controller.getSchemeParameters(event.params._scheme, avatar);
   insertScheme(event.address, avatar, event.params._scheme , paramsHash);
 
-  domain.handleRegisterScheme(avatar, token, reputation, event.params._scheme, paramsHash);
+  domain.handleRegisterScheme(avatar, token, reputation, event.params._scheme, paramsHash, event.block.timestamp);
 
   // Detect a new organization event by looking for the first register scheme event for that org.
   let isFirstRegister = FirstRegisterScheme.load(avatar.toHex());

@@ -1,5 +1,5 @@
-import { Address, BigDecimal, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
-import {  setContractsInfo } from '../contractsInfo';
+import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, Entity, store, Value} from '@graphprotocol/graph-ts';
+import { setContractsInfo } from '../contractsInfo';
 import {
   NewContributionProposal,
   ProposalExecuted,
@@ -7,15 +7,14 @@ import {
 import { Transfer } from '../types/DAOToken/DAOToken';
 import {
   ExecuteProposal,
-  GenesisProtocol,
   GPExecuteProposal,
   Stake,
   StateChange,
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
-import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
-import { equalsBytes, equalStrings, eventId, hexToAddress } from '../utils';
+import { Event, GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
+import { concat, equalsBytes, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
 import * as gpqueueModule from './gpqueue';
 import {
@@ -163,7 +162,6 @@ export function handleVoteProposal(event: VoteProposal): void {
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  updateProposalAfterVote(proposal, event.address, event.params._proposalId);
   if (event.params._vote.toI32() === 1) {
     proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
   } else {
@@ -171,6 +169,7 @@ export function handleVoteProposal(event: VoteProposal): void {
       event.params._reputation,
     );
   }
+  updateProposalAfterVote(proposal, event.address, event.params._proposalId, event.block.timestamp);
   saveProposal(proposal);
   insertVote(
     eventId(event),
@@ -199,7 +198,8 @@ export function handleRegisterScheme(avatar: Address,
                                      nativeTokenAddress: Address,
                                      nativeReputationAddress: Address,
                                      scheme: Address ,
-                                     paramsHash: Bytes ): void {
+                                     paramsHash: Bytes,
+                                     timestamp: BigInt): void {
   // Detect the first register scheme event which indicates a new DAO
   let isFirstRegister = store.get(
     'FirstRegisterSchemeFlag',
@@ -226,6 +226,16 @@ export function handleRegisterScheme(avatar: Address,
     let ent = new Entity();
     ent.set('id', Value.fromString(avatar.toHex()));
     store.set('FirstRegisterSchemeFlag', avatar.toHex(), ent);
+
+    let eventType = 'NewDAO';
+
+    let eventEnt = new Event(avatar.toHex());
+    eventEnt.type = eventType;
+    eventEnt.data = '{ "address": " ' + avatar.toHex() + ' ", "name": " ' + dao.name + ' " }';
+    eventEnt.dao = avatar.toHex();
+    eventEnt.timestamp = timestamp;
+
+    eventEnt.save();
   }
   gpqueueModule.create(avatar, scheme, paramsHash);
 }
@@ -273,6 +283,19 @@ export function handleStateChange(event: StateChange): void {
           (event.params._proposalState === 2)) {
           insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
       }
+      let proposal = Proposal.load(event.params._proposalId.toHex());
+      let eventType = 'ProposalStageChange';
+      let eventEntId = crypto.keccak256(concat(event.params._proposalId, event.block.timestamp as ByteArray));
+
+      let eventEnt = new Event(eventEntId.toHex());
+      eventEnt.type = eventType;
+      eventEnt.data = '{ "stage": " ' + proposal.stage + ' " }';
+      eventEnt.proposal = proposal.id;
+      eventEnt.user = proposal.proposer;
+      eventEnt.dao = proposal.dao;
+      eventEnt.timestamp = event.block.timestamp;
+
+      eventEnt.save();
   }
 }
 
@@ -308,6 +331,19 @@ export function addDaoMember(reputationHolder: ReputationHolder): void {
     reputationHolder.dao = dao;
     reputationHolder.save();
   }
+
+  let eventType = 'NewReputationHolder';
+  let eventEntId = crypto.keccak256(concat(reputationHolder.address, reputationHolder.createdAt as ByteArray));
+
+  let event = new Event(eventEntId.toHex());
+  event.type = eventType;
+  event.data = '{ "reputationAmount": " ' + reputationHolder.balance.toString() + ' " }';
+  event.user = reputationHolder.address;
+  event.dao = reputationHolder.dao;
+  event.timestamp = reputationHolder.createdAt;
+
+  event.save();
+
   daoModule.increaseDAOmembersCount(dao);
 }
 

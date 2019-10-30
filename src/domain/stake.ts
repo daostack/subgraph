@@ -1,5 +1,5 @@
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
-import { ProposalStake } from '../types/schema';
+import { Event, ProposalStake } from '../types/schema';
 
 export function getStake(id: string): ProposalStake {
   let stake = store.get('ProposalStake', id) as ProposalStake;
@@ -30,4 +30,16 @@ export function insertStake(
   stake.dao = daoId;
   stake.outcome = outcome;
   saveStake(stake);
+
+  let eventType = 'Stake';
+
+  let eventEnt = new Event(eventId);
+  eventEnt.type = eventType;
+  eventEnt.data = '{ "stage": " ' + outcome + ' ", "stakeAmount": " ' + amount.toString() + ' " }';
+  eventEnt.proposal = proposalId;
+  eventEnt.user = staker;
+  eventEnt.dao = daoId;
+  eventEnt.timestamp = timestamp;
+
+  eventEnt.save();
 }

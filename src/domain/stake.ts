@@ -35,7 +35,7 @@ export function insertStake(
 
   let eventEnt = new Event(eventId);
   eventEnt.type = eventType;
-  eventEnt.data = '{ "stage": " ' + outcome + ' ", "stakeAmount": " ' + amount.toString() + ' " }';
+  eventEnt.data = '{ "outcome": "' + outcome + '", "stakeAmount": "' + amount.toString() + '" }';
   eventEnt.proposal = proposalId;
   eventEnt.user = staker;
   eventEnt.dao = daoId;

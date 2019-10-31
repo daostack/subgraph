@@ -78,7 +78,6 @@ export function handleNewContributionProposal(
   if (!daoModule.exists(event.params._avatar)) {
     return;
   }
-  handleGPProposalPrivate(event.params._proposalId.toHex());
   updateCRProposal(
     event.params._proposalId,
     event.block.timestamp,
@@ -88,6 +87,7 @@ export function handleNewContributionProposal(
     event.params._beneficiary,
     event.address,
   );
+  handleGPProposalPrivate(event.params._proposalId.toHex());
 }
 
 export function handleNewSchemeRegisterProposal(
@@ -101,7 +101,6 @@ export function handleNewSchemeRegisterProposal(
     if (!daoModule.exists(avatar as Address)) {
       return;
     }
-    handleGPProposalPrivate(proposalId);
     updateSRProposal(
       proposalId,
       timestamp,
@@ -110,6 +109,7 @@ export function handleNewSchemeRegisterProposal(
       descriptionHash,
       schemeAddress,
     );
+    handleGPProposalPrivate(proposalId);
  }
 
 export function handleNewCallProposal(
@@ -122,7 +122,6 @@ export function handleNewCallProposal(
   if (!daoModule.exists(avatar)) {
     return;
   }
-  handleGPProposalPrivate(proposalId.toHex());
   updateGSProposal(
     proposalId,
     timestamp,
@@ -130,6 +129,7 @@ export function handleNewCallProposal(
     descriptionHash,
     eventAddress,
   );
+  handleGPProposalPrivate(proposalId.toHex());
 }
 
 export function handleStake(event: Stake): void {
@@ -231,7 +231,7 @@ export function handleRegisterScheme(avatar: Address,
 
     let eventEnt = new Event(avatar.toHex());
     eventEnt.type = eventType;
-    eventEnt.data = '{ "address": " ' + avatar.toHex() + ' ", "name": " ' + dao.name + ' " }';
+    eventEnt.data = '{ "address": "' + avatar.toHex() + '", "name": "' + dao.name + '" }';
     eventEnt.dao = avatar.toHex();
     eventEnt.timestamp = timestamp;
 
@@ -289,9 +289,8 @@ export function handleStateChange(event: StateChange): void {
 
       let eventEnt = new Event(eventEntId.toHex());
       eventEnt.type = eventType;
-      eventEnt.data = '{ "stage": " ' + proposal.stage + ' " }';
+      eventEnt.data = '{ "stage": "' + proposal.stage + '" }';
       eventEnt.proposal = proposal.id;
-      eventEnt.user = proposal.proposer;
       eventEnt.dao = proposal.dao;
       eventEnt.timestamp = event.block.timestamp;
 
@@ -337,7 +336,7 @@ export function addDaoMember(reputationHolder: ReputationHolder): void {
 
   let event = new Event(eventEntId.toHex());
   event.type = eventType;
-  event.data = '{ "reputationAmount": " ' + reputationHolder.balance.toString() + ' " }';
+  event.data = '{ "reputationAmount": "' + reputationHolder.balance.toString() + '" }';
   event.user = reputationHolder.address;
   event.dao = reputationHolder.dao;
   event.timestamp = reputationHolder.createdAt;

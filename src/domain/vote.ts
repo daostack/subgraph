@@ -35,7 +35,7 @@ export function insertVote(
 
   let eventEnt = new Event(eventId);
   eventEnt.type = eventType;
-  eventEnt.data = '{ "stage": " ' + outcome + ' ", "reputationAmount": " ' + reputation.toString() + ' " }';
+  eventEnt.data = '{ "outcome": "' + outcome + '", "reputationAmount": "' + reputation.toString() + '" }';
   eventEnt.proposal = proposalId;
   eventEnt.user = voter;
   eventEnt.dao = daoId;

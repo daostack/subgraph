@@ -120,7 +120,7 @@ export function updateProposalAfterVote(
 
     let eventEnt = new Event(eventId.toHex());
     eventEnt.type = eventType;
-    eventEnt.data = '{ "outcome": " ' + proposal.winningOutcome + ' ", "votesFor": " ' + proposal.votesFor.toString() + ' ", "votesAgainst": "' + proposal.votesAgainst.toString() + '" }';
+    eventEnt.data = '{ "outcome": "' + proposal.winningOutcome + '", "votesFor": "' + proposal.votesFor.toString() + '", "votesAgainst": "' + proposal.votesAgainst.toString() + '" }';
     eventEnt.proposal = proposal.id;
     eventEnt.dao = proposal.dao;
     eventEnt.timestamp = timestamp;
@@ -302,7 +302,7 @@ export function updateGPProposal(
 
   let event = new Event(eventId.toHex());
   event.type = eventType;
-  event.data = '{ "title": " ' + proposal.title + ' " }';
+  event.data = '{ "title": "' + proposal.title + '" }';
   event.proposal = proposalId.toHex();
   event.user = proposer;
   event.dao = avatarAddress.toHex();

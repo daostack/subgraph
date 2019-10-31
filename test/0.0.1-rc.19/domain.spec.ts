@@ -166,7 +166,7 @@ describe('Domain Layer', () => {
       dao: {
         id: addresses.Avatar.toLowerCase(),
       },
-      data: '{ \"address\": \"' + addresses.Avatar.toLowerCase() + '\", \"name\": \"' + orgName + '\" }',
+      data: '{ \"name\": \"' + orgName + '\" }',
       id: addresses.Avatar.toLowerCase(),
       proposal: null,
       type: 'NewDAO',

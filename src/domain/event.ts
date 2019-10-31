@@ -6,7 +6,7 @@ export function addNewDAOEvent(avatar: Address, daoName: string, timestamp: BigI
     addEvent(
         'NewDAO',
         avatar.toHex(),
-        '{ "address": "' + avatar.toHex() + '", "name": "' + daoName + '" }',
+        '{ "name": "' + daoName + '" }',
         null,
         null,
         avatar.toHex(),

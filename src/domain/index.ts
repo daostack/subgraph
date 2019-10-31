@@ -13,9 +13,10 @@ import {
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
-import { Event, GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
+import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
 import { concat, equalsBytes, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
+import { addNewDAOEvent, addNewReputationHolderEvent, addProposalStateChangeEvent } from './event';
 import * as gpqueueModule from './gpqueue';
 import {
   getProposal,
@@ -227,15 +228,7 @@ export function handleRegisterScheme(avatar: Address,
     ent.set('id', Value.fromString(avatar.toHex()));
     store.set('FirstRegisterSchemeFlag', avatar.toHex(), ent);
 
-    let eventType = 'NewDAO';
-
-    let eventEnt = new Event(avatar.toHex());
-    eventEnt.type = eventType;
-    eventEnt.data = '{ "address": "' + avatar.toHex() + '", "name": "' + dao.name + '" }';
-    eventEnt.dao = avatar.toHex();
-    eventEnt.timestamp = timestamp;
-
-    eventEnt.save();
+    addNewDAOEvent(avatar, dao.name, timestamp);
   }
   gpqueueModule.create(avatar, scheme, paramsHash);
 }
@@ -283,18 +276,7 @@ export function handleStateChange(event: StateChange): void {
           (event.params._proposalState === 2)) {
           insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
       }
-      let proposal = Proposal.load(event.params._proposalId.toHex());
-      let eventType = 'ProposalStageChange';
-      let eventEntId = crypto.keccak256(concat(event.params._proposalId, event.block.timestamp as ByteArray));
-
-      let eventEnt = new Event(eventEntId.toHex());
-      eventEnt.type = eventType;
-      eventEnt.data = '{ "stage": "' + proposal.stage + '" }';
-      eventEnt.proposal = proposal.id;
-      eventEnt.dao = proposal.dao;
-      eventEnt.timestamp = event.block.timestamp;
-
-      eventEnt.save();
+      addProposalStateChangeEvent(event.params._proposalId, event.block.timestamp);
   }
 }
 
@@ -331,17 +313,7 @@ export function addDaoMember(reputationHolder: ReputationHolder): void {
     reputationHolder.save();
   }
 
-  let eventType = 'NewReputationHolder';
-  let eventEntId = crypto.keccak256(concat(reputationHolder.address, reputationHolder.createdAt as ByteArray));
-
-  let event = new Event(eventEntId.toHex());
-  event.type = eventType;
-  event.data = '{ "reputationAmount": "' + reputationHolder.balance.toString() + '" }';
-  event.user = reputationHolder.address;
-  event.dao = reputationHolder.dao;
-  event.timestamp = reputationHolder.createdAt;
-
-  event.save();
+  addNewReputationHolderEvent(reputationHolder);
 
   daoModule.increaseDAOmembersCount(dao);
 }

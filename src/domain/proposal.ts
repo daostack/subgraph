@@ -1,8 +1,9 @@
 import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { ControllerScheme, DAO, Event, GenesisProtocolParam, Proposal, Tag } from '../types/schema';
+import { ControllerScheme, DAO, GenesisProtocolParam, Proposal, Tag } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
 import { getDAO, saveDAO } from './dao';
+import { addNewProposalEvent, addVoteFlipEvent } from './event';
 import { updateThreshold } from './gpqueue';
 import { getReputation } from './reputation';
 
@@ -113,19 +114,7 @@ export function updateProposalAfterVote(
     if ((gpProposal.value2 === 6)) {
       setProposalState(proposal, 6, gp.getProposalTimes(proposalId));
     }
-    let eventType = 'VoteFlip';
-    let eventId = crypto.keccak256(
-      concat(concat(proposalId, proposal.votesFor as ByteArray), proposal.votesAgainst as ByteArray),
-      );
-
-    let eventEnt = new Event(eventId.toHex());
-    eventEnt.type = eventType;
-    eventEnt.data = '{ "outcome": "' + proposal.winningOutcome + '", "votesFor": "' + proposal.votesFor.toString() + '", "votesAgainst": "' + proposal.votesAgainst.toString() + '" }';
-    eventEnt.proposal = proposal.id;
-    eventEnt.dao = proposal.dao;
-    eventEnt.timestamp = timestamp;
-
-    eventEnt.save();
+    addVoteFlipEvent(proposalId, proposal, timestamp);
   }
 }
 
@@ -297,18 +286,7 @@ export function updateGPProposal(
     controllerScheme.save();
   }
 
-  let eventType = 'NewProposal';
-  let eventId = crypto.keccak256(concat(proposalId, timestamp as ByteArray));
-
-  let event = new Event(eventId.toHex());
-  event.type = eventType;
-  event.data = '{ "title": "' + proposal.title + '" }';
-  event.proposal = proposalId.toHex();
-  event.user = proposer;
-  event.dao = avatarAddress.toHex();
-  event.timestamp = timestamp;
-
-  event.save();
+  addNewProposalEvent(proposalId, proposal, timestamp);
 
   saveProposal(proposal);
 }

@@ -3,75 +3,66 @@ import { Event, Proposal, ReputationHolder } from '../types/schema';
 import { concat } from '../utils';
 
 export function addNewDAOEvent(avatar: Address, daoName: string, timestamp: BigInt): void {
-    let eventType = 'NewDAO';
-
-    let eventEnt = new Event(avatar.toHex());
-    eventEnt.type = eventType;
-    eventEnt.data = '{ "address": "' + avatar.toHex() + '", "name": "' + daoName + '" }';
-    eventEnt.dao = avatar.toHex();
-    eventEnt.timestamp = timestamp;
-
-    eventEnt.save();
+    addEvent(
+        'NewDAO',
+        avatar.toHex(),
+        '{ "address": "' + avatar.toHex() + '", "name": "' + daoName + '" }',
+        null,
+        null,
+        avatar.toHex(),
+        timestamp,
+    );
 }
 
 export function addProposalStateChangeEvent(proposalId: Bytes, timestamp: BigInt): void {
     let proposal = Proposal.load(proposalId.toHex());
-    let eventType = 'ProposalStageChange';
-    let eventEntId = crypto.keccak256(concat(proposalId, timestamp as ByteArray));
-
-    let eventEnt = new Event(eventEntId.toHex());
-    eventEnt.type = eventType;
-    eventEnt.data = '{ "stage": "' + proposal.stage + '" }';
-    eventEnt.proposal = proposal.id;
-    eventEnt.dao = proposal.dao;
-    eventEnt.timestamp = timestamp;
-
-    eventEnt.save();
+    addEvent(
+        'ProposalStageChange',
+        crypto.keccak256(concat(proposalId, timestamp as ByteArray)).toHex(),
+        '{ "stage": "' + proposal.stage + '" }',
+        proposalId.toHex(),
+        null,
+        proposal.dao,
+        timestamp,
+    );
 }
 
 export function addNewReputationHolderEvent(reputationHolder: ReputationHolder): void {
-    let eventType = 'NewReputationHolder';
-    let eventEntId = crypto.keccak256(concat(reputationHolder.address, reputationHolder.createdAt as ByteArray));
-
-    let event = new Event(eventEntId.toHex());
-    event.type = eventType;
-    event.data = '{ "reputationAmount": "' + reputationHolder.balance.toString() + '" }';
-    event.user = reputationHolder.address;
-    event.dao = reputationHolder.dao;
-    event.timestamp = reputationHolder.createdAt;
-
-    event.save();
+    addEvent(
+        'NewReputationHolder',
+        crypto.keccak256(concat(reputationHolder.address, reputationHolder.createdAt as ByteArray)).toHex(),
+        '{ "reputationAmount": "' + reputationHolder.balance.toString() + '" }',
+        null,
+        reputationHolder.address,
+        reputationHolder.dao,
+        reputationHolder.createdAt,
+    );
 }
 
 export function addVoteFlipEvent(proposalId: Bytes, proposal: Proposal, timestamp: BigInt): void {
-    let eventType = 'VoteFlip';
-    let eventId = crypto.keccak256(
-      concat(concat(proposalId, proposal.votesFor as ByteArray), proposal.votesAgainst as ByteArray),
-      );
-
-    let eventEnt = new Event(eventId.toHex());
-    eventEnt.type = eventType;
-    eventEnt.data = '{ "outcome": "' + proposal.winningOutcome + '", "votesFor": "' + proposal.votesFor.toString() + '", "votesAgainst": "' + proposal.votesAgainst.toString() + '" }';
-    eventEnt.proposal = proposal.id;
-    eventEnt.dao = proposal.dao;
-    eventEnt.timestamp = timestamp;
-
-    eventEnt.save();
+    addEvent(
+        'VoteFlip',
+        crypto.keccak256(
+            concat(concat(proposalId, proposal.votesFor as ByteArray), proposal.votesAgainst as ByteArray),
+            ).toHex(),
+        '{ "outcome": "' + proposal.winningOutcome + '", "votesFor": "' + proposal.votesFor.toString() + '", "votesAgainst": "' + proposal.votesAgainst.toString() + '" }',
+        proposalId.toHex(),
+        null,
+        proposal.dao,
+        timestamp,
+    );
 }
 
 export function addNewProposalEvent(proposalId: Bytes, proposal: Proposal, timestamp: BigInt): void {
-    let eventType = 'NewProposal';
-    let eventId = crypto.keccak256(concat(proposalId, timestamp as ByteArray));
-
-    let event = new Event(eventId.toHex());
-    event.type = eventType;
-    event.data = '{ "title": "' + proposal.title + '" }';
-    event.proposal = proposalId.toHex();
-    event.user = proposal.proposer;
-    event.dao = proposal.dao;
-    event.timestamp = timestamp;
-
-    event.save();
+    addEvent(
+        'NewProposal',
+        crypto.keccak256(concat(proposalId, timestamp as ByteArray)).toHex(),
+        '{ "title": "' + proposal.title + '" }',
+        proposalId.toHex(),
+        proposal.proposer,
+        proposal.dao,
+        timestamp,
+    );
 }
 
 export function addStakeEvent(
@@ -83,17 +74,15 @@ export function addStakeEvent(
     daoId: string,
     timestamp: BigInt,
 ): void {
-    let eventType = 'Stake';
-
-    let eventEnt = new Event(eventId);
-    eventEnt.type = eventType;
-    eventEnt.data = '{ "outcome": "' + outcome + '", "stakeAmount": "' + amount.toString() + '" }';
-    eventEnt.proposal = proposalId;
-    eventEnt.user = staker;
-    eventEnt.dao = daoId;
-    eventEnt.timestamp = timestamp;
-
-    eventEnt.save();
+    addEvent(
+        'Stake',
+        eventId,
+        '{ "outcome": "' + outcome + '", "stakeAmount": "' + amount.toString() + '" }',
+        proposalId,
+        staker,
+        daoId,
+        timestamp,
+    );
 }
 
 export function addVoteEvent(
@@ -105,15 +94,32 @@ export function addVoteEvent(
     daoId: string,
     timestamp: BigInt,
 ): void {
-    let eventType = 'Vote';
+    addEvent(
+        'Vote',
+        eventId,
+        '{ "outcome": "' + outcome + '", "reputationAmount": "' + reputation.toString() + '" }',
+        proposalId,
+        voter,
+        daoId,
+        timestamp,
+    );
+}
 
-    let eventEnt = new Event(eventId);
-    eventEnt.type = eventType;
-    eventEnt.data = '{ "outcome": "' + outcome + '", "reputationAmount": "' + reputation.toString() + '" }';
-    eventEnt.proposal = proposalId;
-    eventEnt.user = voter;
-    eventEnt.dao = daoId;
+function addEvent(
+    type: string,
+    id: string,
+    data: string,
+    proposal: string,
+    user: Address,
+    dao: string,
+    timestamp: BigInt,
+) {
+    let eventEnt = new Event(id);
+    eventEnt.type = type;
+    eventEnt.data = data;
+    eventEnt.proposal = proposal;
+    eventEnt.user = user;
+    eventEnt.dao = dao;
     eventEnt.timestamp = timestamp;
-
     eventEnt.save();
-    }
+}

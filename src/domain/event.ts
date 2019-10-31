@@ -110,10 +110,10 @@ function addEvent(
     id: string,
     data: string,
     proposal: string,
-    user: Address,
+    user: Bytes,
     dao: string,
-    timestamp: BigInt,
-) {
+    timestamp: BigInt
+): void {
     let eventEnt = new Event(id);
     eventEnt.type = type;
     eventEnt.data = data;

@@ -112,7 +112,7 @@ function addEvent(
     proposal: string,
     user: Bytes,
     dao: string,
-    timestamp: BigInt
+    timestamp: BigInt,
 ): void {
     let eventEnt = new Event(id);
     eventEnt.type = type;

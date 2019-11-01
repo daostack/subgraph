@@ -145,11 +145,11 @@ describe('DAOTracker', () => {
 
   it('Controller e2e', async () => {
     await e2eControllerTest(false);
-  });
+  }, 120000);
 
   it('UController e2e', async () => {
     await e2eControllerTest(true);
-  });
+  }, 120000);
 
   it('Blacklist & Reset DAO', async () => {
     const { avatar } = await e2eControllerTest(false);
@@ -207,5 +207,5 @@ describe('DAOTracker', () => {
       address: avatar.options.address,
       explanationHash: '',
     });
-  });
+  }, 120000);
 });

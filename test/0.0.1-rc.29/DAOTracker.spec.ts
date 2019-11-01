@@ -70,10 +70,66 @@ describe('DAOTracker', () => {
     await daoTracker.methods.track(avatar.options.address, controller.options.address)
       .send();
 
-    // Finish setting up the new DAO
+    // Finish setting up the new DAO, and verify the contract entities are added
     await reputation.methods.transferOwnership(controller.options.address).send();
+
+    const { reputationContract } = await sendQuery(`{
+      reputationContract(id: "${reputation.options.address}") {
+        id
+        address
+      }
+    }`, 5000);
+
+    expect(reputationContract).toMatchObject({
+      id: reputation.options.address,
+      address: reputation.options.address,
+    });
+
     await nativeToken.methods.transferOwnership(controller.options.address).send();
+
+    const { tokenContract } = await sendQuery(`{
+      tokenContract(id: "${nativeToken.options.address}") {
+        id
+        address
+        owner
+      }
+    }`, 5000);
+
+    expect(tokenContract).toMatchObject({
+      id: nativeToken.options.address,
+      address: nativeToken.options.address,
+      owner: controller.options.address,
+    });
+
     await avatar.methods.transferOwnership(controller.options.address).send();
+
+    const { avatarContract } = await sendQuery(`{
+      avatarContract(id: "${avatar.options.address}") {
+        id
+        address
+        name
+        nativeToken
+        nativeReputation
+        owner
+      }
+    }`, 5000);
+
+    expect(avatarContract).toMatchObject({
+      id: avatar.options.address,
+      address: avatar.options.address,
+      name: 'Test DAO',
+      nativeToken: nativeToken.options.address,
+      nativeReputation: reputation.options.address,
+      owner: controller.options.address,
+    });
+
+    // Add a scheme
+    await controller.methods.registerScheme(
+      contributionReward.options.address,
+      schemeParamsHash,
+      '0x0000001F',
+      avatar.options.address,
+    ).send();
 
     // Ensure the new DAO is in the subgraph
     const { dao } = await sendQuery(`{
@@ -113,14 +169,6 @@ describe('DAOTracker', () => {
       },
       reputationHoldersCount: '0',
     });
-
-    // Add a scheme
-    await controller.methods.registerScheme(
-      contributionReward.options.address,
-      schemeParamsHash,
-      '0x0000001F',
-      avatar.options.address,
-    ).send();
 
     // Ensure the scheme is in the subgraph
     const { controllerSchemes } = await sendQuery(`{

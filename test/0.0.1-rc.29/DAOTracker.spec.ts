@@ -3,7 +3,7 @@ import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
 const DAOTracker = require('@daostack/arc/build/contracts/DAOTracker.json');
 const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
 const Controller = require('@daostack/arc/build/contracts/Controller.json');
-const UController = require('@daostack/ar/build/contracts/UController.json');
+const UController = require('@daostack/arc/build/contracts/UController.json');
 const DAOToken = require('@daostack/arc/contracts/build/DAOToken.json');
 const Reputation = require('@daostack/arc/contracts/build/Reputation.json');
 const ContributionReward = require('@daostack/arc/contracts/build/ContributionReward.json');
@@ -40,7 +40,7 @@ describe('DAOTracker', () => {
     schemeSetParams.send();
   });
 
-  const e2eControllerTest = async (uController: boolean) => {
+  const e2eControllerTest = async (isUController: boolean) => {
     // Start deploying a new DAO
     const nativeToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
       .deploy({ data: DAOToken.bytecode, arguments: [ 'Test Token', 'TST', '10000000000' ] })
@@ -51,12 +51,14 @@ describe('DAOTracker', () => {
       .send();
 
     const avatar = await new web3.eth.Contract(Avatar.abi, undefined, opts)
-      .deploy({ data: Avatar.bytecode, arguments: [ 'Test DAO', nativeToken.options.address, reputation.options.address ] })
+      .deploy({
+        data: Avatar.bytecode,
+        arguments: [ 'Test DAO', nativeToken.options.address, reputation.options.address ] })
       .send();
 
     let controller;
 
-    if (!uController) {
+    if (!isUController) {
       controller = await new web3.eth.Contracts(Controller.abi, undefined, opts)
         .deploy({ data: Controller.bytecode, arguments: [ avatar.options.address ] });
     } else {
@@ -99,16 +101,16 @@ describe('DAOTracker', () => {
       nativeToken: {
         id: nativeToken.options.address,
         dao: {
-          id: avatar.options.address
-        }
+          id: avatar.options.address,
+        },
       },
       nativeReputation: {
         id: reputation.options.address,
         dao: {
-          id: avatar.options.address
-        }
+          id: avatar.options.address,
+        },
       },
-      reputationHoldersCount: '0'
+      reputationHoldersCount: '0',
     });
 
     // Add a scheme
@@ -116,7 +118,7 @@ describe('DAOTracker', () => {
       contributionReward.options.address,
       schemeParamsHash,
       '0x0000001F',
-      avatar.options.address
+      avatar.options.address,
     ).send();
 
     // Ensure the scheme is in the subgraph
@@ -131,15 +133,15 @@ describe('DAOTracker', () => {
 
     expect(controllerSchemes).toContainEqual({
       dao: {
-        id: avatar.options.address
+        id: avatar.options.address,
       },
-      address: contributionReward.options.address
+      address: contributionReward.options.address,
     });
 
     return {
-      avatar
-    }
-  }
+      avatar,
+    };
+  };
 
   it('Controller e2e', async () => {
     await e2eControllerTest(false);
@@ -170,7 +172,7 @@ describe('DAOTracker', () => {
         id: avatar.options.address,
         address: avatar.options.address,
         tracker: daoTracker.options.address,
-        explanationHash: ''
+        explanationHash: '',
       });
     }
 
@@ -203,7 +205,7 @@ describe('DAOTracker', () => {
     expect(resetDAO).toMatchObject({
       id: avatar.options.address,
       address: avatar.options.address,
-      explanationHash: ''
+      explanationHash: '',
     });
   });
 });

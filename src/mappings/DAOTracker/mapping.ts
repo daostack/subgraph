@@ -1,21 +1,21 @@
-import { Address, store, ipfs } from '@graphprotocol/graph-ts'
+import { Address, ipfs, store } from '@graphprotocol/graph-ts';
 import {
-  DAOTracker,
-  TrackDAO,
   BlacklistDAO,
-  ResetDAO
+  DAOTracker,
+  ResetDAO,
+  TrackDAO,
 } from '../../types/DAOTracker/DAOTracker';
+import {
+  BlacklistedDAO,
+  DAOTrackerContract,
+  ResetDAO as ResetDAOEntity,
+} from '../../types/schema';
 import {
   Avatar_0_0_1_rc_31,
   Controller_0_0_1_rc_31,
   DAOToken_0_0_1_rc_31,
-  Reputation_0_0_1_rc_31
+  Reputation_0_0_1_rc_31,
 } from '../../types/templates';
-import {
-  DAOTrackerContract,
-  BlacklistedDAO,
-  ResetDAO as ResetDAOEntity
-} from '../../types/schema';
 import { equalStrings } from '../../utils';
 
 export function getDAOTrackerContract(address: Address): DAOTrackerContract {

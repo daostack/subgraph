@@ -36,7 +36,7 @@ describe('DAOTracker', () => {
     await vmSetParams.send();
 
     const schemeSetParams = contributionReward.methods.setParameters(vmParamsHash, absVote.options.address);
-    schemeParamsHash = schemeSetParams.call();
+    schemeParamsHash = await schemeSetParams.call();
     await schemeSetParams.send();
   });
 

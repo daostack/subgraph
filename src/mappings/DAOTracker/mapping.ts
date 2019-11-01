@@ -39,13 +39,13 @@ export function handleTrackDAO(event: TrackDAO): void {
   /* TODO: uncomment when this issue is resolved https://github.com/graphprotocol/graph-node/issues/1333
   // If the avatar hasn't been blacklisted
   const daoTrackerSC = DAOTracker.bind(event.address);
-  if (daoTrackerSC.blacklisted(_avatar), "latest") {
+  if (daoTrackerSC.blacklisted(_avatar), 'latest') {
     return;
   }
   */
 
   // If the avatar already exists, early out
-  if (store.get("AvatarContract", _avatar.toHex()) != null) {
+  if (store.get('AvatarContract', _avatar.toHex()) != null) {
     return;
   }
 
@@ -56,15 +56,14 @@ export function handleTrackDAO(event: TrackDAO): void {
   DAOToken_0_0_1_rc_31.create(_daoToken);
 
   // Track the Controller if it isn't a UController we're already tracking
-  if (store.get("UControllerOrganization", _controller.toHex()) == null) {
+  if (store.get('UControllerOrganization', _controller.toHex()) == null) {
     Controller_0_0_1_rc_31.create(_controller);
   }
 
   // Note, no additional work is needed here because...
-  // * AvatarContract is added to the store by the 'OwnershipTransfered' event
   // * ControllerOrganization is added to the store by the 'RegisterScheme' event
-  // * ReputationContract is added to the store by the 'RegisterScheme' event
-  // * TokenContract is added to the store by the 'RegisterScheme' event
+  // * AvatarContract, ReputationContract, and TokenContract are added to the store
+  //   by the 'RegisterScheme' or 'OwnershipTransfered' events
 }
 
 export function handleBlacklistDAO(event: BlacklistDAO): void {
@@ -87,7 +86,12 @@ export function handleBlacklistDAO(event: BlacklistDAO): void {
     }
   }
 
-  store.set("BlacklistedDAO", blacklistedDAO.id, blacklistedDAO);
+  store.set('BlacklistedDAO', blacklistedDAO.id, blacklistedDAO);
+
+  // If the DAO has been previously reset, remove that entity from the store
+  if (store.get('ResetDAO', _avatar.toHex())) {
+    store.remove('ResetDAO', _avatar.toHex());
+  }
 }
 
 export function handleResetDAO(event: ResetDAO): void {
@@ -97,7 +101,9 @@ export function handleResetDAO(event: ResetDAO): void {
   const { _avatar, _explanationHash } = event.params;
 
   // Remove the BlacklistedDAO from the store
-  store.remove("BlacklistedDAO", _avatar.toHex());
+  if (store.get('BlacklistedDAO', _avatar.toHex())) {
+    store.remove('BlacklistedDAO', _avatar.toHex());
+  }
 
   // Add the ResetDAO entity to the store
   const resetDAO = new ResetDAOEntity(_avatar.toHex());
@@ -112,5 +118,5 @@ export function handleResetDAO(event: ResetDAO): void {
     }
   }
 
-  store.set("ResetDAO", resetDAO.id, resetDAO);
+  store.set('ResetDAO', resetDAO.id, resetDAO);
 }

@@ -70,15 +70,15 @@ describe('DAOTracker', () => {
     await daoTracker.methods.track(avatar.options.address, controller.options.address)
       .send();
 
-    const { daoTrackerContract } = await sendQuery(`{
-      daoTrackerContract(id: "${daoTracker.options.address.toLowerCase()}") {
+    const { daotrackerContract } = await sendQuery(`{
+      daotrackerContract(id: "${daoTracker.options.address.toLowerCase()}") {
         id
         address
         owner
       }
     }`, 5000);
 
-    expect(daoTrackerContract).toMatchObject({
+    expect(daotrackerContract).toMatchObject({
       id: daoTracker.options.address.toLowerCase(),
       address: daoTracker.options.address.toLowerCase(),
       owner: web3.eth.defaultAccount.toLowerCase(),

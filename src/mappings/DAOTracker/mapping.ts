@@ -34,11 +34,11 @@ export function handleTrackDAO(event: TrackDAO): void {
   // Ensure the DAOTrackerContract has been added to the store
   getDAOTrackerContract(event.address);
 
-  const { _avatar, _controller, _reputation, _daoToken } = event.params;
+  let { _avatar, _controller, _reputation, _daoToken } = event.params;
 
   /* TODO: uncomment when this issue is resolved https://github.com/graphprotocol/graph-node/issues/1333
   // If the avatar hasn't been blacklisted
-  const daoTrackerSC = DAOTracker.bind(event.address);
+  let daoTrackerSC = DAOTracker.bind(event.address);
   if (daoTrackerSC.blacklisted(_avatar), 'latest') {
     return;
   }
@@ -68,18 +68,18 @@ export function handleTrackDAO(event: TrackDAO): void {
 
 export function handleBlacklistDAO(event: BlacklistDAO): void {
   // Ensure the DAOTrackerContract has been added to the store
-  const daoTracker = getDAOTrackerContract(event.address);
+  let daoTracker = getDAOTrackerContract(event.address);
 
-  const { _avatar, _explanationHash } = event.params;
+  let { _avatar, _explanationHash } = event.params;
 
   // Add the BlacklistedDAO to the store
-  const blacklistedDAO = new BlacklistedDAO(_avatar.toHex());
+  let blacklistedDAO = new BlacklistedDAO(_avatar.toHex());
   blacklistedDAO.address = _avatar;
   blacklistedDAO.tracker = daoTracker.id;
   blacklistedDAO.explanationHash = _explanationHash;
 
   if (!equalStrings(_explanationHash, '')) {
-    const explanation = ipfs.cat('/ipfs/' + _explanationHash);
+    let explanation = ipfs.cat('/ipfs/' + _explanationHash);
 
     if (explanation != null) {
       blacklistedDAO.explanation = explanation.toString();
@@ -98,7 +98,7 @@ export function handleResetDAO(event: ResetDAO): void {
   // Ensure the DAOTrackerContract has been added to the store
   getDAOTrackerContract(event.address);
 
-  const { _avatar, _explanationHash } = event.params;
+  let { _avatar, _explanationHash } = event.params;
 
   // Remove the BlacklistedDAO from the store
   if (store.get('BlacklistedDAO', _avatar.toHex())) {
@@ -106,12 +106,12 @@ export function handleResetDAO(event: ResetDAO): void {
   }
 
   // Add the ResetDAO entity to the store
-  const resetDAO = new ResetDAOEntity(_avatar.toHex());
+  let resetDAO = new ResetDAOEntity(_avatar.toHex());
   resetDAO.address = _avatar;
   resetDAO.explanationHash = _explanationHash;
 
   if (!equalStrings(_explanationHash, '')) {
-    const explanation = ipfs.cat('/ipfs/' + _explanationHash);
+    let explanation = ipfs.cat('/ipfs/' + _explanationHash);
 
     if (explanation != null) {
       resetDAO.explanation = explanation.toString();

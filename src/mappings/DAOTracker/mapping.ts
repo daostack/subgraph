@@ -34,7 +34,10 @@ export function handleTrackDAO(event: TrackDAO): void {
   // Ensure the DAOTrackerContract has been added to the store
   getDAOTrackerContract(event.address);
 
-  let { _avatar, _controller, _reputation, _daoToken } = event.params;
+  let _avatar = event.params._avatar;
+  let _controller = event.params._controller;
+  let _reputation = event.params._reputation;
+  let _daoToken = event.params._daoToken;
 
   /* TODO: uncomment when this issue is resolved https://github.com/graphprotocol/graph-node/issues/1333
   // If the avatar hasn't been blacklisted
@@ -70,7 +73,8 @@ export function handleBlacklistDAO(event: BlacklistDAO): void {
   // Ensure the DAOTrackerContract has been added to the store
   let daoTracker = getDAOTrackerContract(event.address);
 
-  let { _avatar, _explanationHash } = event.params;
+  let _avatar = event.params._avatar;
+  let _explanationHash = event.params._explanationHash;
 
   // Add the BlacklistedDAO to the store
   let blacklistedDAO = new BlacklistedDAO(_avatar.toHex());
@@ -98,7 +102,8 @@ export function handleResetDAO(event: ResetDAO): void {
   // Ensure the DAOTrackerContract has been added to the store
   getDAOTrackerContract(event.address);
 
-  let { _avatar, _explanationHash } = event.params;
+  let _avatar = event.params._avatar;
+  let _explanationHash = event.params._explanationHash;
 
   // Remove the BlacklistedDAO from the store
   if (store.get('BlacklistedDAO', _avatar.toHex())) {

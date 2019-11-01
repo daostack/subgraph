@@ -59,7 +59,7 @@ describe('DAOTracker', () => {
     let controller;
 
     if (!isUController) {
-      controller = await new web3.eth.Contracts(Controller.abi, undefined, opts)
+      controller = await new web3.eth.Contract(Controller.abi, undefined, opts)
         .deploy({ data: Controller.bytecode, arguments: [ avatar.options.address ] });
     } else {
       controller = uController;

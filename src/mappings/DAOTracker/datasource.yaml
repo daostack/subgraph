@@ -17,4 +17,4 @@ eventHandlers:
   - event: BlacklistDAO(indexed address,string)
     handler: handleBlacklistDAO
   - event: ResetDAO(indexed address,string)
-    handler: handleResetDAO(indexed address,string)
+    handler: handleResetDAO

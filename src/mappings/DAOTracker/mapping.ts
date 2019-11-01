@@ -19,7 +19,7 @@ import {
 import { equalStrings } from '../../utils';
 
 export function getDAOTrackerContract(address: Address): DAOTrackerContract {
-  let daoTracker = DAOTrackerContract.load(address.toHex());
+  let daoTracker = DAOTrackerContract.load(address.toHex()) as DAOTrackerContract;
   if (daoTracker == null) {
     daoTracker = new DAOTrackerContract(address.toHex());
     daoTracker.address = address;

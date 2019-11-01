@@ -71,7 +71,7 @@ describe('DAOTracker', () => {
       .send();
 
     const { daoTrackerContract } = await sendQuery(`{
-      daoTrackerContract(id: "${daoTracker.options.address}") {
+      daoTrackerContract(id: "${daoTracker.options.address.toLowerCase()}") {
         id
         address
         owner
@@ -79,8 +79,8 @@ describe('DAOTracker', () => {
     }`, 5000);
 
     expect(daoTrackerContract).toMatchObject({
-      id: daoTracker.options.address,
-      address: daoTracker.options.address,
+      id: daoTracker.options.address.toLowerCase(),
+      address: daoTracker.options.address.toLowerCase(),
       owner: web3.eth.defaultAccount.toLowerCase(),
     });
 
@@ -88,21 +88,21 @@ describe('DAOTracker', () => {
     await reputation.methods.transferOwnership(controller.options.address).send();
 
     const { reputationContract } = await sendQuery(`{
-      reputationContract(id: "${reputation.options.address}") {
+      reputationContract(id: "${reputation.options.address.toLowerCase()}") {
         id
         address
       }
     }`, 5000);
 
     expect(reputationContract).toMatchObject({
-      id: reputation.options.address,
-      address: reputation.options.address,
+      id: reputation.options.address.toLowerCase(),
+      address: reputation.options.address.toLowerCase(),
     });
 
     await nativeToken.methods.transferOwnership(controller.options.address).send();
 
     const { tokenContract } = await sendQuery(`{
-      tokenContract(id: "${nativeToken.options.address}") {
+      tokenContract(id: "${nativeToken.options.address.toLowerCase()}") {
         id
         address
         owner
@@ -110,15 +110,15 @@ describe('DAOTracker', () => {
     }`, 5000);
 
     expect(tokenContract).toMatchObject({
-      id: nativeToken.options.address,
-      address: nativeToken.options.address,
-      owner: controller.options.address,
+      id: nativeToken.options.address.toLowerCase(),
+      address: nativeToken.options.address.toLowerCase(),
+      owner: controller.options.address.toLowerCase(),
     });
 
     await avatar.methods.transferOwnership(controller.options.address).send();
 
     const { avatarContract } = await sendQuery(`{
-      avatarContract(id: "${avatar.options.address}") {
+      avatarContract(id: "${avatar.options.address.toLowerCase()}") {
         id
         address
         name
@@ -129,12 +129,12 @@ describe('DAOTracker', () => {
     }`, 5000);
 
     expect(avatarContract).toMatchObject({
-      id: avatar.options.address,
-      address: avatar.options.address,
+      id: avatar.options.address.toLowerCase(),
+      address: avatar.options.address.toLowerCase(),
       name: 'Test DAO',
-      nativeToken: nativeToken.options.address,
-      nativeReputation: reputation.options.address,
-      owner: controller.options.address,
+      nativeToken: nativeToken.options.address.toLowerCase(),
+      nativeReputation: reputation.options.address.toLowerCase(),
+      owner: controller.options.address.toLowerCase(),
     });
 
     // Add a scheme
@@ -147,7 +147,7 @@ describe('DAOTracker', () => {
 
     // Ensure the new DAO is in the subgraph
     const { dao } = await sendQuery(`{
-      dao(id: "${avatar.options.address}") {
+      dao(id: "${avatar.options.address.toLowerCase()}") {
         id
         name
         nativeToken {
@@ -167,18 +167,18 @@ describe('DAOTracker', () => {
     }`, 5000);
 
     expect(dao).toMatchObject({
-      id: avatar.options.address,
+      id: avatar.options.address.toLowerCase(),
       name: 'Test DAO',
       nativeToken: {
-        id: nativeToken.options.address,
+        id: nativeToken.options.address.toLowerCase(),
         dao: {
-          id: avatar.options.address,
+          id: avatar.options.address.toLowerCase(),
         },
       },
       nativeReputation: {
-        id: reputation.options.address,
+        id: reputation.options.address.toLowerCase(),
         dao: {
-          id: avatar.options.address,
+          id: avatar.options.address.toLowerCase(),
         },
       },
       reputationHoldersCount: '0',
@@ -196,9 +196,9 @@ describe('DAOTracker', () => {
 
     expect(controllerSchemes).toContainEqual({
       dao: {
-        id: avatar.options.address,
+        id: avatar.options.address.toLowerCase(),
       },
-      address: contributionReward.options.address,
+      address: contributionReward.options.address.toLowerCase(),
     });
 
     return {
@@ -223,7 +223,7 @@ describe('DAOTracker', () => {
     // Ensure the blacklisted DAO is in the subgraph
     {
       const { blacklistedDAO } = await sendQuery(`{
-        blacklistedDAO(id: "${avatar.options.address}") {
+        blacklistedDAO(id: "${avatar.options.address.toLowerCase()}") {
           id
           address
           tracker
@@ -232,9 +232,9 @@ describe('DAOTracker', () => {
       }`, 5000);
 
       expect(blacklistedDAO).toMatchObject({
-        id: avatar.options.address,
-        address: avatar.options.address,
-        tracker: daoTracker.options.address,
+        id: avatar.options.address.toLowerCase(),
+        address: avatar.options.address.toLowerCase(),
+        tracker: daoTracker.options.address.toLowerCase(),
         explanationHash: '',
       });
     }
@@ -245,7 +245,7 @@ describe('DAOTracker', () => {
     // Ensure the blacklisted DAO is no longer in the subgraph
     {
       const { blacklistedDAO } = await sendQuery(`{
-        blacklistedDAO(id: "${avatar.options.address}") {
+        blacklistedDAO(id: "${avatar.options.address.toLowerCase()}") {
           id
           address
           tracker
@@ -258,7 +258,7 @@ describe('DAOTracker', () => {
 
     // Ensure the reset DAO is in the subgraph
     const { resetDAO } = await sendQuery(`{
-      resetDAO(id: "${avatar.options.address}') {
+      resetDAO(id: "${avatar.options.address.toLowerCase()}") {
         id
         address
         explanationHash
@@ -266,8 +266,8 @@ describe('DAOTracker', () => {
     }`);
 
     expect(resetDAO).toMatchObject({
-      id: avatar.options.address,
-      address: avatar.options.address,
+      id: avatar.options.address.toLowerCase(),
+      address: avatar.options.address.toLowerCase(),
       explanationHash: '',
     });
   }, 120000);

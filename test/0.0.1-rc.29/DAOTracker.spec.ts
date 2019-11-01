@@ -5,9 +5,9 @@ const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
 const Controller = require('@daostack/arc/build/contracts/Controller.json');
 const UController = require('@daostack/arc/build/contracts/UController.json');
 const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
-const Reputation = require('@daostack/arc/contracts/build/Reputation.json');
-const ContributionReward = require('@daostack/arc/contracts/build/ContributionReward.json');
-const AbsoluteVote = require('@daostack/arc/contracts/build/AbsoluteVote.json');
+const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
+const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
+const AbsoluteVote = require('@daostack/arc/build/contracts/AbsoluteVote.json');
 
 describe('DAOTracker', () => {
   let web3;

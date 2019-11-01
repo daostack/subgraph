@@ -1,7 +1,18 @@
+abis:
+  - DAOTracker
 entities:
   - DAOTrackerContract
+templates:
+  - mapping: Avatar
+    version: 0.0.1-rc.31
+  - mapping: Controller
+    version: 0.0.1-rc.31
+  - mapping: DAOToken
+    version: 0.0.1-rc.31
+  - mapping: Reputation
+    version: 0.0.1-rc.31
 eventHandlers:
-  - event: TrackDAO(indexed address,address,address)
+  - event: TrackDAO(indexed address,address,address,address)
     handler: handleTrackDAO
   - event: BlacklistDAO(indexed address,string)
     handler: handleBlacklistDAO

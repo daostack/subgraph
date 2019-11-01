@@ -70,7 +70,12 @@ In order to add support for a new contract follow these steps:
          list of entities that are written by the the mapping.
       3. [`eventHandlers`](https://github.com/graphprotocol/graph-node/blob/master/docs/subgraph-manifest.md#1522-eventhandler) -
          map of solidity event signatures to event handlers in mapping code.
-      4. [`templates`]([https://](https://github.com/graphprotocol/graph-node/blob/master/docs/subgraph-manifest.md#17-dynamicdatasource)) - list of datasource mappings that are created by the mapping.
+      4. [`templates`]([https://](https://github.com/graphprotocol/graph-node/blob/master/docs/subgraph-manifest.md#17-dynamicdatasource)) - list of datasource mappings that are created by the mapping. Each template entry refers to a mapping name, and a version to be used with that mapping. Example:
+      ```yaml
+      templates:
+         - mapping: Avatar
+           version: 0.0.1-rc.31
+      ```
    4. `test/integration/<contract name>.spec.ts`
 
 3. Add your contract to `ops/mappings.json`. Under the JSON object for the network your contract is located at, under the `"mappings"` JSON array, add the following.

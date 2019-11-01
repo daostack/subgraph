@@ -16,6 +16,7 @@ async function generateSubgraph(opts={}) {
   opts.subgraphLocation = opts.subgraphLocation || defaultSubgraphLocation;
   const addresses = JSON.parse(fs.readFileSync(migrationFile, "utf-8"));
   const missingAddresses = {};
+  const templateDefinitions = {};
 
   // Filter out 0.0.1-rc.18 & 0.0.1-rc.17
   const latestMappings = mappings.filter(mapping =>
@@ -25,7 +26,7 @@ async function generateSubgraph(opts={}) {
 
   // Build our subgraph's datasources from the mapping fragments
   const dataSources = combineFragments(
-    latestMappings, false, addresses, missingAddresses
+    latestMappings, false, addresses, missingAddresses, templateDefinitions
   ).filter(el => el != null);
 
   // Throw an error if there are contracts that're missing an address
@@ -41,7 +42,8 @@ async function generateSubgraph(opts={}) {
   const subgraph = {
     specVersion: "0.0.1",
     schema: { file: "./schema.graphql" },
-    dataSources
+    dataSources,
+    templates: Object.values(templateDefinitions)
   };
 
   fs.writeFileSync(
@@ -51,10 +53,11 @@ async function generateSubgraph(opts={}) {
   );
 }
 
-function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
+function combineFragments(fragments, isTemplate, addresses, missingAddresses, templateDefinitions) {
   let ids = [];
   return fragments.map(mapping => {
     const contract = mapping.name;
+    const version = mapping.arcVersion;
     const fragment = `${__dirname}/../src/mappings/${mapping.mapping}/datasource.yaml`;
     var abis, entities, eventHandlers, templates, file, yamlLoad, abi;
 
@@ -65,7 +68,6 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       entities = yamlLoad.entities;
       templates = yamlLoad.templates;
       abis = (yamlLoad.abis || [contract]).map(contractName => {
-        const version = mapping.arcVersion;
         const strlen = version.length
         const versionNum = Number(version.slice(strlen - 2, strlen));
 
@@ -95,9 +97,9 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       if (mapping.dao === 'address') {
         contractAddress = mapping.address;
       } else if (mapping.dao === 'organs') {
-        contractAddress = addresses[network].test[mapping.arcVersion][mapping.dao][mapping.contractName];
+        contractAddress = addresses[network].test[version][mapping.dao][mapping.contractName];
       } else {
-        contractAddress = addresses[network][mapping.dao][mapping.arcVersion][mapping.contractName];
+        contractAddress = addresses[network][mapping.dao][version][mapping.contractName];
       }
 
       // If the contract isn't predeployed
@@ -105,7 +107,7 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
         // Keep track of contracts that're missing addresses.
         // These contracts should have addresses because they're not
         // templated contracts aren't used as templates
-        const daoContract = `${network}-${mapping.arcVersion}-${mapping.contractName}-${mapping.dao}`;
+        const daoContract = `${network}-${version}-${mapping.contractName}-${mapping.dao}`;
         if (missingAddresses[daoContract] === undefined) {
           missingAddresses[daoContract] = true;
         }
@@ -130,6 +132,12 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       return;
     }
 
+    if (isTemplate) {
+      // convert name to be version specific
+      const classVersion = version.replace(/\.|-/g, '_');
+      name = `${name}_${classVersion}`
+    }
+
     var result = {
       kind: 'ethereum/contract',
       name: `${name}`,
@@ -146,15 +154,25 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       }
     };
 
+    // If this datasource is requesting templates,
+    // build their definition if we haven't already
     if (templates && templates.length) {
-      result.templates = combineFragments(
-        templates.map(template => ({
-          name: template,
-          mapping: template,
-          arcVersion: mapping.arcVersion
-        })),
-        true, addresses, missingAddresses
-      );
+      templates.forEach((template) => {
+        const { mapping, version } = template;
+        const name = `${mapping}${version}`
+
+        // If we haven't processed it already
+        if (templateDefinitions[name] === undefined) {
+          // Avoid infinite recursion
+          templateDefinitions[name] = {};
+          // Reuse this logic with the template requested
+          templateDefinitions[name] = combineFragments([{
+            name: mapping,
+            mapping: mapping,
+            arcVersion: version
+          }], true, addresses, missingAddresses)[0];
+        }
+      });
     }
 
     return result;

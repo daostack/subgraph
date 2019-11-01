@@ -27,7 +27,7 @@ describe('DAOTracker', () => {
     daoTracker = new web3.eth.Contract(DAOTracker.abi, addresses.DAOTracker, opts);
     uController = new web3.eth.Contract(UController.abi, addresses.UController, opts);
     contributionReward = new web3.eth.Contract(ContributionReward.abi, addresses.ContributionReward, opts);
-    absVote = new web3.eth.Contract(AbsoluteVote.abi, undefined, opts)
+    absVote = await new web3.eth.Contract(AbsoluteVote.abi, undefined, opts)
       .deploy({ data: AbsoluteVote.bytecode, arguments: [] })
       .send();
 

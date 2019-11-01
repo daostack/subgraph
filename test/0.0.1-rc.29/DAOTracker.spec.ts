@@ -70,6 +70,20 @@ describe('DAOTracker', () => {
     await daoTracker.methods.track(avatar.options.address, controller.options.address)
       .send();
 
+    const { daoTrackerContract } = await sendQuery(`{
+      daoTrackerContract(id: "${daoTracker.options.address}") {
+        id
+        address
+        owner
+      }
+    }`, 5000);
+
+    expect(daoTrackerContract).toMatchObject({
+      id: daoTracker.options.address,
+      address: daoTracker.options.address,
+      owner: web3.eth.defaultAccount.toLowerCase(),
+    });
+
     // Finish setting up the new DAO, and verify the contract entities are added
     await reputation.methods.transferOwnership(controller.options.address).send();
 

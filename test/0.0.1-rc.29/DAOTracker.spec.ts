@@ -145,6 +145,23 @@ describe('DAOTracker', () => {
       avatar.options.address,
     ).send();
 
+    // Ensure the scheme is in the subgraph
+    const { controllerSchemes } = await sendQuery(`{
+      controllerSchemes {
+        dao {
+          id
+        }
+        address
+      }
+    }`, 15000);
+
+    expect(controllerSchemes).toContainEqual({
+      dao: {
+        id: avatar.options.address.toLowerCase(),
+      },
+      address: contributionReward.options.address.toLowerCase(),
+    });
+
     // Ensure the new DAO is in the subgraph
     const { dao } = await sendQuery(`{
       dao(id: "${avatar.options.address.toLowerCase()}") {
@@ -162,9 +179,8 @@ describe('DAOTracker', () => {
             id
           }
         }
-        reputationHoldersCount
       }
-    }`, 5000);
+    }`, 15000);
 
     expect(dao).toMatchObject({
       id: avatar.options.address.toLowerCase(),
@@ -181,24 +197,6 @@ describe('DAOTracker', () => {
           id: avatar.options.address.toLowerCase(),
         },
       },
-      reputationHoldersCount: '0',
-    });
-
-    // Ensure the scheme is in the subgraph
-    const { controllerSchemes } = await sendQuery(`{
-      controllerSchemes {
-        dao {
-          id
-        }
-        address
-      }
-    }`, 5000);
-
-    expect(controllerSchemes).toContainEqual({
-      dao: {
-        id: avatar.options.address.toLowerCase(),
-      },
-      address: contributionReward.options.address.toLowerCase(),
     });
 
     return {

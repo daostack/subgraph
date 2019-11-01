@@ -37,7 +37,7 @@ describe('DAOTracker', () => {
 
     const schemeSetParams = contributionReward.methods.setParameters(vmParamsHash, absVote.options.address);
     schemeParamsHash = schemeSetParams.call();
-    schemeSetParams.send();
+    await schemeSetParams.send();
   });
 
   const e2eControllerTest = async (isUController: boolean) => {

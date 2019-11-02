@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path")
 const yaml = require("js-yaml");
 const { migrationFileLocation: defaultMigrationFileLocation,
-network } = require("./settings");
+network ,startBlock} = require("./settings");
 const mappings = require("./mappings.json")[network].mappings;
 const { subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 
@@ -117,7 +117,8 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       abi
     } : {
       address: contractAddress,
-      abi
+      abi,
+      startBlock: startBlock
     };
 
     let name = contract;

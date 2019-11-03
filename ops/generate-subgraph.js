@@ -118,7 +118,7 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
     } : {
       address: contractAddress,
       abi,
-      startBlock: startBlock
+      startBlock
     };
 
     let name = contract;

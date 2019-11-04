@@ -256,7 +256,9 @@ describe('DAOTracker', () => {
         blacklistedDAO(id: "${avatar.options.address.toLowerCase()}") {
           id
           address
-          tracker
+          tracker {
+            id
+          }
           explanationHash
         }
       }`, 5000);
@@ -264,7 +266,9 @@ describe('DAOTracker', () => {
       expect(blacklistedDAO).toMatchObject({
         id: avatar.options.address.toLowerCase(),
         address: avatar.options.address.toLowerCase(),
-        tracker: daoTracker.options.address.toLowerCase(),
+        tracker: {
+          id: daoTracker.options.address.toLowerCase()
+        },
         explanationHash: '',
       });
     }
@@ -278,7 +282,9 @@ describe('DAOTracker', () => {
         blacklistedDAO(id: "${avatar.options.address.toLowerCase()}") {
           id
           address
-          tracker
+          tracker {
+            id
+          }
           explanationHash
         }
       }`, 5000);

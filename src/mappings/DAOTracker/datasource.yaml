@@ -2,6 +2,8 @@ abis:
   - DAOTracker
 entities:
   - DAOTrackerContract
+  - BlacklistedDAO
+  - ResetDAO
 templates:
   - mapping: Avatar
     version: 0.0.1-rc.31

@@ -267,7 +267,7 @@ describe('DAOTracker', () => {
         id: avatar.options.address.toLowerCase(),
         address: avatar.options.address.toLowerCase(),
         tracker: {
-          id: daoTracker.options.address.toLowerCase()
+          id: daoTracker.options.address.toLowerCase(),
         },
         explanationHash: '',
       });

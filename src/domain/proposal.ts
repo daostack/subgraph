@@ -39,6 +39,13 @@ export function getProposal(id: string): Proposal {
     proposal.scheme = null;
     proposal.descriptionHash = '';
     proposal.title = '';
+    proposal.proposer = Address.fromString("0x0000000000000000000000000000000000000000");
+    proposal.votingMachine = Address.fromString("0x0000000000000000000000000000000000000000");
+    proposal.createdAt = BigInt.fromI32(0);
+    proposal.expiresInQueueAt = BigInt.fromI32(0);
+    proposal.gpQueue = '';
+    proposal.dao = '';
+    proposal.genesisProtocolParams = '';
   }
 
   getProposalIPFSData(proposal);

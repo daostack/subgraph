@@ -37,7 +37,7 @@ export function updateThreshold(dao: string,
 
 export function create(dao: Address,
                        scheme: Address,
-                       paramsHash: Bytes ): void {
+                       paramsHash: Bytes): void {
    let contractInfo = ContractInfo.load(scheme.toHex());
    if (contractInfo ==  null) {
      return;

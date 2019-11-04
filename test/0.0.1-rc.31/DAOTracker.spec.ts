@@ -164,6 +164,11 @@ describe('DAOTracker', () => {
       owner: controller.options.address.toLowerCase(),
     });
 
+    if (isUController) {
+      // Add the new organization to the UController
+      await controller.methods.newOrganization(avatar.options.address).send();
+    }
+
     // Add a scheme
     await controller.methods.registerScheme(
       contributionReward.options.address,

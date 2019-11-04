@@ -616,7 +616,7 @@
         "contractName": "DAOTracker",
         "dao": "base",
         "mapping": "DAOTracker",
-        "arcVersion": "0.0.1-rc.29"
+        "arcVersion": "0.0.1-rc.31"
       }
     ]
   },

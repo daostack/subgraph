@@ -1,6 +1,6 @@
 const fs = require("fs");
 const yaml = require("js-yaml");
-const { migrationFileLocation: defaultMigrationFileLocation, network } = require("./settings");
+const { migrationFileLocation: defaultMigrationFileLocation, network, startBlock} = require("./settings");
 const {   subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
@@ -27,7 +27,8 @@ function daoYaml(contract, contractAddress, arcVersion) {
     network: `${network}`,
     source: {
       address: contractAddress,
-      abi: abis && abis.length ? abis[0] : contract
+      abi: abis && abis.length ? abis[0] : contract,
+      startBlock
     },
     mapping: {
       kind: "ethereum/events",

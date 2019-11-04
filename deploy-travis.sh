@@ -6,11 +6,13 @@ if [ ! -z "$access_token" ]; then
     # deploy mainnet
     export network="mainnet"
     export subgraph="daostack/master"
+    export start_block=7400000
     npm run deploy
 
     # deploy rinkeby
     export network="rinkeby"
     export subgraph="daostack/master_rinkeby"
+    start_block=0
     npm run deploy
 
     # Switch to staging key
@@ -22,10 +24,12 @@ if [ ! -z "$access_token" ]; then
     # deploy mainnet
     export network="mainnet"
     export subgraph="daostack/master"
+    start_block=7400000
     npm run deploy
 
     # deploy rinkeby
     export network="rinkeby"
     export subgraph="daostack/master_rinkeby"
+    start_block=0
     npm run deploy
 fi

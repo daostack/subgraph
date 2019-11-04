@@ -7,7 +7,7 @@ const UController = require('@daostack/arc/build/contracts/UController.json');
 const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
 const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
 const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
-const AbsoluteVote = require('@daostack/arc/build/contracts/AbsoluteVote.json');
+const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
 
 describe('DAOTracker', () => {
   let web3;
@@ -16,7 +16,7 @@ describe('DAOTracker', () => {
   let daoTracker;
   let uController;
   let contributionReward;
-  let absVote;
+  let genesisProtocol;
   let vmParamsHash;
   let schemeParamsHash;
 
@@ -27,15 +27,42 @@ describe('DAOTracker', () => {
     daoTracker = new web3.eth.Contract(DAOTracker.abi, addresses.DAOTracker, opts);
     uController = new web3.eth.Contract(UController.abi, addresses.UController, opts);
     contributionReward = new web3.eth.Contract(ContributionReward.abi, addresses.ContributionReward, opts);
-    absVote = await new web3.eth.Contract(AbsoluteVote.abi, undefined, opts)
-      .deploy({ data: AbsoluteVote.bytecode, arguments: [] })
-      .send();
+    genesisProtocol = await new web3.eth.Contract(GenesisProtocol.abi, addresses.GenesisProtocol, opts);
 
-    const vmSetParams = absVote.methods.setParameters(20, '0x0000000000000000000000000000000000000000');
+    const gpParams = {
+      queuedVoteRequiredPercentage: 50,
+      queuedVotePeriodLimit: 60,
+      boostedVotePeriodLimit: 5,
+      preBoostedVotePeriodLimit: 0,
+      thresholdConst: 2000,
+      quietEndingPeriod: 0,
+      proposingRepReward: 60,
+      votersReputationLossRatio: 10,
+      minimumDaoBounty: 15,
+      daoBountyConst: 10,
+      activationTime: 0,
+      voteOnBehalf: '0x0000000000000000000000000000000000000000',
+    };
+    const vmSetParams = genesisProtocol.methods.setParameters(
+      [
+        gpParams.queuedVoteRequiredPercentage,
+        gpParams.queuedVotePeriodLimit,
+        gpParams.boostedVotePeriodLimit,
+        gpParams.preBoostedVotePeriodLimit,
+        gpParams.thresholdConst,
+        gpParams.quietEndingPeriod,
+        gpParams.proposingRepReward,
+        gpParams.votersReputationLossRatio,
+        gpParams.minimumDaoBounty,
+        gpParams.daoBountyConst,
+        gpParams.activationTime,
+      ],
+      gpParams.voteOnBehalf,
+    );
     vmParamsHash = await vmSetParams.call();
     await vmSetParams.send();
 
-    const schemeSetParams = contributionReward.methods.setParameters(vmParamsHash, absVote.options.address);
+    const schemeSetParams = contributionReward.methods.setParameters(vmParamsHash, genesisProtocol.options.address);
     schemeParamsHash = await schemeSetParams.call();
     await schemeSetParams.send();
   });

@@ -10,7 +10,7 @@ import {
   BlacklistedDAO,
   DAOTrackerContract,
   ResetDAO as ResetDAOEntity,
-  UControllerOrganization
+  UControllerOrganization,
 } from '../../types/schema';
 import {
   Avatar_0_0_1_rc_31,

@@ -6,6 +6,7 @@ import {
   TrackDAO,
 } from '../../types/DAOTracker/DAOTracker';
 import {
+  AvatarContract,
   BlacklistedDAO,
   DAOTrackerContract,
   ResetDAO as ResetDAOEntity,
@@ -39,16 +40,8 @@ export function handleTrackDAO(event: TrackDAO): void {
   let _reputation = event.params._reputation;
   let _daoToken = event.params._daoToken;
 
-  /* TODO: uncomment when this issue is resolved https://github.com/graphprotocol/graph-node/issues/1333
-  // If the avatar hasn't been blacklisted
-  let daoTrackerSC = DAOTracker.bind(event.address);
-  if (daoTrackerSC.blacklisted(_avatar), 'latest') {
-    return;
-  }
-  */
-
   // If the avatar already exists, early out
-  if (store.get('AvatarContract', _avatar.toHex()) != null) {
+  if (AvatarContract.load(_avatar.toHex()) != null) {
     return;
   }
 

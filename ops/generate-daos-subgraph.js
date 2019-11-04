@@ -28,7 +28,7 @@ function daoYaml(contract, contractAddress, arcVersion) {
     source: {
       address: contractAddress,
       abi: abis && abis.length ? abis[0] : contract,
-      startBlock: startBlock
+      startBlock
     },
     mapping: {
       kind: "ethereum/events",

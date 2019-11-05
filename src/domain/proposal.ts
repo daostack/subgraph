@@ -1,8 +1,9 @@
-import { Address, BigDecimal, BigInt, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ControllerScheme, DAO, GenesisProtocolParam, Proposal, Tag } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
 import { getDAO, saveDAO } from './dao';
+import { addNewProposalEvent, addVoteFlipEvent } from './event';
 import { updateThreshold } from './gpqueue';
 import { getReputation } from './reputation';
 
@@ -38,6 +39,13 @@ export function getProposal(id: string): Proposal {
     proposal.scheme = null;
     proposal.descriptionHash = '';
     proposal.title = '';
+    proposal.proposer = Address.fromString('0x0000000000000000000000000000000000000000');
+    proposal.votingMachine = Address.fromString('0x0000000000000000000000000000000000000000');
+    proposal.createdAt = BigInt.fromI32(0);
+    proposal.expiresInQueueAt = BigInt.fromI32(0);
+    proposal.gpQueue = '';
+    proposal.dao = '';
+    proposal.genesisProtocolParams = '';
   }
 
   getProposalIPFSData(proposal);
@@ -101,6 +109,7 @@ export function updateProposalAfterVote(
   proposal: Proposal,
   gpAddress: Address,
   proposalId: Bytes,
+  timestamp: BigInt,
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let gpProposal = gp.proposals(proposalId);
@@ -108,8 +117,11 @@ export function updateProposalAfterVote(
   proposal.votingMachine = gpAddress;
   // proposal.winningVote
   proposal.winningOutcome = parseOutcome(gpProposal.value3);
-  if ((gpProposal.value2 === 6) && !equalStrings(proposal.winningOutcome, prevOutcome)) {
-    setProposalState(proposal, 6, gp.getProposalTimes(proposalId));
+  if (!equalStrings(proposal.winningOutcome, prevOutcome)) {
+    if ((gpProposal.value2 === 6)) {
+      setProposalState(proposal, 6, gp.getProposalTimes(proposalId));
+    }
+    addVoteFlipEvent(proposalId, proposal, timestamp);
   }
 }
 
@@ -280,6 +292,8 @@ export function updateGPProposal(
     controllerScheme.numberOfQueuedProposals = controllerScheme.numberOfQueuedProposals.plus(BigInt.fromI32(1));
     controllerScheme.save();
   }
+
+  addNewProposalEvent(proposalId, proposal, timestamp);
 
   saveProposal(proposal);
 }

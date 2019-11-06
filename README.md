@@ -1,6 +1,7 @@
 # DAOstack subgraph
 
 DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
+
 Our latest gratest [master branch subgraph](https://thegraph.com/explorer/subgraph/daostack/master).
 
 ## Getting started

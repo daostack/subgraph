@@ -2,6 +2,8 @@
 
 DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
 
+Our latest gratest [master branch subgraph](https://thegraph.com/explorer/subgraph/daostack/master).
+
 ## Getting started
 
 1. `git clone https://github.com/daostack/subgraph.git && cd subgraph`

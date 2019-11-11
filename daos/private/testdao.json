@@ -1,20 +1,20 @@
 {
-  "name": "Ubiquitous Sawfiler",
-  "Avatar": "0xb9e3Dd112BCc6e89546c46ABb1573cf9c62C3241",
-  "DAOToken": "0x22c38638aC5007e1De99fEAB20f664046cB42768",
-  "Reputation": "0xd5866DBDE071F070C254570d1BBbfE732860221e",
-  "Controller": "0x75FDc3D0415ac6EF34A4B619dc376aa0Bab66284",
+  "name": "Sagacious Senor",
+  "Avatar": "0x0d3B4393A6105ab549DE0c07b590245dbCf6C752",
+  "DAOToken": "0xCEE49e7eBB1A252A0194B19f1Eaa23a7641fCeFC",
+  "Reputation": "0xde51E943caC7450ADA3dC31A2b66D139aE57958b",
+  "Controller": "0x9B8dF962ac65Ff2C08803443Cdbf30B60c633DFC",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0xc1cDB5D4C5A3e6CAEa193c33219dB90f88eE7Bfc"
+      "address": "0xA03408EF1e3C6929e364Bd7db24F62D50842D7F3"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias2",
-      "address": "0xBC24D5E41c60DD605E24b5AAF7F6dDa6B9a7b5a6"
+      "address": "0x72D9Ca808747b01e97c38C9Fc95E99FdC0a8Ab1b"
     }
   ],
-  "arcVersion": "0.0.1-rc.31"
+  "arcVersion": "0.0.1-rc.32"
 }

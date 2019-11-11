@@ -31,6 +31,6 @@ services:
     environment:
       POSTGRES_PASSWORD: letmein
   ganache:
-    image: 'daostack/migration:0.0.1-rc.31-v0'
+    image: 'daostack/migration:0.0.1-rc.32-v0'
     ports:
       - '8545:8545'

@@ -610,6 +610,13 @@
         "dao": "base",
         "mapping": "Redeemer",
         "arcVersion": "0.0.1-rc.32"
+      },
+      {
+        "name": "DAOTracker",
+        "contractName": "DAOTracker",
+        "dao": "base",
+        "mapping": "DAOTracker",
+        "arcVersion": "0.0.1-rc.32"
       }
     ]
   },
@@ -824,6 +831,13 @@
         "dao": "base",
         "mapping": "GenesisProtocol",
         "arcVersion": "0.0.1-rc.24"
+      },
+      {
+        "name": "DAOTracker",
+        "contractName": "DAOTracker",
+        "dao": "base",
+        "mapping": "DAOTracker",
+        "arcVersion": "0.0.1-rc.32"
       }
     ]
   },
@@ -969,6 +983,13 @@
       "dao": "base",
       "mapping": "DAORegistry",
       "arcVersion": "0.0.1-rc.30"
+    },
+    {
+      "name": "DAOTracker",
+      "contractName": "DAOTracker",
+      "dao": "base",
+      "mapping": "DAOTracker",
+      "arcVersion": "0.0.1-rc.32"
     }
   ]
   }

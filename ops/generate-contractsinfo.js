@@ -67,9 +67,10 @@ async function generateContractInfo(opts={}) {
     buffer += "\nexport function setBlacklistedDAOs(): void {\n";
 
     blacklist.forEach(function(avatar) {
-      buffer += `    setBlacklistedDAO("${avatar.toLowerCase()}");\n`;
+      buffer += `    setBlacklistedDAO('${avatar.toLowerCase()}');\n`;
     });
 
+    buffer += "    return;\n";
     buffer += "}\n";
 
     fs.writeFileSync(

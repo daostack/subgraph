@@ -1,4 +1,5 @@
 import { Address } from '@graphprotocol/graph-ts';
+import { setBlacklistedDAOs } from '../../contractsInfo';
 import {
   DAOTracker,
   TrackDAO,
@@ -10,7 +11,6 @@ import {
   DAOTrackerContract,
   UControllerOrganization,
 } from '../../types/schema';
-import { setBlacklistedDAOs } from '../../contractsInfo';
 import { createTemplate, equalStrings, fetchTemplateName } from '../../utils';
 
 export function getDAOTrackerContract(address: Address): DAOTrackerContract {

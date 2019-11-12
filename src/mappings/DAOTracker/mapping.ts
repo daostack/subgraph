@@ -45,10 +45,12 @@ export function handleTrackDAO(event: TrackDAO): void {
 
   // If the sender of the 'track' call is the DaoCreator contract, use its arcVersion
   let daoCreatorInfo = ContractInfo.load(sender.toHex());
-  if (daoCreatorInfo != null) {
-    if (equalStrings(daoCreatorInfo.name, 'DaoCreator')) {
-      arcVersion = daoCreatorInfo.version;
-    }
+  if (daoCreatorInfo != null && equalStrings(daoCreatorInfo.name, 'DaoCreator')) {
+    arcVersion = daoCreatorInfo.version;
+  } else {
+    // We've chosen to disable tracking new DAOs that don't come from the DaoCreator,
+    // as it's a potential security vulnerability
+    return;
   }
 
   let avatarTemplate = fetchTemplateName('Avatar', arcVersion);

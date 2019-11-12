@@ -1,11 +1,8 @@
 import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
 
 const DAOTracker = require('@daostack/arc/build/contracts/DAOTracker.json');
+const DaoCreator = require('@daostack/arc/build/contracts/DaoCreator.json');
 const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
-const Controller = require('@daostack/arc/build/contracts/Controller.json');
-const UController = require('@daostack/arc/build/contracts/UController.json');
-const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
-const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
 const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
 const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
 
@@ -14,7 +11,7 @@ describe('DAOTracker', () => {
   let addresses;
   let opts;
   let daoTracker;
-  let uController;
+  let daoCreator;
   let contributionReward;
   let genesisProtocol;
   let vmParamsHash;
@@ -25,7 +22,7 @@ describe('DAOTracker', () => {
     addresses = getContractAddresses();
     opts = await getOptions(web3);
     daoTracker = new web3.eth.Contract(DAOTracker.abi, addresses.DAOTracker, opts);
-    uController = new web3.eth.Contract(UController.abi, addresses.UController, opts);
+    daoCreator = new web3.eth.Contract(DaoCreator.abi, addresses.DaoCreator, opts);
     contributionReward = new web3.eth.Contract(ContributionReward.abi, addresses.ContributionReward, opts);
     genesisProtocol = await new web3.eth.Contract(GenesisProtocol.abi, addresses.GenesisProtocol, opts);
 
@@ -68,34 +65,25 @@ describe('DAOTracker', () => {
   });
 
   const e2eControllerTest = async (isUController: boolean) => {
-    // Start deploying a new DAO
-    const nativeToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-      .deploy({ data: DAOToken.bytecode, arguments: [ 'Test Token', 'TST', '10000000000' ] })
-      .send();
+    const uControllerAddr = isUController ? addresses.UController : '0x0000000000000000000000000000000000000000';
 
-    const reputation = await new web3.eth.Contract(Reputation.abi, undefined, opts)
-      .deploy({ data: Reputation.bytecode, arguments: [] })
-      .send();
+    const tx = await daoCreator.methods.forgeOrg(
+      'Test DAO',
+      'Test Token',
+      'TST',
+      [opts.from],
+      [0],
+      [0],
+      uControllerAddr,
+      0,
+    ).send();
 
-    const avatar = await new web3.eth.Contract(Avatar.abi, undefined, opts)
-      .deploy({
-        data: Avatar.bytecode,
-        arguments: [ 'Test DAO', nativeToken.options.address, reputation.options.address ] })
-      .send();
+    const avatarAddress = tx.events.NewOrg.returnValues._avatar;
+    const avatar = await new web3.eth.Contract(Avatar.abi, avatarAddress, opts);
 
-    let controller;
-
-    if (!isUController) {
-      controller = await new web3.eth.Contract(Controller.abi, undefined, opts)
-        .deploy({ data: Controller.bytecode, arguments: [ avatar.options.address ] })
-        .send();
-    } else {
-      controller = uController;
-    }
-
-    // Add the new DAO to the DAOTracker
-    await daoTracker.methods.track(avatar.options.address, controller.options.address, '0.0.1-rc.32')
-      .send();
+    const nativeTokenAddress = await avatar.methods.nativeToken().call();
+    const reputationAddress = await avatar.methods.nativeReputation().call();
+    const controllerAddress = await avatar.methods.owner().call();
 
     const { daotrackerContract } = await sendQuery(`{
       daotrackerContract(id: "${daoTracker.options.address.toLowerCase()}") {
@@ -111,25 +99,20 @@ describe('DAOTracker', () => {
       owner: web3.eth.defaultAccount.toLowerCase(),
     });
 
-    // Finish setting up the new DAO, and verify the contract entities are added
-    await reputation.methods.transferOwnership(controller.options.address).send();
-
     const { reputationContract } = await sendQuery(`{
-      reputationContract(id: "${reputation.options.address.toLowerCase()}") {
+      reputationContract(id: "${reputationAddress.toLowerCase()}") {
         id
         address
       }
     }`, 5000);
 
     expect(reputationContract).toMatchObject({
-      id: reputation.options.address.toLowerCase(),
-      address: reputation.options.address.toLowerCase(),
+      id: reputationAddress.toLowerCase(),
+      address: reputationAddress.toLowerCase(),
     });
 
-    await nativeToken.methods.transferOwnership(controller.options.address).send();
-
     const { tokenContract } = await sendQuery(`{
-      tokenContract(id: "${nativeToken.options.address.toLowerCase()}") {
+      tokenContract(id: "${nativeTokenAddress.toLowerCase()}") {
         id
         address
         owner
@@ -137,12 +120,10 @@ describe('DAOTracker', () => {
     }`, 5000);
 
     expect(tokenContract).toMatchObject({
-      id: nativeToken.options.address.toLowerCase(),
-      address: nativeToken.options.address.toLowerCase(),
-      owner: controller.options.address.toLowerCase(),
+      id: nativeTokenAddress.toLowerCase(),
+      address: nativeTokenAddress.toLowerCase(),
+      owner: controllerAddress.toLowerCase(),
     });
-
-    await avatar.methods.transferOwnership(controller.options.address).send();
 
     const { avatarContract } = await sendQuery(`{
       avatarContract(id: "${avatar.options.address.toLowerCase()}") {
@@ -159,22 +140,18 @@ describe('DAOTracker', () => {
       id: avatar.options.address.toLowerCase(),
       address: avatar.options.address.toLowerCase(),
       name: 'Test DAO',
-      nativeToken: nativeToken.options.address.toLowerCase(),
-      nativeReputation: reputation.options.address.toLowerCase(),
-      owner: controller.options.address.toLowerCase(),
+      nativeToken: nativeTokenAddress.toLowerCase(),
+      nativeReputation: reputationAddress.toLowerCase(),
+      owner: controllerAddress.toLowerCase(),
     });
 
-    if (isUController) {
-      // Add the new organization to the UController
-      await controller.methods.newOrganization(avatar.options.address).send();
-    }
-
     // Add a scheme
-    await controller.methods.registerScheme(
-      contributionReward.options.address,
-      schemeParamsHash,
-      '0x0000001F',
-      avatar.options.address,
+    await daoCreator.methods.setSchemes(
+      avatarAddress,
+      [contributionReward.options.address],
+      [schemeParamsHash],
+      ['0x0000001F'],
+      '',
     ).send();
 
     // Ensure the scheme is in the subgraph
@@ -218,13 +195,13 @@ describe('DAOTracker', () => {
       id: avatar.options.address.toLowerCase(),
       name: 'Test DAO',
       nativeToken: {
-        id: nativeToken.options.address.toLowerCase(),
+        id: nativeTokenAddress.toLowerCase(),
         dao: {
           id: avatar.options.address.toLowerCase(),
         },
       },
       nativeReputation: {
-        id: reputation.options.address.toLowerCase(),
+        id: reputationAddress.toLowerCase(),
         dao: {
           id: avatar.options.address.toLowerCase(),
         },

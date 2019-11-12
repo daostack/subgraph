@@ -1,5 +1,4 @@
 const fs = require("fs-extra");
-const path = require("path");
 
 /**
  * Fetch all abis from @daostack/migration into the `abis` folder.

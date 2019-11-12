@@ -1,5 +1,4 @@
 const fs = require("fs");
-const path = require("path");
 
 function versionToNum(version) {
   const strlen = version.length;
@@ -8,7 +7,7 @@ function versionToNum(version) {
 
 function forEachTemplate(callback) {
   const templates = require("./templates.json").templates;
-  const abiDirectories = fs.readdirSync("abis", { withFileTypes: true })
+  const abiDirectories = fs.readdirSync(`${__dirname}/../abis`, { withFileTypes: true })
         .filter(dirent => dirent.isDirectory())
         .map(dirent => dirent.name);
 

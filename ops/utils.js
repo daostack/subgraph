@@ -8,8 +8,8 @@ function versionToNum(version) {
 }
 
 function forEachTemplate(callback) {
-  const templates = JSON.parse(fs.readFileSync(`${currentDir}/templates.json`, "utf-8")).templates;
-  const abiDirectories = fs.readdirSync(`${currentDir}/../abis/`, { withFileTypes: true })
+  const templates = require("./templates.json").templates;
+  const abiDirectories = fs.readdirSync(`${currentDir}/../abis`, { withFileTypes: true })
         .filter(dirent => dirent.isDirectory())
         .map(dirent => dirent.name);
 

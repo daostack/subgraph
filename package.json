@@ -18,7 +18,7 @@
     "deploy": "rm -rf src/types && node ops/setup-env.js",
     "deploy:watch": "npm run deploy -- --watch",
     "docker:stop": "docker-compose down -v",
-    "docker:run": "node ops/set-docker-network.js private && docker-compose up",
+    "docker:run": "node ops/set-docker-network.js private && docker-compose up -d",
     "docker:run-kovan": "node ops/set-docker-network.js kovan && docker-compose up -d",
     "docker:run-rinkeby": "node ops/set-docker-network.js rinkeby && docker-compose up -d",
     "docker:run-mainnet": "node ops/set-docker-network.js mainnet && docker-compose up -d",

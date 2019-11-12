@@ -94,7 +94,7 @@ describe('DAOTracker', () => {
     }
 
     // Add the new DAO to the DAOTracker
-    await daoTracker.methods.track(avatar.options.address, controller.options.address)
+    await daoTracker.methods.track(avatar.options.address, controller.options.address, '0.0.1-rc.32')
       .send();
 
     const { daotrackerContract } = await sendQuery(`{

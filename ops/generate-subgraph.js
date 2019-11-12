@@ -3,6 +3,7 @@ const path = require("path")
 const yaml = require("js-yaml");
 const { migrationFileLocation: defaultMigrationFileLocation,
 network ,startBlock} = require("./settings");
+const { versionToNum, forEachTemplate } = require("./utils");
 const mappings = require("./mappings.json")[network].mappings;
 const { subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 
@@ -16,7 +17,6 @@ async function generateSubgraph(opts={}) {
   opts.subgraphLocation = opts.subgraphLocation || defaultSubgraphLocation;
   const addresses = JSON.parse(fs.readFileSync(migrationFile, "utf-8"));
   const missingAddresses = {};
-  const templateDefinitions = {};
 
   // Filter out 0.0.1-rc.18 & 0.0.1-rc.17
   const latestMappings = mappings.filter(mapping =>
@@ -26,7 +26,7 @@ async function generateSubgraph(opts={}) {
 
   // Build our subgraph's datasources from the mapping fragments
   const dataSources = combineFragments(
-    latestMappings, false, addresses, missingAddresses, templateDefinitions
+    latestMappings, false, addresses, missingAddresses
   ).filter(el => el != null);
 
   // Throw an error if there are contracts that're missing an address
@@ -39,11 +39,13 @@ async function generateSubgraph(opts={}) {
     throw Error(`The following contracts are missing addresses: ${missing.toString()}`);
   }
 
+  const templates = buildTemplates();
+
   const subgraph = {
     specVersion: "0.0.1",
     schema: { file: "./schema.graphql" },
     dataSources,
-    templates: Object.values(templateDefinitions)
+    templates
   };
 
   fs.writeFileSync(
@@ -53,23 +55,21 @@ async function generateSubgraph(opts={}) {
   );
 }
 
-function combineFragments(fragments, isTemplate, addresses, missingAddresses, templateDefinitions) {
+function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
   let ids = [];
   return fragments.map(mapping => {
     const contract = mapping.name;
     const version = mapping.arcVersion;
     const fragment = `${__dirname}/../src/mappings/${mapping.mapping}/datasource.yaml`;
-    var abis, entities, eventHandlers, templates, file, yamlLoad, abi;
+    var abis, entities, eventHandlers, file, yamlLoad, abi;
 
     if (fs.existsSync(fragment)) {
       yamlLoad = yaml.safeLoad(fs.readFileSync(fragment, "utf-8"));
       file = `${__dirname}/../src/mappings/${mapping.mapping}/mapping.ts`;
       eventHandlers = yamlLoad.eventHandlers;
       entities = yamlLoad.entities;
-      templates = yamlLoad.templates;
       abis = (yamlLoad.abis || [contract]).map(contractName => {
-        const strlen = version.length
-        const versionNum = Number(version.slice(strlen - 2, strlen));
+        const versionNum = versionToNum(version);
 
         if ((versionNum < 24) && (contractName === "UGenericScheme")) {
           return {
@@ -155,29 +155,29 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses, te
       }
     };
 
-    // If this datasource is requesting templates,
-    // build their definition if we haven't already
-    if (templates && templates.length) {
-      templates.forEach((template) => {
-        const { mapping, version } = template;
-        const name = `${mapping}${version}`
-
-        // If we haven't processed it already
-        if (templateDefinitions[name] === undefined) {
-          // Avoid infinite recursion
-          templateDefinitions[name] = {};
-          // Reuse this logic with the template requested
-          templateDefinitions[name] = combineFragments([{
-            name: mapping,
-            mapping: mapping,
-            arcVersion: version
-          }], true, addresses, missingAddresses)[0];
-        }
-      });
-    }
-
     return result;
   });
+}
+
+function buildTemplates() {
+  let results = [];
+
+  forEachTemplate((name, mapping, arcVersion) => {
+    results.push(
+      ...combineFragments(
+        [{
+          name,
+          mapping,
+          arcVersion
+        }],
+        true,
+        undefined,
+        undefined
+      )
+    );
+  });
+
+  return results;
 }
 
 if (require.main === module) {

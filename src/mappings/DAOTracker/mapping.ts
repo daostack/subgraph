@@ -8,17 +8,12 @@ import {
 import {
   AvatarContract,
   BlacklistedDAO,
+  ContractInfo,
   DAOTrackerContract,
   ResetDAO as ResetDAOEntity,
   UControllerOrganization,
 } from '../../types/schema';
-import {
-  Avatar_0_0_1_rc_31,
-  Controller_0_0_1_rc_31,
-  DAOToken_0_0_1_rc_31,
-  Reputation_0_0_1_rc_31,
-} from '../../types/templates';
-import { equalStrings } from '../../utils';
+import { createTemplate, equalStrings, fetchTemplateName } from '../../utils';
 
 export function getDAOTrackerContract(address: Address): DAOTrackerContract {
   let daoTracker = DAOTrackerContract.load(address.toHex()) as DAOTrackerContract;
@@ -40,21 +35,51 @@ export function handleTrackDAO(event: TrackDAO): void {
   let controller = event.params._controller;
   let reputation = event.params._reputation;
   let daoToken = event.params._daoToken;
+  let sender = event.params._sender;
+  let arcVersion = event.params._arcVersion;
 
   // If the avatar already exists, early out
   if (AvatarContract.load(avatar.toHex()) != null) {
     return;
   }
 
+  // If the sender of the 'track' call is the DaoCreator contract, use its arcVersion
+  let daoCreatorInfo = ContractInfo.load(sender.toHex());
+  if (daoCreatorInfo != null) {
+    if (equalStrings(daoCreatorInfo.name, 'DaoCreator')) {
+      arcVersion = daoCreatorInfo.version;
+    }
+  }
+
+  let avatarTemplate = fetchTemplateName('Avatar', arcVersion);
+  let controllerTemplate = fetchTemplateName('Controller', arcVersion);
+  let reputationTemplate = fetchTemplateName('Reputation', arcVersion);
+  let daoTokenTemplate = fetchTemplateName('DAOToken', arcVersion);
+
+  let missingTemplate = avatarTemplate == null ||
+                        reputationTemplate == null ||
+                        daoTokenTemplate == null;
+
+  let universalController = UControllerOrganization.load(controller.toHex()) != null;
+
+  if (universalController) {
+    missingTemplate = missingTemplate || controllerTemplate == null;
+  }
+
+  if (missingTemplate) {
+    // We're missing a template version in the subgraph
+    return;
+  }
+
   // Tell the subgraph to start indexing events from the:
   // Avatar, Controller, DAOToken, and Reputation contracts
-  Avatar_0_0_1_rc_31.create(avatar);
-  Reputation_0_0_1_rc_31.create(reputation);
-  DAOToken_0_0_1_rc_31.create(daoToken);
+  createTemplate(avatarTemplate, avatar);
+  createTemplate(reputationTemplate, reputation);
+  createTemplate(daoTokenTemplate, daoToken);
 
   // Track the Controller if it isn't a UController we're already tracking
-  if (UControllerOrganization.load(controller.toHex()) == null) {
-    Controller_0_0_1_rc_31.create(controller);
+  if (universalController === false) {
+    createTemplate(controllerTemplate, controller);
   }
 
   // Note, no additional work is needed here because...

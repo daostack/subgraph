@@ -1,8 +1,8 @@
 const fs = require("fs");
-const yaml = require("js-yaml");
 const { migrationFileLocation: defaultMigrationFileLocation, network } = require("./settings");
+const { forEachTemplate } = require("./utils");
 const path = require("path");
-const currentDir = path.resolve(`${__dirname}`)
+const currentDir = path.resolve(`${__dirname}`);
 
 /**
  * Generate a `src/contractinfo.js` file from `migration.json`
@@ -20,7 +20,7 @@ async function generateContractInfo(opts={}) {
   const migration = JSON.parse(fs.readFileSync(require.resolve(opts.migrationFile), "utf-8"));
 
   let versions = migration[network].base
-  let buffer = "import { setContractInfo } from './utils';\n";
+  let buffer = "import { setContractInfo, setTemplateInfo } from './utils';\n";
   buffer += "// this code was generated automatically . please not edit it -:)\n";
   buffer += "/* tslint:disable:max-line-length */\n";
 
@@ -51,6 +51,15 @@ async function generateContractInfo(opts={}) {
          }
       }
     });
+    buffer += "}\n";
+
+    buffer += "\nexport function setTemplatesInfo(): void {\n";
+
+    forEachTemplate((name, mapping, arcVersion) => {
+      const templateName = arcVersion.replace(/\.|-/g, '_');
+      buffer += `    setTemplateInfo('${name}', '${arcVersion}', '${name}_${templateName}');\n`;
+    });
+
     buffer += "}\n";
 
     fs.writeFileSync(

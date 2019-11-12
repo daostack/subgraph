@@ -199,6 +199,11 @@ type ContractInfo @entity {
 	address: Bytes!
 }
 
+type TemplateInfo @entity {
+	id: ID!
+	templateName: String!
+}
+
 type Event @entity {
 	id: ID!
 	type: EventType!

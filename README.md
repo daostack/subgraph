@@ -72,12 +72,6 @@ In order to add support for a new contract follow these steps:
          list of entities that are written by the the mapping.
       3. [`eventHandlers`](https://github.com/graphprotocol/graph-node/blob/master/docs/subgraph-manifest.md#1522-eventhandler) -
          map of solidity event signatures to event handlers in mapping code.
-      4. [`templates`]([https://](https://github.com/graphprotocol/graph-node/blob/master/docs/subgraph-manifest.md#17-dynamicdatasource)) - list of datasource mappings that are created by the mapping. Each template entry refers to a mapping name, and a version to be used with that mapping. Example:
-      ```yaml
-      templates:
-         - mapping: Avatar
-           version: 0.0.1-rc.31
-      ```
    4. `test/integration/<contract name>.spec.ts`
 
 3. Add your contract to `ops/mappings.json`. Under the JSON object for the network your contract is located at, under the `"mappings"` JSON array, add the following.
@@ -111,6 +105,24 @@ In order to add support for a new contract follow these steps:
 ## Add a new dao tracker
 
 To index a DAO please follow the instructions here: [https://github.com/daostack/subgraph/blob/master/documentations/Deployment.md#indexing-a-new-dao](https://github.com/daostack/subgraph/blob/master/documentations/Deployment.md#indexing-a-new-dao)
+
+## Add a new datasource template
+
+Datasource templates allow you to index blockchain data from addresses the subgraph finds out about at runtime. This is used to dynamically index newly deployed DAOs. To add a new contract ABI that can be used as a template within your mappings, modify the `ops/templates.json` file like so:
+
+```json
+{
+   "templates": [
+      ...,
+      {
+         "name": "<contract name as appears in `abis/arcVersion` folder>",
+         "mapping": "<name of the `src/mappings/...` folder to be used with this contract>",
+         "start_arcVersion": "<contract arc version under which the abi is located in the `abis` folder>",
+         "end_arcVersion": "(optional) <contract arc version under which the abi is located in the `abis` folder> if not given, all future versions of this `name`'s contract ABI will be added as a template for this mapping"
+      }
+   ]
+}
+```
 
 ## Deploy Subgraph
 

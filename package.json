@@ -24,7 +24,7 @@
     "docker:run-mainnet": "node ops/set-docker-network.js mainnet && docker-compose up -d",
     "docker:rebuild": "docker-compose build",
     "docker:logs": "docker-compose logs --follow",
-    "jest": "jest --runInBand --forceExit ./test/0.0.1-rc.32/",
+    "jest": "jest --runInBand --forceExit",
     "lint": "tslint -c tslint.json 'src//**/*.ts' -e 'src//types/**/*.ts' && tslint -c tslint.json 'test/**/*.ts'",
     "migrate": "node ops/migrate.js",
     "test": "npm run deploy && jest --runInBand --forceExit",

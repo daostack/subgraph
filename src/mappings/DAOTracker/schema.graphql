@@ -2,20 +2,8 @@ type DAOTrackerContract @entity {
   id: ID!
   address: Bytes!
   owner: Bytes!
-  blacklisted: [BlacklistedDAO!] @derivedFrom(field: "tracker")
 }
 
 type BlacklistedDAO @entity {
   id: ID!
-  address: Bytes!
-  tracker: DAOTrackerContract!
-  explanationHash: String!
-  explanation: String
-}
-
-type ResetDAO @entity {
-  id: ID!
-  address: Bytes!
-  explanationHash: String!
-  explanation: String
 }

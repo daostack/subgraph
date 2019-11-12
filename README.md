@@ -165,3 +165,16 @@ The docker images are available as:
 
 `daostack/subgraph-postgres:${network}-${migration-version}-${subgraph-version}`
 `daostack/subgraph-ipfs:${network}-${migration-version}-${subgraph-version}`
+
+## Blacklist a malicious DAO
+Add the DAO's Avatar address to the `ops/blacklist.json` file in the proper network array. For example, blacklisting `0xF7074b67B4B7830694a6f58Df06375F00365d2c2` on mainnet would look like:
+```json
+{
+  "private": [],
+  "kovan": [],
+  "rinkeby": [],
+  "mainnet": [
+     "0xF7074b67B4B7830694a6f58Df06375F00365d2c2"
+  ]
+}
+```

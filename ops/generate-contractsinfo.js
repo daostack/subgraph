@@ -20,8 +20,8 @@ async function generateContractInfo(opts={}) {
   const migration = JSON.parse(fs.readFileSync(require.resolve(opts.migrationFile), "utf-8"));
 
   let versions = migration[network].base
-  let buffer = "import { setContractInfo, setTemplateInfo } from './utils';\n";
-  buffer += "// this code was generated automatically . please not edit it -:)\n";
+  let buffer = "import {\n  setBlacklistedDAO,\n  setContractInfo,\n  setTemplateInfo,\n} from './utils';\n";
+  buffer += "\n// this code was generated automatically . please not edit it -:)\n";
   buffer += "/* tslint:disable:max-line-length */\n";
 
   buffer += "export function setContractsInfo(): void {\n";
@@ -58,6 +58,16 @@ async function generateContractInfo(opts={}) {
     forEachTemplate((name, mapping, arcVersion) => {
       const templateName = arcVersion.replace(/\.|-/g, '_');
       buffer += `    setTemplateInfo('${name}', '${arcVersion}', '${name}_${templateName}');\n`;
+    });
+
+    buffer += "}\n";
+
+    const blacklist = require("./blacklist.json")[network];
+
+    buffer += "\nexport function setBlacklistedDAOs(): void {\n";
+
+    blacklist.forEach(function(avatar) {
+      buffer += `    setBlacklistedDAO("${avatar.toLowerCase()}");\n`;
     });
 
     buffer += "}\n";

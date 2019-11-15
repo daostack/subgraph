@@ -208,7 +208,6 @@ export function handleRegisterScheme(avatar: Address,
   );
   if (isFirstRegister == null) {
     setContractsInfo();
-    setTemplatesInfo();
     let dao = daoModule.insertNewDAO(avatar, nativeTokenAddress , nativeReputationAddress);
     insertToken(hexToAddress(dao.nativeToken), avatar.toHex());
     insertReputation(

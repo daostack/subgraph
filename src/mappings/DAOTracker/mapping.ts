@@ -1,5 +1,9 @@
 import { Address } from '@graphprotocol/graph-ts';
-import { setBlacklistedDAOs } from '../../contractsInfo';
+import {
+  setBlacklistedDAOs,
+  setContractsInfo,
+  setTemplatesInfo,
+} from '../../contractsInfo';
 import {
   DAOTracker,
   TrackDAO,
@@ -22,6 +26,8 @@ export function getDAOTrackerContract(address: Address): DAOTrackerContract {
     daoTracker.owner = daoTrackerSC.owner();
     daoTracker.save();
     setBlacklistedDAOs();
+    setContractsInfo();
+    setTemplatesInfo();
   }
   return daoTracker;
 }
@@ -68,7 +74,7 @@ export function handleTrackDAO(event: TrackDAO): void {
 
   let universalController = UControllerOrganization.load(controller.toHex()) != null;
 
-  if (universalController) {
+  if (universalController === false) {
     missingTemplate = missingTemplate || controllerTemplate == null;
   }
 

@@ -1,5 +1,6 @@
 type GenericSchemeProposal @entity {
     id: ID!
+    meta: String
  	dao: DAO!
  	contractToCall: Bytes!
     callData: Bytes!

@@ -48,6 +48,6 @@ export function handleProposalExecuted(
     ent.executed = true;
     ent.returnValue = event.params._genericCallReturnValue;
   }
-
+  ent.meta = 'Hello world'
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);
 }

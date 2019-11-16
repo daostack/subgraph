@@ -11,7 +11,7 @@ const ActionMock = require('@daostack/arc/build/contracts/ActionMock.json');
 const GenericScheme = require('@daostack/arc/build/contracts/UGenericScheme.json');
 const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
 
-describe('UGeneric Signal Scheme', () => {
+describe('Generic Signal Scheme', () => {
   let web3;
   let addresses;
   let opts;
@@ -43,7 +43,7 @@ describe('UGeneric Signal Scheme', () => {
     );
 
     let proposalIPFSData = {
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nWhat is Lorem Ipsum?\nFrom its medieval origins to the digital era, learn everything there is to know about the ubiquitous lorem ipsum passage.\n\nLorem ipsum used in a magazine layout\nMAGAZINE LAYOUT WITH LOREM IPSUM\nHISTORY, PURPOSE AND USAGE\nLorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero\'s De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with:',
+      description: 'Key Values Here',
       title: 'My Title!',
       url: 'http://swift.org/modest',
     };
@@ -104,6 +104,10 @@ describe('UGeneric Signal Scheme', () => {
       }
   }`;
 
+  // const getproposalmeta = `{
+  //   GenericSignal
+  // }`;
+
   //   const metadata  = `{
   //     Metadata(where: {address: "${addresses.GenesisProtocol.toLowerCase()}"}) {
   //     data
@@ -113,88 +117,91 @@ describe('UGeneric Signal Scheme', () => {
     // let resmetadata = await sendQuery(metadata)
     let proposalprint = await sendQuery(getProposal);
     console.log(proposalprint);
+    // let proposalprintsignal = await sendQuery(getproposalmeta);
+    // console.log(proposalprintsignal);
 
+    let proposal = (await sendQuery(getProposal)).proposal;
+    expect(proposal).toMatchObject({
+      id: p1,
+      descriptionHash: descHash,
+      stage: 'Queued',
+      createdAt: p1Creation.toString(),
+      executedAt: null,
+      proposer: web3.eth.defaultAccount.toLowerCase(),
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
 
-    // let proposal = (await sendQuery(getProposal)).proposal;
-    // expect(proposal).toMatchObject({
-    //   id: p1,
-    //   descriptionHash: descHash,
-    //   stage: 'Queued',
-    //   createdAt: p1Creation.toString(),
-    //   executedAt: null,
-    //   proposer: web3.eth.defaultAccount.toLowerCase(),
-    //   votingMachine: genesisProtocol.options.address.toLowerCase(),
-    //
-    //   genericScheme: {
-    //     id: p1,
-    //     dao: {
-    //       id: addresses.TestAvatar.toLowerCase(),
-    //     },
-    //     contractToCall: actionMock.options.address.toLowerCase(),
-    //     callData,
-    //     value: '0',
-    //     executed: false,
-    //     returnValue: null,
-    //   },
-    //   scheme: {
-    //     uGenericSchemeParams: {
-    //       contractToCall: actionMock.options.address.toLowerCase(),
-    //     },
-    //   },
-    // });
-    //
-    // await vote({
-    //   proposalId: p1,
-    //   outcome: PASS,
-    //   voter: accounts[0].address,
-    // });
-    //
-    // await vote({
-    //   proposalId: p1,
-    //   outcome: PASS,
-    //   voter: accounts[1].address,
-    // });
-    //
-    // await vote({
-    //   proposalId: p1,
-    //   outcome: PASS,
-    //   voter: accounts[2].address,
-    // });
-    //
-    // let executedAt = await vote({
-    //   proposalId: p1,
-    //   outcome: PASS,
-    //   voter: accounts[3].address,
-    // });
-    //
-    // const executedIsIndexed = async () => {
-    //   return (await sendQuery(getProposal)).proposal.executedAt != null;
-    // };
-    //
-    // await waitUntilTrue(executedIsIndexed);
-    //
-    // proposal = (await sendQuery(getProposal)).proposal;
-    // expect(proposal).toMatchObject({
-    //   id: p1,
-    //   descriptionHash: descHash,
-    //   stage: 'Executed',
-    //   createdAt: p1Creation.toString(),
-    //   executedAt: executedAt + '',
-    //   proposer: web3.eth.defaultAccount.toLowerCase(),
-    //   votingMachine: genesisProtocol.options.address.toLowerCase(),
-    //
-    //   genericScheme: {
-    //     id: p1,
-    //     dao: {
-    //       id: addresses.TestAvatar.toLowerCase(),
-    //     },
-    //     contractToCall: actionMock.options.address.toLowerCase(),
-    //     callData,
-    //     value: '0',
-    //     executed: true,
-    //     returnValue: '0x0000000000000000000000000000000000000000000000000000000000000001',
-    //   },
-    // });
+      genericScheme: {
+        id: p1,
+        meta: null,
+        dao: {
+          id: addresses.TestAvatar.toLowerCase(),
+        },
+        contractToCall: actionMock.options.address.toLowerCase(),
+        callData,
+        value: '0',
+        executed: false,
+        returnValue: null,
+      },
+      scheme: {
+        uGenericSchemeParams: {
+          contractToCall: actionMock.options.address.toLowerCase(),
+        },
+      },
+    });
+
+    await vote({
+      proposalId: p1,
+      outcome: PASS,
+      voter: accounts[0].address,
+    });
+
+    await vote({
+      proposalId: p1,
+      outcome: PASS,
+      voter: accounts[1].address,
+    });
+
+    await vote({
+      proposalId: p1,
+      outcome: PASS,
+      voter: accounts[2].address,
+    });
+
+    let executedAt = await vote({
+      proposalId: p1,
+      outcome: PASS,
+      voter: accounts[3].address,
+    });
+
+    const executedIsIndexed = async () => {
+      return (await sendQuery(getProposal)).proposal.executedAt != null;
+    };
+
+    await waitUntilTrue(executedIsIndexed);
+
+    proposal = (await sendQuery(getProposal)).proposal;
+    expect(proposal).toMatchObject({
+      id: p1,
+      descriptionHash: descHash,
+      stage: 'Executed',
+      createdAt: p1Creation.toString(),
+      executedAt: executedAt + '',
+      proposer: web3.eth.defaultAccount.toLowerCase(),
+      votingMachine: genesisProtocol.options.address.toLowerCase(),
+
+      genericScheme: {
+        id: p1,
+        meta: 'Hello world',
+        dao: {
+          id: addresses.TestAvatar.toLowerCase(),
+        },
+        contractToCall: actionMock.options.address.toLowerCase(),
+        callData,
+        value: '0',
+        executed: true,
+        returnValue: '0x0000000000000000000000000000000000000000000000000000000000000001',
+      },
+    });
 
   }, 100000);
 });

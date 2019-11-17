@@ -3,6 +3,7 @@ abis:
   - GenesisProtocol
 entities:
   - GenericSchemeProposal
+  - GenericSignal
 eventHandlers:
   - event: ProposalExecuted(indexed address,indexed bytes32,bytes)
     handler: handleProposalExecuted

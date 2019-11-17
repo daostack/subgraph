@@ -114,12 +114,10 @@ describe('Generic Signal Scheme', () => {
   //   }
   // }`;
 
-    // let resmetadata = await sendQuery(metadata)
-    let proposalprint = await sendQuery(getProposal);
-    console.log(proposalprint);
-    // let proposalprintsignal = await sendQuery(getproposalmeta);
-    // console.log(proposalprintsignal);
-
+    // let proposalprint = await sendQuery(getProposal);
+    // console.log(proposalprint);
+    //
+    //
     let proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
@@ -202,6 +200,14 @@ describe('Generic Signal Scheme', () => {
         returnValue: '0x0000000000000000000000000000000000000000000000000000000000000001',
       },
     });
+
+    const metadata = await sendQuery(`{
+      GenericSignal(id: 1){
+        id
+        meta
+      }
+    }`, 5000);
+    console.log(metadata);
 
   }, 100000);
 });

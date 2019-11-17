@@ -12,6 +12,7 @@ import * as domain from '../../domain';
 // Import entity types generated from the GraphQL schema
 import {
   GenericSchemeProposal,
+  GenericSignal,
 } from '../../types/schema';
 
 function insertNewProposal(event: NewCallProposal): void {
@@ -49,5 +50,11 @@ export function handleProposalExecuted(
     ent.returnValue = event.params._genericCallReturnValue;
   }
   ent.meta = 'Hello world'
+
+  //let id = event.params._proposalId.toHex();
+  var id:string = "1"
+  let entsignal = new GenericSignal(id);
+  entsignal.meta = 'meta testprint';
+  store.set('GenericSignal', id, entsignal);
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);
 }

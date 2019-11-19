@@ -1,19 +1,19 @@
 {
-  "name": "Obtuse Chair",
-  "Avatar": "0x42C5d44Dfe7Cfe7A437c622941002c8a59796c26",
-  "DAOToken": "0x97d3dB2767855540b5e290E4Fa931950853875F8",
-  "Reputation": "0xb30796E3d96aA720F7c478e32eCD8a7c97335f54",
-  "Controller": "0x5a4509d679F1022bBDbe41ea4E85d7FA9eEBD0f8",
+  "name": "Invidious Banjo",
+  "Avatar": "0x15A953f6c131da39A97E220D3e7d09499c554d67",
+  "DAOToken": "0x5a4509d679F1022bBDbe41ea4E85d7FA9eEBD0f8",
+  "Reputation": "0x5087ee89F225e2938cFae8D61Ca6f137bdA8209A",
+  "Controller": "0x3fD705AB5958156584D84509216A92E167E15109",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0xc78875845e0883BCD7ed2f6dC0D44CE18A657480"
+      "address": "0x8367c8d334A9B2bc357C46cA3712331b99179a6d"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias2",
-      "address": "0x767966a6AE71e8E2958BDd8Cc14469a2390c20B7"
+      "address": "0x4845BEAd787ACeAc404Fce7F408B655a7ed39fC5"
     }
   ],
   "arcVersion": "0.0.1-rc.33"

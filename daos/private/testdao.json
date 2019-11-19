@@ -1,20 +1,20 @@
 {
-  "name": "Obtuse Artisan",
-  "Avatar": "0x0d3B4393A6105ab549DE0c07b590245dbCf6C752",
-  "DAOToken": "0xCEE49e7eBB1A252A0194B19f1Eaa23a7641fCeFC",
-  "Reputation": "0xde51E943caC7450ADA3dC31A2b66D139aE57958b",
-  "Controller": "0x9B8dF962ac65Ff2C08803443Cdbf30B60c633DFC",
+  "name": "Obtuse Chair",
+  "Avatar": "0x42C5d44Dfe7Cfe7A437c622941002c8a59796c26",
+  "DAOToken": "0x97d3dB2767855540b5e290E4Fa931950853875F8",
+  "Reputation": "0xb30796E3d96aA720F7c478e32eCD8a7c97335f54",
+  "Controller": "0x5a4509d679F1022bBDbe41ea4E85d7FA9eEBD0f8",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0xA03408EF1e3C6929e364Bd7db24F62D50842D7F3"
+      "address": "0xc78875845e0883BCD7ed2f6dC0D44CE18A657480"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias2",
-      "address": "0x72D9Ca808747b01e97c38C9Fc95E99FdC0a8Ab1b"
+      "address": "0x767966a6AE71e8E2958BDd8Cc14469a2390c20B7"
     }
   ],
-  "arcVersion": "0.0.1-rc.32"
+  "arcVersion": "0.0.1-rc.33"
 }

@@ -8,8 +8,3 @@ type GenericSchemeProposal @entity {
     executed: Boolean!
     returnValue: Bytes
 }
-
-type GenericSignal @entity {
-    id: ID!
-    meta: String
-}

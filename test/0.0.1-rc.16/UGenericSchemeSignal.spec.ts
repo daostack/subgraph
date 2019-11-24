@@ -73,7 +73,7 @@ describe('Generic Signal Scheme', () => {
     }
 
     const { proposalId: p1, timestamp: p1Creation } = await propose();
-
+    //console.log(p1)
     const getProposal = `{
       proposal(id: "${p1}") {
           id
@@ -104,20 +104,24 @@ describe('Generic Signal Scheme', () => {
       }
   }`;
 
-  // const getproposalmeta = `{
-  //   GenericSignal
+  // const gettestgeneric = `{
+  //   genericScheme(id: "${p1}") {
+  //     id
+  //     meta
+  //     dao {
+  //        id
+  //     }
+  //     contractToCall
+  //     callData
+  //     value
+  //     executed
+  //     returnValue
+  //     }
   // }`;
+  //
+  //   let proposalprint = await sendQuery(gettestgeneric);
+  //   console.log(proposalprint);
 
-  //   const metadata  = `{
-  //     Metadata(where: {address: "${addresses.GenesisProtocol.toLowerCase()}"}) {
-  //     data
-  //   }
-  // }`;
-
-    // let proposalprint = await sendQuery(getProposal);
-    // console.log(proposalprint);
-    //
-    //
     let proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
       id: p1,
@@ -201,13 +205,58 @@ describe('Generic Signal Scheme', () => {
       },
     });
 
-    const metadata = await sendQuery(`{
-      GenericSignal(id: 1){
+    // const daodata = await sendQuery(`{
+    //   Metadata(id: test) {
+    //     id
+    //     meta
+    //   }
+    // }`);
+    // console.log(daodata)
+    // const metaq = `{
+    //   Signal(id: 0){
+    //     id
+    //     data
+    //   }
+    // }`
+    // const metaq = `{
+    //   debug(id: "0"){
+    //     id
+    //     message
+    //   }
+    // }`
+    const metaq = `{
+      debugs{
         id
-        meta
+        message
       }
-    }`, 5000);
+    }`
+
+    const metadata = await sendQuery(metaq, 5000);
     console.log(metadata);
+
+
+
+    // const metadata1 = await sendQuery(`{
+    //   genericSchemes {
+    //     id
+    //     meta
+    //     dao {
+    //        id
+    //     }
+    //     contractToCall
+    //     callData
+    //     value
+    //     executed
+    //     returnValue
+    //   }
+    //   scheme {
+    //     uGenericSchemeParams {
+    //       contractToCall
+    //     }
+    //   }
+    // }`, 5000);
+    // let metaproposal = (await sendQuery(getProposal))
+    // console.log(metaproposal);
 
   }, 100000);
 });

@@ -1,4 +1,5 @@
 import { store } from '@graphprotocol/graph-ts';
+import { debug } from '../../utils';
 
 // Import event types from the Reputation contract ABI
 import {
@@ -12,7 +13,6 @@ import * as domain from '../../domain';
 // Import entity types generated from the GraphQL schema
 import {
   GenericSchemeProposal,
-  GenericSignal,
 } from '../../types/schema';
 
 function insertNewProposal(event: NewCallProposal): void {
@@ -51,10 +51,10 @@ export function handleProposalExecuted(
   }
   ent.meta = 'Hello world'
 
-  //let id = event.params._proposalId.toHex();
-  var id:string = "1"
-  let entsignal = new GenericSignal(id);
-  entsignal.meta = 'meta testprint';
-  store.set('GenericSignal', id, entsignal);
+  //var testid:number = 0
+  var testmetastring = 'Hello world';
+  debug(testmetastring);
+
+  //domain.addSignal(testid, testmetastring);
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);
 }

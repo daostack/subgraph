@@ -120,7 +120,7 @@ async function generateSubgraph(opts={}) {
                 subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml(
                   "GenericScheme",
                   scheme.address,
-                  dao.arcVersion
+                  scheme.arcVersion ? scheme.arcVersion : dao.arcVersion
                 );
                 genericSchemeAddresses[scheme.address] = true;
                 genericScheme = true;

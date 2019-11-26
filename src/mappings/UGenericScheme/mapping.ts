@@ -54,6 +54,6 @@ export function handleProposalExecuted(
   var testmetastring = 'Hello world';
   debug(testmetastring);
 
-  //domain.addSignal(testid, testmetastring);
+  domain.addSignal("testid", testmetastring);
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);
 }

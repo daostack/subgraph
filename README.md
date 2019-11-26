@@ -2,7 +2,7 @@
 
 DAOstack subgraph for [TheGraph](https://thegraph.com/) project. A feature article is available [here](https://thegraph.com/blog/daostack-alchemy). 
 
-![image](https://github.com/pat-daostack/subgraph/blob/master/images/arcgraph.png)
+![image](https://github.com/pat-daostack/subgraph/blob/master/images/arcgraph.jpg)
 
 ## Getting started
 

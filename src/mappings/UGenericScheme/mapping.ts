@@ -50,10 +50,10 @@ export function handleProposalExecuted(
     ent.returnValue = event.params._genericCallReturnValue;
   }
 
-  //var testid:number = 0
-  var testmetastring = 'Hello world';
+  var signalId = event.params._avatar.toHex();
+  var testmetastring = '{"signal": {"Header":"https://de.wikipedia.org/wiki/Wald#/media/Datei:Laurisilva_en_el_Cubo_de_la_Galga.jpg"}}';
   debug(testmetastring);
 
-  domain.addSignal("testid", testmetastring);
+  domain.addSignal(signalId, testmetastring);
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);
 }

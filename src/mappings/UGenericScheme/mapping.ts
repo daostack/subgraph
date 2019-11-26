@@ -49,7 +49,6 @@ export function handleProposalExecuted(
     ent.executed = true;
     ent.returnValue = event.params._genericCallReturnValue;
   }
-  ent.meta = 'Hello world'
 
   //var testid:number = 0
   var testmetastring = 'Hello world';

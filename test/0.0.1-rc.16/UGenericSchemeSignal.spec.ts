@@ -208,25 +208,25 @@ describe('Generic Signal Scheme', () => {
     //     meta
     //   }
     // }`);
-    // console.log(daodata)
-    // const metaq = `{
-    //   Signal(id: 0){
-    //     id
-    //     data
-    //   }
-    // }`
+    //console.log(daodata)
+    const metaq = `{
+      signals{
+        id
+        data
+      }
+    }`
     // const metaq = `{
     //   debug(id: "0"){
     //     id
     //     message
     //   }
     // }`
-    const metaq = `{
-      debugs{
-        id
-        message
-      }
-    }`
+    // const metaq = `{
+    //   debugs{
+    //     id
+    //     message
+    //   }
+    // }`
 
     const metadata = await sendQuery(metaq, 5000);
     console.log(metadata);

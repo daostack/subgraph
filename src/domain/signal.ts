@@ -18,7 +18,7 @@ export function addMeta(signal: Signal, metadata: string): void {
   saveSignal(signal);
 }
 
-export function testwritesignal(id: number, metadata: string): void {
+export function testwritesignal(id: string, metadata: string): void {
   let testId = 0;
   let idstring = BigInt.fromI32(testId).toHex();
   let sig = new Signal(idstring);

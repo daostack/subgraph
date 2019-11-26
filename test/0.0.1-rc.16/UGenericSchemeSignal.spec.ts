@@ -86,7 +86,6 @@ describe('Generic Signal Scheme', () => {
 
           genericScheme {
             id
-            meta
  	          dao {
                id
             }
@@ -134,7 +133,6 @@ describe('Generic Signal Scheme', () => {
 
       genericScheme: {
         id: p1,
-        meta: null,
         dao: {
           id: addresses.TestAvatar.toLowerCase(),
         },
@@ -193,7 +191,6 @@ describe('Generic Signal Scheme', () => {
 
       genericScheme: {
         id: p1,
-        meta: 'Hello world',
         dao: {
           id: addresses.TestAvatar.toLowerCase(),
         },

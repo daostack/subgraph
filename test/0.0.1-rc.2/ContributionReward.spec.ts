@@ -2,6 +2,7 @@ import { getContractAddresses, getOptions, getWeb3, increaseTime, prepareReputat
 
 const ContributionReward = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/ContributionReward.json');
 const DAOToken = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/DAOToken.json');
+const Reputation = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/Reputation.json');
 const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/GenesisProtocol.json');
 
 describe('ContributionReward', () => {
@@ -41,7 +42,7 @@ describe('ContributionReward', () => {
             rep: 1,
         };
 
-        await gen.methods.mint(addresses.Avatar, rewards.externalToken.toString()).send();
+        await gen.methods.mint(addresses.Avatar, web3.utils.toWei(rewards.externalToken.toString())).send();
 
         const propose = contributionReward.methods.proposeContributionReward(
             descHash,
@@ -140,12 +141,10 @@ describe('ContributionReward', () => {
         });
 
         // pass the proposal
-        await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[0].address });
-        await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[1].address).send({ from: accounts[1].address });
-        await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[2].address).send({ from: accounts[2].address });
-        let passTx = await genesisProtocol.methods.vote(
-            proposalId, 1, 0, accounts[3].address,
-        ).send({ from: accounts[3].address });
+        await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[2].address });
+        await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[3].address });
+        await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[4].address });
+        let passTx = await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[5].address });
 
         const { transactionHash: executeTxHash, blockNumber } = passTx;
         const block = await web3.eth.getBlock(blockNumber);

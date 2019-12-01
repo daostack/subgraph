@@ -103,23 +103,6 @@ describe('Generic Signal Scheme', () => {
       }
   }`;
 
-  // const gettestgeneric = `{
-  //   genericScheme(id: "${p1}") {
-  //     id
-  //     meta
-  //     dao {
-  //        id
-  //     }
-  //     contractToCall
-  //     callData
-  //     value
-  //     executed
-  //     returnValue
-  //     }
-  // }`;
-  //
-  //   let proposalprint = await sendQuery(gettestgeneric);
-  //   console.log(proposalprint);
 
     let proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({
@@ -202,58 +185,27 @@ describe('Generic Signal Scheme', () => {
       },
     });
 
-    // const daodata = await sendQuery(`{
-    //   Metadata(id: test) {
-    //     id
-    //     meta
-    //   }
-    // }`);
-    //console.log(daodata)
     const metaq = `{
       signals{
         id
         data
       }
     }`
-    // const metaq = `{
-    //   debug(id: "0"){
-    //     id
-    //     message
-    //   }
-    // }`
-    // const metaq = `{
-    //   debugs{
-    //     id
-    //     message
-    //   }
-    // }`
+
 
     const metadata = await sendQuery(metaq, 5000);
     console.log(metadata);
 
-
-
-    // const metadata1 = await sendQuery(`{
-    //   genericSchemes {
-    //     id
-    //     meta
-    //     dao {
-    //        id
-    //     }
-    //     contractToCall
-    //     callData
-    //     value
-    //     executed
-    //     returnValue
-    //   }
-    //   scheme {
-    //     uGenericSchemeParams {
-    //       contractToCall
-    //     }
-    //   }
-    // }`, 5000);
-    // let metaproposal = (await sendQuery(getProposal))
-    // console.log(metaproposal);
+    expect(metadata).toMatchObject({
+       signals:[
+          {
+            data:
+              '{"signal": {"Header":"https://de.wikipedia.org/wiki/Wald#/media/Datei:Laurisilva_en_el_Cubo_de_la_Galga.jpg"}}',
+            id:
+              '0xe7a2c59e134ee81d4035ae6db2254f79308e334f'
+          }
+        ]
+    });
 
   }, 100000);
 });

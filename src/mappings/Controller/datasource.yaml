@@ -6,7 +6,6 @@ abis:
   - SchemeRegistrar
   - ContributionReward
   - GenericScheme
-  - UGenericScheme
   - GenesisProtocol
 entities:
   - ControllerOrganization
@@ -24,7 +23,7 @@ eventHandlers:
     handler: handleUnregisterScheme
   - event: UpgradeController(indexed address,address)
     handler: handleUpgradeController
-  - event: AddGlobalConstraint(indexed address,bytes32,uint8)
+  - event: AddGlobalConstraint(indexed address,uint8)
     handler: handleAddGlobalConstraint
   - event: RemoveGlobalConstraint(indexed address,uint256,bool)
     handler: handleRemoveGlobalConstraint

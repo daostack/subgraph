@@ -1,86 +1,49 @@
-import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
+import { getContractAddresses, getOptions, getWeb3, increaseTime, prepareReputation, sendQuery, waitUntilTrue } from './util';
 
-const AbsoluteVote = require('@daostack/arc/build/contracts/AbsoluteVote.json');
-const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
-const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
-const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
-const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
-const UController = require('@daostack/arc/build/contracts/UController.json');
+const ContributionReward = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/ContributionReward.json');
+const DAOToken = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/DAOToken.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/GenesisProtocol.json');
 
 describe('ContributionReward', () => {
     let web3;
     let addresses;
     let opts;
+    let accounts;
     let contributionReward;
     beforeAll(async () => {
         web3 = await getWeb3();
         addresses = getContractAddresses();
         opts = await getOptions(web3);
         contributionReward = new web3.eth.Contract(ContributionReward.abi, addresses.ContributionReward, opts);
-    });
+        accounts = web3.eth.accounts.wallet;
+        await prepareReputation(web3, addresses, opts, accounts);
+    }, 100000);
 
     it('Sanity', async () => {
-        const accounts = web3.eth.accounts.wallet;
-
-        // START long setup ...
-        const externalToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-            .deploy({ data: DAOToken.bytecode, arguments: ['Test Token', 'TST', '10000000000'] })
-            .send();
-        await externalToken.methods.mint(accounts[0].address, '100000').send();
-
-        const nativeToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-            .deploy({ data: DAOToken.bytecode, arguments: ['Test Token', 'TST', '10000000000'] })
-            .send();
-
-        const reputation = await new web3.eth.Contract(Reputation.abi, undefined, opts)
-            .deploy({ data: Reputation.bytecode, arguments: [] })
-            .send();
-        await reputation.methods.mint(accounts[1].address, 100000).send(); // to be able to pass a vote
-
-        const avatar = await new web3.eth.Contract(Avatar.abi, undefined, opts)
-            .deploy({ arguments: ['Test', nativeToken.options.address, reputation.options.address],
-                      data: Avatar.bytecode,
-                    })
-            .send();
-        await externalToken.methods.transfer(avatar.options.address, '100000').send();
-
-        const controller = await new web3.eth.Contract(UController.abi, undefined, opts)
-            .deploy({ data: UController.bytecode, arguments: [] })
-            .send();
-
-        const absVote = await new web3.eth.Contract(AbsoluteVote.abi, undefined, opts)
-            .deploy({ data: AbsoluteVote.bytecode, arguments: [] })
-            .send();
-
-        const setParams = absVote.methods.setParameters(20, '0x0000000000000000000000000000000000000000');
-        const absVoteParamsHash = await setParams.call();
-        await setParams.send();
-        const crSetParams = contributionReward.methods.setParameters(absVoteParamsHash, absVote.options.address);
-        const paramsHash = await crSetParams.call();
-        await crSetParams.send();
-        await reputation.methods.transferOwnership(controller.options.address).send();
-        await nativeToken.methods.transferOwnership(controller.options.address).send();
-        await avatar.methods.transferOwnership(controller.options.address).send();
-        await controller.methods.newOrganization(avatar.options.address).send();
-        await controller.methods.registerScheme(
-            contributionReward.options.address,
-            paramsHash,
-            '0x0000001F', // full permissions,
-            avatar.options.address,
-        ).send();
-        // END setup
+        const genesisProtocol = new web3.eth.Contract(
+            GenesisProtocol.abi,
+            addresses.GenesisProtocol,
+            opts,
+        );
+        const gen = new web3.eth.Contract(
+            DAOToken.abi,
+            addresses.GEN,
+            opts,
+        );
 
         const descHash = '0x0000000000000000000000000000000000000000000000000000000000000123';
         const rewards = {
             eth: 4,
             externalToken: 3,
             nativeToken: 2,
-            periodLength: 13,
+            periodLength: 1000,
             periods: 5,
             rep: 1,
         };
+
+        await gen.methods.mint(addresses.Avatar, rewards.externalToken.toString()).send();
+
         const propose = contributionReward.methods.proposeContributionReward(
-            avatar.options.address,
             descHash,
             rewards.rep,
             [
@@ -90,7 +53,7 @@ describe('ContributionReward', () => {
                 rewards.periodLength,
                 rewards.periods,
             ],
-            externalToken.options.address,
+            addresses.GEN,
             accounts[1].address,
         );
         const proposalId = await propose.call();
@@ -116,12 +79,12 @@ describe('ContributionReward', () => {
         }`);
 
         expect(contributionRewardNewContributionProposals).toContainEqual({
-            avatar: avatar.options.address.toLowerCase(),
+            avatar: addresses.Avatar.toLowerCase(),
             beneficiary: accounts[1].address.toLowerCase(),
             contract: contributionReward.options.address.toLowerCase(),
             descriptionHash: descHash,
             ethReward: rewards.eth.toString(),
-            externalToken: externalToken.options.address.toLowerCase(),
+            externalToken: addresses.GEN.toLowerCase(),
             externalTokenReward: rewards.externalToken.toString(),
             nativeTokenReward: rewards.nativeToken.toString(),
             periodLength: rewards.periodLength.toString(),
@@ -129,7 +92,7 @@ describe('ContributionReward', () => {
             proposalId,
             reputationReward: rewards.rep.toString(),
             txHash: proposaTxHash,
-            votingMachine: absVote.options.address.toLowerCase(),
+            votingMachine: addresses.GenesisProtocol.toLowerCase(),
         });
 
         let { contributionRewardProposals } = await sendQuery(`{
@@ -160,30 +123,42 @@ describe('ContributionReward', () => {
             alreadyRedeemedExternalTokenPeriods: null,
             alreadyRedeemedNativeTokenPeriods: null,
             alreadyRedeemedReputationPeriods: null,
-            avatar: avatar.options.address.toLowerCase(),
+            avatar: addresses.Avatar.toLowerCase(),
             beneficiary: accounts[1].address.toLowerCase(),
             contract: contributionReward.options.address.toLowerCase(),
             descriptionHash: descHash,
             ethReward: rewards.eth.toString(),
             executedAt: null,
-            externalToken: externalToken.options.address.toLowerCase(),
+            externalToken: addresses.GEN.toLowerCase(),
             externalTokenReward: rewards.externalToken.toString(),
             nativeTokenReward: rewards.nativeToken.toString(),
             periodLength: rewards.periodLength.toString(),
             periods: rewards.periods.toString(),
             proposalId,
             reputationReward: rewards.rep.toString(),
-            votingMachine: absVote.options.address.toLowerCase(),
+            votingMachine: addresses.GenesisProtocol.toLowerCase(),
         });
 
         // pass the proposal
-        const { transactionHash: executeTxHash, blockNumber } = await absVote.methods.vote(
-                                                                proposalId,
-                                                                1,
-                                                                0,
-                                                                accounts[0].address /* unused by the contract */)
-                                                                .send({ from: accounts[1].address });
+        await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[0].address });
+        await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[1].address).send({ from: accounts[1].address });
+        await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[2].address).send({ from: accounts[2].address });
+        let passTx = await genesisProtocol.methods.vote(
+            proposalId, 1, 0, accounts[3].address,
+        ).send({ from: accounts[3].address });
+
+        const { transactionHash: executeTxHash, blockNumber } = passTx;
         const block = await web3.eth.getBlock(blockNumber);
+
+        const voteIsIndexed = async () => {
+            return (await sendQuery(`
+            {
+                contributionRewardProposalResolveds(where: {proposalId: "${proposalId}"}) {
+                  passed
+                }
+            }`)).contributionRewardProposalResolveds[0] !== undefined;
+        };
+        await waitUntilTrue(voteIsIndexed);
 
         const { contributionRewardProposalResolveds } = await sendQuery(`{
             contributionRewardProposalResolveds {
@@ -196,10 +171,9 @@ describe('ContributionReward', () => {
         }`);
 
         expect(contributionRewardProposalResolveds).toContainEqual({
-            avatar: avatar.options.address.toLowerCase(),
+            avatar: addresses.Avatar.toLowerCase(),
             contract: contributionReward.options.address.toLowerCase(),
             txHash: executeTxHash,
-
             passed: true,
             proposalId,
         });
@@ -215,12 +189,9 @@ describe('ContributionReward', () => {
         });
 
         // wait 2 periods
-        await new Promise((res) => setTimeout(res, rewards.periodLength * 2 * 1000));
-        const { transactionHash: redeemReputationTxHash } = await contributionReward
-                                                                  .methods
-                                                                  .redeemReputation(proposalId,
-                                                                                    avatar.options.address)
-                                                                                    .send();
+        await increaseTime(rewards.periodLength * 2, web3);
+        const { transactionHash: redeemReputationTxHash } =
+            await contributionReward.methods.redeemReputation(proposalId).send();
 
         const { contributionRewardRedeemReputations } = await sendQuery(`{
             contributionRewardRedeemReputations {
@@ -236,7 +207,7 @@ describe('ContributionReward', () => {
         expect(contributionRewardRedeemReputations).toContainEqual({
             txHash: redeemReputationTxHash,
             contract: contributionReward.options.address.toLowerCase(),
-            avatar: avatar.options.address.toLowerCase(),
+            avatar: addresses.Avatar.toLowerCase(),
             beneficiary: accounts[1].address.toLowerCase(),
             proposalId,
             amount: (rewards.rep * 2).toString(),
@@ -252,11 +223,8 @@ describe('ContributionReward', () => {
             alreadyRedeemedReputationPeriods: '2',
         });
 
-        const { transactionHash: redeemNativeTokenTxHash } = await contributionReward
-                                                                   .methods
-                                                                   .redeemNativeToken(proposalId,
-                                                                                      avatar.options.address)
-                                                                   .send();
+        const { transactionHash: redeemNativeTokenTxHash } =
+            await contributionReward.methods.redeemNativeToken(proposalId).send();
 
         const { contributionRewardRedeemNativeTokens } = await sendQuery(`{
             contributionRewardRedeemNativeTokens {
@@ -272,7 +240,7 @@ describe('ContributionReward', () => {
         expect(contributionRewardRedeemNativeTokens).toContainEqual({
             txHash: redeemNativeTokenTxHash,
             contract: contributionReward.options.address.toLowerCase(),
-            avatar: avatar.options.address.toLowerCase(),
+            avatar: addresses.Avatar.toLowerCase(),
             beneficiary: accounts[1].address.toLowerCase(),
             proposalId,
             amount: (rewards.nativeToken * 2).toString(),
@@ -288,11 +256,8 @@ describe('ContributionReward', () => {
             alreadyRedeemedNativeTokenPeriods: '2',
         });
 
-        const { transactionHash: redeemExternalTokenTxHash } = await contributionReward
-                                                                     .methods.
-                                                                     redeemExternalToken(proposalId,
-                                                                     avatar.options.address)
-                                                                     .send();
+        const { transactionHash: redeemExternalTokenTxHash } =
+            await contributionReward.methods.redeemExternalToken(proposalId).send();
 
         const { contributionRewardRedeemExternalTokens } = await sendQuery(`{
             contributionRewardRedeemExternalTokens {
@@ -308,7 +273,7 @@ describe('ContributionReward', () => {
         expect(contributionRewardRedeemExternalTokens).toContainEqual({
             txHash: redeemExternalTokenTxHash,
             contract: contributionReward.options.address.toLowerCase(),
-            avatar: avatar.options.address.toLowerCase(),
+            avatar: addresses.Avatar.toLowerCase(),
             beneficiary: accounts[1].address.toLowerCase(),
             proposalId,
             amount: (rewards.externalToken * 2).toString(),
@@ -325,16 +290,13 @@ describe('ContributionReward', () => {
         });
 
         await web3.eth.sendTransaction({ from: accounts[0].address,
-                                         to: avatar.options.address,
+                                         to: addresses.Avatar.toLowerCase(),
                                          value: web3.utils.toWei('10', 'ether'),
                                          data: '0xABCD', // data field is needed here due to bug in ganache
                                          gas: 50000});
 
-        const { transactionHash: redeemEtherTxHash } = await contributionReward
-                                                             .methods
-                                                             .redeemEther(proposalId,
-                                                              avatar.options.address)
-                                                              .send({gas: 1000000});
+        const { transactionHash: redeemEtherTxHash } =
+            await contributionReward.methods.redeemEther(proposalId).send({gas: 1000000});
 
         const receipt = await web3.eth.getTransactionReceipt(redeemEtherTxHash);
 
@@ -361,7 +323,7 @@ describe('ContributionReward', () => {
         expect(contributionRewardRedeemEthers).toContainEqual({
             txHash: redeemEtherTxHash,
             contract: contributionReward.options.address.toLowerCase(),
-            avatar: avatar.options.address.toLowerCase(),
+            avatar: addresses.Avatar.toLowerCase(),
             beneficiary: accounts[1].address.toLowerCase(),
             proposalId,
             amount: (amountRedeemed).toString(),

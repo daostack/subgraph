@@ -28,7 +28,6 @@ export function handleNewSchemeProposal(event: NewSchemeProposal): void {
   ent.avatar = event.params._avatar;
   ent.proposalId = event.params._proposalId;
   ent.scheme = event.params._scheme;
-  ent.paramsHash = event.params._parametersHash;
   ent.permission = event.params._permissions;
   ent.descriptionHash = event.params._descriptionHash;
   ent.votingMachine = event.params._intVoteInterface;
@@ -44,7 +43,6 @@ export function handleNewSchemeProposal(event: NewSchemeProposal): void {
   insertNewProposalRegister(ent.avatar as Address,
                           ent.proposalId,
                           ent.scheme,
-                          ent.paramsHash,
                           ent.permission);
 }
 
@@ -92,7 +90,6 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
 function insertNewProposalRegister(avatar: Address,
                                    proposalId: Bytes,
                                    scheme: Bytes,
-                                   paramsHash: Bytes,
                                    permissions: Bytes): void {
   let ent = SchemeRegistrarProposal.load(proposalId.toHex());
   if (ent == null) {
@@ -100,7 +97,6 @@ function insertNewProposalRegister(avatar: Address,
   }
   ent.dao = avatar.toHex();
   ent.schemeToRegister = scheme;
-  ent.schemeToRegisterParamsHash = paramsHash;
   ent.schemeToRegisterPermission = permissions;
   ent.save();
 }

@@ -1,15 +1,12 @@
-import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
+import { Address, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
 import { setContributionRewardParams,
          setGenericSchemeParams,
          setSchemeRegistrarParams,
-         setUGenericSchemeParams,
         } from '../mappings/Controller/mapping';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
 import {GenericScheme} from '../types/GenericScheme/GenericScheme';
-import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
-import {UGenericScheme} from '../types/UGenericScheme/UGenericScheme';
 import { concat, equalStrings} from '../utils';
 
 export function getGPQueue(id: string): GPQueue {
@@ -36,57 +33,45 @@ export function updateThreshold(dao: string,
 }
 
 export function create(dao: Address,
-                       scheme: Address,
-                       paramsHash: Bytes): void {
+                       scheme: Address): void {
    let contractInfo = ContractInfo.load(scheme.toHex());
    if (contractInfo ==  null) {
      return;
    }
    let gpAddress: Address;
    let isGPQue = false;
-   let gpParamsHash: Bytes;
    let addressZero = '0x0000000000000000000000000000000000000000';
    if (equalStrings(contractInfo.name, 'ContributionReward')) {
      let contributionReward =  ContributionReward.bind(scheme);
-     let parameters = contributionReward.parameters(paramsHash);
-     if (!equalStrings(parameters.value1.toHex(), addressZero)) {
-       gpAddress = parameters.value1;
-       setContributionRewardParams(dao, scheme, gpAddress, parameters.value0);
+     gpAddress = contributionReward.votingMachine();
+     let voteParams = contributionReward.voteParams();
+     if (!equalStrings(voteParams.toHex(), addressZero)) {
+       setContributionRewardParams(dao, scheme, gpAddress, voteParams);
        isGPQue = true;
      }
 
    }
    if (equalStrings(contractInfo.name, 'SchemeRegistrar')) {
      let schemeRegistrar =  SchemeRegistrar.bind(scheme);
-     let parameters = schemeRegistrar.parameters(paramsHash);
-     if (!equalStrings(parameters.value2.toHex(), addressZero)) {
-         gpAddress = parameters.value2;
-         setSchemeRegistrarParams(dao, scheme, gpAddress, parameters.value0, parameters.value1);
+     gpAddress = schemeRegistrar.votingMachine();
+     let voteRegisterParams = schemeRegistrar.voteRegisterParams();
+     let voteRemoveParams = schemeRegistrar.voteRemoveParams();
+     if (!equalStrings(gpAddress.toHex(), addressZero)) {
+         setSchemeRegistrarParams(dao, scheme, gpAddress, voteRegisterParams, voteRemoveParams);
          isGPQue = true;
      }
    }
-   let arcVersion = BigDecimal.fromString(
-      contractInfo.version.slice(contractInfo.version.length - 2, contractInfo.version.length));
 
-   if ((equalStrings(contractInfo.name, 'UGenericScheme')) ||
-       (equalStrings(contractInfo.name, 'GenericScheme') && (arcVersion < BigDecimal.fromString('24')))) {
-     let genericScheme =  UGenericScheme.bind(scheme);
-     let parameters = genericScheme.parameters(paramsHash);
-     if (!equalStrings(parameters.value0.toHex(), addressZero)) {
-         gpAddress = parameters.value0;
-         setUGenericSchemeParams(dao, scheme, gpAddress, parameters.value1, parameters.value2);
-         isGPQue = true;
-     }
-   } else if (equalStrings(contractInfo.name, 'GenericScheme')) {
-     let genericScheme =  GenericScheme.bind(scheme);
-     setGenericSchemeParams(
-                     dao,
-                     scheme,
-                     genericScheme.votingMachine(),
-                     genericScheme.voteParams(),
-                     genericScheme.contractToCall());
-     isGPQue = true;
-   }
+   if (equalStrings(contractInfo.name, 'GenericScheme')) {
+    let genericScheme =  GenericScheme.bind(scheme);
+    gpAddress = genericScheme.votingMachine();
+    let voteParams = genericScheme.voteParams();
+    let contractToCall = genericScheme.contractToCall();
+    if (!equalStrings(gpAddress.toHex(), addressZero)) {
+        setGenericSchemeParams(dao, scheme, gpAddress, voteParams, contractToCall);
+        isGPQue = true;
+    }
+  }
 
    if (isGPQue) {
       let bigOne = new ByteArray(6);

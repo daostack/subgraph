@@ -19,7 +19,7 @@ async function generateContractInfo(opts={}) {
   }
   const migration = JSON.parse(fs.readFileSync(require.resolve(opts.migrationFile), "utf-8"));
 
-  let versions = migration[network].base
+  let versions = migration[network].package
   let buffer = "import {\n  setBlacklistedDAO,\n  setContractInfo,\n  setTemplateInfo,\n} from './utils';\n";
   buffer += "\n// this code was generated automatically . please not edit it -:)\n";
   buffer += "/* tslint:disable:max-line-length */\n";
@@ -27,7 +27,7 @@ async function generateContractInfo(opts={}) {
   buffer += "export function setContractsInfo(): void {\n";
   for (var version in versions) {
     if (versions.hasOwnProperty(version)) {
-        let addresses = migration[network].base[version];
+        let addresses = migration[network].package[version];
         for (var name in addresses) {
           if (addresses.hasOwnProperty(name)) {
               buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+name+"'"+", "+"'"+name+"', "+"'"+version+"'"+");\n";
@@ -36,7 +36,6 @@ async function generateContractInfo(opts={}) {
     }
   }
 
-  const daos = require(opts.migrationFile)[network].dao;
   fs.readdir(daodir, function(err, files) {
     if (err) {
       console.error("Could not list the directory.", err);

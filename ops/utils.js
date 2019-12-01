@@ -2,7 +2,7 @@ const fs = require("fs");
 
 function versionToNum(version) {
   const strlen = version.length;
-  return Number(version.slice(strlen - 2, strlen));
+  return Number(version.slice(strlen - 1, strlen));
 }
 
 function forEachTemplate(callback) {

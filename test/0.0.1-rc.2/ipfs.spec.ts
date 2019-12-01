@@ -2,26 +2,28 @@ import {
   getContractAddresses,
   getOptions,
   getWeb3,
+  prepareReputation,
   sendQuery,
+  waitUntilTrue,
   writeProposalIPFS,
 } from './util';
 
-const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
-const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
+const ContributionReward = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/ContributionReward.json');
 describe('Domain Layer', () => {
   let web3;
   let addresses;
   let opts;
+  let accounts;
 
   beforeAll(async () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
     opts = await getOptions(web3);
-  });
+    accounts = web3.eth.accounts.wallet;
+    await prepareReputation(web3, addresses, opts, accounts);
+  }, 100000);
 
   it('Sanity', async () => {
-    const accounts = web3.eth.accounts.wallet;
-
     const contributionReward = new web3.eth.Contract(
       ContributionReward.abi,
       addresses.ContributionReward,
@@ -51,7 +53,6 @@ describe('Domain Layer', () => {
       beneficiary,
     }) {
       const prop = contributionReward.methods.proposeContributionReward(
-        addresses.Avatar,
         proposalDescHash,
         rep,
         [tokens, eth, external, periodLength, periods],
@@ -85,6 +86,12 @@ describe('Domain Layer', () => {
             url
         }
     }`;
+
+    const proposalIsIndexed = async () => {
+      return (await sendQuery(getProposal)).proposal !== null;
+    };
+
+    await waitUntilTrue(proposalIsIndexed);
 
     let proposal = (await sendQuery(getProposal)).proposal;
     expect(proposal).toMatchObject({

@@ -113,25 +113,21 @@ function updateProposalAfterRedemption(
     if (type === 0) {
       ent.alreadyRedeemedReputationPeriods = cr.getRedeemedPeriods(
         proposalId,
-        ent.avatar as Address,
         BigInt.fromI32(0),
       );
     } else if (type === 1) {
       ent.alreadyRedeemedNativeTokenPeriods = cr.getRedeemedPeriods(
         proposalId,
-        ent.avatar as Address,
         BigInt.fromI32(1),
       );
     } else if (type === 2) {
       ent.alreadyRedeemedEthPeriods = cr.getRedeemedPeriods(
         proposalId,
-        ent.avatar as Address,
         BigInt.fromI32(2),
       );
     } else if (type === 3) {
       ent.alreadyRedeemedExternalTokenPeriods = cr.getRedeemedPeriods(
         proposalId,
-        ent.avatar as Address,
         BigInt.fromI32(3),
       );
     }
@@ -154,7 +150,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
     proposalId.toHex(),
   ) as ContributionRewardProposal;
   if (proposalEnt != null) {
-    let proposal = cr.organizationsProposals(event.params._avatar, proposalId);
+    let proposal = cr.organizationProposals(proposalId);
     proposalEnt.executedAt = proposal.value8;
     store.set('ContributionRewardProposal', proposalId.toHex(), proposalEnt);
   }

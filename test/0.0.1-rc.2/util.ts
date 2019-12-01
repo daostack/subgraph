@@ -53,21 +53,24 @@ export async function getWeb3() {
 }
 
 export function getContractAddresses() {
-  const addresses = require(`@daostack/migration/migration.json`);
-  let arcVersion = '0.0.1-rc.33';
+  const addresses = require(`@daostack/migration-experimental/migration.json`);
+  let arcVersion = '0.0.1-rc.2';
+
   return {
-    ...addresses.private.test[arcVersion],
+    ...addresses.private.package[arcVersion],
     ...addresses.private.dao[arcVersion],
-    ...addresses.private.base[arcVersion],
-    ...addresses.private.test[arcVersion].organs,
-    TestAvatar: addresses.private.test[arcVersion].Avatar,
     NativeToken: addresses.private.dao[arcVersion].DAOToken,
     NativeReputation: addresses.private.dao[arcVersion].Reputation,
+    ContributionReward: addresses.private.dao[arcVersion].Schemes[0].address,
+    SchemeRegistrar: addresses.private.dao[arcVersion].Schemes[1].address,
+    GlobalConstraintRegistrar: addresses.private.dao[arcVersion].Schemes[2].address,
+    UpgradeScheme: addresses.private.dao[arcVersion].Schemes[3].address,
+    GenericScheme: addresses.private.dao[arcVersion].Schemes[4].address,
   };
 }
 
 export function getOrgName() {
-  return require(`@daostack/migration/migration.json`).private.dao['0.0.1-rc.32'].name;
+  return require(`@daostack/migration-experimental/migration.json`).private.dao['0.0.1-rc.2'].name;
 }
 
 export async function getOptions(web3) {
@@ -122,7 +125,56 @@ export async function waitUntilSynced() {
       'http://127.0.0.1:8000/subgraphs');
     return ((result.subgraphDeployments.length > 0) && result.subgraphDeployments[0].synced);
     };
-  await waitUntilTrue(graphIsSynced);
+  return waitUntilTrue(graphIsSynced);
+}
+
+export async function registerAdminAccountScheme(web3, addresses, opts, accounts) {
+  const Controller = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/Controller.json');
+  const SchemeRegistrar = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/SchemeRegistrar.json');
+  const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/GenesisProtocol.json');
+
+  const controller = new web3.eth.Contract(Controller.abi, addresses.Controller, opts);
+  const genesisProtocol = new web3.eth.Contract(GenesisProtocol.abi, addresses.GenesisProtocol, opts);
+  const schemeRegistrar = new web3.eth.Contract(SchemeRegistrar.abi, addresses.SchemeRegistrar, opts);
+
+  let isRegistered = await controller.methods.isSchemeRegistered(accounts[0].address).call();
+
+  if (!isRegistered) {
+    let propose = schemeRegistrar.methods.proposeScheme(
+      accounts[0].address,
+      '0x0000001f',
+      '0x0000000000000000000000000000000000000000000000000000000000000123',
+    );
+    const proposalId = await propose.call();
+    await propose.send();
+
+    await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[0].address });
+    await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[1].address).send({ from: accounts[1].address });
+    await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[2].address).send({ from: accounts[2].address });
+    await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[3].address).send({ from: accounts[3].address });
+  }
+}
+
+export async function prepareReputation(web3, addresses, opts, accounts) {
+  const Controller = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/Controller.json');
+  const Reputation = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/Reputation.json');
+
+  await registerAdminAccountScheme(web3, addresses, opts, accounts);
+  const controller = new web3.eth.Contract(Controller.abi, addresses.Controller, opts);
+  const reputation = new web3.eth.Contract(Reputation.abi, addresses.NativeReputation, opts);
+  for (let i = 0; i < 6; i++) {
+    let rep = await reputation.methods.balanceOf(accounts[i].address).call();
+    if (Number(web3.utils.fromWei(rep)) < 1000) {
+      await controller.methods.mintReputation(
+        web3.utils.toWei(`${1000 - Number(web3.utils.fromWei(rep))}`), accounts[i].address,
+      ).send();
+    } else {
+      await controller.methods.burnReputation(
+        web3.utils.toWei(`${Number(web3.utils.fromWei(rep)) - 1000}`), accounts[i].address,
+      ).send();
+    }
+  }
+
 }
 
 export const increaseTime = async function(duration, web3) {

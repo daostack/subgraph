@@ -16,8 +16,8 @@ async function setDockerNetwork() {
     if (network === "private") {
       doc["services"]["ganache"] = {
         image:
-          "daostack/migration:" +
-          require("../package.json").devDependencies["@daostack/migration"],
+          "daostack/migration-experimental:" +
+          require("../package.json").devDependencies["@daostack/migration-experimental"],
         ports: ["8545:8545"]
       };
 

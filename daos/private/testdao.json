@@ -1,20 +1,40 @@
 {
-  "name": "Invidious Banjo",
-  "Avatar": "0x15A953f6c131da39A97E220D3e7d09499c554d67",
-  "DAOToken": "0x5a4509d679F1022bBDbe41ea4E85d7FA9eEBD0f8",
-  "Reputation": "0x5087ee89F225e2938cFae8D61Ca6f137bdA8209A",
-  "Controller": "0x3fD705AB5958156584D84509216A92E167E15109",
+  "name": "Defamatory Snakes",
+  "Avatar": "0x019518168df29B1cb2E06894b63DC12d83e4774A",
+  "DAOToken": "0xb5232C367925f39f90FFb210970086c71803B2D9",
+  "Reputation": "0x897689B5227eAb6B7d5ED6b3147fCB571B68E9a4",
+  "Controller": "0x6C870dD5cE6D8be4653725afdc0C0A15028AbFeB",
   "Schemes": [
+    {
+      "name": "ContributionReward",
+      "alias": "ContributionRewardAlias",
+      "address": "0x05d1DA617069cb74B44678D6Cb48829e908266C1"
+    },
+    {
+      "name": "SchemeRegistrar",
+      "alias": "SchemeRegistrarAlias",
+      "address": "0x66C795C2d0e8eef8aDe7aEb5Fc4286559443C9e7"
+    },
+    {
+      "name": "GlobalConstraintRegistrar",
+      "alias": "GlobalConstraintRegistrarAlias",
+      "address": "0x69627D7c6385DF9dA62F80a9D7070Aa52C69613A"
+    },
+    {
+      "name": "UpgradeScheme",
+      "alias": "UpgradeSchemeAlias",
+      "address": "0xFB47562530A7e5071461Cd256722Ee371251e84b"
+    },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0x8367c8d334A9B2bc357C46cA3712331b99179a6d"
+      "address": "0xf6A5D1e1791d27607c11a702ab711568616a5281"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias2",
-      "address": "0x4845BEAd787ACeAc404Fce7F408B655a7ed39fC5"
+      "address": "0x88dACe4393AaD98eF4067a903e7f67c97887F4A5"
     }
   ],
-  "arcVersion": "0.0.1-rc.33"
+  "arcVersion": "0.0.1-rc.2"
 }

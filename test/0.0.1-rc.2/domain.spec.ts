@@ -4,6 +4,7 @@ import {
   getOrgName,
   getWeb3,
   increaseTime,
+  prepareReputation,
   sendQuery,
   toFixed,
   waitUntilSynced,
@@ -11,17 +12,17 @@ import {
   writeProposalIPFS,
 } from './util';
 
-const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
-const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
-const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
-const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
-const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
-const DAORegistry = require('@daostack/arc-hive/build/contracts/DAORegistry.json');
+const ContributionReward = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/ContributionReward.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/GenesisProtocol.json');
+const DAOToken = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/DAOToken.json');
+const Reputation = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/Reputation.json');
+const Avatar = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/Avatar.json');
 const REAL_FBITS = 40;
 describe('Domain Layer', () => {
   let web3;
   let addresses;
   let opts;
+  let accounts;
   const orgName = getOrgName();
   const tokenName = orgName + ' Token';
   const tokenSymbol = orgName[0] + orgName.split(' ')[1][0] + 'T';
@@ -30,11 +31,12 @@ describe('Domain Layer', () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
     opts = await getOptions(web3);
-  });
+    accounts = web3.eth.accounts.wallet;
+    await prepareReputation(web3, addresses, opts, accounts);
+  }, 100000);
 
   it('migration dao', async () => {
     await waitUntilSynced();
-    const accounts = web3.eth.accounts.wallet;
 
     const getMigrationDao = `{
       dao(id: "${addresses.Avatar.toLowerCase()}") {
@@ -121,31 +123,6 @@ describe('Domain Layer', () => {
       }
     }`;
 
-    const getRegister = `{
-      dao(id: "${addresses.Avatar.toLowerCase()}") {
-        register
-      }
-    }`;
-    let register;
-
-    register = (await sendQuery(getRegister)).dao.register;
-
-    const daoRegistry = new web3.eth.Contract(
-      DAORegistry.abi,
-      addresses.DAORegistry,
-      opts,
-    );
-
-    expect(register).toEqual('na');
-
-    await daoRegistry.methods.register(addresses.Avatar, 'test').send();
-    register = (await sendQuery(getRegister, 2000)).dao.register;
-    expect(register).toEqual('registered');
-
-    await daoRegistry.methods.unRegister(addresses.Avatar).send();
-    register = (await sendQuery(getRegister, 2000)).dao.register;
-    expect(register).toEqual('unRegistered');
-
     // Can't test timestap for NewDAO event
     const getDAOEvents = `{
       events(where: { dao: "${addresses.Avatar.toLowerCase()}" }) {
@@ -175,8 +152,6 @@ describe('Domain Layer', () => {
   }, 120000);
 
   it('Sanity', async () => {
-    const accounts = web3.eth.accounts.wallet;
-
     const contributionReward = new web3.eth.Contract(
       ContributionReward.abi,
       addresses.ContributionReward,
@@ -394,7 +369,6 @@ describe('Domain Layer', () => {
       beneficiary,
     }) {
       const prop = contributionReward.methods.proposeContributionReward(
-        addresses.Avatar,
         descHash,
         rep,
         [tokens, eth, external, periodLength, periods],
@@ -1238,7 +1212,7 @@ describe('Domain Layer', () => {
       accounts[5].address.toLowerCase(),
     ]});
 
-    await contributionReward.methods.redeem(p1, avatar.options.address, [true, true, true, true]).send();
+    await contributionReward.methods.redeem(p1, [true, true, true, true]).send();
 
     accountsWithUnclaimedRewardsIsIndexed = async () => {
       return (await sendQuery(getProposalRewards)).proposal.accountsWithUnclaimedRewards.length === 0;
@@ -1274,7 +1248,7 @@ describe('Domain Layer', () => {
         accountsWithUnclaimedRewards
     }}`;
 
-    increaseTime(600 + 1 , web3);
+    increaseTime(600 + 1, web3);
     await genesisProtocol.methods.execute(p2).send();
 
     let stage = (await sendQuery(getExpiredProposal, 3000)).proposal.stage;
@@ -1381,35 +1355,19 @@ describe('Domain Layer', () => {
         threshold: Math.pow(2, REAL_FBITS).toString(),
         scheme: {
           name: 'GenericScheme',
+          numberOfQueuedProposals: '0',
+          numberOfPreBoostedProposals: '0',
           numberOfBoostedProposals: '0',
           numberOfExpiredInQueueProposals: '0',
-          numberOfPreBoostedProposals: '0',
-          numberOfQueuedProposals: '0',
         },
         dao: {
-          numberOfQueuedProposals: '0',
+          numberOfBoostedProposals: '1',
+          numberOfExpiredInQueueProposals: '1',
           numberOfPreBoostedProposals: '0',
-          numberOfBoostedProposals: '0',
-          numberOfExpiredInQueueProposals: '0',
+          numberOfQueuedProposals: '0',
         },
     });
 
-    expect(gpQueues).toContainEqual({
-        threshold: Math.pow(2, REAL_FBITS + 1).toString(),
-        scheme: {
-          name: 'ContributionReward',
-          numberOfBoostedProposals: '1',
-          numberOfExpiredInQueueProposals: '0',
-          numberOfPreBoostedProposals: '1',
-          numberOfQueuedProposals: '1',
-        },
-        dao: {
-          numberOfQueuedProposals: '2',
-          numberOfPreBoostedProposals: '1',
-          numberOfBoostedProposals: '1',
-          numberOfExpiredInQueueProposals: '0',
-        },
-    });
     increaseTime(300 + 1 , web3);
     await genesisProtocol.methods.execute(p2).send();
     expect((await sendQuery(getExpiredProposal)).proposal.accountsWithUnclaimedRewards)

@@ -199,7 +199,6 @@ export function handleRegisterScheme(avatar: Address,
                                      nativeTokenAddress: Address,
                                      nativeReputationAddress: Address,
                                      scheme: Address ,
-                                     paramsHash: Bytes,
                                      timestamp: BigInt): void {
   // Detect the first register scheme event which indicates a new DAO
   let isFirstRegister = store.get(
@@ -230,7 +229,7 @@ export function handleRegisterScheme(avatar: Address,
 
     addNewDAOEvent(avatar, dao.name, timestamp);
   }
-  gpqueueModule.create(avatar, scheme, paramsHash);
+  gpqueueModule.create(avatar, scheme);
 }
 
 export function handleMint(event: Mint): void {
@@ -296,10 +295,6 @@ export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , tim
            daoBountyRedemption(proposalId, beneficiary, timestamp);
        }
     }
-}
-
-export function daoRegister(dao: Address, tag: string): void {
-   daoModule.register(dao, tag);
 }
 
 export function addDaoMember(reputationHolder: ReputationHolder): void {

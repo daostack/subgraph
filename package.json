@@ -25,13 +25,13 @@
     "docker:rebuild": "docker-compose build",
     "docker:logs": "docker-compose logs --follow",
     "jest": "jest --runInBand --forceExit",
-    "lint": "tslint -c tslint.json 'src//**/*.ts' -e 'src//types/**/*.ts' && tslint -c tslint.json 'test/**/*.ts'",
+    "lint": "tslint --fix -c tslint.json 'src//**/*.ts' -e 'src//types/**/*.ts' && tslint --fix -c tslint.json 'test/**/*.ts'",
     "migrate": "node ops/migrate.js",
     "test": "npm run deploy && jest --runInBand --forceExit",
     "test:watch": "npm run test -- --watch"
   },
   "devDependencies": {
-    "@daostack/migration": "0.0.1-rc.33-v1",
+    "@daostack/migration-experimental": "0.0.1-rc.2-v1",
     "@types/jest": "^23.3.7",
     "@types/mocha": "^5.2.5",
     "babel-eslint": "^10.0.1",

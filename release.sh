@@ -2,7 +2,7 @@
 echo "Creating a new release"
 npm ci
 
-migration_version=$(cat package.json  | jq -r '.devDependencies."@daostack/migration"')
+migration_version=$(cat package.json  | jq -r '.devDependencies."@daostack/migration-experimental"')
 docker_compose_migration_version=$(cat docker-compose.yml | grep daostack/migration | cut -d ":" -f 3 | sed "s/'//")
 package_version=$(cat package.json | jq -r '.version')
 image_version=ganache-$migration_version-$package_version

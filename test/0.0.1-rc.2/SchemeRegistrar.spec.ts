@@ -2,27 +2,31 @@ import {
   getContractAddresses,
   getOptions,
   getWeb3,
+  prepareReputation,
   sendQuery,
   waitUntilTrue,
 } from './util';
 
-const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
-const SchemeRegistrar = require('@daostack/arc/build/contracts/SchemeRegistrar.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/GenesisProtocol.json');
+const SchemeRegistrar = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/SchemeRegistrar.json');
 
 describe('SchemeRegistrar', () => {
     let web3;
     let addresses;
     let opts;
+    let accounts;
     let schemeRegistrar;
+
     beforeAll(async () => {
         web3 = await getWeb3();
         addresses = getContractAddresses();
         opts = await getOptions(web3);
+        accounts = web3.eth.accounts.wallet;
+        await prepareReputation(web3, addresses, opts, accounts);
         schemeRegistrar = new web3.eth.Contract(SchemeRegistrar.abi, addresses.SchemeRegistrar, opts);
-    });
+    }, 100000);
 
     it('Sanity', async () => {
-        const accounts = web3.eth.accounts.wallet;
         const genesisProtocol = new web3.eth.Contract(
           GenesisProtocol.abi,
           addresses.GenesisProtocol,
@@ -30,7 +34,6 @@ describe('SchemeRegistrar', () => {
         );
 
         const descHash = '0x0000000000000000000000000000000000000000000000000000000000000123';
-        const registerSchemeParamsHash = '0x0000000000000000000000000000000000000000000000000000000000001234';
 
         const schemeRegistrarNewSchemeProposalsQuery = `{
           schemeRegistrarNewSchemeProposals {
@@ -41,7 +44,6 @@ describe('SchemeRegistrar', () => {
             votingMachine,
             proposalId,
             scheme,
-            paramsHash,
             permission,
           }
         }`;
@@ -51,9 +53,7 @@ describe('SchemeRegistrar', () => {
         ).schemeRegistrarNewSchemeProposals.length;
 
         let propose = schemeRegistrar.methods.proposeScheme(
-            addresses.Avatar,
             accounts[0].address,
-            registerSchemeParamsHash,
             '0x0000001f',
             descHash,
         );
@@ -77,12 +77,10 @@ describe('SchemeRegistrar', () => {
             txHash: proposaTxHash,
             votingMachine: addresses.GenesisProtocol.toLowerCase(),
             scheme: accounts[0].address.toLowerCase(),
-            paramsHash: registerSchemeParamsHash,
             permission: '0x0000001f',
         });
 
         propose = schemeRegistrar.methods.proposeToRemoveScheme(
-            addresses.Avatar,
             accounts[0].address,
             descHash,
         );
@@ -236,7 +234,6 @@ describe('SchemeRegistrar', () => {
                 id
               },
               schemeToRegister,
-              schemeToRegisterParamsHash,
               schemeToRegisterPermission,
               schemeToRemove,
               decision,
@@ -249,7 +246,6 @@ describe('SchemeRegistrar', () => {
         expect(schemeRegistrarProposals).toContainEqual({
           dao: { id : addresses.Avatar.toLowerCase() },
           schemeToRegister: accounts[0].address.toLowerCase(),
-          schemeToRegisterParamsHash: registerSchemeParamsHash,
           schemeToRegisterPermission: '0x0000001f',
           schemeToRemove: null,
           id: proposalId,
@@ -261,7 +257,6 @@ describe('SchemeRegistrar', () => {
         expect(schemeRegistrarProposals).toContainEqual({
           dao: { id : addresses.Avatar.toLowerCase() },
           schemeToRegister: null,
-          schemeToRegisterParamsHash: null,
           schemeToRegisterPermission: null,
           schemeToRemove: accounts[0].address.toLowerCase(),
           id: removeProposalId,

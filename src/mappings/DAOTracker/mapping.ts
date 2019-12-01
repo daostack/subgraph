@@ -12,8 +12,8 @@ import {
   AvatarContract,
   BlacklistedDAO,
   ContractInfo,
+  ControllerOrganization,
   DAOTrackerContract,
-  UControllerOrganization,
 } from '../../types/schema';
 import { createTemplate, equalStrings, fetchTemplateName } from '../../utils';
 
@@ -40,8 +40,8 @@ export function handleTrackDAO(event: TrackDAO): void {
   let controller = event.params._controller;
   let reputation = event.params._reputation;
   let daoToken = event.params._daoToken;
-  let sender = event.params._sender;
-  let arcVersion = event.params._arcVersion;
+  let sender = event.transaction.from;
+  let arcVersion: string;
 
   // If the avatar already exists, early out
   if (AvatarContract.load(avatar.toHex()) != null) {
@@ -54,9 +54,9 @@ export function handleTrackDAO(event: TrackDAO): void {
   }
 
   // If the sender of the 'track' call is the DaoCreator contract, use its arcVersion
-  let daoCreatorInfo = ContractInfo.load(sender.toHex());
-  if (daoCreatorInfo != null && equalStrings(daoCreatorInfo.name, 'DaoCreator')) {
-    arcVersion = daoCreatorInfo.version;
+  let daoFactoryInfo = ContractInfo.load(sender.toHex());
+  if (daoFactoryInfo != null && equalStrings(daoFactoryInfo.name, 'DaoCreator')) {
+    arcVersion = daoFactoryInfo.version;
   } else {
     // We've chosen to disable tracking new DAOs that don't come from the DaoCreator,
     // as it's a potential security vulnerability
@@ -72,7 +72,7 @@ export function handleTrackDAO(event: TrackDAO): void {
                         reputationTemplate == null ||
                         daoTokenTemplate == null;
 
-  let universalController = UControllerOrganization.load(controller.toHex()) != null;
+  let universalController = ControllerOrganization.load(controller.toHex()) != null;
 
   if (universalController === false) {
     missingTemplate = missingTemplate || controllerTemplate == null;
@@ -89,7 +89,7 @@ export function handleTrackDAO(event: TrackDAO): void {
   createTemplate(reputationTemplate, reputation);
   createTemplate(daoTokenTemplate, daoToken);
 
-  // Track the Controller if it isn't a UController we're already tracking
+  // Track the Controller if it isn't a Controller we're already tracking
   if (universalController === false) {
     createTemplate(controllerTemplate, controller);
   }

@@ -1,18 +1,13 @@
-import { getContractAddresses, getOptions, getOrgName, getWeb3, sendQuery } from './util';
-
-const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
+import { getContractAddresses, getOrgName, getWeb3, sendQuery } from './util';
 
 describe('Avatar', () => {
   let web3;
   let addresses;
-  let avatar;
   const orgName = getOrgName();
 
   beforeAll(async () => {
     web3 = await getWeb3();
     addresses = getContractAddresses();
-    const opts = await getOptions(web3);
-    avatar = new web3.eth.Contract(Avatar.abi, addresses.Avatar, opts);
   });
 
   it('Sanity', async () => {

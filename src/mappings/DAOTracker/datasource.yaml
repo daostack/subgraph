@@ -4,5 +4,5 @@ entities:
   - DAOTrackerContract
   - BlacklistedDAO
 eventHandlers:
-  - event: TrackDAO(indexed address,address,address,address,address,string)
+  - event: TrackDAO(indexed address,address,address,address)
     handler: handleTrackDAO

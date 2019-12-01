@@ -1,6 +1,6 @@
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
+import { Avatar } from '../types/Controller/Avatar';
 import { DAO } from '../types/schema';
-import { Avatar } from '../types/UController/Avatar';
 
 export function getDAO(id: string): DAO {
   let dao = store.get('DAO', id) as DAO;
@@ -42,21 +42,9 @@ export function insertNewDAO(
   dao.nativeToken = nativeTokenAddress.toHex();
   dao.nativeReputation = nativeReputationAddress.toHex();
   dao.reputationHoldersCount = BigInt.fromI32(0);
-  dao.register = 'na';
   saveDAO(dao);
 
   return dao;
-}
-
-export function register(
-  avatar: Address,
-  tag: string,
-): void {
-  let dao = DAO.load(avatar.toHex());
-  if (dao != null) {
-    dao.register = tag;
-    dao.save();
-  }
 }
 
 export function exists(

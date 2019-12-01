@@ -145,7 +145,7 @@ describe('ContributionReward', () => {
         await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[3].address });
         await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[4].address });
         let passTx = await genesisProtocol.methods.vote(
-            proposalId, 1, 0, accounts[0].address
+            proposalId, 1, 0, accounts[0].address,
         ).send({ from: accounts[5].address });
 
         const { transactionHash: executeTxHash, blockNumber } = passTx;

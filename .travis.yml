@@ -21,7 +21,6 @@ script:
   - docker-compose logs graph-node
 
   - echo 'npm ci:' && echo -en 'travis_fold:start:script.1\\r'
-  - npm i
   - npm ci
   - echo -en 'travis_fold:end:script.1\\r'
 

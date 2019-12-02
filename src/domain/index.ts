@@ -1,14 +1,12 @@
-import { Address, BigDecimal, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
-import {  setContractsInfo } from '../contractsInfo';
+import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, Entity, store, Value} from '@graphprotocol/graph-ts';
+import { setContractsInfo, setTemplatesInfo } from '../contractsInfo';
 import {
   NewContributionProposal,
   ProposalExecuted,
 } from '../types/ContributionReward/ContributionReward';
 import { Transfer } from '../types/DAOToken/DAOToken';
-import { NewCallProposal } from '../types/GenericScheme/GenericScheme';
 import {
   ExecuteProposal,
-  GenesisProtocol,
   GPExecuteProposal,
   Stake,
   StateChange,
@@ -16,8 +14,9 @@ import {
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
 import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
-import { equalsBytes, equalStrings, eventId, hexToAddress } from '../utils';
+import { concat, equalsBytes, eventId, hexToAddress } from '../utils';
 import * as daoModule from './dao';
+import { addNewDAOEvent, addNewReputationHolderEvent, addProposalStateChangeEvent } from './event';
 import * as gpqueueModule from './gpqueue';
 import {
   getProposal,
@@ -80,7 +79,6 @@ export function handleNewContributionProposal(
   if (!daoModule.exists(event.params._avatar)) {
     return;
   }
-  handleGPProposalPrivate(event.params._proposalId.toHex());
   updateCRProposal(
     event.params._proposalId,
     event.block.timestamp,
@@ -90,6 +88,7 @@ export function handleNewContributionProposal(
     event.params._beneficiary,
     event.address,
   );
+  handleGPProposalPrivate(event.params._proposalId.toHex());
 }
 
 export function handleNewSchemeRegisterProposal(
@@ -103,7 +102,6 @@ export function handleNewSchemeRegisterProposal(
     if (!daoModule.exists(avatar as Address)) {
       return;
     }
-    handleGPProposalPrivate(proposalId);
     updateSRProposal(
       proposalId,
       timestamp,
@@ -112,22 +110,27 @@ export function handleNewSchemeRegisterProposal(
       descriptionHash,
       schemeAddress,
     );
+    handleGPProposalPrivate(proposalId);
  }
 
 export function handleNewCallProposal(
-  event: NewCallProposal,
+  avatar: Address,
+  proposalId: Bytes,
+  timestamp: BigInt,
+  descriptionHash: string,
+  eventAddress: Address,
 ): void {
-  if (!daoModule.exists(event.params._avatar)) {
+  if (!daoModule.exists(avatar)) {
     return;
   }
-  handleGPProposalPrivate(event.params._proposalId.toHex());
   updateGSProposal(
-    event.params._proposalId,
-    event.block.timestamp,
-    event.params._avatar,
-    event.params._descriptionHash,
-    event.address,
+    proposalId,
+    timestamp,
+    avatar,
+    descriptionHash,
+    eventAddress,
   );
+  handleGPProposalPrivate(proposalId.toHex());
 }
 
 export function handleStake(event: Stake): void {
@@ -160,7 +163,6 @@ export function handleVoteProposal(event: VoteProposal): void {
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  updateProposalAfterVote(proposal, event.address, event.params._proposalId);
   if (event.params._vote.toI32() === 1) {
     proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
   } else {
@@ -168,6 +170,7 @@ export function handleVoteProposal(event: VoteProposal): void {
       event.params._reputation,
     );
   }
+  updateProposalAfterVote(proposal, event.address, event.params._proposalId, event.block.timestamp);
   saveProposal(proposal);
   insertVote(
     eventId(event),
@@ -196,7 +199,8 @@ export function handleRegisterScheme(avatar: Address,
                                      nativeTokenAddress: Address,
                                      nativeReputationAddress: Address,
                                      scheme: Address ,
-                                     paramsHash: Bytes ): void {
+                                     paramsHash: Bytes,
+                                     timestamp: BigInt): void {
   // Detect the first register scheme event which indicates a new DAO
   let isFirstRegister = store.get(
     'FirstRegisterSchemeFlag',
@@ -223,6 +227,8 @@ export function handleRegisterScheme(avatar: Address,
     let ent = new Entity();
     ent.set('id', Value.fromString(avatar.toHex()));
     store.set('FirstRegisterSchemeFlag', avatar.toHex(), ent);
+
+    addNewDAOEvent(avatar, dao.name, timestamp);
   }
   gpqueueModule.create(avatar, scheme, paramsHash);
 }
@@ -270,6 +276,7 @@ export function handleStateChange(event: StateChange): void {
           (event.params._proposalState === 2)) {
           insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
       }
+      addProposalStateChangeEvent(event.params._proposalId, event.block.timestamp);
   }
 }
 
@@ -305,6 +312,9 @@ export function addDaoMember(reputationHolder: ReputationHolder): void {
     reputationHolder.dao = dao;
     reputationHolder.save();
   }
+
+  addNewReputationHolderEvent(reputationHolder);
+
   daoModule.increaseDAOmembersCount(dao);
 }
 

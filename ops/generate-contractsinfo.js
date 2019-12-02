@@ -1,8 +1,8 @@
 const fs = require("fs");
-const yaml = require("js-yaml");
 const { migrationFileLocation: defaultMigrationFileLocation, network } = require("./settings");
+const { forEachTemplate } = require("./utils");
 const path = require("path");
-const currentDir = path.resolve(`${__dirname}`)
+const currentDir = path.resolve(`${__dirname}`);
 
 /**
  * Generate a `src/contractinfo.js` file from `migration.json`
@@ -20,8 +20,9 @@ async function generateContractInfo(opts={}) {
   const migration = JSON.parse(fs.readFileSync(require.resolve(opts.migrationFile), "utf-8"));
 
   let versions = migration[network].base
-  let buffer = "import { setContractInfo } from './utils';\n";
-  buffer += "// this code was generated automatically . please not edit it -:)\n";
+  let buffer = "import {\n  setBlacklistedDAO,\n  setContractInfo,\n  setTemplateInfo,\n} from './utils';\n";
+  buffer += "\n// this code was generated automatically . please not edit it -:)\n";
+  buffer += "/* tslint:disable:max-line-length */\n";
 
   buffer += "export function setContractsInfo(): void {\n";
   for (var version in versions) {
@@ -29,7 +30,7 @@ async function generateContractInfo(opts={}) {
         let addresses = migration[network].base[version];
         for (var name in addresses) {
           if (addresses.hasOwnProperty(name)) {
-              buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+name+"'"+", "+"'"+version+"'"+");\n";
+              buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+name+"'"+", "+"'"+name+"', "+"'"+version+"'"+");\n";
           }
         }
     }
@@ -44,11 +45,32 @@ async function generateContractInfo(opts={}) {
     files.forEach(function(file) {
       const dao = JSON.parse(fs.readFileSync(daodir + '/' + file, "utf-8"));
       if (dao.Schemes !== undefined) {
-         for(var key in dao.Schemes) {
-           buffer += "    setContractInfo("+"'"+dao.Schemes[key].toLowerCase()+"'"+", " +"'"+key+"'"+", "+"'"+dao.arcVersion+"'"+");\n";
+         for (var i = 0, len = dao.Schemes.length; i < len; i++) {
+           var scheme = dao.Schemes[i];
+           buffer += "    setContractInfo("+"'"+scheme.address.toLowerCase()+"'"+", " +"'"+scheme.name+"'"+", "+"'"+ scheme.alias +"', "+"'"+dao.arcVersion+"'"+");\n";
          }
       }
     });
+    buffer += "}\n";
+
+    buffer += "\nexport function setTemplatesInfo(): void {\n";
+
+    forEachTemplate((name, mapping, arcVersion) => {
+      const templateName = arcVersion.replace(/\.|-/g, '_');
+      buffer += `    setTemplateInfo('${name}', '${arcVersion}', '${name}_${templateName}');\n`;
+    });
+
+    buffer += "}\n";
+
+    const blacklist = require("./blacklist.json")[network];
+
+    buffer += "\nexport function setBlacklistedDAOs(): void {\n";
+
+    blacklist.forEach(function(avatar) {
+      buffer += `    setBlacklistedDAO('${avatar.toLowerCase()}');\n`;
+    });
+
+    buffer += "    return;\n";
     buffer += "}\n";
 
     fs.writeFileSync(

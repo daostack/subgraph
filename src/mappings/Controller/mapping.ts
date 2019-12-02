@@ -28,11 +28,13 @@ import {
   ControllerScheme,
   ControllerUnregisterScheme,
   ControllerUpgradeController,
+  FirstRegisterScheme,
   GenericSchemeParam,
   GenesisProtocolParam,
   ReputationContract,
   SchemeRegistrarParam,
   TokenContract,
+  UGenericSchemeParam,
 } from '../../types/schema';
 
 import {
@@ -44,7 +46,7 @@ import {
   UpgradeController,
 } from '../../types/Controller/Controller';
 
-import { concat, debug, equalsBytes, eventId } from '../../utils';
+import { concat, equalsBytes, eventId } from '../../utils';
 
 function insertScheme(
   controllerAddress: Address,
@@ -54,25 +56,34 @@ function insertScheme(
 ): void {
   let controller = Controller.bind(controllerAddress);
   let perms = controller.getSchemePermissions(scheme, avatarAddress);
+  let controllerSchemeId = crypto.keccak256(concat(avatarAddress, scheme)).toHex();
+  let controllerScheme = ControllerScheme.load(controllerSchemeId);
+  if (controllerScheme === null) {
+     controllerScheme = new ControllerScheme(controllerSchemeId);
+     controllerScheme.numberOfQueuedProposals = BigInt.fromI32(0);
+     controllerScheme.numberOfPreBoostedProposals = BigInt.fromI32(0);
+     controllerScheme.numberOfBoostedProposals = BigInt.fromI32(0);
+     controllerScheme.numberOfExpiredInQueueProposals = BigInt.fromI32(0);
+  }
+  controllerScheme.dao = avatarAddress.toHex();
+  controllerScheme.paramsHash = paramsHash;
+  /* tslint:disable:no-bitwise */
+  controllerScheme.canRegisterSchemes = (perms[3] & 2) === 2;
+  /* tslint:disable:no-bitwise */
+  controllerScheme.canManageGlobalConstraints = (perms[3] & 4) === 4;
+  /* tslint:disable:no-bitwise */
+  controllerScheme.canUpgradeController = (perms[3] & 8) === 8;
+  /* tslint:disable:no-bitwise */
+  controllerScheme.canDelegateCall = (perms[3] & 16) === 16;
+  controllerScheme.address = scheme;
 
-  let ent = new ControllerScheme(crypto.keccak256(concat(avatarAddress, scheme)).toHex());
-  ent.dao = avatarAddress.toHex();
-  ent.paramsHash = paramsHash;
-  /* tslint:disable:no-bitwise */
-  ent.canRegisterSchemes = (perms[3] & 2) === 2;
-  /* tslint:disable:no-bitwise */
-  ent.canManageGlobalConstraints = (perms[3] & 4) === 4;
-  /* tslint:disable:no-bitwise */
-  ent.canUpgradeController = (perms[3] & 8) === 8;
-  /* tslint:disable:no-bitwise */
-  ent.canDelegateCall = (perms[3] & 16) === 16;
-  ent.address = scheme;
   let contractInfo = ContractInfo.load(scheme.toHex());
   if (contractInfo != null) {
-     ent.name = contractInfo.name;
-     ent.version = contractInfo.version;
+     controllerScheme.name = contractInfo.name;
+     controllerScheme.version = contractInfo.version;
+     controllerScheme.alias = contractInfo.alias;
   }
-  store.set('ControllerScheme', ent.id, ent);
+  controllerScheme.save();
 }
 
 function deleteScheme(avatarAddress: Address, scheme: Address): void {
@@ -170,20 +181,14 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   let paramsHash = controller.getSchemeParameters(event.params._scheme, avatar);
   insertScheme(event.address, avatar, event.params._scheme , paramsHash);
 
-  domain.handleRegisterScheme(avatar, token, reputation, event.params._scheme, paramsHash);
+  domain.handleRegisterScheme(avatar, token, reputation, event.params._scheme, paramsHash, event.block.timestamp);
 
   // Detect a new organization event by looking for the first register scheme event for that org.
-  let isFirstRegister = store.get(
-    'FirstRegisterScheme',
-    avatar.toHex(),
-  );
+  let isFirstRegister = FirstRegisterScheme.load(avatar.toHex());
   if (isFirstRegister == null) {
     insertOrganization(event.address, avatar);
-    store.set(
-      'FirstRegisterScheme',
-      avatar.toHex(),
-      new Entity(),
-    );
+    isFirstRegister = new FirstRegisterScheme(avatar.toHex());
+    isFirstRegister.save();
   }
 
   let ent = new ControllerRegisterScheme(eventId(event));
@@ -310,7 +315,6 @@ export function setSchemeRegistrarParams(avatar: Address,
    setGPParams(vmAddress, voteRegisterParams);
    setGPParams(vmAddress, voteRemoveParams);
    let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
-   debug(controllerScheme.paramsHash.toHex());
    let schemeRegistrarParams = new SchemeRegistrarParam(controllerScheme.paramsHash.toHex());
    schemeRegistrarParams.votingMachine = vmAddress;
    schemeRegistrarParams.voteRegisterParams = voteRegisterParams.toHex();
@@ -328,11 +332,27 @@ export function setGenericSchemeParams(avatar: Address,
                                        contractToCall: Bytes): void {
    setGPParams(vmAddress, vmParamsHash);
    let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
-   let genericSchemeParams = new GenericSchemeParam(controllerScheme.paramsHash.toHex());
+   let genericSchemeParams = new GenericSchemeParam(scheme.toHex());
    genericSchemeParams.votingMachine = vmAddress;
    genericSchemeParams.voteParams = vmParamsHash.toHex();
    genericSchemeParams.contractToCall = contractToCall;
    genericSchemeParams.save();
    controllerScheme.genericSchemeParams = genericSchemeParams.id;
+   controllerScheme.save();
+}
+
+export function setUGenericSchemeParams(avatar: Address,
+                                        scheme: Address,
+                                        vmAddress: Address,
+                                        vmParamsHash: Bytes,
+                                        contractToCall: Bytes): void {
+   setGPParams(vmAddress, vmParamsHash);
+   let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
+   let genericSchemeParams = new UGenericSchemeParam(controllerScheme.paramsHash.toHex());
+   genericSchemeParams.votingMachine = vmAddress;
+   genericSchemeParams.voteParams = vmParamsHash.toHex();
+   genericSchemeParams.contractToCall = contractToCall;
+   genericSchemeParams.save();
+   controllerScheme.uGenericSchemeParams = genericSchemeParams.id;
    controllerScheme.save();
 }

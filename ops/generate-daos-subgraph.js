@@ -1,21 +1,34 @@
 const fs = require("fs");
 const yaml = require("js-yaml");
-const { migrationFileLocation: defaultMigrationFileLocation, network } = require("./settings");
+const { migrationFileLocation: defaultMigrationFileLocation, network, startBlock} = require("./settings");
 const {   subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
+let ids = [];
 
 function daoYaml(contract, contractAddress, arcVersion) {
   const { abis, entities, eventHandlers } = yaml.safeLoad(
     fs.readFileSync(`${currentDir}/../src/mappings/${contract}/datasource.yaml`, "utf-8")
   );
+
+  let name = contract;
+  if (ids.indexOf(contract) == -1) {
+    ids.push(contract);
+  } else if (ids.indexOf(contract+contractAddress) == -1) {
+    ids.push(contract+contractAddress);
+    name = contract+contractAddress;
+  } else {
+    return;
+  }
+
   return {
     kind: "ethereum/contract",
-    name: `${contract}`,
+    name: `${name}`,
     network: `${network}`,
     source: {
       address: contractAddress,
-      abi: abis && abis.length ? abis[0] : contract
+      abi: abis && abis.length ? abis[0] : contract,
+      startBlock
     },
     mapping: {
       kind: "ethereum/events",
@@ -23,10 +36,17 @@ function daoYaml(contract, contractAddress, arcVersion) {
       language: "wasm/assemblyscript",
       file: path.resolve(`${__dirname}/../src/mappings/${contract}/mapping.ts`),
       entities,
-      abis: (abis || [contract]).map(contract => ({
-        name: contract,
-        file: path.resolve(`./abis/${arcVersion}/${contract}.json`)
-      })),
+      abis: (abis || [contract]).map(contractName => {
+        let _arcVersion = Number(arcVersion.slice(arcVersion.length-2,arcVersion.length));
+        if ((_arcVersion < 24) && (contractName === "UGenericScheme")) {
+          return {name: contractName,
+                  file: path.resolve(`./abis/${arcVersion}/GenericScheme.json`)
+                };
+        }
+        return {name: contractName,
+                file: path.resolve(`./abis/${arcVersion}/${contractName}.json`)
+              };
+      }),
       eventHandlers
     }
   };
@@ -38,6 +58,14 @@ function daoYaml(contract, contractAddress, arcVersion) {
 async function generateSubgraph(opts={}) {
   opts.migrationFile = opts.migrationFile || defaultMigrationFileLocation;
   opts.subgraphLocation = opts.subgraphLocation || defaultSubgraphLocation;
+  const subgraphYaml = yaml.safeLoad(
+    fs.readFileSync(opts.subgraphLocation, "utf8")
+  );
+
+  for (var i = 0, len = subgraphYaml.dataSources.length; i < len; i++) {
+    ids.push(subgraphYaml.dataSources[i].name)
+  }
+
   let daodir
   if (opts.daodir) {
     daodir = path.resolve(`${opts.daodir}/${network}/`)
@@ -63,13 +91,15 @@ async function generateSubgraph(opts={}) {
     const subgraphYaml = yaml.safeLoad(
       fs.readFileSync(opts.subgraphLocation, "utf8")
     );
+    var genericSchemeAddresses = {};
+    var genericScheme = false;
     files.forEach(function(file) {
       const dao = JSON.parse(fs.readFileSync(daodir + '/' + file, "utf-8"));
       let includeRep = false;
       let includeToken = false;
       let includeAvatar = false;
       let includeController = false;
-      for (let i = 0; i < subgraphYaml.dataSources.length; i++) {
+      for (var i = 0, len = subgraphYaml.dataSources.length; i < len; i++) {
         if (subgraphYaml.dataSources[i].source.address === dao.Reputation) {
           includeRep = true;
         }
@@ -82,6 +112,22 @@ async function generateSubgraph(opts={}) {
         if (subgraphYaml.dataSources[i].source.address === dao.Controller) {
           includeController = true;
         }
+        if ( dao.Schemes !== undefined) {
+        for (var j = 0, schemesLen = dao.Schemes.length; j < schemesLen; j++) {
+            let scheme = dao.Schemes[j];
+            if (scheme.name == "GenericScheme") {
+              if (!genericSchemeAddresses[scheme.address]) {
+                subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml(
+                  "GenericScheme",
+                  scheme.address,
+                  scheme.arcVersion ? scheme.arcVersion : dao.arcVersion
+                );
+                genericSchemeAddresses[scheme.address] = true;
+                genericScheme = true;
+              }
+            }
+        }
+       }
       }
       if (includeRep === false) {
         subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml(
@@ -112,6 +158,15 @@ async function generateSubgraph(opts={}) {
         );
       }
     });
+
+    if (!genericScheme) {
+      subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml(
+        "GenericScheme",
+        "0x1234000000000000000000000000000000000000",
+        "0.0.1-rc.28"
+      );
+    }
+
     fs.writeFileSync(
       opts.subgraphLocation,
       yaml.safeDump(subgraphYaml, { noRefs: true }),

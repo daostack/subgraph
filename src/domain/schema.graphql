@@ -10,6 +10,16 @@ enum Outcome {
 	Fail
 }
 
+enum EventType {
+	NewProposal
+	NewReputationHolder
+	ProposalStageChange
+	Vote
+	Stake
+	VoteFlip
+	NewDAO
+}
+
 type DAO @entity {
 	id: ID!
 	name: String!
@@ -22,6 +32,10 @@ type DAO @entity {
 	register: String!
 	schemes: [ControllerScheme!] @derivedFrom(field: "dao")
 	gpQueues: [GPQueue!] @derivedFrom(field: "dao")
+	numberOfQueuedProposals: BigInt!
+	numberOfPreBoostedProposals: BigInt!
+	numberOfBoostedProposals: BigInt!
+	numberOfExpiredInQueueProposals: BigInt!
 }
 
 type GPQueue @entity {
@@ -70,6 +84,7 @@ type Proposal @entity {
 	title: String
 	description: String
 	url: String
+	tags: [Tag!]
 	fulltext: [String!]
 
 	gpRewards: [GPReward!] @derivedFrom(field: "proposal")
@@ -97,10 +112,16 @@ type Proposal @entity {
 	genericScheme : GenericSchemeProposal
 
 	# SchemeRegistrar proposal
-  schemeRegistrar : SchemeRegistrarProposal
+  	schemeRegistrar : SchemeRegistrarProposal
 
 	genesisProtocolParams : GenesisProtocolParam!
 
+}
+
+type Tag @entity {
+	id: ID!
+	proposals: [Proposal!]
+	numberOfProposals: BigInt!
 }
 
 type ProposalStake @entity {
@@ -173,6 +194,22 @@ type FirstRegisterSchemeFlag @entity {
 type ContractInfo @entity {
 	id: ID!
 	name: String!
+	alias: String!
 	version: String!
 	address: Bytes!
+}
+
+type TemplateInfo @entity {
+	id: ID!
+	templateName: String!
+}
+
+type Event @entity {
+	id: ID!
+	type: EventType!
+	data: String!
+	proposal: Proposal
+	user: Bytes
+	dao: DAO
+	timestamp: BigInt!
 }

@@ -1,6 +1,6 @@
 import {
-  getArcVersion,
   createSubscriptionObservable,
+  getArcVersion,
   getContractAddresses,
   getOptions,
   getWeb3,

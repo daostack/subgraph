@@ -1,10 +1,10 @@
-import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
+import { getArcVersion, getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
 
-const DAOTracker = require('@daostack/arc/build/contracts/DAOTracker.json');
-const DaoCreator = require('@daostack/arc/build/contracts/DaoCreator.json');
-const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
-const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
-const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
+const DAOTracker = require('@daostack/migration/contracts/' + getArcVersion() + '/DAOTracker.json');
+const DaoCreator = require('@daostack/migration/contracts/' + getArcVersion() + '/DaoCreator.json');
+const Avatar = require('@daostack/migration/contracts/' + getArcVersion() + '/Avatar.json');
+const ContributionReward = require('@daostack/migration/contracts/' + getArcVersion() + '/ContributionReward.json');
+const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
 
 describe('DAOTracker', () => {
   let web3;

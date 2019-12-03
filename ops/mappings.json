@@ -80,6 +80,13 @@
         "arcVersion": "0.0.1-rc.16"
       },
       {
+        "name": "Controller",
+        "contractName": "Controller",
+        "dao": "test",
+        "mapping": "Controller",
+        "arcVersion": "0.0.1-rc.16"
+      },
+      {
         "name": "Avatar",
         "contractName": "Avatar",
         "dao": "test",
@@ -199,6 +206,13 @@
         "arcVersion": "0.0.1-rc.17"
       },
       {
+        "name": "Controller",
+        "contractName": "Controller",
+        "dao": "test",
+        "mapping": "Avatar",
+        "arcVersion": "0.0.1-rc.17"
+      },
+      {
         "name": "Avatar",
         "contractName": "Avatar",
         "dao": "test",
@@ -318,6 +332,13 @@
         "arcVersion": "0.0.1-rc.19"
       },
       {
+        "name": "Controller",
+        "contractName": "Controller",
+        "dao": "test",
+        "mapping": "Controller",
+        "arcVersion": "0.0.1-rc.19"
+      },
+      {
         "name": "Avatar",
         "contractName": "Avatar",
         "dao": "test",
@@ -433,6 +454,13 @@
         "name": "Controller",
         "contractName": "Controller",
         "dao": "dao",
+        "mapping": "Controller",
+        "arcVersion": "0.0.1-rc.23"
+      },
+      {
+        "name": "Controller",
+        "contractName": "Controller",
+        "dao": "test",
         "mapping": "Controller",
         "arcVersion": "0.0.1-rc.23"
       },
@@ -563,6 +591,13 @@
         "arcVersion": "0.0.1-rc.34"
       },
       {
+        "name": "Controller",
+        "contractName": "Controller",
+        "dao": "test",
+        "mapping": "Controller",
+        "arcVersion": "0.0.1-rc.34"
+      },
+      {
         "name": "Avatar",
         "contractName": "Avatar",
         "dao": "test",
@@ -581,6 +616,13 @@
         "contractName": "Reputation",
         "dao": "test",
         "mapping": "Reputation",
+        "arcVersion": "0.0.1-rc.34"
+      },
+      {
+        "name": "Controller",
+        "contractName": "Controller",
+        "dao": "test",
+        "mapping": "Controller",
         "arcVersion": "0.0.1-rc.34"
       },
       {

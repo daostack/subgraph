@@ -8,7 +8,7 @@ import {
 } from './util';
 
 const ActionMock = require('@daostack/migration/contracts/' + getArcVersion() + '/ActionMock.json');
-const GenericScheme = require('@daostack/migration/contracts/' + getArcVersion() + '/UGenericScheme.json');
+const GenericScheme = require('@daostack/migration/contracts/' + getArcVersion() + '/GenericScheme.json');
 const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
 
 describe('UGenericScheme', () => {

@@ -556,6 +556,13 @@
         "arcVersion": "0.0.1-rc.33"
       },
       {
+        "name": "DAOTracker",
+        "contractName": "DAOTracker",
+        "dao": "base",
+        "mapping": "DAOTracker",
+        "arcVersion": "0.0.1-rc.33"
+      },
+      {
         "name": "DAORegistry",
         "contractName": "DAORegistry",
         "dao": "base",

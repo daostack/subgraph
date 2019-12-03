@@ -1400,7 +1400,7 @@ describe('Domain Layer', () => {
         numberOfQueuedProposals: '1',
       },
       dao: {
-        numberOfQueuedProposals: '1',
+        numberOfQueuedProposals: '2',
         numberOfPreBoostedProposals: '1',
         numberOfBoostedProposals: '1',
         numberOfExpiredInQueueProposals: '0',

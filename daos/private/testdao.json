@@ -1,19 +1,19 @@
 {
-  "name": "Mannered Ukulele",
-  "Avatar": "0x300F2726c094f159b8790dE7925b9ddB8796e9b0",
-  "DAOToken": "0xc90086E80626Fb386B92e66251e3FcB50EC47dBa",
-  "Reputation": "0xad5B2d5909d27b0fB470cB033c0caE8a8a66339D",
-  "Controller": "0xAA53A0176a5C5574aA3c704631eb9e8d6FAa3cAD",
+  "name": "Fulsome Salad",
+  "Avatar": "0xF5FBbf3603C1Ad17F8056fAaeb7E3b7c9C4D48fd",
+  "DAOToken": "0x378F35b008F8E386e151616AAcF3D9Cd6f242b0E",
+  "Reputation": "0x37A6FFA06B9F1f491c532f39F2Af80bD9256B3E2",
+  "Controller": "0x5A286F22BFC8cEd57ee592978965e7136354bBc1",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0xa1F3936Ec0a31E3352f415F6AA3BB5b9ff0f781B"
+      "address": "0xF6C2037e97cd8d49Ec3e78306F257EeDA21901fc"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias2",
-      "address": "0xac2bDF95569d1c04b08fe1E2f7f6b63923A704Fc"
+      "address": "0x42349A30159ce95d0bA335C23adcB6c8c1055cE8"
     }
   ],
   "arcVersion": "0.0.1-rc.34"

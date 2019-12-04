@@ -1,4 +1,5 @@
 import {
+  getArcVersion,
   getContractAddresses,
   getOptions,
   getOrgName,
@@ -11,11 +12,11 @@ import {
   writeProposalIPFS,
 } from './util';
 
-const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
-const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
-const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
-const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
-const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
+const ContributionReward = require('@daostack/migration/contracts/' + getArcVersion() + '/ContributionReward.json');
+const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
+const DAOToken = require('@daostack/migration/contracts/' + getArcVersion() + '/DAOToken.json');
+const Reputation = require('@daostack/migration/contracts/' + getArcVersion() + '/Reputation.json');
+const Avatar = require('@daostack/migration/contracts/' + getArcVersion() + '/Avatar.json');
 const DAORegistry = require('@daostack/arc-hive/build/contracts/DAORegistry.json');
 const REAL_FBITS = 40;
 describe('Domain Layer', () => {
@@ -136,9 +137,6 @@ describe('Domain Layer', () => {
       opts,
     );
 
-    expect(register).toEqual('na');
-
-    await daoRegistry.methods.register(addresses.Avatar, 'test').send();
     register = (await sendQuery(getRegister, 2000)).dao.register;
     expect(register).toEqual('registered');
 
@@ -1393,20 +1391,20 @@ describe('Domain Layer', () => {
         },
     });
     expect(gpQueues).toContainEqual({
-        threshold: Math.pow(2, REAL_FBITS + 1).toString(),
-        scheme: {
-          name: 'ContributionReward',
-          numberOfBoostedProposals: '1',
-          numberOfExpiredInQueueProposals: '0',
-          numberOfPreBoostedProposals: '1',
-          numberOfQueuedProposals: '1',
-        },
-        dao: {
-          numberOfQueuedProposals: '2',
-          numberOfPreBoostedProposals: '1',
-          numberOfBoostedProposals: '1',
-          numberOfExpiredInQueueProposals: '0',
-        },
+      threshold: Math.pow(2, REAL_FBITS + 1).toString(),
+      scheme: {
+        name: 'ContributionReward',
+        numberOfBoostedProposals: '1',
+        numberOfExpiredInQueueProposals: '0',
+        numberOfPreBoostedProposals: '1',
+        numberOfQueuedProposals: '1',
+      },
+      dao: {
+        numberOfQueuedProposals: '2',
+        numberOfPreBoostedProposals: '1',
+        numberOfBoostedProposals: '1',
+        numberOfExpiredInQueueProposals: '0',
+      },
     });
     increaseTime(300 + 1 , web3);
     await genesisProtocol.methods.execute(p2).send();

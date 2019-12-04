@@ -1,4 +1,5 @@
 import {
+  getArcVersion,
   getContractAddresses,
   getOptions,
   getWeb3,
@@ -6,8 +7,8 @@ import {
   writeProposalIPFS,
 } from './util';
 
-const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
-const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
+const ContributionReward = require('@daostack/migration/contracts/' + getArcVersion() + '/ContributionReward.json');
+const Avatar = require('@daostack/migration/contracts/' + getArcVersion() + '/Avatar.json');
 describe('Domain Layer', () => {
   let web3;
   let addresses;

@@ -71,6 +71,12 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       abis = (yamlLoad.abis || [contract]).map(contractName => {
         const versionNum = versionToNum(version);
 
+        if ((versionNum >= 34) && (contractName === "UGenericScheme")) {
+          return {
+            name: contractName,
+            file: `${__dirname}/../abis/0.0.1-rc.33/UGenericScheme.json`
+          };
+        }
         if ((versionNum < 24) && (contractName === "UGenericScheme")) {
           return {
             name: contractName,

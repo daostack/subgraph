@@ -12,6 +12,6 @@ describe('sanity', () => {
           latestArcVersionExist++;
         }
     }
-    expect(latestArcVersionExist).toBeGreaterThanOrEqual(18);
+    expect(latestArcVersionExist).toBeGreaterThanOrEqual(17);
   }, 10);
 });

@@ -39,10 +39,7 @@ function daoYaml(contract, contractAddress, arcVersion) {
       abis: (abis || [contract]).map(contractName => {
         let _arcVersion = Number(arcVersion.slice(arcVersion.length-2,arcVersion.length));
         if ((_arcVersion >= 34) && (contractName === "UGenericScheme")) {
-          return {
-            name: contractName,
-            file: `${__dirname}/../abis/0.0.1-rc.33/UGenericScheme.json`
-          };
+          throw Error(`Contract UGenericScheme is not supported for Arc version 34+.`)
         }
         if ((_arcVersion < 24) && (contractName === "UGenericScheme")) {
           return {name: contractName,

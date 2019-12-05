@@ -1,5 +1,6 @@
 import { Address, store, BigInt } from '@graphprotocol/graph-ts';
 import { Signal } from '../types/schema';
+import { getProposal } from './proposal'
 
 export function getSignal(id: string): Signal {
   let sig = store.get('Signal', id) as Signal;
@@ -14,7 +15,9 @@ function saveSignal(signal: Signal): void {
 }
 
 function addMeta(signal: Signal, metadata: string): void {
-  signal.data = metadata;
+  let proposal = getProposal(metadata);
+  let metadatatitle = proposal.title;
+  signal.data = metadatatitle;
   saveSignal(signal);
 }
 

@@ -9,17 +9,17 @@ export function getSignal(id: string): Signal {
   return sig;
 }
 
-export function saveSignal(signal: Signal): void {
+function saveSignal(signal: Signal): void {
   signal.save()
 }
 
-export function addMeta(signal: Signal, metadata: string): void {
+function addMeta(signal: Signal, metadata: string): void {
   signal.data = metadata;
   saveSignal(signal);
 }
 
-export function testwritesignal(id: string, metadata: string): void {
-  let sig = new Signal(id);
-  sig.data = metadata;
-  saveSignal(sig);
+export function writesignal(id: string, metadata: string): void {
+  let signal = getSignal(id)
+  addMeta(signal,metadata);
+
 }

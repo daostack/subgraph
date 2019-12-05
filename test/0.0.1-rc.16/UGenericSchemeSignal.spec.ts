@@ -193,19 +193,29 @@ describe('Generic Signal Scheme', () => {
     }`
 
 
+    // const metaq = `{
+    //   debugs{
+    //     id
+    //     message
+    //   }
+    // }`
+
+
     const metadata = await sendQuery(metaq, 5000);
     console.log(metadata);
+    //
+    // expect(metadata).toMatchObject({
+    //    signals:[
+    //       {
+    //         data:
+    //           '{"signal": {"Header":"https://de.wikipedia.org/wiki/Wald#/media/Datei:Laurisilva_en_el_Cubo_de_la_Galga.jpg"}}',
+    //         id:
+    //           '0xe7a2c59e134ee81d4035ae6db2254f79308e334f'
+    //       }
+    //     ]
+    // });
 
-    expect(metadata).toMatchObject({
-       signals:[
-          {
-            data:
-              '{"signal": {"Header":"https://de.wikipedia.org/wiki/Wald#/media/Datei:Laurisilva_en_el_Cubo_de_la_Galga.jpg"}}',
-            id:
-              '0xe7a2c59e134ee81d4035ae6db2254f79308e334f'
-          }
-        ]
-    });
+
 
   }, 100000);
 });

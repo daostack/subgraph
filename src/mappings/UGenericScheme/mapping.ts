@@ -51,9 +51,9 @@ export function handleProposalExecuted(
   }
 
   var signalId = event.params._avatar.toHex();
-  var testmetastring = '{"signal": {"Header":"https://de.wikipedia.org/wiki/Wald#/media/Datei:Laurisilva_en_el_Cubo_de_la_Galga.jpg"}}';
-  debug(testmetastring);
-
+  var testmetastring = event.params._proposalId.toHex();
   domain.addSignal(signalId, testmetastring);
+
+
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);
 }

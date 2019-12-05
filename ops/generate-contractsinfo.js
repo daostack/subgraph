@@ -47,7 +47,7 @@ async function generateContractInfo(opts={}) {
       if (dao.Schemes !== undefined) {
          for (var i = 0, len = dao.Schemes.length; i < len; i++) {
            var scheme = dao.Schemes[i];
-           buffer += "    setContractInfo("+"'"+scheme.address.toLowerCase()+"'"+", " +"'"+scheme.name+"'"+", "+"'"+ scheme.alias +"', "+"'"+dao.arcVersion+"'"+");\n";
+           buffer += "    setContractInfo("+"'"+scheme.address.toLowerCase()+"'"+", " +"'"+scheme.name+"'"+", "+"'"+ scheme.alias +"', "+"'"+(scheme.arcVersion ? scheme.arcVersion : dao.arcVersion)+"'"+");\n";
          }
       }
     });

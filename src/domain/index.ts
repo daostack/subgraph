@@ -43,7 +43,7 @@ import {
 import { insertStake } from './stake';
 import { getToken, insertToken, updateTokenTotalSupply } from './token';
 import { insertVote } from './vote';
-import { getSignal, addMeta, testwritesignal } from './signal'
+import { writesignal } from './signal'
 
 function isProposalValid(proposalId: string ): boolean {
   let p = Proposal.load(proposalId);
@@ -331,7 +331,7 @@ export function removeDaoMember(reputationHolder: ReputationHolder): void {
 }
 
 export function addSignal(id: string, metadata: string): void{
-  // let signal = getSignal(id);
-  // addMeta(signal,metadata);
-  testwritesignal(id,metadata);
+  //let signal = getSignal(id);
+  //addMeta(signal,metadata);
+  writesignal(id,metadata);
 }

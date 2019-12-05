@@ -16,8 +16,9 @@ function saveSignal(signal: Signal): void {
 
 function addMeta(signal: Signal, metadata: string): void {
   let proposal = getProposal(metadata);
-  let metadatatitle = proposal.title;
-  signal.data = metadatatitle;
+  let instruction = proposal.title;
+  let metadatavalues = proposal.description;
+  signal.data = metadatavalues;
   saveSignal(signal);
 }
 

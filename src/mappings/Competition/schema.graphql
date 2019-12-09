@@ -2,7 +2,7 @@ type CompetitionProposal @entity {
     id: ID!
     proposal: Proposal!
     contract: Bytes!
-    avatar: DAO!
+    dao: DAO!
     numberOfWinners: BigInt!
     rewardSplit: [BigInt!]
     startTime: BigInt!

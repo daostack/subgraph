@@ -1,6 +1,6 @@
 import 'allocator/arena';
 
-import { BigInt, ByteArray, crypto, ipfs } from '@graphprotocol/graph-ts';
+import { BigInt, ByteArray, crypto, ipfs, Address } from '@graphprotocol/graph-ts';
 // Import event types from the Reputation contract ABI
 import {
   NewCompetitionProposal, NewSuggestion, NewVote, Redeem, SnapshotBlock,
@@ -12,10 +12,12 @@ import { concat, eventId } from '../../utils';
 
 export function handleNewCompetitionProposal(event: NewCompetitionProposal): void {
   let contributionRewardExt = ContributionRewardExt.bind(event.params._contributionRewardExt);
+  let avatar = contributionRewardExt.avatar();
+  let contributionRewardScheme = crypto.keccak256(concat(avatar, event.params._contributionRewardExt)).toHex()
   let competitionProposal = new CompetitionProposal(event.params._proposalId.toHex());
   competitionProposal.proposal = event.params._proposalId.toHex();
   competitionProposal.contract = event.address;
-  competitionProposal.avatar = contributionRewardExt.avatar().toHex();
+  competitionProposal.dao = avatar.toHex();
   competitionProposal.numberOfWinners = event.params._numberOfWinners;
   competitionProposal.rewardSplit = event.params._rewardSplit;
   competitionProposal.startTime = event.params._startTime;
@@ -23,7 +25,7 @@ export function handleNewCompetitionProposal(event: NewCompetitionProposal): voi
   competitionProposal.suggestionsEndTime = event.params._suggestionsEndTime;
   competitionProposal.endTime = event.params._endTime;
   competitionProposal.numberOfVotesPerVoters = event.params._maxNumberOfVotesPerVoter;
-  competitionProposal.contributionReward = event.params._contributionRewardExt.toHex();
+  competitionProposal.contributionReward = contributionRewardScheme;
   competitionProposal.createdAt = event.block.timestamp;
   competitionProposal.save();
   let proposal = Proposal.load(competitionProposal.id);

@@ -39,18 +39,18 @@ describe('Competition', () => {
             nativeToken: 2,
             rep: 1,
         };
-        let rewardSplit = [50, 25, 15, 10];
+        let rewardSplit = ['50', '25', '15', '10'];
         let block = await web3.eth.getBlock('latest');
         let startTime = block.timestamp + 10;
         let votingStartTime = block.timestamp + 600;
         let endTime = block.timestamp + 1200;
         let suggestionsEndTime = block.timestamp + 1200;
-        let maxNumberOfVotesPerVoter = 3;
+        let numberOfVotesPerVoters = 3;
         let competitionParameters = [
             startTime,
             votingStartTime,
             endTime,
-            maxNumberOfVotesPerVoter,
+            numberOfVotesPerVoters,
             suggestionsEndTime,
         ];
         const propose = competition.methods.proposeCompetition(
@@ -66,8 +66,8 @@ describe('Competition', () => {
             competitionParameters,
         );
         const proposalId = await propose.call();
-        const { transactionHash: proposaTxHash } = await propose.send();
-
+        const { blockNumber } = await propose.send();
+        const { timestamp } = await web3.eth.getBlock(blockNumber);
         let { contributionRewardProposal } = await sendQuery(`{
             contributionRewardProposal(id: "${proposalId}") {
                 proposalId,
@@ -108,6 +108,62 @@ describe('Competition', () => {
             proposalId,
             reputationReward: rewards.rep.toString(),
             votingMachine: addresses.GenesisProtocol.toLowerCase(),
+        });
+
+        let { competitionProposal } = await sendQuery(`{
+            competitionProposal(id: "${proposalId}") {
+              id
+              proposal {
+                id
+              }
+              contract
+              dao {
+                id
+              }
+              numberOfWinners
+              rewardSplit
+              startTime
+              votingStartTime
+              suggestionsEndTime
+              endTime
+              numberOfVotesPerVoters
+              contributionReward {
+                address
+              }
+              snapshotBlock
+              suggestions {
+                id
+              }
+              votes {
+                id
+              }
+              createdAt
+            }
+          }`);
+
+        expect(competitionProposal).toEqual({
+            id: proposalId,
+            proposal: {
+                id: proposalId,
+            },
+            contract: addresses.Competition.toLowerCase(),
+            dao: {
+                id: addresses.Avatar.toLowerCase(),
+            },
+            numberOfWinners: rewardSplit.length.toString(),
+            rewardSplit,
+            startTime: startTime.toString(),
+            votingStartTime: votingStartTime.toString(),
+            suggestionsEndTime: suggestionsEndTime.toString(),
+            endTime: endTime.toString(),
+            numberOfVotesPerVoters: numberOfVotesPerVoters.toString(),
+            contributionReward: {
+                address: addresses.ContributionRewardExt.toLowerCase()
+            },
+            snapshotBlock: null,
+            suggestions: [],
+            votes: [],
+            createdAt: timestamp.toString(),
         });
     }, 100000);
 });

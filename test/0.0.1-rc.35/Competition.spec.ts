@@ -68,8 +68,8 @@ describe('Competition', () => {
         const proposalId = await propose.call();
         const { transactionHash: proposaTxHash } = await propose.send();
 
-        let { contributionRewardProposals } = await sendQuery(`{
-            contributionRewardProposals {
+        let { contributionRewardProposal } = await sendQuery(`{
+            contributionRewardProposal(id: "${proposalId}") {
                 proposalId,
                 contract,
                 avatar,
@@ -82,7 +82,6 @@ describe('Competition', () => {
                 ethReward,
                 externalTokenReward,
                 periods,
-                periodLength,
                 executedAt,
                 alreadyRedeemedReputationPeriods,
                 alreadyRedeemedNativeTokenPeriods,
@@ -91,13 +90,13 @@ describe('Competition', () => {
             }
         }`);
 
-        expect(contributionRewardProposals).toContainEqual({
+        expect(contributionRewardProposal).toEqual({
             alreadyRedeemedEthPeriods: null,
             alreadyRedeemedExternalTokenPeriods: null,
             alreadyRedeemedNativeTokenPeriods: null,
             alreadyRedeemedReputationPeriods: null,
             avatar: addresses.Avatar.toLowerCase(),
-            beneficiary: accounts[1].address.toLowerCase(),
+            beneficiary: addresses.ContributionRewardExt.toLowerCase(),
             contract: contributionReward.options.address.toLowerCase(),
             descriptionHash: descHash,
             ethReward: rewards.eth.toString(),

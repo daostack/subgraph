@@ -1,6 +1,4 @@
-import 'allocator/arena';
-
-import { BigInt, ByteArray, crypto, ipfs, Address } from '@graphprotocol/graph-ts';
+import { Address, BigInt, ByteArray, Bytes, crypto, ipfs } from '@graphprotocol/graph-ts';
 import {
   NewCompetitionProposal, NewSuggestion, NewVote, Redeem, SnapshotBlock,
 } from '../../types/Competition/Competition';
@@ -12,7 +10,7 @@ import { concat, eventId } from '../../utils';
 export function handleNewCompetitionProposal(event: NewCompetitionProposal): void {
   let contributionRewardExt = ContributionRewardExt.bind(event.params._contributionRewardExt);
   let avatar = contributionRewardExt.avatar();
-  let contributionRewardScheme = crypto.keccak256(concat(avatar, event.params._contributionRewardExt)).toHex()
+  let contributionRewardScheme = crypto.keccak256(concat(avatar, event.params._contributionRewardExt)).toHex();
   let competitionProposal = new CompetitionProposal(event.params._proposalId.toHex());
   competitionProposal.proposal = event.params._proposalId.toHex();
   competitionProposal.contract = event.address;
@@ -35,46 +33,70 @@ export function handleNewCompetitionProposal(event: NewCompetitionProposal): voi
 }
 
 export function handleRedeem(event: Redeem): void {
-  // TODO: Implement redeem and reward logic.
+  let competitionProposal = CompetitionProposal.load(event.params._proposalId.toHex());
+  if (competitionProposal != null) {
+    let suggestionId = crypto.keccak256(
+      concat(
+        Bytes.fromHexString(competitionProposal.contributionReward),
+        event.params._suggestionId as ByteArray,
+      ),
+    ).toHex();
+    let suggestion = CompetitionSuggestion.load(suggestionId);
+    if (suggestion != null) {
+      suggestion.redeemedAt = event.block.timestamp;
+      suggestion.rewardPercentage = event.params._rewardPercentage;
+      suggestion.save();
+    }
+  }
 }
 
 export function handleNewSuggestion(event: NewSuggestion): void {
-  let competitionSuggestion = new CompetitionSuggestion(
-    crypto.keccak256(
-      concat(
-        event.params._proposalId,
-        event.params._suggestionId as ByteArray,
-      ),
-    ).toHex(),
-  );
-  competitionSuggestion.proposal = event.params._proposalId.toHex();
-  competitionSuggestion.descriptionHash = event.params._descriptionHash;
-  let ipfsData = ipfs.cat('/ipfs/' + event.params._descriptionHash.toHex());
-  if (ipfsData != null) {
-    competitionSuggestion.description = ipfsData.toString();
+  let competitionProposal = CompetitionProposal.load(event.params._proposalId.toHex());
+  if (competitionProposal != null) {
+    let competitionSuggestion = new CompetitionSuggestion(
+      crypto.keccak256(
+        concat(
+          Bytes.fromHexString(competitionProposal.contributionReward),
+          event.params._suggestionId as ByteArray,
+        ),
+      ).toHex(),
+    );
+    competitionSuggestion.suggestionId = event.params._suggestionId;
+    competitionSuggestion.proposal = event.params._proposalId.toHex();
+    competitionSuggestion.descriptionHash = event.params._descriptionHash.toHex();
+    let ipfsData = ipfs.cat('/ipfs/' + event.params._descriptionHash.toHex());
+    if (ipfsData != null) {
+      competitionSuggestion.description = ipfsData.toString();
+    }
+    competitionSuggestion.suggester = event.params._suggester;
+    competitionSuggestion.totalVotes = BigInt.fromI32(0);
+    competitionSuggestion.createdAt = event.block.timestamp;
+    competitionSuggestion.save();
   }
-  competitionSuggestion.suggester = event.params._suggester;
-  competitionSuggestion.totalVotes = BigInt.fromI32(0);
-  competitionSuggestion.createdAt = event.block.timestamp;
-  competitionSuggestion.save();
 }
 
 export function handleNewVote(event: NewVote): void {
-  let suggestionId = crypto.keccak256(
-    concat(event.params._proposalId, event.params._suggestionId as ByteArray),
-  ).toHex();
-  let vote = new CompetitionVote(eventId(event));
-  vote.proposal = event.params._proposalId.toHex();
-  vote.suggestion = suggestionId;
-  vote.voter = event.params._voter;
-  vote.createdAt = event.block.timestamp;
-  vote.reptutation = event.params._reputation;
-  let suggestion = CompetitionSuggestion.load(suggestionId);
-  if (suggestion != null) {
-    suggestion.totalVotes = suggestion.totalVotes.plus(event.params._reputation);
-    suggestion.save();
+  let competitionProposal = CompetitionProposal.load(event.params._proposalId.toHex());
+  if (competitionProposal != null) {
+    let suggestionId = crypto.keccak256(
+      concat(
+        Bytes.fromHexString(competitionProposal.contributionReward),
+        event.params._suggestionId as ByteArray,
+      ),
+    ).toHex();
+    let vote = new CompetitionVote(eventId(event));
+    vote.proposal = event.params._proposalId.toHex();
+    vote.suggestion = suggestionId;
+    vote.voter = event.params._voter;
+    vote.createdAt = event.block.timestamp;
+    vote.reptutation = event.params._reputation;
+    let suggestion = CompetitionSuggestion.load(suggestionId);
+    if (suggestion != null) {
+      suggestion.totalVotes = suggestion.totalVotes.plus(event.params._reputation);
+      suggestion.save();
+    }
+    vote.save();
   }
-  vote.save();
 }
 
 export function handleSnapshotBlock(event: SnapshotBlock): void {

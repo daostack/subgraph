@@ -1,7 +1,6 @@
 import 'allocator/arena';
 
 import { BigInt, ByteArray, crypto, ipfs, Address } from '@graphprotocol/graph-ts';
-// Import event types from the Reputation contract ABI
 import {
   NewCompetitionProposal, NewSuggestion, NewVote, Redeem, SnapshotBlock,
 } from '../../types/Competition/Competition';

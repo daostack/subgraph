@@ -19,13 +19,16 @@ type CompetitionProposal @entity {
 
 type CompetitionSuggestion @entity {
     id: ID!
+    suggestionId: BigInt!
     proposal: CompetitionProposal!
-    descriptionHash: Bytes!
+    descriptionHash: String!
     description: String
     suggester: Bytes!
     votes: [CompetitionVote!] @derivedFrom(field: "suggestion")
     totalVotes: BigInt!
     createdAt: BigInt!
+    redeemedAt: BigInt
+    rewardPercentage: BigInt
 }
 
 type CompetitionVote @entity {

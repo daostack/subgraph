@@ -1,8 +1,6 @@
-import 'allocator/arena';
-
 import { Address, BigInt, Bytes, crypto, store } from '@graphprotocol/graph-ts';
 
-// Import event types from the Reputation contract ABI
+// Import event types from the ContributionRewardExt contract ABI
 import {
   ContributionRewardExt,
   NewContributionProposal,
@@ -109,22 +107,27 @@ function updateProposalAfterRedemption(
   ) as ContributionRewardProposal;
   if (ent != null) {
     let cr = ContributionRewardExt.bind(contributionRewardAddress);
+    let proposal = cr.organizationProposals(proposalId);
     if (type === 0) {
-      if (cr.organizationProposals(proposalId).value1.isZero()) {
+      if (proposal.value1.isZero()) {
         ent.alreadyRedeemedReputationPeriods = BigInt.fromI32(1);
       }
+      ent.reputationChangeLeft = proposal.value7;
     } else if (type === 1) {
-      if (cr.organizationProposals(proposalId).value0.isZero()) {
+      if (proposal.value0.isZero()) {
         ent.alreadyRedeemedNativeTokenPeriods = BigInt.fromI32(1);
       }
+      ent.nativeTokenRewardLeft = proposal.value6;
     } else if (type === 2) {
-      if (cr.organizationProposals(proposalId).value2.isZero()) {
+      if (proposal.value2.isZero()) {
         ent.alreadyRedeemedEthPeriods = BigInt.fromI32(1);
       }
+      ent.ethRewardLeft = proposal.value8;
     } else if (type === 3) {
-      if (cr.organizationProposals(proposalId).value4.isZero()) {
+      if (proposal.value4.isZero()) {
         ent.alreadyRedeemedExternalTokenPeriods = BigInt.fromI32(1);
       }
+      ent.externalTokenRewardLeft = proposal.value9;
     }
     store.set('ContributionRewardProposal', proposalId.toHex(), ent);
     let reward = GPReward.load(crypto.keccak256(concat(proposalId, ent.beneficiary)).toHex());
@@ -143,6 +146,12 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   ) as ContributionRewardProposal;
   if (proposalEnt != null) {
     proposalEnt.executedAt = event.block.timestamp;
+    if (event.params._param.toI32() === 1) {
+      proposalEnt.reputationChangeLeft = proposalEnt.reputationReward;
+      proposalEnt.nativeTokenRewardLeft = proposalEnt.nativeTokenReward;
+      proposalEnt.ethRewardLeft = proposalEnt.ethReward;
+      proposalEnt.externalTokenRewardLeft = proposalEnt.externalTokenReward;
+    }
     store.set('ContributionRewardProposal', proposalId.toHex(), proposalEnt);
   }
 

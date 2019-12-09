@@ -85,4 +85,8 @@ type ContributionRewardProposal @entity {
 	alreadyRedeemedNativeTokenPeriods: BigInt
 	alreadyRedeemedEthPeriods: BigInt
 	alreadyRedeemedExternalTokenPeriods: BigInt
+	reputationChangeLeft: BigInt
+	nativeTokenRewardLeft: BigInt
+	ethRewardLeft: BigInt
+	externalTokenRewardLeft: BigInt
 }

@@ -4,14 +4,14 @@ import { Address, BigInt, Bytes, crypto, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Reputation contract ABI
 import {
-  ContributionReward,
+  ContributionRewardExt,
   NewContributionProposal,
   ProposalExecuted,
   RedeemEther,
   RedeemExternalToken,
   RedeemNativeToken,
   RedeemReputation,
-} from '../../types/ContributionReward/ContributionReward';
+} from '../../types/ContributionRewardExt/ContributionRewardExt';
 
 import * as domain from '../../domain';
 
@@ -94,8 +94,7 @@ function insertNewProposal(event: NewContributionProposal): void {
   ent.nativeTokenReward = rewards.shift(); // native tokens
   ent.ethReward = rewards.shift(); // eth
   ent.externalTokenReward = rewards.shift(); // external tokens
-  ent.periodLength = rewards.shift(); // period length
-  ent.periods = rewards.shift(); // number of periods
+  ent.periods = BigInt.fromI32(1); // number of periods
   store.set('ContributionRewardProposal', ent.id, ent);
 }
 
@@ -109,31 +108,23 @@ function updateProposalAfterRedemption(
     proposalId.toHex(),
   ) as ContributionRewardProposal;
   if (ent != null) {
-    let cr = ContributionReward.bind(contributionRewardAddress);
+    let cr = ContributionRewardExt.bind(contributionRewardAddress);
     if (type === 0) {
-      ent.alreadyRedeemedReputationPeriods = cr.getRedeemedPeriods(
-        proposalId,
-        ent.avatar as Address,
-        BigInt.fromI32(0),
-      );
+      if (cr.organizationProposals(proposalId).value1.isZero()) {
+        ent.alreadyRedeemedReputationPeriods = BigInt.fromI32(1);
+      }
     } else if (type === 1) {
-      ent.alreadyRedeemedNativeTokenPeriods = cr.getRedeemedPeriods(
-        proposalId,
-        ent.avatar as Address,
-        BigInt.fromI32(1),
-      );
+      if (cr.organizationProposals(proposalId).value0.isZero()) {
+        ent.alreadyRedeemedNativeTokenPeriods = BigInt.fromI32(1);
+      }
     } else if (type === 2) {
-      ent.alreadyRedeemedEthPeriods = cr.getRedeemedPeriods(
-        proposalId,
-        ent.avatar as Address,
-        BigInt.fromI32(2),
-      );
+      if (cr.organizationProposals(proposalId).value2.isZero()) {
+        ent.alreadyRedeemedEthPeriods = BigInt.fromI32(1);
+      }
     } else if (type === 3) {
-      ent.alreadyRedeemedExternalTokenPeriods = cr.getRedeemedPeriods(
-        proposalId,
-        ent.avatar as Address,
-        BigInt.fromI32(3),
-      );
+      if (cr.organizationProposals(proposalId).value4.isZero()) {
+        ent.alreadyRedeemedExternalTokenPeriods = BigInt.fromI32(1);
+      }
     }
     store.set('ContributionRewardProposal', proposalId.toHex(), ent);
     let reward = GPReward.load(crypto.keccak256(concat(proposalId, ent.beneficiary)).toHex());
@@ -145,15 +136,13 @@ function updateProposalAfterRedemption(
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
-  let cr = ContributionReward.bind(event.address);
   let proposalId = event.params._proposalId;
   let proposalEnt = store.get(
     'ContributionRewardProposal',
     proposalId.toHex(),
   ) as ContributionRewardProposal;
   if (proposalEnt != null) {
-    let proposal = cr.organizationsProposals(event.params._avatar, proposalId);
-    proposalEnt.executedAt = proposal.value8;
+    proposalEnt.executedAt = event.block.timestamp;
     store.set('ContributionRewardProposal', proposalId.toHex(), proposalEnt);
   }
 
@@ -193,7 +182,6 @@ export function handleNewContributionProposal(
   ent.nativeTokenReward = rewards.shift(); // native tokens
   ent.ethReward = rewards.shift(); // eth
   ent.externalTokenReward = rewards.shift(); // external tokens
-  ent.periodLength = rewards.shift(); // period length
-  ent.periods = rewards.shift(); // number of periods
+  ent.periods = BigInt.fromI32(1); // number of periods
   store.set('ContributionRewardNewContributionProposal', ent.id, ent);
 }

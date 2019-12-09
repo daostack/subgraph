@@ -74,21 +74,25 @@ function handleGPProposalPrivate(proposalId: string): void {
 }
 
 export function handleNewContributionProposal(
-  event: NewContributionProposal,
+  proposalId: Bytes,
+  avatar: Address,
+  timestamp: BigInt,
+  intVoteInterface: Address,
+  descriptionHash: string,
+  contract: Address,
 ): void {
-  if (!daoModule.exists(event.params._avatar)) {
+  if (!daoModule.exists(avatar)) {
     return;
   }
   updateCRProposal(
-    event.params._proposalId,
-    event.block.timestamp,
-    event.params._avatar,
-    event.params._intVoteInterface,
-    event.params._descriptionHash,
-    event.params._beneficiary,
-    event.address,
+    proposalId,
+    timestamp,
+    avatar,
+    intVoteInterface,
+    descriptionHash,
+    contract,
   );
-  handleGPProposalPrivate(event.params._proposalId.toHex());
+  handleGPProposalPrivate(proposalId.toHex());
 }
 
 export function handleNewSchemeRegisterProposal(
@@ -182,11 +186,6 @@ export function handleVoteProposal(event: VoteProposal): void {
     event.params._reputation,
   );
   insertGPRewardsToHelper(event.params._proposalId, event.params._voter);
-}
-
-export function handleProposalExecuted(event: ProposalExecuted): void {
-  // this already handled at handleExecuteProposal
-  // updateProposalExecution(event.params._proposalId, null, event.block.timestamp,event.address);
 }
 
 export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {

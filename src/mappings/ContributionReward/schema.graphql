@@ -62,7 +62,7 @@ type ContributionRewardNewContributionProposal @entity {
 	ethReward: BigInt!
 	externalTokenReward: BigInt!
 	periods: BigInt!
-	periodLength: BigInt!
+	periodLength: BigInt
 }
 
 type ContributionRewardProposal @entity {
@@ -79,7 +79,7 @@ type ContributionRewardProposal @entity {
 	ethReward: BigInt!
 	externalTokenReward: BigInt!
 	periods: BigInt!
-	periodLength: BigInt!
+	periodLength: BigInt
 	executedAt: BigInt
 	alreadyRedeemedReputationPeriods: BigInt
 	alreadyRedeemedNativeTokenPeriods: BigInt

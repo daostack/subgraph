@@ -1,0 +1,38 @@
+type CompetitionProposal @entity {
+    id: ID!
+    proposal: Proposal!
+    contract: Bytes!
+    avatar: DAO!
+    numberOfWinners: BigInt!
+    rewardSplit: [BigInt!]
+    startTime: BigInt!
+    votingStartTime: BigInt!
+    suggestionsEndTime: BigInt!
+    endTime: BigInt!
+    numberOfVotesPerVoters: BigInt!
+    contributionReward: ControllerScheme!
+    snapshotBlock: BigInt
+    suggestions: [CompetitionSuggestion!] @derivedFrom(field: "proposal")
+    votes: [CompetitionVote!] @derivedFrom(field: "proposal")
+    createdAt: BigInt!
+}
+
+type CompetitionSuggestion @entity {
+    id: ID!
+    proposal: CompetitionProposal!
+    descriptionHash: Bytes!
+    description: String
+    suggester: Bytes!
+    votes: [CompetitionVote!] @derivedFrom(field: "suggestion")
+    totalVotes: BigInt!
+    createdAt: BigInt!
+}
+
+type CompetitionVote @entity {
+    id: ID!
+    proposal: CompetitionProposal!
+    suggestion: CompetitionSuggestion!
+    voter: Bytes!
+    createdAt: BigInt!
+    reptutation: BigInt!
+}

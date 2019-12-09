@@ -1,6 +1,6 @@
 import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { ControllerScheme, DAO, GenesisProtocolParam, Proposal, Tag } from '../types/schema';
+import { CompetitionProposal, ControllerScheme, DAO, GenesisProtocolParam, Proposal, Tag } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
 import { getDAO, saveDAO } from './dao';
 import { addNewProposalEvent, addVoteFlipEvent } from './event';
@@ -304,7 +304,6 @@ export function updateCRProposal(
   avatarAddress: Address,
   votingMachine: Address,
   descriptionHash: string,
-  beneficiary: Address,
   schemeAddress: Address,
 ): void {
   let proposal = getProposal(proposalId.toHex());

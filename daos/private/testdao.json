@@ -1,20 +1,39 @@
 {
-  "name": "Fulsome Salad",
-  "Avatar": "0xF5FBbf3603C1Ad17F8056fAaeb7E3b7c9C4D48fd",
-  "DAOToken": "0x378F35b008F8E386e151616AAcF3D9Cd6f242b0E",
-  "Reputation": "0x37A6FFA06B9F1f491c532f39F2Af80bD9256B3E2",
-  "Controller": "0x5A286F22BFC8cEd57ee592978965e7136354bBc1",
+  "name": "Inveterate Maintenance",
+  "Avatar": "0xcf13fFcAF78259Ab49714A4634a9a518Cd2e30e9",
+  "DAOToken": "0x89cdFe95c4E16220028D14FC88516Ad7A09Ff130",
+  "Reputation": "0x5872024e06a7bB0C55E64BC6D0a84318C9C7113b",
+  "Controller": "0x791c19214A6b01a58928A82678cb294504349c5D",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0xF6C2037e97cd8d49Ec3e78306F257EeDA21901fc"
+      "address": "0x02a01FD7431F457380eBDAa00A4f5bDFA3e751c4",
+      "arcVersion": "0.0.1-rc.35"
     },
     {
-      "name": "GenericScheme",
-      "alias": "GenericSchemeAlias2",
-      "address": "0x42349A30159ce95d0bA335C23adcB6c8c1055cE8"
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x49Aec747d48b443aeDC8d70d0f3dFBc6515C7e8A",
+      "arcVersion": "0.0.1-rc.35"
     }
   ],
-  "arcVersion": "0.0.1-rc.34"
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0x4A6010cf9A8f142034CA14fd802ec7372D498150",
+      "arcVersion": "0.0.1-rc.35"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x49Aec747d48b443aeDC8d70d0f3dFBc6515C7e8A",
+      "arcVersion": "0.0.1-rc.35"
+    },
+    {
+      "name": "Competition",
+      "address": "0xC565D008100a9A3d305cD08c3119582e822c88A9",
+      "arcVersion": "0.0.1-rc.35"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.35"
 }

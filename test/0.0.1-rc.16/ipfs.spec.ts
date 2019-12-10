@@ -133,7 +133,7 @@ describe('Domain Layer', () => {
       id: p2,
       descriptionHash: descHash,
       title: proposalTitle,
-      description: null,
+      description: '',
       url: proposalUrl,
     });
 
@@ -168,8 +168,8 @@ describe('Domain Layer', () => {
       id: p3,
       descriptionHash: descHash,
       title: '',
-      description: null,
-      url: null,
+      description: '',
+      url: '',
     });
 
     // Invalid IPFS hash
@@ -201,8 +201,8 @@ describe('Domain Layer', () => {
       id: p4,
       descriptionHash: descHash,
       title: '',
-      description: null,
-      url: null,
+      description: '',
+      url: '',
     });
 
     // Invalid IPFS data1
@@ -236,8 +236,8 @@ describe('Domain Layer', () => {
       id: p5,
       descriptionHash: descHash,
       title: '',
-      description: null,
-      url: null,
+      description: '',
+      url: '',
     });
 
     // Invalid IPFS data2
@@ -271,8 +271,8 @@ describe('Domain Layer', () => {
       id: p6,
       descriptionHash: descHash,
       title: '',
-      description: null,
-      url: null,
+      description: '',
+      url: '',
     });
 
   }, 100000);

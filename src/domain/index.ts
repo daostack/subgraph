@@ -170,7 +170,13 @@ export function handleVoteProposal(event: VoteProposal): void {
       event.params._reputation,
     );
   }
-  updateProposalAfterVote(proposal, event.address, event.params._proposalId, event.params._voter, event.block.timestamp);
+  updateProposalAfterVote(
+    proposal,
+    event.address,
+    event.params._proposalId,
+    event.params._voter,
+    event.block.timestamp,
+  );
   saveProposal(proposal);
   insertVote(
     eventId(event),

@@ -1309,7 +1309,7 @@ describe('Domain Layer', () => {
       data: '{ \"outcome\": \"Fail\", \"votesFor\": \"' + address1Rep + '\", \"votesAgainst\": \"' + address2Rep + '\" }',
       proposal: { id: p2 },
       type: 'VoteFlip',
-      user: null,
+      user: accounts[2].address,
       timestamp: `${quietEndingPeriodBeganAt}`,
     });
 

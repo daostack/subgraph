@@ -137,6 +137,7 @@ export function updateProposalAfterVote(
   proposal: Proposal,
   gpAddress: Address,
   proposalId: Bytes,
+  voter: Address,
   timestamp: BigInt,
 ): void {
   let gp = GenesisProtocol.bind(gpAddress);
@@ -149,7 +150,7 @@ export function updateProposalAfterVote(
     if ((gpProposal.value2 === 6)) {
       setProposalState(proposal, 6, gp.getProposalTimes(proposalId));
     }
-    addVoteFlipEvent(proposalId, proposal, timestamp);
+    addVoteFlipEvent(proposalId, proposal, voter, timestamp);
   }
 }
 

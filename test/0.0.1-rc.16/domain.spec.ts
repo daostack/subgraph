@@ -933,7 +933,7 @@ describe('Domain Layer', () => {
       data: '{ \"stage\": \"Boosted\" }',
       proposal: { id: p1 },
       type: 'ProposalStageChange',
-      user: null,
+      user: accounts[1].address.toLowerCase(),
       timestamp: `${v2Timestamp}`,
     });
 
@@ -1309,7 +1309,7 @@ describe('Domain Layer', () => {
       data: '{ \"outcome\": \"Fail\", \"votesFor\": \"' + address1Rep + '\", \"votesAgainst\": \"' + address2Rep + '\" }',
       proposal: { id: p2 },
       type: 'VoteFlip',
-      user: accounts[2].address,
+      user: accounts[2].address.toLowerCase(),
       timestamp: `${quietEndingPeriodBeganAt}`,
     });
 

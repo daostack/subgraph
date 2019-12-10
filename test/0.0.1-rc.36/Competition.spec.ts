@@ -1,12 +1,12 @@
-import { 
-    increaseTime,
-    waitUntilTrue,
-    writeProposalIPFS,
+import {
     getArcVersion,
     getContractAddresses,
     getOptions,
     getWeb3,
-    sendQuery 
+    increaseTime,
+    sendQuery,
+    waitUntilTrue,
+    writeProposalIPFS,
 } from './util';
 
 const ContributionRewardExt = require(
@@ -56,7 +56,7 @@ describe('Competition', () => {
             title: 'A modest proposal',
             url: 'http://swift.org/modest',
         };
-    
+
         let proposalDescription = proposalIPFSData.description;
         let proposalTitle = proposalIPFSData.title;
         let proposalUrl = proposalIPFSData.url;
@@ -228,10 +228,12 @@ describe('Competition', () => {
         });
 
         await increaseTime(20, web3);
-        const { blockNumber: blockNumberSuggest1 } =
-            await competition.methods.suggest(proposalId, descHash).send({ from: accounts[0].address });
+
+        let suggest = competition.methods.suggest(proposalId, descHash);
+
+        let suggestionId1 = await suggest.call();
+        const { blockNumber: blockNumberSuggest1 } = await suggest.send({ from: accounts[0].address });
         const { timestamp: timestampSuggest1 } = await web3.eth.getBlock(blockNumberSuggest1);
-        let suggestionId1 = await competition.methods.suggestionsCounter().call();
 
         let competitionSuggestionsQuery = `{
             competitionSuggestions {
@@ -269,10 +271,9 @@ describe('Competition', () => {
             createdAt: timestampSuggest1.toString(),
         });
 
-        const { blockNumber: blockNumberSuggest2 } =
-            await competition.methods.suggest(proposalId, descHash).send({ from: accounts[0].address });
+        let suggestionId2 = await suggest.call();
+        const { blockNumber: blockNumberSuggest2 } = await suggest.send({ from: accounts[0].address });
         const { timestamp: timestampSuggest2 } = await web3.eth.getBlock(blockNumberSuggest2);
-        let suggestionId2 = await competition.methods.suggestionsCounter().call();
 
         expect((await sendQuery(competitionSuggestionsQuery)).competitionSuggestions).toContainEqual({
             suggestionId: suggestionId2.toString(),

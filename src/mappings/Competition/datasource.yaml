@@ -14,7 +14,7 @@ eventHandlers:
     handler: handleNewCompetitionProposal
   - event: Redeem(indexed bytes32,indexed uint256,uint256)
     handler: handleRedeem
-  - event: NewSuggestion(indexed bytes32,indexed uint256,indexed string,address)
+  - event: NewSuggestion(indexed bytes32,indexed uint256,string,indexed address)
     handler: handleNewSuggestion
   - event: NewVote(indexed bytes32,indexed uint256,indexed address,uint256)
     handler: handleNewVote

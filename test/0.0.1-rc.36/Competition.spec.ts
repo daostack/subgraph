@@ -1,5 +1,13 @@
-import { increaseTime, waitUntilTrue } from '../0.0.1-rc.16/util';
-import { getArcVersion, getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
+import { 
+    increaseTime,
+    waitUntilTrue,
+    writeProposalIPFS,
+    getArcVersion,
+    getContractAddresses,
+    getOptions,
+    getWeb3,
+    sendQuery 
+} from './util';
 
 const ContributionRewardExt = require(
     '@daostack/migration/contracts/' + getArcVersion() + '/ContributionRewardExt.json',
@@ -43,7 +51,18 @@ describe('Competition', () => {
             data: '0xABCD',
         });
 
-        const descHash = '0x0000000000000000000000000000000000000000000000000000000000000123';
+        let proposalIPFSData = {
+            description: 'Just eat them',
+            title: 'A modest proposal',
+            url: 'http://swift.org/modest',
+        };
+    
+        let proposalDescription = proposalIPFSData.description;
+        let proposalTitle = proposalIPFSData.title;
+        let proposalUrl = proposalIPFSData.url;
+
+        const descHash = await writeProposalIPFS(proposalIPFSData);
+
         const rewards = {
             eth: 4,
             externalToken: 3,
@@ -220,8 +239,11 @@ describe('Competition', () => {
                 proposal {
                     id
                 }
-                # descriptionHash
+                descriptionHash
+                title
                 description
+                fulltext
+                url
                 suggester
                 votes {
                     id
@@ -236,8 +258,11 @@ describe('Competition', () => {
             proposal: {
                 id: proposalId,
             },
-            // descriptionHash: descHash,
-            description: null,
+            descriptionHash: descHash,
+            title: proposalTitle,
+            description: proposalDescription,
+            fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),
+            url: proposalUrl,
             suggester: accounts[0].address.toLowerCase(),
             totalVotes: '0',
             votes: [],
@@ -254,8 +279,11 @@ describe('Competition', () => {
             proposal: {
                 id: proposalId,
             },
-            // descriptionHash: descHash,
-            description: null,
+            descriptionHash: descHash,
+            title: proposalTitle,
+            description: proposalDescription,
+            fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),
+            url: proposalUrl,
             suggester: accounts[0].address.toLowerCase(),
             totalVotes: '0',
             votes: [],

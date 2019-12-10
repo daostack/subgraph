@@ -54,7 +54,7 @@ export async function getWeb3() {
 
 export function getContractAddresses() {
   const addresses = require(`@daostack/migration/migration.json`);
-  let arcVersion = '0.0.1-rc.35';
+  let arcVersion = '0.0.1-rc.36';
   return {
     ...addresses.private.test[arcVersion],
     ...addresses.private.dao[arcVersion],
@@ -69,11 +69,11 @@ export function getContractAddresses() {
 }
 
 export function getArcVersion() {
-  return '0.0.1-rc.35';
+  return '0.0.1-rc.36';
 }
 
 export function getOrgName() {
-  return require(`@daostack/migration/migration.json`).private.dao['0.0.1-rc.35'].name;
+  return require(`@daostack/migration/migration.json`).private.dao['0.0.1-rc.36'].name;
 }
 
 export async function getOptions(web3) {

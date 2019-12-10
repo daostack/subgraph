@@ -1,39 +1,39 @@
 {
-  "name": "Inveterate Maintenance",
-  "Avatar": "0xcf13fFcAF78259Ab49714A4634a9a518Cd2e30e9",
-  "DAOToken": "0x89cdFe95c4E16220028D14FC88516Ad7A09Ff130",
-  "Reputation": "0x5872024e06a7bB0C55E64BC6D0a84318C9C7113b",
-  "Controller": "0x791c19214A6b01a58928A82678cb294504349c5D",
+  "name": "Gustatory Woodworkers",
+  "Avatar": "0x46e342972535e15776Cf31f9407975f3E8A4078c",
+  "DAOToken": "0x1f1DFd38F0cc6C1c7d2516d9aA9f99a4192C7249",
+  "Reputation": "0x3AFEebAb0eA2D0A31BB882d3C1a6B6f0C8dE4859",
+  "Controller": "0x9Ef023Ca8D27076b6b3823aA1108E0f03bfF9800",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0x02a01FD7431F457380eBDAa00A4f5bDFA3e751c4",
-      "arcVersion": "0.0.1-rc.35"
+      "address": "0x38d2AD56A9F589c2d6f0a330291F79BfF9B13C6d",
+      "arcVersion": "0.0.1-rc.36"
     },
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0x49Aec747d48b443aeDC8d70d0f3dFBc6515C7e8A",
+      "address": "0x68c29524E583380aF7896f7e63463740225Ac026",
       "arcVersion": "0.0.1-rc.35"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "Wallet",
-      "address": "0x4A6010cf9A8f142034CA14fd802ec7372D498150",
-      "arcVersion": "0.0.1-rc.35"
+      "address": "0x9AD84A087C55F61e116df9A8c474703E3D58c536",
+      "arcVersion": "0.0.1-rc.36"
     },
     {
       "name": "ContributionRewardExt",
-      "address": "0x49Aec747d48b443aeDC8d70d0f3dFBc6515C7e8A",
+      "address": "0x68c29524E583380aF7896f7e63463740225Ac026",
       "arcVersion": "0.0.1-rc.35"
     },
     {
       "name": "Competition",
-      "address": "0xC565D008100a9A3d305cD08c3119582e822c88A9",
+      "address": "0x4b7284ac4714e27F9098c57F54306ed74454D05F",
       "arcVersion": "0.0.1-rc.35"
     }
   ],
-  "arcVersion": "0.0.1-rc.35"
+  "arcVersion": "0.0.1-rc.36"
 }

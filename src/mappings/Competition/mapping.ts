@@ -1,11 +1,11 @@
-import { Address, BigInt, ByteArray, Bytes, crypto, ipfs } from '@graphprotocol/graph-ts';
+import { Address, BigInt, ByteArray, Bytes, crypto, ipfs, JSONValueKind, json } from '@graphprotocol/graph-ts';
 import {
   NewCompetitionProposal, NewSuggestion, NewVote, Redeem, SnapshotBlock,
 } from '../../types/Competition/Competition';
 
 import { ContributionRewardExt } from '../../types/ContributionRewardExt/ContributionRewardExt';
-import { CompetitionProposal, CompetitionSuggestion, CompetitionVote, Proposal } from '../../types/schema';
-import { concat, eventId } from '../../utils';
+import { CompetitionProposal, CompetitionSuggestion, CompetitionVote, Proposal, Tag } from '../../types/schema';
+import { concat, eventId, equalStrings } from '../../utils';
 
 export function handleNewCompetitionProposal(event: NewCompetitionProposal): void {
   let contributionRewardExt = ContributionRewardExt.bind(event.params._contributionRewardExt);
@@ -64,15 +64,38 @@ export function handleNewSuggestion(event: NewSuggestion): void {
     competitionSuggestion.suggestionId = event.params._suggestionId;
     competitionSuggestion.proposal = event.params._proposalId.toHex();
     competitionSuggestion.descriptionHash = event.params._descriptionHash.toHex();
-    let ipfsData = ipfs.cat('/ipfs/' + event.params._descriptionHash.toHex());
-    if (ipfsData != null) {
-      competitionSuggestion.description = ipfsData.toString();
-    }
     competitionSuggestion.suggester = event.params._suggester;
     competitionSuggestion.totalVotes = BigInt.fromI32(0);
     competitionSuggestion.createdAt = event.block.timestamp;
+    getSuggestionIPFSData(competitionSuggestion);
+
     competitionSuggestion.save();
   }
+}
+
+export function getSuggestionIPFSData(suggestion: CompetitionSuggestion): CompetitionSuggestion {
+  // IPFS reading
+  if (!equalStrings(suggestion.descriptionHash, '') && equalStrings(suggestion.title, '')) {
+    let ipfsData = ipfs.cat('/ipfs/' + suggestion.descriptionHash);
+    if (ipfsData != null && ipfsData.toString() !== '{}') {
+      let descJson = json.fromBytes(ipfsData as Bytes);
+      if (descJson.kind !== JSONValueKind.OBJECT) {
+        return suggestion;
+      }
+      if (descJson.toObject().get('title') != null) {
+        suggestion.title = descJson.toObject().get('title').toString();
+        suggestion.fulltext = suggestion.title.split(' ');
+      }
+      if (descJson.toObject().get('description') != null) {
+        suggestion.description = descJson.toObject().get('description').toString();
+        suggestion.fulltext = suggestion.fulltext.concat(suggestion.description.split(' '));
+      }
+      if (descJson.toObject().get('url') != null) {
+        suggestion.url = descJson.toObject().get('url').toString();
+      }
+    }
+  }
+  return suggestion;
 }
 
 export function handleNewVote(event: NewVote): void {

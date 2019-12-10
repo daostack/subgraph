@@ -672,14 +672,14 @@
         "contractName": "GenesisProtocol",
         "dao": "base",
         "mapping": "GenesisProtocol",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "ContributionReward",
         "contractName": "ContributionReward",
         "dao": "base",
         "mapping": "ContributionReward",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "UGenericScheme",
@@ -693,7 +693,7 @@
         "contractName": "SchemeRegistrar",
         "dao": "base",
         "mapping": "SchemeRegistrar",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "UController",
@@ -714,105 +714,105 @@
         "contractName": "DAORegistry",
         "dao": "base",
         "mapping": "DAORegistry",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "Avatar",
         "contractName": "Avatar",
         "dao": "dao",
         "mapping": "Avatar",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "DAOToken",
         "contractName": "DAOToken",
         "dao": "dao",
         "mapping": "DAOToken",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "Reputation",
         "contractName": "Reputation",
         "dao": "dao",
         "mapping": "Reputation",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "Controller",
         "contractName": "Controller",
         "dao": "dao",
         "mapping": "Controller",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "Controller",
         "contractName": "Controller",
         "dao": "test",
         "mapping": "Controller",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "Avatar",
         "contractName": "Avatar",
         "dao": "test",
         "mapping": "Avatar",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "DAOToken",
         "contractName": "DAOToken",
         "dao": "test",
         "mapping": "DAOToken",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "Reputation",
         "contractName": "Reputation",
         "dao": "test",
         "mapping": "Reputation",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "Controller",
         "contractName": "Controller",
         "dao": "test",
         "mapping": "Controller",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "Reputation",
         "contractName": "DemoReputation",
         "dao": "organs",
         "mapping": "Reputation",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "DAOToken",
         "contractName": "DemoDAOToken",
         "dao": "organs",
         "mapping": "DAOToken",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "Avatar",
         "contractName": "DemoAvatar",
         "dao": "organs",
         "mapping": "Avatar",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "Redeemer",
         "contractName": "Redeemer",
         "dao": "base",
         "mapping": "Redeemer",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       },
       {
         "name": "DAOTracker",
         "contractName": "DAOTracker",
         "dao": "base",
         "mapping": "DAOTracker",
-        "arcVersion": "0.0.1-rc.35"
+        "arcVersion": "0.0.1-rc.36"
       }
     ]
   },

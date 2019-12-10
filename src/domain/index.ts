@@ -1,9 +1,5 @@
-import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, Entity, store, Value} from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
 import { setContractsInfo, setTemplatesInfo } from '../contractsInfo';
-import {
-  NewContributionProposal,
-  ProposalExecuted,
-} from '../types/ContributionReward/ContributionReward';
 import { Transfer } from '../types/DAOToken/DAOToken';
 import {
   ExecuteProposal,

@@ -10,16 +10,6 @@ enum Outcome {
 	Fail
 }
 
-enum EventType {
-	NewProposal
-	NewReputationHolder
-	ProposalStageChange
-	Vote
-	Stake
-	VoteFlip
-	NewDAO
-}
-
 type DAO @entity {
 	id: ID!
 	name: String!
@@ -211,7 +201,7 @@ type TemplateInfo @entity {
 
 type Event @entity {
 	id: ID!
-	type: EventType!
+	type: String!
 	data: String!
 	proposal: Proposal
 	user: Bytes

@@ -4,6 +4,8 @@ const { migrationFileLocation: defaultMigrationFileLocation, network, startBlock
 const {   subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
+const supportedSchemes = ['ContributionRewardExt', 'GenericScheme']
+const supportedStandAloneContracts = ['Competition']
 let ids = [];
 
 function daoYaml(contract, contractAddress, arcVersion) {
@@ -12,9 +14,9 @@ function daoYaml(contract, contractAddress, arcVersion) {
   );
 
   let name = contract;
-  if (ids.indexOf(contract) == -1) {
+  if (ids.indexOf(contract) === -1) {
     ids.push(contract);
-  } else if (ids.indexOf(contract+contractAddress) == -1) {
+  } else if (ids.indexOf(contract+contractAddress) === -1) {
     ids.push(contract+contractAddress);
     name = contract+contractAddress;
   } else {
@@ -49,8 +51,8 @@ function daoYaml(contract, contractAddress, arcVersion) {
         //this is temporary workaround (not nice) patch to solve an issue with multiple contract versions
         //in genesis alpha dao
         let _abiVersion = arcVersion;
-        if ((contractAddress == "0x211b9Bd0bCCACa64fB1d43093C75269bb84B3Be6") &&
-           (contractName == "GenericScheme")) {
+        if ((contractAddress === "0x211b9Bd0bCCACa64fB1d43093C75269bb84B3Be6") &&
+           (contractName === "GenericScheme")) {
             _abiVersion = "0.0.1-rc.33";
         }
         return {name: contractName,
@@ -101,8 +103,7 @@ async function generateSubgraph(opts={}) {
     const subgraphYaml = yaml.safeLoad(
       fs.readFileSync(opts.subgraphLocation, "utf8")
     );
-    var genericSchemeAddresses = {};
-    var genericScheme = false;
+    var schemeAddresses = {};
     files.forEach(function(file) {
       const dao = JSON.parse(fs.readFileSync(daodir + '/' + file, "utf-8"));
       let includeRep = false;
@@ -122,22 +123,36 @@ async function generateSubgraph(opts={}) {
         if (subgraphYaml.dataSources[i].source.address === dao.Controller) {
           includeController = true;
         }
-        if ( dao.Schemes !== undefined) {
-        for (var j = 0, schemesLen = dao.Schemes.length; j < schemesLen; j++) {
+        if (dao.Schemes !== undefined) {
+          for (var j = 0, schemesLen = dao.Schemes.length; j < schemesLen; j++) {
             let scheme = dao.Schemes[j];
-            if (scheme.name == "GenericScheme") {
-              if (!genericSchemeAddresses[scheme.address]) {
+            if (supportedSchemes.indexOf(scheme.name) !== -1) {
+              if (!schemeAddresses[scheme.address]) {
                 subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml(
-                  "GenericScheme",
+                  scheme.name,
                   scheme.address,
                   scheme.arcVersion ? scheme.arcVersion : dao.arcVersion
                 );
-                genericSchemeAddresses[scheme.address] = true;
-                genericScheme = true;
+                schemeAddresses[scheme.address] = true;
               }
             }
+          }
         }
-       }
+        if (dao.StandAloneContracts !== undefined) {
+          for (var k = 0, saContractsLen = dao.StandAloneContracts.length; k < saContractsLen; k++) {
+            let saContract = dao.StandAloneContracts[k];
+            if (supportedStandAloneContracts.indexOf(saContract.name) !== -1) {
+              if (!schemeAddresses[saContract.address]) {
+                subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml(
+                  saContract.name,
+                  saContract.address,
+                  saContract.arcVersion ? saContract.arcVersion : dao.arcVersion
+                );
+                schemeAddresses[saContract.address] = true;
+              }
+            }
+          }
+        }
       }
       if (includeRep === false) {
         subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml(
@@ -168,14 +183,6 @@ async function generateSubgraph(opts={}) {
         );
       }
     });
-
-    if (!genericScheme) {
-      subgraphYaml.dataSources[subgraphYaml.dataSources.length] = daoYaml(
-        "GenericScheme",
-        "0x1234000000000000000000000000000000000000",
-        "0.0.1-rc.28"
-      );
-    }
 
     fs.writeFileSync(
       opts.subgraphLocation,

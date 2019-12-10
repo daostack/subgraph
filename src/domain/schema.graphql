@@ -108,13 +108,18 @@ type Proposal @entity {
 	# Contribution Reward params
 	contributionReward: ContributionRewardProposal
 
+	# Competition params
+	competition: CompetitionProposal
+
 	# Generic Scheme params
-	genericScheme : GenericSchemeProposal
+	genericScheme: GenericSchemeProposal
 
 	# SchemeRegistrar proposal
-  	schemeRegistrar : SchemeRegistrarProposal
+  	schemeRegistrar: SchemeRegistrarProposal
 
-	genesisProtocolParams : GenesisProtocolParam!
+	genesisProtocolParams: GenesisProtocolParam!
+
+
 
 }
 

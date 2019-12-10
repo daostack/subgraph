@@ -77,7 +77,7 @@ describe('Domain Layer', () => {
 
     // Can't test timestap for NewReputationHolder event
     const getNewMemberEvents = `{
-      events(where: { type: NewReputationHolder, dao: "${addresses.Avatar.toLowerCase()}" }) {
+      events(where: { type: "NewReputationHolder", dao: "${addresses.Avatar.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -626,7 +626,7 @@ describe('Domain Layer', () => {
     });
 
     const getNewProposalsEvents = `{
-      events(where: { type: NewProposal, dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
+      events(where: { type: "NewProposal", dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -704,7 +704,7 @@ describe('Domain Layer', () => {
     });
 
     const getVotesEvents = `{
-      events(where: { type: Vote, dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
+      events(where: { type: "Vote", dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -792,7 +792,7 @@ describe('Domain Layer', () => {
     });
 
     const getStakessEvents = `{
-      events(where: { type: Stake, dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
+      events(where: { type: "Stake", dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -920,7 +920,7 @@ describe('Domain Layer', () => {
     });
 
     const getProposalStageChangeEvents = `{
-      events(where: { type: ProposalStageChange, dao: "${addresses.Avatar.toLowerCase()}" }) {
+      events(where: { type: "ProposalStageChange", dao: "${addresses.Avatar.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -941,7 +941,7 @@ describe('Domain Layer', () => {
       data: '{ \"stage\": \"Boosted\" }',
       proposal: { id: p1 },
       type: 'ProposalStageChange',
-      user: null,
+      user: accounts[1].address.toLowerCase(),
       timestamp: `${v2Timestamp}`,
     });
 
@@ -1296,7 +1296,7 @@ describe('Domain Layer', () => {
     });
 
     const getVoteFlipsEvents = `{
-      events(where: { type: VoteFlip, dao: "${addresses.Avatar.toLowerCase()}" }) {
+      events(where: { type: "VoteFlip", dao: "${addresses.Avatar.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -1317,7 +1317,7 @@ describe('Domain Layer', () => {
       data: '{ \"outcome\": \"Fail\", \"votesFor\": \"' + address1Rep + '\", \"votesAgainst\": \"' + address2Rep + '\" }',
       proposal: { id: p2 },
       type: 'VoteFlip',
-      user: null,
+      user: accounts[2].address.toLowerCase(),
       timestamp: `${quietEndingPeriodBeganAt}`,
     });
 

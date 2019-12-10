@@ -170,7 +170,13 @@ export function handleVoteProposal(event: VoteProposal): void {
       event.params._reputation,
     );
   }
-  updateProposalAfterVote(proposal, event.address, event.params._proposalId, event.block.timestamp);
+  updateProposalAfterVote(
+    proposal,
+    event.address,
+    event.params._proposalId,
+    event.params._voter,
+    event.block.timestamp,
+  );
   saveProposal(proposal);
   insertVote(
     eventId(event),
@@ -271,7 +277,8 @@ export function handleStateChange(event: StateChange): void {
           (event.params._proposalState === 2)) {
           insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
       }
-      addProposalStateChangeEvent(event.params._proposalId, event.block.timestamp);
+
+      addProposalStateChangeEvent(event.params._proposalId, event.transaction.from, event.block.timestamp);
   }
 }
 

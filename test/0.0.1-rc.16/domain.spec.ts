@@ -363,7 +363,7 @@ describe('Domain Layer', () => {
 
     let proposalIPFSData = {
       description: 'Just eat them',
-      title: 'A modest proposal',
+      title: '"A modest proposal"',
       url: 'http://swift.org/modest',
       tags: ['test', 'proposal'],
     };
@@ -637,7 +637,7 @@ describe('Domain Layer', () => {
       dao: {
         id: addresses.Avatar.toLowerCase(),
       },
-      data: '{ \"title\": \"' + proposalTitle + '\" }',
+      data: '{ \"title\": \"\"' + proposalTitle + '\"\" }',
       proposal: { id: p1 },
       type: 'NewProposal',
       user: accounts[0].address.toLowerCase(),

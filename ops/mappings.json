@@ -535,20 +535,6 @@
         "arcVersion": "0.0.1-rc.34"
       },
       {
-        "name": "UGenericScheme",
-        "contractName": "UGenericScheme",
-        "dao": "base",
-        "mapping": "UGenericScheme",
-        "arcVersion": "0.0.1-rc.33"
-      },
-      {
-        "name": "SchemeRegistrar",
-        "contractName": "SchemeRegistrar",
-        "dao": "base",
-        "mapping": "SchemeRegistrar",
-        "arcVersion": "0.0.1-rc.34"
-      },
-      {
         "name": "UController",
         "contractName": "UController",
         "dao": "base",
@@ -561,6 +547,13 @@
         "dao": "base",
         "mapping": "DAOTracker",
         "arcVersion": "0.0.1-rc.33"
+      },
+      {
+        "name": "SchemeRegistrar",
+        "contractName": "SchemeRegistrar",
+        "dao": "base",
+        "mapping": "SchemeRegistrar",
+        "arcVersion": "0.0.1-rc.34"
       },
       {
         "name": "DAORegistry",
@@ -682,32 +675,11 @@
         "arcVersion": "0.0.1-rc.36"
       },
       {
-        "name": "UGenericScheme",
-        "contractName": "UGenericScheme",
-        "dao": "base",
-        "mapping": "UGenericScheme",
-        "arcVersion": "0.0.1-rc.33"
-      },
-      {
         "name": "SchemeRegistrar",
         "contractName": "SchemeRegistrar",
         "dao": "base",
         "mapping": "SchemeRegistrar",
         "arcVersion": "0.0.1-rc.36"
-      },
-      {
-        "name": "UController",
-        "contractName": "UController",
-        "dao": "base",
-        "mapping": "UController",
-        "arcVersion": "0.0.1-rc.33"
-      },
-      {
-        "name": "DAOTracker",
-        "contractName": "DAOTracker",
-        "dao": "base",
-        "mapping": "DAOTracker",
-        "arcVersion": "0.0.1-rc.33"
       },
       {
         "name": "DAORegistry",

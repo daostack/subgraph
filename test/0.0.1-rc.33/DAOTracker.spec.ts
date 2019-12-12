@@ -64,7 +64,8 @@ describe('DAOTracker', () => {
     await schemeSetParams.send();
   });
 
-  const e2eControllerTest = async () => {
+  const e2eControllerTest = async (isUController: boolean) => {
+    const uControllerAddr = isUController ? addresses.UController : '0x0000000000000000000000000000000000000000';
 
     const tx = await daoCreator.methods.forgeOrg(
       'Test DAO',
@@ -73,6 +74,7 @@ describe('DAOTracker', () => {
       [opts.from],
       [0],
       [0],
+      uControllerAddr,
       0,
     ).send();
 
@@ -212,6 +214,10 @@ describe('DAOTracker', () => {
   };
 
   it('Controller e2e', async () => {
-    await e2eControllerTest();
+    await e2eControllerTest(false);
+  }, 120000);
+
+  it('UController e2e', async () => {
+    await e2eControllerTest(true);
   }, 120000);
 });

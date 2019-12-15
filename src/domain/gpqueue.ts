@@ -1,18 +1,18 @@
 import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
-import { setContributionRewardParams,
+import { setContributionRewardExtParams,
+         setContributionRewardParams,
          setGenericSchemeParams,
          setSchemeRegistrarParams,
          setUGenericSchemeParams,
-         setContributionRewardExtParams,
         } from '../mappings/Controller/mapping';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
+import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
 import {GenericScheme} from '../types/GenericScheme/GenericScheme';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
 import {UGenericScheme} from '../types/UGenericScheme/UGenericScheme';
 import { concat, equalStrings} from '../utils';
-import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
 
 export function getGPQueue(id: string): GPQueue {
   let gpQueue = GPQueue.load(id) ;

@@ -19,8 +19,8 @@ import * as domain from '../../domain';
 import {
   AvatarContract,
   ContractInfo,
-  ContributionRewardParam,
   ContributionRewardExtParam,
+  ContributionRewardParam,
   ControllerAddGlobalConstraint,
   ControllerGlobalConstraint,
   ControllerOrganization,
@@ -309,10 +309,10 @@ export function setContributionRewardParams(avatar: Address,
 }
 
 export function setContributionRewardExtParams(avatar: Address,
-                                              scheme: Address,
-                                              vmAddress: Address,
-                                              vmParamsHash: Bytes,
-                                              rewarder: Address): void {
+                                               scheme: Address,
+                                               vmAddress: Address,
+                                               vmParamsHash: Bytes,
+                                               rewarder: Address): void {
     setGPParams(vmAddress, vmParamsHash);
     let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
     let contributionRewardExtParams = new ContributionRewardExtParam(controllerScheme.paramsHash.toHex());

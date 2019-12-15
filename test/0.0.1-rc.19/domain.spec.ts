@@ -370,7 +370,7 @@ describe('Domain Layer', () => {
 
     let proposalIPFSData = {
       description: 'Just eat them',
-      title: 'A modest proposal',
+      title: '"A modest proposal"',
       url: 'http://swift.org/modest',
       tags: ['test2', 'proposal2'],
     };

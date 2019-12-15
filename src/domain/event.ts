@@ -1,12 +1,12 @@
 import { Address, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
 import { Event, Proposal, ReputationHolder } from '../types/schema';
-import { concat } from '../utils';
+import { concat, fixJsonQuotes} from '../utils';
 
 export function addNewDAOEvent(avatar: Address, daoName: string, timestamp: BigInt): void {
     addEvent(
         'NewDAO',
         avatar.toHex(),
-        '{ "name": "' + daoName + '" }',
+        '{ "name": "' + fixJsonQuotes(daoName) + '" }',
         null,
         null,
         avatar.toHex(),
@@ -57,7 +57,7 @@ export function addNewProposalEvent(proposalId: Bytes, proposal: Proposal, times
     addEvent(
         'NewProposal',
         crypto.keccak256(concat(proposalId, timestamp as ByteArray)).toHex(),
-        '{ "title": "' + proposal.title + '" }',
+        '{ "title": "' + fixJsonQuotes(proposal.title) + '" }',
         proposalId.toHex(),
         proposal.proposer,
         proposal.dao,

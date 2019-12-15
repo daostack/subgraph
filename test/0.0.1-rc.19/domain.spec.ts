@@ -644,7 +644,7 @@ describe('Domain Layer', () => {
       dao: {
         id: addresses.Avatar.toLowerCase(),
       },
-      data: '{ \"title\": \"\"' + proposalTitle + '\"\" }',
+      data: '{ \"title\": \"' + proposalTitle + '\" }',
       proposal: { id: p1 },
       type: 'NewProposal',
       user: accounts[0].address.toLowerCase(),

@@ -121,40 +121,15 @@ export function setBlacklistedDAO(address: string): void {
   }
 }
 
-export function replace(target: String, search: String, replacement: String): String {
-  var len: usize = target.length;
-  var slen: usize = search.length;
-  if (len <= slen) {
-    return len < slen ? target : select<String>(replacement, target, search == target);
-  }
-  var index: isize = target.indexOf(search);
-  if (~index) {
-    let rlen: usize = replacement.length;
-    len -= slen;
-    let olen = len + rlen;
-    if (olen) {
-      let out = memory.allocate(olen << 1);
-      memory.copy(out, changetype<usize>(target), index << 1);
-      memory.copy(
-        out + (index << 1),
-        changetype<usize>(replacement),
-        rlen << 1
-      );
-      memory.copy(
-        out + ((index + rlen) << 1),
-        changetype<usize>(target) + ((index + slen) << 1),
-        (len - index) << 1
-      );
-      return changetype<String>(out);
-    }
-  }
-  return target;
-}
-
-export function replaceAll(target: String, search: String, replacement: String): String {
-  let result = target;
-  while (result.indexOf(search.toString()) != -1) {
-    result = replace(result, search, replacement)
-  }
-  return result
+export function fixJsonQuotes(target: string): string {
+     let targetIndex = 0;
+     let result = '';
+     for (targetIndex = 0; targetIndex < target.length; targetIndex++) {
+       if (target[targetIndex] === '"') {
+         result += '\\"';
+       } else {
+         result += target[targetIndex];
+       }
+     }
+     return result;
 }

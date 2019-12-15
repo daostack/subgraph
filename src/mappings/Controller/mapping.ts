@@ -20,6 +20,7 @@ import {
   AvatarContract,
   ContractInfo,
   ContributionRewardParam,
+  ContributionRewardExtParam,
   ControllerAddGlobalConstraint,
   ControllerGlobalConstraint,
   ControllerOrganization,
@@ -304,6 +305,22 @@ export function setContributionRewardParams(avatar: Address,
     contributionRewardParams.voteParams = vmParamsHash.toHex();
     contributionRewardParams.save();
     controllerScheme.contributionRewardParams = contributionRewardParams.id;
+    controllerScheme.save();
+}
+
+export function setContributionRewardExtParams(avatar: Address,
+                                              scheme: Address,
+                                              vmAddress: Address,
+                                              vmParamsHash: Bytes,
+                                              rewarder: Address): void {
+    setGPParams(vmAddress, vmParamsHash);
+    let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
+    let contributionRewardExtParams = new ContributionRewardExtParam(controllerScheme.paramsHash.toHex());
+    contributionRewardExtParams.votingMachine = vmAddress;
+    contributionRewardExtParams.voteParams = vmParamsHash.toHex();
+    contributionRewardExtParams.rewarder = rewarder;
+    contributionRewardExtParams.save();
+    controllerScheme.contributionRewardExtParams = contributionRewardExtParams.id;
     controllerScheme.save();
 }
 

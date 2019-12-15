@@ -1,4 +1,4 @@
-import { Address, BigInt, ByteArray, Bytes, crypto, ipfs, json, JSONValueKind } from '@graphprotocol/graph-ts';
+import { BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
 import {
   NewCompetitionProposal, NewSuggestion, NewVote, Redeem, SnapshotBlock,
 } from '../../types/Competition/Competition';
@@ -6,7 +6,7 @@ import {
 import { getIPFSData } from '../../domain/proposal';
 import { ContributionRewardExt } from '../../types/ContributionRewardExt/ContributionRewardExt';
 import { CompetitionProposal, CompetitionSuggestion, CompetitionVote, Proposal, Tag } from '../../types/schema';
-import { concat, equalStrings, eventId } from '../../utils';
+import { concat, eventId } from '../../utils';
 
 export function handleNewCompetitionProposal(event: NewCompetitionProposal): void {
   let contributionRewardExt = ContributionRewardExt.bind(event.params._contributionRewardExt);

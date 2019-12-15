@@ -3,6 +3,7 @@ import { setContributionRewardParams,
          setGenericSchemeParams,
          setSchemeRegistrarParams,
          setUGenericSchemeParams,
+         setContributionRewardExtParams,
         } from '../mappings/Controller/mapping';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
 import {GenericScheme} from '../types/GenericScheme/GenericScheme';
@@ -11,6 +12,7 @@ import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
 import {UGenericScheme} from '../types/UGenericScheme/UGenericScheme';
 import { concat, equalStrings} from '../utils';
+import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
 
 export function getGPQueue(id: string): GPQueue {
   let gpQueue = GPQueue.load(id) ;
@@ -44,7 +46,6 @@ export function create(dao: Address,
    }
    let gpAddress: Address;
    let isGPQue = false;
-   let gpParamsHash: Bytes;
    let addressZero = '0x0000000000000000000000000000000000000000';
    if (equalStrings(contractInfo.name, 'ContributionReward')) {
      let contributionReward =  ContributionReward.bind(scheme);
@@ -54,7 +55,16 @@ export function create(dao: Address,
        setContributionRewardParams(dao, scheme, gpAddress, parameters.value0);
        isGPQue = true;
      }
-
+   }
+   if (equalStrings(contractInfo.name, 'ContributionRewardExt')) {
+    let contributionRewardExt =  ContributionRewardExt.bind(scheme);
+    setContributionRewardExtParams(
+                    dao,
+                    scheme,
+                    contributionRewardExt.votingMachine(),
+                    contributionRewardExt.voteParams(),
+                    contributionRewardExt.rewarder());
+    isGPQue = true;
    }
    if (equalStrings(contractInfo.name, 'SchemeRegistrar')) {
      let schemeRegistrar =  SchemeRegistrar.bind(scheme);

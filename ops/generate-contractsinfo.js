@@ -36,7 +36,6 @@ async function generateContractInfo(opts={}) {
     }
   }
 
-  const daos = require(opts.migrationFile)[network].dao;
   fs.readdir(daodir, function(err, files) {
     if (err) {
       console.error("Could not list the directory.", err);
@@ -50,6 +49,12 @@ async function generateContractInfo(opts={}) {
            buffer += "    setContractInfo("+"'"+scheme.address.toLowerCase()+"'"+", " +"'"+scheme.name+"'"+", "+"'"+ scheme.alias +"', "+"'"+(scheme.arcVersion ? scheme.arcVersion : dao.arcVersion)+"'"+");\n";
          }
       }
+      if (dao.StandAloneContracts !== undefined) {
+        for (var j = 0; j < dao.StandAloneContracts.length; j++) {
+          var saContract = dao.StandAloneContracts[j];
+          buffer += "    setContractInfo("+"'"+saContract.address.toLowerCase()+"'"+", " +"'"+saContract.name+"'"+", "+"'"+ (saContract.alias ? saContract.alias : saContract.name) +"', "+"'"+(saContract.arcVersion ? saContract.arcVersion : dao.arcVersion)+"'"+");\n";
+        }
+     }
     });
     buffer += "}\n";
 

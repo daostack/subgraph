@@ -48,11 +48,6 @@ function daoYaml(contract, contractAddress, arcVersion) {
                   file: path.resolve(`./abis/${arcVersion}/GenericScheme.json`)
                 };
         }
-        if ((_arcVersion < 36) && (contractName === "ContributionRewardExt")) {
-          return {name: contractName,
-                  file: path.resolve(`./abis/0.0.1-rc.36/ContributionRewardExt.json`)
-                };
-        }
         //this is temporary workaround (not nice) patch to solve an issue with multiple contract versions
         //in genesis alpha dao
         let _abiVersion = arcVersion;

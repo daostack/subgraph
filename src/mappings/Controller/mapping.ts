@@ -7,6 +7,7 @@ import {
   crypto,
   Entity,
   store,
+  log
 } from '@graphprotocol/graph-ts';
 
 import { Avatar } from '../../types/Controller/Avatar';
@@ -57,6 +58,7 @@ function insertScheme(
 ): void {
   let controller = Controller.bind(controllerAddress);
   let perms = controller.getSchemePermissions(scheme, avatarAddress);
+  log.info('insertScheme avatar {} scheme {}', [avatarAddress.toHex(),scheme.toHex()])
   let controllerSchemeId = crypto.keccak256(concat(avatarAddress, scheme)).toHex();
   let controllerScheme = ControllerScheme.load(controllerSchemeId);
   if (controllerScheme === null) {
@@ -88,10 +90,17 @@ function insertScheme(
 }
 
 function deleteScheme(avatarAddress: Address, scheme: Address): void {
-  store.remove(
-    'ControllerScheme',
-    crypto.keccak256(concat(avatarAddress, scheme)).toHex(),
-  );
+  log.info('deleteScheme avatar {} scheme {}', [avatarAddress.toHex(),scheme.toHex()])
+  let id = crypto.keccak256(concat(avatarAddress, scheme)).toHex();
+  let controllerScheme = ControllerScheme.load(id);
+  if (controllerScheme != null) {
+      store.remove(
+        'ControllerScheme',
+        crypto.keccak256(concat(avatarAddress, scheme)).toHex(),
+      );
+  } else {
+    log.error('unregisterScheme none registered avatar {} , scheme {}', [avatarAddress.toHex(),scheme.toHex()]);
+  }
 }
 
 function insertOrganization(
@@ -175,6 +184,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   let avatar = controller.avatar();
 
   if (AvatarContract.load(avatar.toHex()) == null) {
+      log.info("handleRegisterSchemeO {}" ,[event.params._scheme.toHex()])
       return;
   }
   let token = controller.nativeToken();

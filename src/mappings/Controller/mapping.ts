@@ -6,8 +6,8 @@ import {
   Bytes,
   crypto,
   Entity,
+  log,
   store,
-  log
 } from '@graphprotocol/graph-ts';
 
 import { Avatar } from '../../types/Controller/Avatar';
@@ -81,9 +81,9 @@ function insertScheme(
 
   let contractInfo = ContractInfo.load(scheme.toHex());
   if (contractInfo != null) {
-     if (contractInfo.name == "ControllerCreator") {
-       //this is a temporary workaround due to unexplained edge case where there is wrong ordering of events
-       //RegisterScheme come after UnRegisterScheme
+     if (contractInfo.name === 'ControllerCreator') {
+       // this is a temporary workaround due to unexplained edge case where there is wrong ordering of events
+       // RegisterScheme come after UnRegisterScheme
        return;
      }
      controllerScheme.name = contractInfo.name;
@@ -102,7 +102,7 @@ function deleteScheme(avatarAddress: Address, scheme: Address): void {
         crypto.keccak256(concat(avatarAddress, scheme)).toHex(),
       );
   } else {
-    log.error('unregisterScheme none registered avatar {} , scheme {}', [avatarAddress.toHex(),scheme.toHex()]);
+    log.error('unregisterScheme none registered avatar {} , scheme {}', [avatarAddress.toHex(), scheme.toHex()]);
   }
 }
 
@@ -187,7 +187,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   let avatar = controller.avatar();
 
   if (AvatarContract.load(avatar.toHex()) == null) {
-      log.info("handleRegisterScheme avatar entity not exist {}" ,[event.params._scheme.toHex()])
+      log.info('handleRegisterScheme avatar entity not exist {}' , [event.params._scheme.toHex()]);
       return;
   }
   let token = controller.nativeToken();

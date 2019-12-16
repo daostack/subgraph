@@ -58,7 +58,6 @@ function insertScheme(
 ): void {
   let controller = Controller.bind(controllerAddress);
   let perms = controller.getSchemePermissions(scheme, avatarAddress);
-  log.info('insertScheme avatar {} scheme {}', [avatarAddress.toHex(),scheme.toHex()])
   let controllerSchemeId = crypto.keccak256(concat(avatarAddress, scheme)).toHex();
   let controllerScheme = ControllerScheme.load(controllerSchemeId);
   if (controllerScheme === null) {
@@ -82,6 +81,11 @@ function insertScheme(
 
   let contractInfo = ContractInfo.load(scheme.toHex());
   if (contractInfo != null) {
+     if (contractInfo.name == "ControllerCreator") {
+       //this is a temporary workaround due to unexplained edge case where there is wrong ordering of events
+       //RegisterScheme come after UnRegisterScheme
+       return;
+     }
      controllerScheme.name = contractInfo.name;
      controllerScheme.version = contractInfo.version;
      controllerScheme.alias = contractInfo.alias;
@@ -90,7 +94,6 @@ function insertScheme(
 }
 
 function deleteScheme(avatarAddress: Address, scheme: Address): void {
-  log.info('deleteScheme avatar {} scheme {}', [avatarAddress.toHex(),scheme.toHex()])
   let id = crypto.keccak256(concat(avatarAddress, scheme)).toHex();
   let controllerScheme = ControllerScheme.load(id);
   if (controllerScheme != null) {
@@ -184,7 +187,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   let avatar = controller.avatar();
 
   if (AvatarContract.load(avatar.toHex()) == null) {
-      log.info("handleRegisterSchemeO {}" ,[event.params._scheme.toHex()])
+      log.info("handleRegisterScheme avatar entity not exist {}" ,[event.params._scheme.toHex()])
       return;
   }
   let token = controller.nativeToken();

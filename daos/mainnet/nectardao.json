@@ -1,39 +1,39 @@
 {
     "name": "necDAO",
-    "Avatar": "0xB914983Fa9B6b34dAd7986D6B95A5C2BE47cCBBE",
-    "DAOToken": "0x117a00b33202fD07CC68c9c3F6259ad167Df8611",
-    "Reputation": "0x55214678b71d9447E4B21A186bA7adbaF5644087",
-    "Controller": "0x8C4452E14A179BC91C8e8DE9F636f47d9e0B1279",
+    "Avatar": "0xa0bCe1B03B7f1934580e445D6274e87e582149C1",
+    "DAOToken": "0xc9459C94205451090132caB73977749AFCF355F1",
+    "Reputation": "0x2a5383Adc12A84a684027F0af913e10CA0b28d73",
+    "Controller": "0xaA25D42930bfBe840BB05C0B09158D67AD9A4815",
     "Schemes": [
       {
         "name": "GenericScheme",
         "alias": "GenericSchemeENSPublicProvider",
-        "address": "0x0cD2573ed5117815704c585ee8644DD112bbfD16"
+        "address": "0x88B47e395c4AAF5d5028C69C4abdA9db057954e6"
       },
       {
         "name": "GenericScheme",
         "alias": "GenericSchemeENSRegistry",
-        "address": "0xC512bF9EaDBf7B131fB24056956e3654e7AA9511"
+        "address": "0x20599AF3822De8915FD035f91D4DA74b89877c45"
       },
       {
         "name": "GenericScheme",
         "alias": "GenericSchemeRegistryLookup",
-        "address": "0x025D7547D8d72491f89F61D4c4539580A35b8a58"
+        "address": "0x8fEeC2d4968C8883fF2f78706422e437F8b61D12"
       },
       {
         "name": "ContinuousLocking4Reputation",
         "alias": "InfiniteReputation4Token",
-        "address": "0x864A6C068F11F7EfB0f5129919159DED92885f14"
+        "address": "0xfF6710A04B38b1f5fB01d76ECbe1552fA91E9Ce6"
       },
       {
         "name": "Auction4Reputation",
         "alias": "GENAuction",
-        "address": "0x3e0f7f54caaCF716dE479F33d8914F39ACbA2D75"
+        "address": "0xb18787a67889f85C005Eb7C3Ac60Ea8c9AA656AF"
       },
       {
         "name": "ReputationFromToken",
         "alias": "ReputationFromToken",
-        "address": "0xcA72D68b2bE12eb7b44E0Dae988Ef1FDAe611337"
+        "address": "0xAB766B1358eb7EE3Df1D39A574b847624a5f7783"
       }
     ],
     "arcVersion": "0.0.1-rc.34"

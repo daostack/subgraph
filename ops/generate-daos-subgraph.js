@@ -86,13 +86,19 @@ async function generateSubgraph(opts={}) {
   }
   const daos = require(opts.migrationFile)[network].dao;
   for (let arcVersion in daos) {
-    daos[arcVersion].arcVersion = arcVersion;
-    if (daos[arcVersion] !== undefined) {
-      fs.writeFileSync(
-        path.resolve(daodir + "/testdao.json"),
-        JSON.stringify(daos[arcVersion], undefined, 2),
-        "utf-8"
-      );
+    let _arcVersion = Number(arcVersion.slice(arcVersion.length-2,arcVersion.length));
+    for (var i = 0, len = subgraphYaml.dataSources.length; i < len; i++) {
+      if (subgraphYaml.dataSources[i].source.address === daos[arcVersion].Avatar) {
+        daos[arcVersion].arcVersion = arcVersion;
+        if (daos[arcVersion] !== undefined) {
+          fs.writeFileSync(
+            path.resolve(daodir + "/testdao" + _arcVersion + ".json"),
+            JSON.stringify(daos[arcVersion], undefined, 2),
+            "utf-8"
+          );
+        }
+        break
+      }
     }
   }
   fs.readdir(daodir, function(err, files) {

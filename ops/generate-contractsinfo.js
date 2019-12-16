@@ -25,18 +25,21 @@ async function generateContractInfo(opts={}) {
   buffer += "/* tslint:disable:max-line-length */\n";
 
   buffer += "export function setContractsInfo(): void {\n";
+  let contractsAddresses = {};
   for (var version in versions) {
     if (versions.hasOwnProperty(version)) {
         let addresses = migration[network].base[version];
         for (var name in addresses) {
           if (addresses.hasOwnProperty(name)) {
+            if(!contractsAddresses[addresses[name]]) {
               buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+name+"'"+", "+"'"+name+"', "+"'"+version+"'"+");\n";
+            }
+            contractsAddresses[addresses[name]] = true;
           }
         }
     }
   }
 
-  const daos = require(opts.migrationFile)[network].dao;
   fs.readdir(daodir, function(err, files) {
     if (err) {
       console.error("Could not list the directory.", err);
@@ -44,12 +47,25 @@ async function generateContractInfo(opts={}) {
     }
     files.forEach(function(file) {
       const dao = JSON.parse(fs.readFileSync(daodir + '/' + file, "utf-8"));
+
       if (dao.Schemes !== undefined) {
          for (var i = 0, len = dao.Schemes.length; i < len; i++) {
-           var scheme = dao.Schemes[i];
-           buffer += "    setContractInfo("+"'"+scheme.address.toLowerCase()+"'"+", " +"'"+scheme.name+"'"+", "+"'"+ scheme.alias +"', "+"'"+(scheme.arcVersion ? scheme.arcVersion : dao.arcVersion)+"'"+");\n";
-         }
+          var scheme = dao.Schemes[i];
+          if (!contractsAddresses[scheme.address.toLowerCase()]) {
+            buffer += "    setContractInfo("+"'"+scheme.address.toLowerCase()+"'"+", " +"'"+scheme.name+"'"+", "+"'"+ scheme.alias +"', "+"'"+(scheme.arcVersion ? scheme.arcVersion : dao.arcVersion)+"'"+");\n";
+          }
+          contractsAddresses[scheme.address.toLowerCase()] = true;
+        }
       }
+      if (dao.StandAloneContracts !== undefined) {
+        for (var j = 0; j < dao.StandAloneContracts.length; j++) {
+          var saContract = dao.StandAloneContracts[j];
+          if (!contractsAddresses[saContract.address.toLowerCase()]) {
+            buffer += "    setContractInfo("+"'"+saContract.address.toLowerCase()+"'"+", " +"'"+saContract.name+"'"+", "+"'"+ (saContract.alias ? saContract.alias : saContract.name) +"', "+"'"+(saContract.arcVersion ? saContract.arcVersion : dao.arcVersion)+"'"+");\n";
+          }
+          contractsAddresses[saContract.address.toLowerCase()] = true;
+        }
+     }
     });
     buffer += "}\n";
 

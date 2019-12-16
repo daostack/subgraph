@@ -84,6 +84,13 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
           };
         }
 
+        if ((versionNum < 36) && (contractName === "ContributionRewardExt")) {
+          return {
+            name: contractName,
+            file: `${__dirname}/../abis/0.0.1-rc.36/ContributionRewardExt.json`
+          };
+        }
+
         return {
           name: contractName,
           file: `${__dirname}/../abis/${version}/${contractName}.json`

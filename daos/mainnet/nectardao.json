@@ -1,40 +1,40 @@
 {
-    "name": "necDAO",
-    "Avatar": "0x2fF98aa3afb76F0a198C3cfDf71beA53C8bd990a",
-    "DAOToken": "0x9B924e51408BeBd1cd828Bbedd84428e6E1af61D",
-    "Reputation": "0x9a566bC44FEa5548BB9dCeeE619e03382C9950dC",
-    "Controller": "0xa0A9D4b95a0dC6855999df698eCfb48a57BF8115",
-    "Schemes": [
-      {
-        "name": "GenericScheme",
-        "alias": "GenericSchemeENSPublicProvider",
-        "address": "0x1dfBb7D53A963F3bE085A54c4C3fd3DD4d520aF5"
-      },
-      {
-        "name": "GenericScheme",
-        "alias": "GenericSchemeENSRegistry",
-        "address": "0x34632172D8D4b34E1b053bb3AC71053c618dcB17"
-      },
-      {
-        "name": "GenericScheme",
-        "alias": "GenericSchemeRegistryLookup",
-        "address": "0x910a1F7593DD273A2842b5187bC1c7e2a5b087a4"
-      },
-      {
-        "name": "ContinuousLocking4Reputation",
-        "alias": "InfiniteReputation4Token",
-        "address": "0xd56B323dce56e5b9b499f3e1F6A6Ccc433472db3"
-      },
-      {
-        "name": "Auction4Reputation",
-        "alias": "GENAuction",
-        "address": "0xb78DF7cFD07849B19ec083D76B2DF6Fb5d1CbC3b"
-      },
-      {
-        "name": "ReputationFromToken",
-        "alias": "ReputationFromToken",
-        "address": "0x32200646243cd4181abD8abbAd8f46B7b16a8aF0"
-      }
-    ],
-    "arcVersion": "0.0.1-rc.34"
-  }
+  "name": "necDAO",
+  "Avatar": "0x9801D3ba8474C073E33DF8c7e20717022eb04645",
+  "DAOToken": "0x4d752680F311a0AE9f2dFF3f5c96cF30A7b39496",
+  "Reputation": "0xdc2Fe8e860438774568befAf911C20bCe6418587",
+  "Controller": "0xF87Ac289cFBCD647759bdb43323ea0a34C4433e7",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeENSPublicProvider",
+      "address": "0x8DB083d0F19321646af19735270c95665cA68685"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeENSRegistry",
+      "address": "0x2588050079a51a8dC6C0465d01287cD1Edcb68E3"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeRegistryLookup",
+      "address": "0xDbb5666c3E5395249d66ec25b9F4FeFF0Ac78f7A"
+    },
+    {
+      "name": "ContinuousLocking4Reputation",
+      "alias": "InfiniteReputation4Token",
+      "address": "0x6DC7abE3C74B98F94ff0F4025aE4706324F0227E"
+    },
+    {
+      "name": "Auction4Reputation",
+      "alias": "GENAuction",
+      "address": "0x756f22F766685e5601492d2dd1ad2BD40E457e8A"
+    },
+    {
+      "name": "ReputationFromToken",
+      "alias": "ReputationFromToken",
+      "address": "0x2c7E0457C521b8277Bd9e5BfD1Bc5bf9EaDa350A"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.34"
+}

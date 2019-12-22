@@ -315,7 +315,7 @@ export function setContributionRewardExtParams(avatar: Address,
                                                rewarder: Address): void {
     setGPParams(vmAddress, vmParamsHash);
     let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
-    let contributionRewardExtParams = new ContributionRewardExtParam(controllerScheme.paramsHash.toHex());
+    let contributionRewardExtParams = new ContributionRewardExtParam(scheme.toHex());
     contributionRewardExtParams.votingMachine = vmAddress;
     contributionRewardExtParams.voteParams = vmParamsHash.toHex();
     contributionRewardExtParams.rewarder = rewarder;

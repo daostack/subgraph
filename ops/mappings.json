@@ -1199,6 +1199,118 @@
       "contractName": "GenesisProtocol",
       "dao": "base",
       "mapping": "GenesisProtocol",
+      "arcVersion": "0.0.1-rc.31"
+    },
+    {
+      "name": "ContributionReward",
+      "contractName": "ContributionReward",
+      "dao": "base",
+      "mapping": "ContributionReward",
+      "arcVersion": "0.0.1-rc.31"
+    },
+    {
+      "name": "UGenericScheme",
+      "contractName": "UGenericScheme",
+      "dao": "base",
+      "mapping": "UGenericScheme",
+      "arcVersion": "0.0.1-rc.31"
+    },
+    {
+      "name": "SchemeRegistrar",
+      "contractName": "SchemeRegistrar",
+      "dao": "base",
+      "mapping": "SchemeRegistrar",
+      "arcVersion": "0.0.1-rc.31"
+    },
+    {
+      "name": "UController",
+      "contractName": "UController",
+      "dao": "base",
+      "mapping": "UController",
+      "arcVersion": "0.0.1-rc.31"
+    },
+    {
+      "name": "DAORegistry",
+      "contractName": "DAORegistry",
+      "dao": "base",
+      "mapping": "DAORegistry",
+      "arcVersion": "0.0.1-rc.31"
+    },
+    {
+      "name": "Redeemer",
+      "contractName": "Redeemer",
+      "dao": "base",
+      "mapping": "Redeemer",
+      "arcVersion": "0.0.1-rc.31"
+    },
+    {
+      "name": "DAOTracker",
+      "contractName": "DAOTracker",
+      "dao": "base",
+      "mapping": "DAOTrackerOld",
+      "arcVersion": "0.0.1-rc.31"
+    },
+    {
+      "name": "GenesisProtocol",
+      "contractName": "GenesisProtocol",
+      "dao": "base",
+      "mapping": "GenesisProtocol",
+      "arcVersion": "0.0.1-rc.32"
+    },
+    {
+      "name": "ContributionReward",
+      "contractName": "ContributionReward",
+      "dao": "base",
+      "mapping": "ContributionReward",
+      "arcVersion": "0.0.1-rc.32"
+    },
+    {
+      "name": "UGenericScheme",
+      "contractName": "UGenericScheme",
+      "dao": "base",
+      "mapping": "UGenericScheme",
+      "arcVersion": "0.0.1-rc.32"
+    },
+    {
+      "name": "SchemeRegistrar",
+      "contractName": "SchemeRegistrar",
+      "dao": "base",
+      "mapping": "SchemeRegistrar",
+      "arcVersion": "0.0.1-rc.32"
+    },
+    {
+      "name": "UController",
+      "contractName": "UController",
+      "dao": "base",
+      "mapping": "UController",
+      "arcVersion": "0.0.1-rc.32"
+    },
+    {
+      "name": "DAORegistry",
+      "contractName": "DAORegistry",
+      "dao": "base",
+      "mapping": "DAORegistry",
+      "arcVersion": "0.0.1-rc.32"
+    },
+    {
+      "name": "Redeemer",
+      "contractName": "Redeemer",
+      "dao": "base",
+      "mapping": "Redeemer",
+      "arcVersion": "0.0.1-rc.32"
+    },
+    {
+      "name": "DAOTracker",
+      "contractName": "DAOTracker",
+      "dao": "base",
+      "mapping": "DAOTracker",
+      "arcVersion": "0.0.1-rc.32"
+    },
+    {
+      "name": "GenesisProtocol",
+      "contractName": "GenesisProtocol",
+      "dao": "base",
+      "mapping": "GenesisProtocol",
       "arcVersion": "0.0.1-rc.33"
     },
     {
@@ -1234,6 +1346,13 @@
       "contractName": "DAORegistry",
       "dao": "base",
       "mapping": "DAORegistry",
+      "arcVersion": "0.0.1-rc.33"
+    },
+    {
+      "name": "DAOTracker",
+      "contractName": "DAOTracker",
+      "dao": "base",
+      "mapping": "DAOTracker",
       "arcVersion": "0.0.1-rc.33"
     },
     {

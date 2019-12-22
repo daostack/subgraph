@@ -93,7 +93,7 @@ export function handleNewVote(event: NewVote): void {
     vote.suggestion = suggestionId;
     vote.voter = event.params._voter;
     vote.createdAt = event.block.timestamp;
-    vote.reptutation = event.params._reputation;
+    vote.reputation = event.params._reputation;
     let suggestion = CompetitionSuggestion.load(suggestionId);
     if (suggestion != null) {
       suggestion.totalVotes = suggestion.totalVotes.plus(event.params._reputation);

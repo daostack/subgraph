@@ -40,5 +40,5 @@ type CompetitionVote @entity {
     suggestion: CompetitionSuggestion!
     voter: Bytes!
     createdAt: BigInt!
-    reptutation: BigInt!
+    reputation: BigInt!
 }

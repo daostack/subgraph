@@ -326,7 +326,7 @@ describe('Competition', () => {
               }
               voter
               createdAt
-              reptutation
+              reputation
             }
           }`;
 
@@ -340,7 +340,7 @@ describe('Competition', () => {
             },
             voter: accounts[0].address.toLowerCase(),
             createdAt: timestampVote1.toString(),
-            reptutation: address0Rep,
+            reputation: address0Rep,
         });
 
         let proposalVotesQuery = `{

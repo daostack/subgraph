@@ -1,39 +1,39 @@
 {
   "name": "necDAO",
-  "Avatar": "0x9801D3ba8474C073E33DF8c7e20717022eb04645",
-  "DAOToken": "0x4d752680F311a0AE9f2dFF3f5c96cF30A7b39496",
-  "Reputation": "0xdc2Fe8e860438774568befAf911C20bCe6418587",
-  "Controller": "0xF87Ac289cFBCD647759bdb43323ea0a34C4433e7",
+  "Avatar": "0xE56b4D8d42b1C9eA7dda8A6950e3699755943DE7",
+  "DAOToken": "0x760877788E5Fe5081E14F1cF07059c49efE959Ba",
+  "Reputation": "0x9bCc45CBA43Cf699289Fcc0F72e5095fA53BfFee",
+  "Controller": "0x9f80898cC3Bc625b6A05B1500Adc7c4357eFb647",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeENSPublicProvider",
-      "address": "0x8DB083d0F19321646af19735270c95665cA68685"
+      "address": "0xD7aCd0a6985345810A0f87b58f4f90287cEa15Cc"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeENSRegistry",
-      "address": "0x2588050079a51a8dC6C0465d01287cD1Edcb68E3"
+      "address": "0x533aD184434676679F3a42723408197B7A34a4A1"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeRegistryLookup",
-      "address": "0xDbb5666c3E5395249d66ec25b9F4FeFF0Ac78f7A"
+      "address": "0x60FE6a11BDed577e8fa3572272e7920197aFEDbC"
     },
     {
       "name": "ContinuousLocking4Reputation",
       "alias": "InfiniteReputation4Token",
-      "address": "0x6DC7abE3C74B98F94ff0F4025aE4706324F0227E"
+      "address": "0xDa490e9acc7f7418293CFeA1FF2085c60d573626"
     },
     {
       "name": "Auction4Reputation",
       "alias": "GENAuction",
-      "address": "0x756f22F766685e5601492d2dd1ad2BD40E457e8A"
+      "address": "0xACfbe2dFb0745042f01d95A529a9735Aba8FE746"
     },
     {
       "name": "ReputationFromToken",
       "alias": "ReputationFromToken",
-      "address": "0x2c7E0457C521b8277Bd9e5BfD1Bc5bf9EaDa350A"
+      "address": "0x0bC3853f47B9B8A3F5cBA8a9cBC33cb865d09B37"
     }
   ],
   "arcVersion": "0.0.1-rc.34"

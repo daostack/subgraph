@@ -1286,13 +1286,6 @@
       "arcVersion": "0.0.1-rc.31"
     },
     {
-      "name": "DAOTracker",
-      "contractName": "DAOTracker",
-      "dao": "base",
-      "mapping": "DAOTrackerOld",
-      "arcVersion": "0.0.1-rc.31"
-    },
-    {
       "name": "GenesisProtocol",
       "contractName": "GenesisProtocol",
       "dao": "base",

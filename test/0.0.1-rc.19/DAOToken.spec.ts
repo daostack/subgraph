@@ -79,9 +79,7 @@ describe('DAOToken', () => {
     const { allowances } = await sendQuery(`{
       allowances {
         token
-        owner {
-          address
-        }
+        owner
         spender
         amount
       }

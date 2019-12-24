@@ -1,4 +1,3 @@
-const path = require('path')
 require('dotenv').config();
 
 const migrationFileLocation = require.resolve(`@daostack/migration-experimental/migration.json`)

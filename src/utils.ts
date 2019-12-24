@@ -10,7 +10,6 @@ import {
   Value,
 } from '@graphprotocol/graph-ts';
 import {
-  BlacklistedDAO,
   ContractInfo,
   Debug,
   TemplateInfo,
@@ -111,12 +110,4 @@ export function fetchTemplateName(name: string, version: string): string | null 
 
 export function createTemplate(templateName: string, address: Address): void {
   DataSourceTemplate.create(templateName, [address.toHex()]);
-}
-
-export function setBlacklistedDAO(address: string): void {
-  let blacklistedDAO = BlacklistedDAO.load(address);
-  if (blacklistedDAO == null) {
-    blacklistedDAO = new BlacklistedDAO(address);
-    blacklistedDAO.save();
-  }
 }

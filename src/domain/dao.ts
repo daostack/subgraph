@@ -42,9 +42,21 @@ export function insertNewDAO(
   dao.nativeToken = nativeTokenAddress.toHex();
   dao.nativeReputation = nativeReputationAddress.toHex();
   dao.reputationHoldersCount = BigInt.fromI32(0);
+  dao.register = 'na';
   saveDAO(dao);
 
   return dao;
+}
+
+export function register(
+  avatar: Address,
+  tag: string,
+): void {
+  let dao = DAO.load(avatar.toHex());
+  if (dao != null) {
+    dao.register = tag;
+    dao.save();
+  }
 }
 
 export function exists(

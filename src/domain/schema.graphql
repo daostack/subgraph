@@ -29,6 +29,7 @@ type DAO @entity {
 	reputationHolders: [ReputationHolder!] @derivedFrom(field: "dao")
 	reputationHoldersCount: BigInt!
 	rewards: [GPReward!] @derivedFrom(field: "dao")
+	register: String!
 	schemes: [ControllerScheme!] @derivedFrom(field: "dao")
 	gpQueues: [GPQueue!] @derivedFrom(field: "dao")
 	numberOfQueuedProposals: BigInt!

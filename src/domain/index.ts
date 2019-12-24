@@ -297,6 +297,10 @@ export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , tim
     }
 }
 
+export function daoRegister(dao: Address, tag: string): void {
+  daoModule.register(dao, tag);
+}
+
 export function addDaoMember(reputationHolder: ReputationHolder): void {
   let dao = getReputation(reputationHolder.contract.toHex()).dao;
   if (dao == null) {

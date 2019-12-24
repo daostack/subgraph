@@ -35,7 +35,7 @@ fi
 
 # commit the postgres image
 container_id=$(docker ps  -f "name=postgres" -l -q)
-image_name=daostack/subgraph-postgres
+image_name=daostack/subgraph-experimental-postgres
 echo "docker commit $container_id $image_name:$image_version"
 docker commit $container_id $image_name:$image_version
 echo "docker push $image_name:$image_version"
@@ -43,7 +43,7 @@ docker push $image_name:$image_version
 
 # commit the ipfs  image
 container_id=$(docker ps  -f "name=ipfs" -l -q)
-image_name=daostack/subgraph-ipfs
+image_name=daostack/subgraph-experimental-ipfs
 echo "docker commit $container_id $image_name:$image_version"
 docker commit $container_id $image_name:$image_version
 echo "docker push $image_name:$image_version"

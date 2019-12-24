@@ -7,49 +7,42 @@
           "contractName": "GEN",
           "dao": "package",
           "mapping": "DAOToken",
-          "arcVersion": "0.0.1-rc.2"
+          "arcVersion": "0.1.1-rc.0"
         },
         {
           "name": "GenesisProtocol",
           "contractName": "GenesisProtocol",
           "dao": "package",
           "mapping": "GenesisProtocol",
-          "arcVersion": "0.0.1-rc.2"
-        },
-        {
-          "name": "DAORegistryInstance",
-          "contractName": "DAORegistry",
-          "dao": "package",
-          "mapping": "DAORegistry",
-          "arcVersion": "0.0.1-rc.2"
+          "arcVersion": "0.1.1-rc.0"
         },
         {
           "name": "DAORegistry",
-          "contractName": "DAORegistry",
+          "contractName": "DAORegistryInstance",
           "dao": "package",
           "mapping": "DAORegistry",
-          "arcVersion": "0.0.1-rc.2"
+          "arcVersion": "0.1.1-rc.0"
         },
         {
           "name": "ContributionReward",
           "contractName": "ContributionReward",
           "dao": "package",
           "mapping": "ContributionReward",
-          "arcVersion": "0.0.1-rc.2"
+          "arcVersion": "0.1.1-rc.0"
         },
         {
           "name": "SchemeRegistrar",
           "contractName": "SchemeRegistrar",
           "dao": "package",
           "mapping": "SchemeRegistrar",
-          "arcVersion": "0.0.1-rc.2"
+          "arcVersion": "0.1.1-rc.0"
         },
         {
           "name": "GenericScheme",
           "contractName": "GenericScheme",
           "dao": "package",
           "mapping": "GenericScheme",
-          "arcVersion": "0.0.1-rc.2"
+          "arcVersion": "0.1.1-rc.0"
         }
       ]
   },

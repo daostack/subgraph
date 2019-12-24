@@ -20,7 +20,7 @@ async function generateContractInfo(opts={}) {
   const migration = JSON.parse(fs.readFileSync(require.resolve(opts.migrationFile), "utf-8"));
 
   let versions = migration[network].package
-  let buffer = "import {\n  setBlacklistedDAO,\n  setContractInfo,\n  setTemplateInfo,\n} from './utils';\n";
+  let buffer = "import {\n  setContractInfo,\n  setTemplateInfo,\n} from './utils';\n";
   buffer += "\n// this code was generated automatically . please not edit it -:)\n";
   buffer += "/* tslint:disable:max-line-length */\n";
 

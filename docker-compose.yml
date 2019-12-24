@@ -1,7 +1,7 @@
 version: '3'
 services:
   graph-node:
-    image: 'graphprotocol/graph-node:v0.16.0'
+    image: 'graphprotocol/graph-node:v0.17.0'
     ports:
       - '8000:8000'
       - '8001:8001'
@@ -31,6 +31,6 @@ services:
     environment:
       POSTGRES_PASSWORD: letmein
   ganache:
-    image: 'daostack/migration-experimental:0.0.1-rc.2-v1'
+    image: 'daostack/migration-experimental:0.1.1-rc.0-v2'
     ports:
       - '8545:8545'

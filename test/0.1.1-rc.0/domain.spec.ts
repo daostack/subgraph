@@ -12,11 +12,13 @@ import {
   writeProposalIPFS,
 } from './util';
 
-const ContributionReward = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/ContributionReward.json');
-const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/GenesisProtocol.json');
-const DAOToken = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/DAOToken.json');
-const Reputation = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/Reputation.json');
-const Avatar = require('@daostack/migration-experimental/contracts/0.0.1-rc.2/Avatar.json');
+const ContributionReward = require('@daostack/migration-experimental/contracts/0.1.1-rc.0/ContributionReward.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.0/GenesisProtocol.json');
+const DAOToken = require('@daostack/migration-experimental/contracts/0.1.1-rc.0/DAOToken.json');
+const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.0/Reputation.json');
+const Avatar = require('@daostack/migration-experimental/contracts/0.1.1-rc.0/Avatar.json');
+const DAORegistry = require('@daostack/arc-hive/build/contracts/DAORegistry.json');
+
 const REAL_FBITS = 40;
 describe('Domain Layer', () => {
   let web3;
@@ -149,6 +151,31 @@ describe('Domain Layer', () => {
       type: 'NewDAO',
       user: null,
     });
+
+    const daoRegistry = new web3.eth.Contract(
+      DAORegistry.abi,
+      addresses.DAORegistryInstance,
+      opts,
+    );
+    
+    const getRegister = `{
+      dao(id: "${addresses.Avatar.toLowerCase()}") {
+        register
+      }
+    }`;
+
+    let register;
+    register = (await sendQuery(getRegister)).dao.register;
+    expect(register).toEqual('na');
+
+    await daoRegistry.methods.register(addresses.Avatar, addresses.name).send();
+
+    register = (await sendQuery(getRegister, 2000)).dao.register;
+    expect(register).toEqual('registered');
+
+    await daoRegistry.methods.unRegister(addresses.Avatar).send();
+    register = (await sendQuery(getRegister, 2000)).dao.register;
+    expect(register).toEqual('unRegistered');
   }, 120000);
 
   it('Sanity', async () => {

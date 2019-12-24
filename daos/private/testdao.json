@@ -1,5 +1,5 @@
 {
-  "name": "Defamatory Snakes",
+  "name": "Zealous Snakes",
   "Avatar": "0x019518168df29B1cb2E06894b63DC12d83e4774A",
   "DAOToken": "0xb5232C367925f39f90FFb210970086c71803B2D9",
   "Reputation": "0x897689B5227eAb6B7d5ED6b3147fCB571B68E9a4",
@@ -36,5 +36,5 @@
       "address": "0x88dACe4393AaD98eF4067a903e7f67c97887F4A5"
     }
   ],
-  "arcVersion": "0.0.1-rc.2"
+  "arcVersion": "0.1.1-rc.0"
 }

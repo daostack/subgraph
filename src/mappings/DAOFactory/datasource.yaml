@@ -1,0 +1,12 @@
+abis:
+  - DAOFactory
+  - Avatar
+entities:
+  - DAOFactoryContract
+eventHandlers:
+  - event:  NewOrg(indexed address)
+    handler: handleNewOrg
+  - event:  SchemeInstance(indexed address,indexed string)
+    handler: handleSchemeInstance
+  - event:  ProxyCreated(address,uint64[3])
+    handler: handleProxyCreated

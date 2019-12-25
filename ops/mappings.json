@@ -24,6 +24,13 @@
           "arcVersion": "0.1.1-rc.0"
         },
         {
+          "name": "DAOFactory",
+          "contractName": "DAOFactoryInstance",
+          "dao": "package",
+          "mapping": "DAOFactory",
+          "arcVersion": "0.1.1-rc.0"
+        },
+        {
           "name": "ContributionReward",
           "contractName": "ContributionReward",
           "dao": "package",

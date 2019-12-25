@@ -157,7 +157,7 @@ describe('Domain Layer', () => {
       addresses.DAORegistryInstance,
       opts,
     );
-    
+
     const getRegister = `{
       dao(id: "${addresses.Avatar.toLowerCase()}") {
         register

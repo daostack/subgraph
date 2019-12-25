@@ -13,7 +13,7 @@ describe('Reputation', () => {
   const totalSupplyIsIndexed = async () => {
     return (await sendQuery(`
     {
-      reputationContracts {
+      reputationContracts(where: {address: "${reputation.options.address}"}) {
         address,
         totalSupply
       }
@@ -33,7 +33,7 @@ describe('Reputation', () => {
     await waitUntilTrue(totalSupplyIsIndexed);
 
     const { reputationContracts } = await sendQuery(`{
-      reputationContracts {
+      reputationContracts(where: {address: "${reputation.options.address}"}) {
         address,
         totalSupply
       }

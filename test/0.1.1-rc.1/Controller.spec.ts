@@ -1,27 +1,16 @@
 import {
-  sendQuery,
+  sendQuery, getContractAddresses,
 } from './util';
-
-function getControllerDAOAddresses() {
-  const controllerDao = require(`../../daos/private/testdao.json`);
-  return {
-    Controller: controllerDao.Controller,
-    ControllerAvatar: controllerDao.Avatar,
-    ControllerReputation: controllerDao.Reputation,
-    ControllerToken: controllerDao.DAOToken,
-    Name: controllerDao.name,
-  };
-}
 
 describe('Controller', () => {
   let addresses;
   beforeAll(async () => {
-    addresses = getControllerDAOAddresses();
+    addresses = getContractAddresses();
   });
 
   it('Sanity', async () => {
     const getMigrationDao = `{
-      dao(id: "${addresses.ControllerAvatar.toLowerCase()}") {
+      dao(id: "${addresses.Avatar.toLowerCase()}") {
         id
         name
         nativeToken {
@@ -40,18 +29,18 @@ describe('Controller', () => {
     }`;
     let dao = (await sendQuery(getMigrationDao)).dao;
     expect(dao).toMatchObject({
-      id: addresses.ControllerAvatar.toLowerCase(),
-      name: addresses.Name,
+      id: addresses.Avatar.toLowerCase(),
+      name: addresses.name,
       nativeToken: {
-        id: addresses.ControllerToken.toLowerCase(),
+        id: addresses.DAOToken.toLowerCase(),
         dao: {
-          id: addresses.ControllerAvatar.toLowerCase(),
+          id: addresses.Avatar.toLowerCase(),
         },
       },
       nativeReputation: {
-        id: addresses.ControllerReputation.toLowerCase(),
+        id: addresses.Reputation.toLowerCase(),
         dao: {
-          id: addresses.ControllerAvatar.toLowerCase(),
+          id: addresses.Avatar.toLowerCase(),
         },
       },
     });

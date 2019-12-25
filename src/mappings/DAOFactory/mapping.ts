@@ -9,7 +9,7 @@ import { DAOFactory, InitialSchemesSet, NewOrg, ProxyCreated, SchemeInstance } f
 import {
   AvatarContract, ContractInfo, DAOFactoryContract,
 } from '../../types/schema';
-import { createTemplate, fetchTemplateName, setContractInfo } from '../../utils';
+import { createTemplate, debug, fetchTemplateName, setContractInfo } from '../../utils';
 
 export function getDAOFactoryContract(address: Address): DAOFactoryContract {
   let daoFactory = DAOFactoryContract.load(address.toHex()) as DAOFactoryContract;
@@ -45,10 +45,40 @@ export function handleNewOrg(event: NewOrg): void {
 
   let avatarInfo = ContractInfo.load(avatar.toHex());
   if (avatarInfo != null) {
+    avatarInfo.name = 'Avatar';
+    avatarInfo.alias = 'Avatar';
+    avatarInfo.save();
     arcVersion = avatarInfo.version;
   } else {
-    // We've chosen to disable tracking new DAOs that don't come from the DaoCreator,
-    // as it's a potential security vulnerability
+    // If contractInfo doesn't exist something went wrong and should exit early
+    return;
+  }
+
+  let controllerInfo = ContractInfo.load(controller.toHex());
+  if (controllerInfo != null) {
+    controllerInfo.name = 'Controller';
+    controllerInfo.alias = 'Controller';
+    controllerInfo.save();
+  } else {
+    // If contractInfo doesn't exist something went wrong and should exit early
+    return;
+  }
+  let reputationInfo = ContractInfo.load(reputation.toHex());
+  if (reputationInfo != null) {
+    reputationInfo.name = 'Reputation';
+    reputationInfo.alias = 'Reputation';
+    reputationInfo.save();
+  } else {
+    // If contractInfo doesn't exist something went wrong and should exit early
+    return;
+  }
+  let daotokenInfo = ContractInfo.load(daoToken.toHex());
+  if (daotokenInfo != null) {
+    daotokenInfo.name = 'DAOToken';
+    daotokenInfo.alias = 'DAOToken';
+    daotokenInfo.save();
+  } else {
+    // If contractInfo doesn't exist something went wrong and should exit early
     return;
   }
 
@@ -83,11 +113,12 @@ export function handleNewOrg(event: NewOrg): void {
 export function handleSchemeInstance(event: SchemeInstance): void {
   let schemeInfo = ContractInfo.load(event.params._scheme.toHex());
   if (schemeInfo != null) {
-    schemeInfo.name = event.params._name.toHex(); // TODO: In Arc, make this not indexed
-    schemeInfo.alias = event.params._name.toHex();
+    schemeInfo.name = event.params._name;
+    schemeInfo.alias = event.params._name;
     schemeInfo.save();
 
     let schemeTemplate = fetchTemplateName(schemeInfo.name, schemeInfo.version);
+    debug(schemeTemplate);
 
     if (schemeTemplate == null) {
       // We're missing a template version in the subgraph

@@ -1,10 +1,10 @@
 import { getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
 
-const DAOFactory = require('@daostack/migration-experimental/contracts/0.1.1-rc.0/DAOFactory.json');
-const Avatar = require('@daostack/migration-experimental/contracts/0.1.1-rc.0/Avatar.json');
-const DAOToken = require('@daostack/migration-experimental/contracts/0.1.1-rc.0/DAOToken.json');
-const ContributionReward = require('@daostack/migration-experimental/contracts/0.1.1-rc.0/ContributionReward.json');
-const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.0/GenesisProtocol.json');
+const DAOFactory = require('@daostack/migration-experimental/contracts/0.1.1-rc.1/DAOFactory.json');
+const Avatar = require('@daostack/migration-experimental/contracts/0.1.1-rc.1/Avatar.json');
+const DAOToken = require('@daostack/migration-experimental/contracts/0.1.1-rc.1/DAOToken.json');
+const ContributionReward = require('@daostack/migration-experimental/contracts/0.1.1-rc.1/ContributionReward.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.1/GenesisProtocol.json');
 
 describe('DAOTracker', () => {
   let web3;

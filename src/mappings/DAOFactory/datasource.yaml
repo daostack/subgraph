@@ -6,7 +6,7 @@ entities:
 eventHandlers:
   - event:  NewOrg(indexed address)
     handler: handleNewOrg
-  - event:  SchemeInstance(indexed address,indexed string)
+  - event:  SchemeInstance(indexed address,string)
     handler: handleSchemeInstance
   - event:  ProxyCreated(address,uint64[3])
     handler: handleProxyCreated

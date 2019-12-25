@@ -1,6 +1,6 @@
 {
   "name": "@daostack/subgraph-experimental",
-  "version": "0.1.1-rc.0-v1",
+  "version": "0.1.1-rc.1-v1",
   "author": "DAOstack (https://www.daostack.io)",
   "license": "GPL-3.0",
   "description": "A caching layer for daostack using The Graph",
@@ -13,7 +13,7 @@
     "node": ">=10.16.3"
   },
   "scripts": {
-    "codegen": "node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js && node ops/generate-daos-subgraph.js && node ops/generate-contractsinfo.js && node ops/graph-codegen.js",
+    "codegen": "node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js && node ops/generate-contractsinfo.js && node ops/graph-codegen.js",
     "codegen:watch": "watch 'npm run codegen' src/mappings src/domain",
     "deploy": "rm -rf src/types && node ops/setup-env.js",
     "deploy:watch": "npm run deploy -- --watch",
@@ -31,7 +31,7 @@
     "test:watch": "npm run test -- --watch"
   },
   "devDependencies": {
-    "@daostack/migration-experimental": "0.1.1-rc.0-v2",
+    "@daostack/migration-experimental": "0.1.1-rc.1-v1",
     "@types/jest": "^23.3.7",
     "@types/mocha": "^5.2.5",
     "babel-eslint": "^10.0.1",

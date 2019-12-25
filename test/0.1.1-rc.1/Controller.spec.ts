@@ -1,5 +1,5 @@
 import {
-  sendQuery, getContractAddresses,
+  getContractAddresses, sendQuery,
 } from './util';
 
 describe('Controller', () => {

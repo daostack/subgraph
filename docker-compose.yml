@@ -18,7 +18,7 @@ services:
       ipfs: 'ipfs:5001'
       ethereum: 'private:http://ganache:8545'
       GRAPH_IPFS_TIMEOUT: '2'
-      GRAPH_MAX_IPFS_FILE_BYTES: '200000'
+      GRAPH_MAX_IPFS_FILE_BYTES: '300000'
       GRAPH_GRAPHQL_MAX_FIRST: '1000'
   ipfs:
     build: docker/ipfs

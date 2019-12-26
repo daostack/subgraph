@@ -5,13 +5,13 @@ import {
 } from '../../contractsInfo';
 
 import { Avatar } from '../../types/Controller/Avatar';
-import { DAOFactory, InitialSchemesSet, NewOrg, ProxyCreated, SchemeInstance } from '../../types/DAOFactory/DAOFactory';
+import { DAOFactory, NewOrg, ProxyCreated, SchemeInstance } from '../../types/DAOFactory/DAOFactory';
 import {
   AvatarContract, ContractInfo, DAOFactoryContract,
 } from '../../types/schema';
 import { createTemplate, debug, fetchTemplateName, setContractInfo } from '../../utils';
 
-export function getDAOFactoryContract(address: Address): DAOFactoryContract {
+function getDAOFactoryContract(address: Address): DAOFactoryContract {
   let daoFactory = DAOFactoryContract.load(address.toHex()) as DAOFactoryContract;
   if (daoFactory == null) {
     daoFactory = new DAOFactoryContract(address.toHex());
@@ -27,7 +27,7 @@ export function getDAOFactoryContract(address: Address): DAOFactoryContract {
 }
 
 export function handleNewOrg(event: NewOrg): void {
-  // Ensure the DAOTrackerContract has been added to the store
+  // Ensure the FactoryContract has been added to the store
   getDAOFactoryContract(event.address);
 
   let avatar = event.params._avatar;

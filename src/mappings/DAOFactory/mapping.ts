@@ -28,7 +28,7 @@ function getDAOFactoryContract(address: Address): DAOFactoryContract {
 export function handleProxyCreated(event: ProxyCreated): void {
   // Ensure the FactoryContract has been added to the store
   getDAOFactoryContract(event.address);
-  
+
   let fullVersion = event.params._version;
   let version = '0.1.1-rc.' + fullVersion[2].toString();
   setContractInfo(

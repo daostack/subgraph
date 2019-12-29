@@ -4,9 +4,5 @@ abis:
 entities:
   - DAOFactoryContract
 eventHandlers:
-  - event:  NewOrg(indexed address)
-    handler: handleNewOrg
-  - event:  SchemeInstance(indexed address,string)
-    handler: handleSchemeInstance
-  - event:  ProxyCreated(address,uint64[3])
+  - event:  ProxyCreated(address,address,string,uint64[3])
     handler: handleProxyCreated

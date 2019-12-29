@@ -12,11 +12,11 @@ import {
   writeProposalIPFS,
 } from './util';
 
-const ContributionReward = require('@daostack/migration-experimental/contracts/0.1.1-rc.1/ContributionReward.json');
-const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.1/GenesisProtocol.json');
-const DAOToken = require('@daostack/migration-experimental/contracts/0.1.1-rc.1/DAOToken.json');
-const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.1/Reputation.json');
-const Avatar = require('@daostack/migration-experimental/contracts/0.1.1-rc.1/Avatar.json');
+const ContributionReward = require('@daostack/migration-experimental/contracts/0.1.1-rc.2/ContributionReward.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.2/GenesisProtocol.json');
+const DAOToken = require('@daostack/migration-experimental/contracts/0.1.1-rc.2/DAOToken.json');
+const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.2/Reputation.json');
+const Avatar = require('@daostack/migration-experimental/contracts/0.1.1-rc.2/Avatar.json');
 const DAORegistry = require('@daostack/arc-hive/build/contracts/DAORegistry.json');
 
 const REAL_FBITS = 40;

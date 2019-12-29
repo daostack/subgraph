@@ -3,37 +3,37 @@
     {
       "name": "Avatar",
       "mapping": "Avatar",
-      "start_arcVersion": "0.1.1-rc.1"
+      "start_arcVersion": "0.1.1-rc.2"
     },
     {
       "name": "Controller",
       "mapping": "Controller",
-      "start_arcVersion": "0.1.1-rc.1"
+      "start_arcVersion": "0.1.1-rc.2"
     },
     {
       "name": "DAOToken",
       "mapping": "DAOToken",
-      "start_arcVersion": "0.1.1-rc.1"
+      "start_arcVersion": "0.1.1-rc.2"
     },
     {
       "name": "Reputation",
       "mapping": "Reputation",
-      "start_arcVersion": "0.1.1-rc.1"
+      "start_arcVersion": "0.1.1-rc.2"
     },
     {
       "name": "ContributionReward",
       "mapping": "ContributionReward",
-      "start_arcVersion": "0.1.1-rc.1"
+      "start_arcVersion": "0.1.1-rc.2"
     },
     {
       "name": "GenericScheme",
       "mapping": "GenericScheme",
-      "start_arcVersion": "0.1.1-rc.1"
+      "start_arcVersion": "0.1.1-rc.2"
     },
     {
       "name": "SchemeRegistrar",
       "mapping": "SchemeRegistrar",
-      "start_arcVersion": "0.1.1-rc.1"
+      "start_arcVersion": "0.1.1-rc.2"
     }
   ]
 }

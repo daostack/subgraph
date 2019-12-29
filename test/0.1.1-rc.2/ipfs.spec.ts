@@ -8,7 +8,7 @@ import {
   writeProposalIPFS,
 } from './util';
 
-const ContributionReward = require('@daostack/migration-experimental/contracts/0.1.1-rc.1/ContributionReward.json');
+const ContributionReward = require('@daostack/migration-experimental/contracts/0.1.1-rc.2/ContributionReward.json');
 describe('Domain Layer', () => {
   let web3;
   let addresses;

@@ -4,18 +4,18 @@ import {
   setTemplatesInfo,
 } from '../../contractsInfo';
 
+import { addDaoMember } from '../../domain';
+import { insertNewDAO } from '../../domain/dao';
+import { addNewDAOEvent } from '../../domain/event';
+import { insertReputation } from '../../domain/reputation';
+import { insertToken, updateTokenTotalSupply } from '../../domain/token';
+import { DAOToken } from '../../types/Controller/DAOToken';
+import { Reputation } from '../../types/Controller/Reputation';
 import { DAOFactory, NewOrg, ProxyCreated } from '../../types/DAOFactory/DAOFactory';
 import {
-  DAOFactoryContract, ReputationContract, ReputationHolder, TokenContract, ControllerOrganization,
+  ControllerOrganization, DAOFactoryContract, ReputationContract, ReputationHolder, TokenContract,
 } from '../../types/schema';
-import { createTemplate, fetchTemplateName, setContractInfo, hexToAddress } from '../../utils';
-import { insertNewDAO } from '../../domain/dao';
-import { insertToken, updateTokenTotalSupply } from '../../domain/token';
-import { insertReputation } from '../../domain/reputation';
-import { addDaoMember } from '../../domain';
-import { addNewDAOEvent } from '../../domain/event';
-import { Reputation } from '../../types/Controller/Reputation';
-import { DAOToken } from '../../types/Controller/DAOToken';
+import { createTemplate, fetchTemplateName, hexToAddress, setContractInfo } from '../../utils';
 
 function getDAOFactoryContract(address: Address): DAOFactoryContract {
   let daoFactory = DAOFactoryContract.load(address.toHex()) as DAOFactoryContract;
@@ -31,7 +31,6 @@ function getDAOFactoryContract(address: Address): DAOFactoryContract {
   }
   return daoFactory;
 }
-
 
 export function handleNewOrg(event: NewOrg): void {
   let reputation = event.params._reputation;
@@ -69,7 +68,7 @@ export function handleNewOrg(event: NewOrg): void {
   let repContract = ReputationContract.load(dao.nativeReputation);
   let holders: string[] = repContract.reputationHolders as string[];
   for (let i = 0; i < holders.length; i++) {
-    let reputationHolder = ReputationHolder.load(holders[i]);
+    let reputationHolder = store.get('ReputationHolder', holders[i]) as ReputationHolder;
     addDaoMember(reputationHolder);
   }
   updateTokenTotalSupply(hexToAddress(dao.nativeToken));

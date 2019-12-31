@@ -1,14 +1,21 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts';
+import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import {
   setContractsInfo,
   setTemplatesInfo,
 } from '../../contractsInfo';
 
-import { DAOFactory, NewOrg, ProxyCreated, SchemeInstance } from '../../types/DAOFactory/DAOFactory';
+import { DAOFactory, NewOrg, ProxyCreated } from '../../types/DAOFactory/DAOFactory';
 import {
-  AvatarContract, ContractInfo, DAOFactoryContract,
+  DAOFactoryContract, ReputationContract, ReputationHolder, TokenContract, ControllerOrganization,
 } from '../../types/schema';
-import { createTemplate, fetchTemplateName, setContractInfo } from '../../utils';
+import { createTemplate, fetchTemplateName, setContractInfo, hexToAddress } from '../../utils';
+import { insertNewDAO } from '../../domain/dao';
+import { insertToken, updateTokenTotalSupply } from '../../domain/token';
+import { insertReputation } from '../../domain/reputation';
+import { addDaoMember } from '../../domain';
+import { addNewDAOEvent } from '../../domain/event';
+import { Reputation } from '../../types/Controller/Reputation';
+import { DAOToken } from '../../types/Controller/DAOToken';
 
 function getDAOFactoryContract(address: Address): DAOFactoryContract {
   let daoFactory = DAOFactoryContract.load(address.toHex()) as DAOFactoryContract;
@@ -23,6 +30,52 @@ function getDAOFactoryContract(address: Address): DAOFactoryContract {
     setTemplatesInfo();
   }
   return daoFactory;
+}
+
+
+export function handleNewOrg(event: NewOrg): void {
+  let reputation = event.params._reputation;
+  let reputationContract = new ReputationContract(reputation.toHex());
+  let rep = Reputation.bind(reputation);
+  reputationContract.address = reputation;
+  reputationContract.totalSupply = rep.totalSupply();
+  store.set('ReputationContract', reputationContract.id, reputationContract);
+
+  let token = event.params._daotoken;
+  let tokenContract = new TokenContract(token.toHex());
+  let daotoken = DAOToken.bind(token);
+  tokenContract.address = token;
+  tokenContract.totalSupply = daotoken.totalSupply();
+  tokenContract.owner = event.params._controller;
+  store.set('TokenContract', tokenContract.id, tokenContract);
+
+  let ent = new ControllerOrganization(event.params._avatar.toHex());
+  ent.avatarAddress = event.params._avatar;
+  ent.nativeToken = token.toHex();
+  ent.nativeReputation = reputation.toHex();
+  ent.controller = event.params._controller;
+
+  store.set('ControllerOrganization', ent.id, ent);
+
+  let dao = insertNewDAO(event.params._avatar, token , reputation);
+  insertToken(hexToAddress(dao.nativeToken), event.params._avatar.toHex());
+  insertReputation(
+    hexToAddress(dao.nativeReputation),
+    event.params._avatar.toHex(),
+  );
+  // the following code handle cases where the reputation and token minting are done before the dao creation
+  // (e.g using daocreator)
+  // get reputation contract
+  let repContract = ReputationContract.load(dao.nativeReputation);
+  let holders: string[] = repContract.reputationHolders as string[];
+  for (let i = 0; i < holders.length; i++) {
+    let reputationHolder = ReputationHolder.load(holders[i]);
+    addDaoMember(reputationHolder);
+  }
+  updateTokenTotalSupply(hexToAddress(dao.nativeToken));
+
+  addNewDAOEvent(event.params._avatar, dao.name, event.block.timestamp);
+
 }
 
 export function handleProxyCreated(event: ProxyCreated): void {

@@ -90,38 +90,6 @@ function deleteScheme(avatarAddress: Address, scheme: Address): void {
   );
 }
 
-function insertOrganization(
-  controllerAddress: Address,
-  avatarAddress: Address,
-): void {
-
-  let controller = Controller.bind(controllerAddress);
-  let reputation = controller.nativeReputation();
-
-  let reputationContract = new ReputationContract(reputation.toHex());
-  let rep = Reputation.bind(reputation);
-  reputationContract.address = reputation;
-  reputationContract.totalSupply = rep.totalSupply();
-  store.set('ReputationContract', reputationContract.id, reputationContract);
-
-  let token = controller.nativeToken();
-
-  let tokenContract = new TokenContract(token.toHex());
-  let daotoken = DAOToken.bind(token);
-  tokenContract.address = token;
-  tokenContract.totalSupply = daotoken.totalSupply();
-  tokenContract.owner = controllerAddress;
-  store.set('TokenContract', tokenContract.id, tokenContract);
-
-  let ent = new ControllerOrganization(avatarAddress.toHex());
-  ent.avatarAddress = avatarAddress;
-  ent.nativeToken = token.toHex();
-  ent.nativeReputation = reputation.toHex();
-  ent.controller = controllerAddress;
-
-  store.set('ControllerOrganization', ent.id, ent);
-}
-
 function updateController(
   avatarAddress: Address,
   newController: Address,
@@ -169,15 +137,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   let reputation = controller.nativeReputation();
   insertScheme(event.address, avatar, event.params._scheme);
 
-  domain.handleRegisterScheme(avatar, token, reputation, event.params._scheme, event.block.timestamp);
-
-  // Detect a new organization event by looking for the first register scheme event for that org.
-  let isFirstRegister = FirstRegisterScheme.load(avatar.toHex());
-  if (isFirstRegister == null) {
-    insertOrganization(event.address, avatar);
-    isFirstRegister = new FirstRegisterScheme(avatar.toHex());
-    isFirstRegister.save();
-  }
+  domain.handleRegisterScheme(avatar, event.params._scheme);
 
   let ent = new ControllerRegisterScheme(eventId(event));
   ent.txHash = event.transaction.hash;

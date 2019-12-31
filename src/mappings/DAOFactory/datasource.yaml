@@ -1,6 +1,8 @@
 abis:
   - DAOFactory
   - Avatar
+  - Reputation
+  - DAOToken
 entities:
   - DAOFactoryContract
 eventHandlers:

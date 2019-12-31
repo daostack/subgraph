@@ -1,5 +1,5 @@
 const path = require('path')
-const DAOstackMigration = require('@daostack/migration')
+const DAOstackMigration = require('@daostack/migration-experimental')
 const { migrationFileLocation } = require('./settings')
 
 async function migrate (options) {

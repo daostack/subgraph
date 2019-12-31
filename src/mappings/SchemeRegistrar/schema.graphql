@@ -6,7 +6,6 @@ type SchemeRegistrarNewSchemeProposal @entity {
 	proposalId: Bytes!
 	votingMachine: Bytes!
 	scheme: Bytes!
-	paramsHash: Bytes!
 	permission: Bytes!
 	descriptionHash: String!
 }
@@ -28,17 +27,16 @@ type SchemeRegistrarProposalExecuted @entity {
 	contract: Bytes!
 	avatar: Bytes!
 	proposalId: Bytes!
-	decision : BigInt!
+	decision: BigInt!
 }
 
 type SchemeRegistrarProposal @entity {
 	id: ID!
 	dao: DAO!
 	schemeToRegister: Bytes
-	schemeToRegisterParamsHash: Bytes
 	schemeToRegisterPermission: Bytes
-  schemeToRemove: Bytes
-  decision: BigInt
-  schemeRegistered: Boolean
-  schemeRemoved: Boolean
+	schemeToRemove: Bytes
+	decision: BigInt
+	schemeRegistered: Boolean
+	schemeRemoved: Boolean
 }

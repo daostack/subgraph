@@ -187,10 +187,6 @@ type GPReward @entity {
 	daoBountyForStakerRedeemedAt: BigInt!
 }
 
-type FirstRegisterSchemeFlag @entity {
-	id: ID!
-}
-
 type ContractInfo @entity {
 	id: ID!
 	name: String!

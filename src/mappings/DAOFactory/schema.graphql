@@ -1,0 +1,6 @@
+type DAOFactoryContract @entity {
+  id: ID!
+  address: Bytes!
+  packageName: String!
+  app: Bytes!
+}

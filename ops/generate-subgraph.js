@@ -3,7 +3,7 @@ const path = require("path")
 const yaml = require("js-yaml");
 const { migrationFileLocation: defaultMigrationFileLocation,
 network ,startBlock} = require("./settings");
-const { versionToNum, forEachTemplate } = require("./utils");
+const { forEachTemplate } = require("./utils");
 const mappings = require("./mappings.json")[network].mappings;
 const { subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 
@@ -31,7 +31,7 @@ async function generateSubgraph(opts={}) {
 
   // Throw an error if there are contracts that're missing an address
   // and are never used as a template
-  const missing = Object.keys(missingAddresses).map(function(key, index) {
+  const missing = Object.keys(missingAddresses).map(function(key) {
     return missingAddresses[key] ? key : null
   }).filter(el => el != null);
 
@@ -69,15 +69,6 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       eventHandlers = yamlLoad.eventHandlers;
       entities = yamlLoad.entities;
       abis = (yamlLoad.abis || [contract]).map(contractName => {
-        const versionNum = versionToNum(version);
-
-        if ((versionNum < 24) && (contractName === "UGenericScheme")) {
-          return {
-            name: contractName,
-            file: `${__dirname}/../abis/${version}/GenericScheme.json`
-          };
-        }
-
         return {
           name: contractName,
           file: `${__dirname}/../abis/${version}/${contractName}.json`

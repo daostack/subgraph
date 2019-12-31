@@ -9,7 +9,7 @@ const fs = require('fs')
  * @return {[type]}               [description]
  */
 async function setupenv (opts={}) {
-  const defaultMigrationFile = '@daostack/migration/migration.json'
+  const defaultMigrationFile = '@daostack/migration-experimental/migration.json'
   if (!opts.migrationFile) {
     opts.migrationFile = defaultMigrationFile
   }
@@ -31,15 +31,11 @@ async function setupenv (opts={}) {
   console.log(`Generating subgraph`)
   await require(`../ops/generate-subgraph`)(opts)
 
-  console.log(`Generating daos subgraph`)
-  await require(`../ops/generate-daos-subgraph`)(opts)
-
   console.log(`Generating contracts info`)
   await require(`../ops/generate-contractsinfo`)(opts)
 
   console.log('Calling graph-codegen')
   await require(`../ops/graph-codegen`)(opts)
-
 
   console.log('Deploying subgraph')
   await require(`${subgraphRepo}/ops/graph-deploy`)(opts)

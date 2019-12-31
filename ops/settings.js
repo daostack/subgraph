@@ -1,7 +1,6 @@
-const path = require('path')
 require('dotenv').config();
 
-const migrationFileLocation = require.resolve(`@daostack/migration/migration.json`)
+const migrationFileLocation = require.resolve(`@daostack/migration-experimental/migration.json`)
 const network = process.env.network || 'private'
 const graphNode = process.env.graph_node || 'http://127.0.0.1:8020/'
 const ipfsNode = process.env.ipfs_node || 'http://127.0.0.1:5001'

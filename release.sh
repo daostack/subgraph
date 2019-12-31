@@ -2,7 +2,7 @@
 echo "Creating a new release"
 npm ci
 
-migration_version=$(cat package.json  | jq -r '.devDependencies."@daostack/migration"')
+migration_version=$(cat package.json  | jq -r '.devDependencies."@daostack/migration-experimental"')
 docker_compose_migration_version=$(cat docker-compose.yml | grep daostack/migration | cut -d ":" -f 3 | sed "s/'//")
 package_version=$(cat package.json | jq -r '.version')
 image_version=ganache-$migration_version-$package_version
@@ -35,7 +35,7 @@ fi
 
 # commit the postgres image
 container_id=$(docker ps  -f "name=postgres" -l -q)
-image_name=daostack/subgraph-postgres
+image_name=daostack/subgraph-experimental-postgres
 echo "docker commit $container_id $image_name:$image_version"
 docker commit $container_id $image_name:$image_version
 echo "docker push $image_name:$image_version"
@@ -43,7 +43,7 @@ docker push $image_name:$image_version
 
 # commit the ipfs  image
 container_id=$(docker ps  -f "name=ipfs" -l -q)
-image_name=daostack/subgraph-ipfs
+image_name=daostack/subgraph-experimental-ipfs
 echo "docker commit $container_id $image_name:$image_version"
 docker commit $container_id $image_name:$image_version
 echo "docker push $image_name:$image_version"

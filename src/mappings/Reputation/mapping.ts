@@ -47,7 +47,6 @@ function update(contract: Address, owner: Address, timestamp: BigInt): void {
       // create a new one
     }
   } else {
-
     repHolder.balance = balance;
     if (!balance.isZero()) {
       // update

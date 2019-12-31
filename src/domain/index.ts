@@ -195,42 +195,8 @@ export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: Bi
   }
 }
 
-export function handleRegisterScheme(avatar: Address,
-                                     nativeTokenAddress: Address,
-                                     nativeReputationAddress: Address,
-                                     scheme: Address ,
-                                     paramsHash: Bytes,
-                                     timestamp: BigInt): void {
-  // Detect the first register scheme event which indicates a new DAO
-  let isFirstRegister = store.get(
-    'FirstRegisterSchemeFlag',
-    avatar.toHex(),
-  );
-  if (isFirstRegister == null) {
-    setContractsInfo();
-    let dao = daoModule.insertNewDAO(avatar, nativeTokenAddress , nativeReputationAddress);
-    insertToken(hexToAddress(dao.nativeToken), avatar.toHex());
-    insertReputation(
-      hexToAddress(dao.nativeReputation),
-      avatar.toHex(),
-    );
-    // the following code handle cases where the reputation and token minting are done before the dao creation
-    // (e.g using daocreator)
-    // get reputation contract
-    let repContract = store.get('ReputationContract', dao.nativeReputation) as ReputationContract;
-    let holders: string[] = repContract.reputationHolders as string[];
-    for (let i = 0; i < holders.length; i++) {
-      let reputationHolder = store.get('ReputationHolder', holders[i]) as ReputationHolder;
-      addDaoMember(reputationHolder);
-    }
-    updateTokenTotalSupply(hexToAddress(dao.nativeToken));
-    let ent = new Entity();
-    ent.set('id', Value.fromString(avatar.toHex()));
-    store.set('FirstRegisterSchemeFlag', avatar.toHex(), ent);
-
-    addNewDAOEvent(avatar, dao.name, timestamp);
-  }
-  gpqueueModule.create(avatar, scheme, paramsHash);
+export function handleRegisterScheme(avatar: Address, scheme: Address): void {
+  gpqueueModule.create(avatar, scheme);
 }
 
 export function handleMint(event: Mint): void {
@@ -299,7 +265,7 @@ export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , tim
 }
 
 export function daoRegister(dao: Address, tag: string): void {
-   daoModule.register(dao, tag);
+  daoModule.register(dao, tag);
 }
 
 export function addDaoMember(reputationHolder: ReputationHolder): void {

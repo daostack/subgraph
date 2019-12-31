@@ -1,4 +1,4 @@
-import { Address, BigInt, store } from '@graphprotocol/graph-ts';
+import { Address, store } from '@graphprotocol/graph-ts';
 import {
   setContractsInfo,
   setTemplatesInfo,

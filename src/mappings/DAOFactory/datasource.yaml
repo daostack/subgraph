@@ -5,6 +5,6 @@ entities:
   - DAOFactoryContract
 eventHandlers:
   - event:  NewOrg(indexed address,indexed address,indexed address,address)
-    handler: handleProxyCreated
+    handler: handleNewOrg
   - event:  ProxyCreated(address,address,string,uint64[3])
     handler: handleProxyCreated

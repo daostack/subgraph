@@ -187,20 +187,20 @@ describe('Generic Signal Scheme', () => {
       },
     });
 
-    const metaq = `{
-      signals{
-        id
-        data
-      }
-    }`
-
-
     // const metaq = `{
-    //   debugs{
+    //   signals{
     //     id
-    //     message
+    //     data
     //   }
     // }`
+
+
+    const metaq = `{
+      debugs{
+        id
+        message
+      }
+    }`
 
 
     const metadata = await sendQuery(metaq, 5000);

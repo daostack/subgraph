@@ -328,8 +328,6 @@ export function removeDaoMember(reputationHolder: ReputationHolder): void {
    daoModule.decreaseDAOmembersCount(dao);
 }
 
-export function addSignal(id: string, metadata: string): void{
-  //let signal = getSignal(id);
-  //addMeta(signal,metadata);
-  writesignal(id,metadata);
+export function addSignal(signalId: string, proposalId: string): void{
+  writesignal(signalId,proposalId);
 }

@@ -1,5 +1,5 @@
-import { Address, store, BigInt } from '@graphprotocol/graph-ts';
-import { Signal } from '../types/schema';
+import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Signal, Proposal } from '../types/schema';
 import { getProposal } from './proposal'
 
 export function getSignal(id: string): Signal {
@@ -14,16 +14,27 @@ function saveSignal(signal: Signal): void {
   signal.save()
 }
 
-function addMeta(signal: Signal, metadata: string): void {
-  let proposal = getProposal(metadata);
-  let instruction = proposal.title;
-  let metadatavalues = proposal.description;
-  signal.data = metadatavalues;
-  saveSignal(signal);
+
+export function writesignal(signalId: string, proposalId: string): void {
+  let newsignal = readProposal(signalId, proposalId)
+  saveSignal(newsignal);
 }
 
-export function writesignal(id: string, metadata: string): void {
-  let signal = getSignal(id)
-  addMeta(signal,metadata);
 
+export function readProposal(id: string, proposalId: string): Signal {
+  let signal = getSignal(id)
+  let proposal = store.get('Proposal', proposalId) as Proposal;
+
+  let ipfsData = ipfs.cat('/ipfs/' + proposal.descriptionHash);
+  if (ipfsData != null && ipfsData.toString() !== '{}') {
+
+    let descJson = json.fromBytes(ipfsData as Bytes);
+    if (descJson.kind !== JSONValueKind.OBJECT) {
+      return signal;
+    }
+    if (descJson.toObject().get('key') != null) {
+      signal.data = descJson.toObject().get('key').toString();
+    }
+  }
+  return signal;
 }

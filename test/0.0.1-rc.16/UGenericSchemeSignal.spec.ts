@@ -43,9 +43,11 @@ describe('Generic Signal Scheme', () => {
     );
 
     let proposalIPFSData = {
-      description: '{"Header":"https://de.wikipedia.org/wiki/Wald#/media/Datei:Laurisilva_en_el_Cubo_de_la_Galga.jpg"}',
-      title: 'SET',
+      description: 'Setting new header Image',
+      title: 'New Header Image',
       url: 'http://swift.org/modest',
+      key: 'Header',
+      value: '{"Header":"https://de.wikipedia.org/wiki/Wald#/media/Datei:Laurisilva_en_el_Cubo_de_la_Galga.jpg"}',
     };
 
     let proposalDescription = proposalIPFSData.description;

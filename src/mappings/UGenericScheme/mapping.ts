@@ -51,8 +51,8 @@ export function handleProposalExecuted(
   }
 
   var signalId = event.params._avatar.toHex();
-  var testmetastring = event.params._proposalId.toHex();
-  domain.addSignal(signalId, testmetastring);
+  var proposalId = event.params._proposalId.toHex();
+  domain.addSignal(signalId, proposalId);
 
 
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);

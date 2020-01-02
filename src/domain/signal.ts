@@ -20,9 +20,16 @@ export function writesignal(signalId: string, proposalId: string): void {
   saveSignal(newsignal);
 }
 
+function generatestring(key: string, value: string, signal: Signal ): Signal {
+  signal.data = '{'+ '"' + key + '"' +':' + '"'+ value + '"' + '}'
+  return signal
+}
+
 
 export function readProposal(id: string, proposalId: string): Signal {
   let signal = getSignal(id)
+  let key = ''
+  let value = ''
   let proposal = store.get('Proposal', proposalId) as Proposal;
 
   let ipfsData = ipfs.cat('/ipfs/' + proposal.descriptionHash);
@@ -33,8 +40,13 @@ export function readProposal(id: string, proposalId: string): Signal {
       return signal;
     }
     if (descJson.toObject().get('key') != null) {
-      signal.data = descJson.toObject().get('key').toString();
+      key = descJson.toObject().get('key').toString();
     }
+    if (descJson.toObject().get('value') != null) {
+      value = descJson.toObject().get('value').toString();
+    }
+
   }
-  return signal;
+  let signalstring = generatestring(key,value,signal)
+  return signalstring;
 }

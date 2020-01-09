@@ -298,6 +298,13 @@ describe('Competition', () => {
         const { blockNumber: blockNumberSuggest2 } = await suggest.send({ from: accounts[0].address });
         const { timestamp: timestampSuggest2 } = await web3.eth.getBlock(blockNumberSuggest2);
 
+        tagsList = [];
+        for (let tag of proposalTags) {
+            tagsList.unshift({
+                    id: tag, numberOfSuggestions: '2',
+                    competitionSuggestions: [{ suggestionId: suggestionId2 }, { suggestionId: suggestionId1 }],
+                });
+        }
         expect((await sendQuery(competitionSuggestionsQuery)).competitionSuggestions).toContainEqual({
             suggestionId: suggestionId2.toString(),
             proposal: {
@@ -308,6 +315,7 @@ describe('Competition', () => {
             description: proposalDescription,
             fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),
             url: proposalUrl,
+            tags: tagsList,
             suggester: accounts[0].address.toLowerCase(),
             totalVotes: '0',
             votes: [],

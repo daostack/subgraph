@@ -6,7 +6,7 @@ import {
 import { getIPFSData } from '../../domain/proposal';
 import { ContributionRewardExt } from '../../types/ContributionRewardExt/ContributionRewardExt';
 import { CompetitionProposal, CompetitionSuggestion, CompetitionVote, Proposal, Tag } from '../../types/schema';
-import { concat, eventId, debug, equalStrings } from '../../utils';
+import { concat, debug, equalStrings, eventId } from '../../utils';
 
 export function handleNewCompetitionProposal(event: NewCompetitionProposal): void {
   let contributionRewardExt = ContributionRewardExt.bind(event.params._contributionRewardExt);
@@ -72,7 +72,7 @@ export function handleNewSuggestion(event: NewSuggestion): void {
     competitionSuggestion.totalVotes = BigInt.fromI32(0);
     competitionSuggestion.createdAt = event.block.timestamp;
 
-    getSuggestionIPFSData(competitionSuggestion)
+    getSuggestionIPFSData(competitionSuggestion);
 
     competitionSuggestion.save();
 
@@ -144,15 +144,16 @@ export function handleNewVote(event: NewVote): void {
     let competition = Competition.bind(event.address);
     competitionProposal.winningSuggestions = [];
     let winningSuggestions = competitionProposal.winningSuggestions;
-    debug(competitionProposal.suggestions.toString() + '')
+    debug(competitionProposal.suggestions.toString() + '');
     for (let i = 0; i < competitionProposal.suggestions.length; i++) {
       let suggestions = competitionProposal.suggestions;
       if (suggestions != null) {
-        let currentSuggestionId = (suggestions as Array<string>)[i]
+        let currentSuggestionId = (suggestions as string[])[i];
         let competitionSuggestion = CompetitionSuggestion.load(currentSuggestionId as string);
         if (competitionSuggestion != null) {
           let index = competition.getOrderedIndexOfSuggestion(competitionSuggestion.suggestionId);
-          if (index >= competitionProposal.numberOfWinners || competitionSuggestion.totalVotes.equals(BigInt.fromI32(0))) {
+          if (index >= competitionProposal.numberOfWinners ||
+            competitionSuggestion.totalVotes.equals(BigInt.fromI32(0))) {
             competitionSuggestion.positionInWinnerList = null;
           } else {
             competitionSuggestion.positionInWinnerList = index;

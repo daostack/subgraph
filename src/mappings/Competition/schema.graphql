@@ -12,7 +12,8 @@ type CompetitionProposal @entity {
     numberOfVotesPerVoters: BigInt!
     contributionReward: ControllerScheme!
     snapshotBlock: BigInt
-    suggestions: [CompetitionSuggestion!] @derivedFrom(field: "proposal")
+    suggestions: [CompetitionSuggestion!]
+    winningSuggestions: [CompetitionSuggestion!]
     votes: [CompetitionVote!] @derivedFrom(field: "proposal")
     createdAt: BigInt!
 }
@@ -26,12 +27,14 @@ type CompetitionSuggestion @entity {
 	description: String
 	url: String
     fulltext: [String!]
+    tags: [Tag!]
     suggester: Bytes!
     votes: [CompetitionVote!] @derivedFrom(field: "suggestion")
     totalVotes: BigInt!
     createdAt: BigInt!
     redeemedAt: BigInt
     rewardPercentage: BigInt
+    positionInWinnerList: BigInt
 }
 
 type CompetitionVote @entity {

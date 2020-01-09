@@ -55,11 +55,13 @@ describe('Competition', () => {
             description: 'Just eat them',
             title: 'A modest proposal',
             url: 'http://swift.org/modest',
+            tags: ['test', 'suggestion'],
         };
 
         let proposalDescription = proposalIPFSData.description;
         let proposalTitle = proposalIPFSData.title;
         let proposalUrl = proposalIPFSData.url;
+        let proposalTags = proposalIPFSData.tags;
 
         const descHash = await writeProposalIPFS(proposalIPFSData);
 
@@ -168,6 +170,9 @@ describe('Competition', () => {
                 id
               }
               createdAt
+              winningSuggestions {
+                suggestionId
+              }
             }
           }`);
 
@@ -194,6 +199,7 @@ describe('Competition', () => {
             suggestions: [],
             votes: [],
             createdAt: timestampPropose.toString(),
+            winningSuggestions: [],
         });
 
         // Pass the ContributionReward proposal to approve the competition
@@ -246,15 +252,27 @@ describe('Competition', () => {
                 description
                 fulltext
                 url
+                tags {
+                    id
+                    numberOfSuggestions
+                    competitionSuggestions {
+                        suggestionId
+                    }
+                }
                 suggester
                 votes {
                     id
                 }
                 totalVotes
                 createdAt
+                positionInWinnerList
             }
           }`;
 
+        let tagsList = [];
+        for (let tag of proposalTags) {
+            tagsList.unshift({ id: tag, numberOfSuggestions: '1', competitionSuggestions: [{ suggestionId: suggestionId1 }] });
+        }
         expect((await sendQuery(competitionSuggestionsQuery)).competitionSuggestions).toContainEqual({
             suggestionId: suggestionId1.toString(),
             proposal: {
@@ -265,10 +283,12 @@ describe('Competition', () => {
             description: proposalDescription,
             fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),
             url: proposalUrl,
+            tags: tagsList,
             suggester: accounts[0].address.toLowerCase(),
             totalVotes: '0',
             votes: [],
             createdAt: timestampSuggest1.toString(),
+            positionInWinnerList: null,
         });
 
         let suggestionId2 = await suggest.call();
@@ -289,11 +309,15 @@ describe('Competition', () => {
             totalVotes: '0',
             votes: [],
             createdAt: timestampSuggest2.toString(),
+            positionInWinnerList: null,
         });
 
         let proposalSuggestionsQuery = `{
             competitionProposal(id: "${proposalId}") {
                 suggestions(orderBy: suggestionId) {
+                    suggestionId
+                }
+                winningSuggestions {
                     suggestionId
                 }
             }
@@ -304,6 +328,7 @@ describe('Competition', () => {
                 { suggestionId: suggestionId1.toString() },
                 { suggestionId: suggestionId2.toString() },
             ],
+            winningSuggestions: [],
         });
 
         // Get rep balance
@@ -352,6 +377,9 @@ describe('Competition', () => {
                     createdAt
                 }
                 snapshotBlock
+                winningSuggestions {
+                    suggestionId
+                }
             }
         }`;
 
@@ -360,6 +388,9 @@ describe('Competition', () => {
                 { suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote1.toString() },
             ],
             snapshotBlock: blockNumberVote1.toString(),
+            winningSuggestions: [{
+                suggestionId: suggestionId1.toString(),
+            }],
         });
 
         let suggestionVotesQuery = `{
@@ -368,6 +399,7 @@ describe('Competition', () => {
                 votes {
                     createdAt
                 }
+                positionInWinnerList
             }
         }`;
 
@@ -376,6 +408,7 @@ describe('Competition', () => {
             votes: [
                 { createdAt: timestampVote1.toString() },
             ],
+            positionInWinnerList: '0',
         });
 
         const rewardsLeftQuery = `{
@@ -406,6 +439,7 @@ describe('Competition', () => {
                 suggestionId
                 redeemedAt
                 rewardPercentage
+                positionInWinnerList
             }
         }`;
 
@@ -413,6 +447,7 @@ describe('Competition', () => {
             suggestionId: suggestionId1,
             redeemedAt: timestampRedeem1.toString(),
             rewardPercentage: '100',
+            positionInWinnerList: '0',
         });
 
         expect((await sendQuery(rewardsLeftQuery)).contributionRewardProposal).toEqual({

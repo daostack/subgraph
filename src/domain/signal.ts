@@ -20,16 +20,17 @@ export function writesignal(signalId: string, proposalId: string): void {
 
 export function generatestring(key: string, value: string, signal: Signal ): void {
   const newkeypair = '"' + key + '"' +':' + '"'+ value + '"';
-  signal.data = '{"text":"website.jpg","Header":"website.jpg","info":"hello friends"}'
-  let searchstringposition = signal.data.indexOf(key)
+  debug(signal.data);
   if (signal.data == null){
     generatenewdict(newkeypair,signal)
-  }
-  else if(searchstringposition === -1){
-    appenddict(newkeypair,signal)
-  }
-  else{
-    replaceindict(newkeypair,key,signal)
+  }else{
+    let searchstringposition = signal.data.indexOf(key)
+    if(searchstringposition === -1){
+      appenddict(newkeypair,signal)
+    }
+    else{
+      replaceindict(newkeypair,key,signal)
+    }
   }
 }
 
@@ -76,7 +77,7 @@ export function readProposal(id: string, proposalId: string): void {
 
     let descJson = json.fromBytes(ipfsData as Bytes);
     if (descJson.kind !== JSONValueKind.OBJECT) {
-      debug("");
+      debug("No JSON");
     }
     if (descJson.toObject().get('key') != null) {
       key = descJson.toObject().get('key').toString();

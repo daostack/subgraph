@@ -140,32 +140,40 @@ export function handleNewVote(event: NewVote): void {
       suggestion.save();
     }
     vote.save();
-
-    let competition = Competition.bind(event.address);
-    competitionProposal.winningSuggestions = [];
-    let winningSuggestions = competitionProposal.winningSuggestions;
-    debug(competitionProposal.suggestions.toString() + '');
-    for (let i = 0; i < competitionProposal.suggestions.length; i++) {
-      let suggestions = competitionProposal.suggestions;
-      if (suggestions != null) {
-        let currentSuggestionId = (suggestions as string[])[i];
-        let competitionSuggestion = CompetitionSuggestion.load(currentSuggestionId as string);
-        if (competitionSuggestion != null) {
-          let index = competition.getOrderedIndexOfSuggestion(competitionSuggestion.suggestionId);
-          if (index >= competitionProposal.numberOfWinners ||
-            competitionSuggestion.totalVotes.equals(BigInt.fromI32(0))) {
-            competitionSuggestion.positionInWinnerList = null;
-          } else {
-            competitionSuggestion.positionInWinnerList = index;
-            winningSuggestions.push(currentSuggestionId as string);
-          }
-          competitionSuggestion.save();
-        }
-      }
-    }
-    competitionProposal.winningSuggestions = winningSuggestions;
+    let suggestions = competitionProposal.suggestions;
+    sortSuggestions(suggestions as CompetitionSuggestion[]);
     competitionProposal.save();
   }
+}
+
+function sortSuggestions(suggestions: CompetitionSuggestion[]): CompetitionSuggestion[] {
+   let temp: string;
+   for (let i = 0; i < suggestions.length; i++) {
+       let suggestionId = (suggestions as string[])[i];
+       let competitionSuggestion = CompetitionSuggestion.load(suggestionId as string);
+       /*
+        * Place currently selected element array[i]
+        * to its correct place.
+        */
+       for (let j = i + 1; j < suggestions.length ; j++) {
+           let suggestionIdJ = (suggestions as string[])[j];
+           let competitionSuggestionJ = CompetitionSuggestion.load(suggestionIdJ as string);
+           /*
+            * Swap if currently selected array element
+            * is not at its correct position.
+            */
+           if (competitionSuggestion.totalVotes > competitionSuggestionJ.totalVotes) {
+               temp     = suggestionId;
+               (suggestions as string[])[i] = (suggestions as string[])[j];
+               competitionSuggestion.positionInWinnerList = BigInt.fromI32(i);
+               competitionSuggestion.save();
+               (suggestions as string[])[j] = temp;
+               competitionSuggestionJ.positionInWinnerList = BigInt.fromI32(j);
+               competitionSuggestionJ.save();
+           }
+       }
+   }
+   return suggestions;
 }
 
 export function handleSnapshotBlock(event: SnapshotBlock): void {

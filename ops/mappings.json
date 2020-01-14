@@ -549,6 +549,13 @@
           "arcVersion": "0.0.1-rc.37"
         },
         {
+          "name": "GenesisProtocol",
+          "contractName": "GenesisProtocol",
+          "dao": "base",
+          "mapping": "GenesisProtocol",
+          "arcVersion": "0.0.1-rc.36"
+        },
+        {
           "name": "ContributionReward",
           "contractName": "ContributionReward",
           "dao": "base",

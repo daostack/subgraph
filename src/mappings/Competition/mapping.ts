@@ -6,7 +6,7 @@ import {
 import { getIPFSData } from '../../domain/proposal';
 import { ContributionRewardExt } from '../../types/ContributionRewardExt/ContributionRewardExt';
 import { CompetitionProposal, CompetitionSuggestion, CompetitionVote, Proposal, Tag } from '../../types/schema';
-import { concat, debug, equalStrings, eventId } from '../../utils';
+import { concat, equalStrings, eventId } from '../../utils';
 
 export function handleNewCompetitionProposal(event: NewCompetitionProposal): void {
   let contributionRewardExt = ContributionRewardExt.bind(event.params._contributionRewardExt);
@@ -141,26 +141,34 @@ export function handleNewVote(event: NewVote): void {
     }
     vote.save();
 
-    let competition = Competition.bind(event.address);
     competitionProposal.winningSuggestions = [];
     let winningSuggestions = competitionProposal.winningSuggestions;
-    debug(competitionProposal.suggestions.toString() + '');
+    let suggestions = competitionProposal.suggestions.sort((a, b) => {
+      let result = CompetitionSuggestion.load(a as string).totalVotes.minus(
+        CompetitionSuggestion.load(b as string).totalVotes,
+      );
+      if (result.gt(BigInt.fromI32(0))) {
+        return 1;
+      } else if (result.equals(BigInt.fromI32(0))) {
+        return 0;
+      } else {
+        return -1;
+      }
+    });
+    let lastTotalVotes = BigInt.fromI32(0);
+    let idx = BigInt.fromI32(0);
     for (let i = 0; i < competitionProposal.suggestions.length; i++) {
-      let suggestions = competitionProposal.suggestions;
-      if (suggestions != null) {
-        let currentSuggestionId = (suggestions as string[])[i];
-        let competitionSuggestion = CompetitionSuggestion.load(currentSuggestionId as string);
-        if (competitionSuggestion != null) {
-          let index = competition.getOrderedIndexOfSuggestion(competitionSuggestion.suggestionId);
-          if (index >= competitionProposal.numberOfWinners ||
-            competitionSuggestion.totalVotes.equals(BigInt.fromI32(0))) {
-            competitionSuggestion.positionInWinnerList = null;
-          } else {
-            competitionSuggestion.positionInWinnerList = index;
-            winningSuggestions.push(currentSuggestionId as string);
-          }
-          competitionSuggestion.save();
-        }
+      let competitionSuggestion = CompetitionSuggestion.load(suggestions[i] as string);
+      if (idx >= competitionProposal.numberOfWinners ||
+        competitionSuggestion.totalVotes.equals(BigInt.fromI32(0))) {
+        competitionSuggestion.positionInWinnerList = null;
+      } else {
+        competitionSuggestion.positionInWinnerList = idx;
+        winningSuggestions.push(competitionSuggestion.id as string);
+      }
+      competitionSuggestion.save();
+      if (lastTotalVotes.lt(competitionSuggestion.totalVotes)) {
+        idx = idx.plus(BigInt.fromI32(1));
       }
     }
     competitionProposal.winningSuggestions = winningSuggestions;

@@ -1433,5 +1433,52 @@
       "arcVersion": "0.0.1-rc.34"
     }
   ]
-  }
+},
+"xdai":
+  {
+    "mappings": [
+    {
+      "name": "GenesisProtocol",
+      "contractName": "GenesisProtocol",
+      "dao": "base",
+      "mapping": "GenesisProtocol",
+      "arcVersion": "0.0.1-rc.37"
+    },
+    {
+      "name": "ContributionReward",
+      "contractName": "ContributionReward",
+      "dao": "base",
+      "mapping": "ContributionReward",
+      "arcVersion": "0.0.1-rc.37"
+    },
+    {
+      "name": "SchemeRegistrar",
+      "contractName": "SchemeRegistrar",
+      "dao": "base",
+      "mapping": "SchemeRegistrar",
+      "arcVersion": "0.0.1-rc.37"
+    },
+    {
+      "name": "DAORegistry",
+      "contractName": "DAORegistry",
+      "dao": "base",
+      "mapping": "DAORegistry",
+      "arcVersion": "0.0.1-rc.37"
+    },
+    {
+      "name": "DAOTracker",
+      "contractName": "DAOTracker",
+      "dao": "base",
+      "mapping": "DAOTracker",
+      "arcVersion": "0.0.1-rc.37"
+    },
+    {
+      "name": "Redeemer",
+      "contractName": "Redeemer",
+      "dao": "base",
+      "mapping": "Redeemer",
+      "arcVersion": "0.0.1-rc.37"
+    }
+  ]
+}
 }

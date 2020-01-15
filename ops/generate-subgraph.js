@@ -4,7 +4,7 @@ const yaml = require("js-yaml");
 const { migrationFileLocation: defaultMigrationFileLocation,
 network ,startBlock} = require("./settings");
 const { versionToNum, forEachTemplate } = require("./utils");
-const mappings = require("./mappings.json")[network].mappings;
+var mappings = require("./mappings.json")[network].mappings;
 const { subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 
 /**
@@ -17,13 +17,21 @@ async function generateSubgraph(opts={}) {
   opts.subgraphLocation = opts.subgraphLocation || defaultSubgraphLocation;
   const addresses = JSON.parse(fs.readFileSync(migrationFile, "utf-8"));
   const missingAddresses = {};
+  if (network === 'xdai') {
+   mappings.push(  //workaround :(
+     {name: 'UGenericScheme',
+      contractName: 'UGenericScheme',
+      dao: 'base',
+      mapping: 'UGenericScheme',
+      arcVersion: '0.0.1-rc.37' });
+      addresses[network].base['0.0.1-rc.37']['UGenericScheme'] = "0xA92A766d62318B9c06Eb548753bD34acbD7C5f3c" //dummy
+  }
 
   // Filter out 0.0.1-rc.18 & 0.0.1-rc.17
   const latestMappings = mappings.filter(mapping =>
     !(mapping.arcVersion === "0.0.1-rc.18" ||
       mapping.arcVersion === "0.0.1-rc.17")
   );
-
   // Build our subgraph's datasources from the mapping fragments
   const dataSources = combineFragments(
     latestMappings, false, addresses, missingAddresses

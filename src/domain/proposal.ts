@@ -81,6 +81,8 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
             tagEnt = new Tag(tagsObjects[i].toString());
             tagEnt.numberOfProposals = BigInt.fromI32(0);
             tagEnt.proposals = [];
+            tagEnt.numberOfSuggestions = BigInt.fromI32(0);
+            tagEnt.competitionSuggestions = [];
           }
           let tagProposals = tagEnt.proposals;
           tagProposals.push(proposal.id);

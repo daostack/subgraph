@@ -117,6 +117,8 @@ type Tag @entity {
 	id: ID!
 	proposals: [Proposal!]
 	numberOfProposals: BigInt!
+	competitionSuggestions: [CompetitionSuggestion!]
+	numberOfSuggestions: BigInt!
 }
 
 type ProposalStake @entity {

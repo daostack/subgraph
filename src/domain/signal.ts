@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Bytes, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { Signal, Proposal } from '../types/schema';
 import { debug } from '../utils';
 
@@ -19,49 +19,58 @@ export function writesignal(signalId: string, proposalId: string): void {
 }
 
 export function generatestring(key: string, value: string, signal: Signal ): void {
-  const newkeypair = '"' + key + '"' +':' + '"'+ value + '"';
-  debug(signal.data);
+  const curlybraceopen = String.fromCharCode(123)
+  const curlybraceclose = String.fromCharCode(125)
+  const colon = String.fromCharCode(58)
+  const comma = String.fromCharCode(44)
+  const quotation = String.fromCharCode(34)
+  const newkeypair = quotation.concat(key).concat(quotation).concat(colon).concat(quotation).concat(value).concat(quotation)
   if (signal.data == null){
-    generatenewdict(newkeypair,signal)
+    generatenewdict(newkeypair,signal,curlybraceopen, curlybraceclose)
   }else{
     let searchstringposition = signal.data.indexOf(key)
     if(searchstringposition === -1){
-      appenddict(newkeypair,signal)
+      appenddict(newkeypair,signal,curlybraceclose,comma)
     }
     else{
-      replaceindict(newkeypair,key,signal)
-    }
+      replaceindict(newkeypair,key,signal,curlybraceopen,curlybraceclose,comma)
   }
 }
+}
 
-function replaceindict(newkeypair: string, key: string, signal: Signal):void{
+function replaceindict(newkeypair: string,
+                              key: string,
+                              signal: Signal,
+                              curlybraceopen:string,
+                              curlybraceclosed:string,
+                              comma:string ):void{
   let lenght = signal.data.length;
   let cutstring = signal.data.slice(1,lenght-1);
-  let stringarray = cutstring.split(',')
+  let stringarray = cutstring.split(comma)
   let finalstring = ""
   for (let y = 0; y < stringarray.length; ++y) {
     if (stringarray[y].indexOf(key) === -1){
-      finalstring = finalstring + "," + stringarray[y];
+      finalstring = finalstring.concat(comma).concat(stringarray[y]);
     }else{
-      finalstring = finalstring + "," + newkeypair;
+      finalstring = finalstring.concat(comma).concat(newkeypair);
       }
     }
-    signal.data = "{"+finalstring.slice(1)+"}"
+    signal.data = curlybraceopen.concat(finalstring.slice(1)).concat(curlybraceclosed)
     debug(signal.data);
+    debug("replace");
     saveSignal(signal);
   }
 
-function generatenewdict(keypair: string, signal: Signal): void{
-  const data = '{' + keypair + '}';
+function generatenewdict(keypair: string, signal: Signal, curlybraceopen:string, curlybraceclosed:string): void{
+  const data = curlybraceopen.concat(keypair).concat(curlybraceclosed);
   debug("generate");
   signal.data = data;
-  debug(signal.data);
   saveSignal(signal);
 }
 
-function appenddict(keypair: string, signal: Signal):void{
+function appenddict(keypair: string, signal: Signal, curlybraceclosed:string, comma:string):void{
   let signalsubstring = signal.data.substring(0,signal.data.length-1)
-  signal.data = signalsubstring + "," + keypair + "}"
+  signal.data = signalsubstring.concat(comma).concat(keypair).concat(curlybraceclosed)
   debug(signal.data);
   saveSignal(signal);
 }

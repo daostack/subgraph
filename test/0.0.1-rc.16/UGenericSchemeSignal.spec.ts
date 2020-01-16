@@ -7,6 +7,8 @@ import {
   writeProposalIPFS,
 } from './util';
 
+jest.setTimeout(30000);
+
 const ActionMock = require('@daostack/arc/build/contracts/ActionMock.json');
 const GenericScheme = require('@daostack/arc/build/contracts/UGenericScheme.json');
 const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
@@ -87,7 +89,7 @@ const maintest = async (web3,addresses,opts,proposalIPFSData,matchto) => {
 }`;
 
 
-  let proposal = (await sendQuery(getProposal)).proposal;
+  let proposal = (await sendQuery(getProposal,60000)).proposal;
   expect(proposal).toMatchObject({
     id: p1,
     descriptionHash: descHash,
@@ -184,7 +186,7 @@ const maintest = async (web3,addresses,opts,proposalIPFSData,matchto) => {
   // }`
 
 
-  const metadata = await sendQuery(metaq, 5000);
+  const metadata = await sendQuery(metaq, 15000);
   expect(metadata).toMatchObject(matchto);
 
 }

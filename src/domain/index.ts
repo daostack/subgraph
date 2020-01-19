@@ -1,9 +1,5 @@
-import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, Entity, store, Value} from '@graphprotocol/graph-ts';
-import { setContractsInfo } from '../contractsInfo';
-import {
-  NewContributionProposal,
-  ProposalExecuted,
-} from '../types/ContributionReward/ContributionReward';
+import { Address, BigDecimal, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
+import { setContractsInfo, setTemplatesInfo } from '../contractsInfo';
 import { Transfer } from '../types/DAOToken/DAOToken';
 import {
   ExecuteProposal,
@@ -75,21 +71,25 @@ function handleGPProposalPrivate(proposalId: string): void {
 }
 
 export function handleNewContributionProposal(
-  event: NewContributionProposal,
+  proposalId: Bytes,
+  avatar: Address,
+  timestamp: BigInt,
+  intVoteInterface: Address,
+  descriptionHash: string,
+  contract: Address,
 ): void {
-  if (!daoModule.exists(event.params._avatar)) {
+  if (!daoModule.exists(avatar)) {
     return;
   }
   updateCRProposal(
-    event.params._proposalId,
-    event.block.timestamp,
-    event.params._avatar,
-    event.params._intVoteInterface,
-    event.params._descriptionHash,
-    event.params._beneficiary,
-    event.address,
+    proposalId,
+    timestamp,
+    avatar,
+    intVoteInterface,
+    descriptionHash,
+    contract,
   );
-  handleGPProposalPrivate(event.params._proposalId.toHex());
+  handleGPProposalPrivate(proposalId.toHex());
 }
 
 export function handleNewSchemeRegisterProposal(
@@ -171,7 +171,13 @@ export function handleVoteProposal(event: VoteProposal): void {
       event.params._reputation,
     );
   }
-  updateProposalAfterVote(proposal, event.address, event.params._proposalId, event.block.timestamp);
+  updateProposalAfterVote(
+    proposal,
+    event.address,
+    event.params._proposalId,
+    event.params._voter,
+    event.block.timestamp,
+  );
   saveProposal(proposal);
   insertVote(
     eventId(event),
@@ -183,11 +189,6 @@ export function handleVoteProposal(event: VoteProposal): void {
     event.params._reputation,
   );
   insertGPRewardsToHelper(event.params._proposalId, event.params._voter);
-}
-
-export function handleProposalExecuted(event: ProposalExecuted): void {
-  // this already handled at handleExecuteProposal
-  // updateProposalExecution(event.params._proposalId, null, event.block.timestamp,event.address);
 }
 
 export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {
@@ -277,7 +278,8 @@ export function handleStateChange(event: StateChange): void {
           (event.params._proposalState === 2)) {
           insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
       }
-      addProposalStateChangeEvent(event.params._proposalId, event.block.timestamp);
+
+      addProposalStateChangeEvent(event.params._proposalId, event.transaction.from, event.block.timestamp);
   }
 }
 

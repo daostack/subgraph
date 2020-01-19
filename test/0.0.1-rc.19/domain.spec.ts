@@ -1,4 +1,5 @@
 import {
+  getArcVersion,
   getContractAddresses,
   getOptions,
   getOrgName,
@@ -11,11 +12,11 @@ import {
   writeProposalIPFS,
 } from './util';
 
-const ContributionReward = require('@daostack/arc/build/contracts/ContributionReward.json');
-const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
-const DAOToken = require('@daostack/arc/build/contracts/DAOToken.json');
-const Reputation = require('@daostack/arc/build/contracts/Reputation.json');
-const Avatar = require('@daostack/arc/build/contracts/Avatar.json');
+const ContributionReward = require('@daostack/migration/contracts/' + getArcVersion() + '/ContributionReward.json');
+const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
+const DAOToken = require('@daostack/migration/contracts/' + getArcVersion() + '/DAOToken.json');
+const Reputation = require('@daostack/migration/contracts/' + getArcVersion() + '/Reputation.json');
+const Avatar = require('@daostack/migration/contracts/' + getArcVersion() + '/Avatar.json');
 const DAORegistry = require('@daostack/arc-hive/build/contracts/DAORegistry.json');
 const REAL_FBITS = 40;
 describe('Domain Layer', () => {
@@ -76,7 +77,7 @@ describe('Domain Layer', () => {
 
     // Can't test timestap for NewReputationHolder event
     const getNewMemberEvents = `{
-      events(where: { type: NewReputationHolder, dao: "${addresses.Avatar.toLowerCase()}" }) {
+      events(where: { type: "NewReputationHolder", dao: "${addresses.Avatar.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -136,9 +137,6 @@ describe('Domain Layer', () => {
       opts,
     );
 
-    expect(register).toEqual('na');
-
-    await daoRegistry.methods.register(addresses.Avatar, 'test').send();
     register = (await sendQuery(getRegister, 2000)).dao.register;
     expect(register).toEqual('registered');
 
@@ -372,7 +370,7 @@ describe('Domain Layer', () => {
 
     let proposalIPFSData = {
       description: 'Just eat them',
-      title: 'A modest proposal',
+      title: '"A modest proposal"',
       url: 'http://swift.org/modest',
       tags: ['test2', 'proposal2'],
     };
@@ -628,7 +626,7 @@ describe('Domain Layer', () => {
     });
 
     const getNewProposalsEvents = `{
-      events(where: { type: NewProposal, dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
+      events(where: { type: "NewProposal", dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -706,7 +704,7 @@ describe('Domain Layer', () => {
     });
 
     const getVotesEvents = `{
-      events(where: { type: Vote, dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
+      events(where: { type: "Vote", dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -794,7 +792,7 @@ describe('Domain Layer', () => {
     });
 
     const getStakessEvents = `{
-      events(where: { type: Stake, dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
+      events(where: { type: "Stake", dao: "${addresses.Avatar.toLowerCase()}", user: "${accounts[0].address.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -922,7 +920,7 @@ describe('Domain Layer', () => {
     });
 
     const getProposalStageChangeEvents = `{
-      events(where: { type: ProposalStageChange, dao: "${addresses.Avatar.toLowerCase()}" }) {
+      events(where: { type: "ProposalStageChange", dao: "${addresses.Avatar.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -943,7 +941,7 @@ describe('Domain Layer', () => {
       data: '{ \"stage\": \"Boosted\" }',
       proposal: { id: p1 },
       type: 'ProposalStageChange',
-      user: null,
+      user: accounts[1].address.toLowerCase(),
       timestamp: `${v2Timestamp}`,
     });
 
@@ -1298,7 +1296,7 @@ describe('Domain Layer', () => {
     });
 
     const getVoteFlipsEvents = `{
-      events(where: { type: VoteFlip, dao: "${addresses.Avatar.toLowerCase()}" }) {
+      events(where: { type: "VoteFlip", dao: "${addresses.Avatar.toLowerCase()}" }) {
         type
         data
         proposal {
@@ -1319,7 +1317,7 @@ describe('Domain Layer', () => {
       data: '{ \"outcome\": \"Fail\", \"votesFor\": \"' + address1Rep + '\", \"votesAgainst\": \"' + address2Rep + '\" }',
       proposal: { id: p2 },
       type: 'VoteFlip',
-      user: null,
+      user: accounts[2].address.toLowerCase(),
       timestamp: `${quietEndingPeriodBeganAt}`,
     });
 
@@ -1393,20 +1391,20 @@ describe('Domain Layer', () => {
         },
     });
     expect(gpQueues).toContainEqual({
-        threshold: Math.pow(2, REAL_FBITS + 1).toString(),
-        scheme: {
-          name: 'ContributionReward',
-          numberOfBoostedProposals: '1',
-          numberOfExpiredInQueueProposals: '0',
-          numberOfPreBoostedProposals: '1',
-          numberOfQueuedProposals: '1',
-        },
-        dao: {
-          numberOfQueuedProposals: '2',
-          numberOfPreBoostedProposals: '1',
-          numberOfBoostedProposals: '1',
-          numberOfExpiredInQueueProposals: '0',
-        },
+      threshold: Math.pow(2, REAL_FBITS + 1).toString(),
+      scheme: {
+        name: 'ContributionReward',
+        numberOfBoostedProposals: '1',
+        numberOfExpiredInQueueProposals: '0',
+        numberOfPreBoostedProposals: '1',
+        numberOfQueuedProposals: '1',
+      },
+      dao: {
+        numberOfQueuedProposals: '2',
+        numberOfPreBoostedProposals: '1',
+        numberOfBoostedProposals: '1',
+        numberOfExpiredInQueueProposals: '0',
+      },
     });
     increaseTime(300 + 1 , web3);
     await genesisProtocol.methods.execute(p2).send();

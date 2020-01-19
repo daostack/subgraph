@@ -1,12 +1,12 @@
 import { Address, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
 import { Event, Proposal, ReputationHolder } from '../types/schema';
-import { concat } from '../utils';
+import { concat, fixJsonQuotes} from '../utils';
 
 export function addNewDAOEvent(avatar: Address, daoName: string, timestamp: BigInt): void {
     addEvent(
         'NewDAO',
         avatar.toHex(),
-        '{ "name": "' + daoName + '" }',
+        '{ "name": "' + fixJsonQuotes(daoName) + '" }',
         null,
         null,
         avatar.toHex(),
@@ -14,14 +14,14 @@ export function addNewDAOEvent(avatar: Address, daoName: string, timestamp: BigI
     );
 }
 
-export function addProposalStateChangeEvent(proposalId: Bytes, timestamp: BigInt): void {
+export function addProposalStateChangeEvent(proposalId: Bytes, user: Address, timestamp: BigInt): void {
     let proposal = Proposal.load(proposalId.toHex());
     addEvent(
         'ProposalStageChange',
         crypto.keccak256(concat(proposalId, timestamp as ByteArray)).toHex(),
         '{ "stage": "' + proposal.stage + '" }',
         proposalId.toHex(),
-        null,
+        user,
         proposal.dao,
         timestamp,
     );
@@ -39,7 +39,7 @@ export function addNewReputationHolderEvent(reputationHolder: ReputationHolder):
     );
 }
 
-export function addVoteFlipEvent(proposalId: Bytes, proposal: Proposal, timestamp: BigInt): void {
+export function addVoteFlipEvent(proposalId: Bytes, proposal: Proposal, voter: Address, timestamp: BigInt): void {
     addEvent(
         'VoteFlip',
         crypto.keccak256(
@@ -47,7 +47,7 @@ export function addVoteFlipEvent(proposalId: Bytes, proposal: Proposal, timestam
             ).toHex(),
         '{ "outcome": "' + proposal.winningOutcome + '", "votesFor": "' + proposal.votesFor.toString() + '", "votesAgainst": "' + proposal.votesAgainst.toString() + '" }',
         proposalId.toHex(),
-        null,
+        voter,
         proposal.dao,
         timestamp,
     );
@@ -57,7 +57,7 @@ export function addNewProposalEvent(proposalId: Bytes, proposal: Proposal, times
     addEvent(
         'NewProposal',
         crypto.keccak256(concat(proposalId, timestamp as ByteArray)).toHex(),
-        '{ "title": "' + proposal.title + '" }',
+        '{ "title": "' + fixJsonQuotes(proposal.title) + '" }',
         proposalId.toHex(),
         proposal.proposer,
         proposal.dao,

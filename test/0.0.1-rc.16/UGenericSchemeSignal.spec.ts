@@ -1,4 +1,5 @@
 import {
+  getArcVersion,
   getContractAddresses,
   getOptions,
   getWeb3,
@@ -9,9 +10,10 @@ import {
 
 jest.setTimeout(30000);
 
-const ActionMock = require('@daostack/arc/build/contracts/ActionMock.json');
-const GenericScheme = require('@daostack/arc/build/contracts/UGenericScheme.json');
-const GenesisProtocol = require('@daostack/arc/build/contracts/GenesisProtocol.json');
+const ActionMock = require('@daostack/migration/contracts/' + getArcVersion() + '/ActionMock.json');
+const GenericScheme = require('@daostack/migration/contracts/' + getArcVersion() + '/GenericScheme.json');
+const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
+
 
 const maintest = async (web3,addresses,opts,proposalIPFSData,matchto) => {
   const accounts = web3.eth.accounts.wallet;
@@ -89,7 +91,7 @@ const maintest = async (web3,addresses,opts,proposalIPFSData,matchto) => {
 }`;
 
 
-  let proposal = (await sendQuery(getProposal,60000)).proposal;
+  let proposal = (await sendQuery(getProposal,80000)).proposal;
   expect(proposal).toMatchObject({
     id: p1,
     descriptionHash: descHash,
@@ -220,7 +222,7 @@ describe('Generic Signal Scheme', () => {
            data:
              '{"Header":"https://de.wikipedia.org/wiki/Wald#/media/Datei:Laurisilva_en_el_Cubo_de_la_Galga.jpg"}',
            id:
-             '0xe7a2c59e134ee81d4035ae6db2254f79308e334f'
+             '0x86e9fe552e75e4fc51f46e4efc128628ecd5ada7'
          }
        ]
     }
@@ -246,7 +248,7 @@ describe('Generic Signal Scheme', () => {
            data:
              '{"Header":"https://de.wikipedia.org/wiki/Wald#/media/Datei:Laurisilva_en_el_Cubo_de_la_Galga.jpg","Icon":"https://en.wikipedia.org/wiki/River#/media/File:Melting_Toe_of_Athabasca_Glacier.jpg"}',
            id:
-             '0xe7a2c59e134ee81d4035ae6db2254f79308e334f'
+             '0x86e9fe552e75e4fc51f46e4efc128628ecd5ada7'
          }
        ]
     }
@@ -272,7 +274,7 @@ describe('Generic Signal Scheme', () => {
            data:
              '{"Header":"https://de.wikipedia.org/wiki/Wasserfall#/media/Datei:Russell_Falls_2.jpg","Icon":"https://en.wikipedia.org/wiki/River#/media/File:Melting_Toe_of_Athabasca_Glacier.jpg"}',
            id:
-             '0xe7a2c59e134ee81d4035ae6db2254f79308e334f'
+             '0x86e9fe552e75e4fc51f46e4efc128628ecd5ada7'
          }
        ]
     }

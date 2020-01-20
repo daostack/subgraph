@@ -424,9 +424,6 @@ describe('Competition', () => {
                     createdAt
                 }
                 snapshotBlock
-                winningSuggestions {
-                    suggestionId
-                }
             }
         }`;
 
@@ -437,15 +434,21 @@ describe('Competition', () => {
                 { suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote3.toString() },
             ],
             snapshotBlock: blockNumberVote1.toString(),
-            winningSuggestions: [
-                {
-                    suggestionId: suggestionId2.toString(),
-                },
-                {
-                    suggestionId: suggestionId1.toString(),
-                },
-            ],
         });
+
+        let proposalVotesWinningSuggestionsQuery = `{
+            competitionProposal(id: "${proposalId}") {
+                winningSuggestions {
+                    suggestionId
+                }
+            }
+        }`;
+
+        expect((await sendQuery(proposalVotesWinningSuggestionsQuery)).competitionProposal.winningSuggestions)
+        .toContainEqual({ suggestionId: suggestionId1.toString() });
+
+        expect((await sendQuery(proposalVotesWinningSuggestionsQuery)).competitionProposal.winningSuggestions)
+        .toContainEqual({ suggestionId: suggestionId2.toString() });
 
         let suggestionVotesQuery = `{
             competitionSuggestions(where: {suggestionId: "${suggestionId1}"}) {

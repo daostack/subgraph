@@ -430,7 +430,7 @@ describe('Competition', () => {
             }
         }`;
 
-        expect((await sendQuery(proposalVotesQuery))).toContainEqual({
+        expect((await sendQuery(proposalVotesQuery)).competitionProposal).toMatchObject({
             votes: [
                 { suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote1.toString() },
                 { suggestion: { suggestionId: suggestionId2.toString() }, createdAt: timestampVote2.toString() },

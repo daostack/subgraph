@@ -439,11 +439,11 @@ describe('Competition', () => {
             snapshotBlock: blockNumberVote1.toString(),
             winningSuggestions: [
                 {
-                    suggestionId: suggestionId2.toString(),
+                    suggestionId: suggestionId1.toString(),
                 },
                 {
-                    suggestionId: suggestionId1.toString(),
-                }
+                    suggestionId: suggestionId2.toString(),
+                },
             ],
         });
 

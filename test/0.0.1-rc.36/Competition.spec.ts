@@ -71,7 +71,7 @@ describe('Competition', () => {
             nativeToken: 1,
             rep: 1,
         };
-        let rewardSplit = ['50', '25', '15', '10'];
+        let rewardSplit = ['50', '30', '10', '10'];
         let block = await web3.eth.getBlock('latest');
         let startTime = block.timestamp + 10;
         let votingStartTime = block.timestamp + 600;
@@ -344,6 +344,8 @@ describe('Competition', () => {
 
         // Get rep balance
         const address0Rep = await reputation.methods.balanceOf(accounts[0].address).call();
+        const address1Rep = await reputation.methods.balanceOf(accounts[1].address).call();
+        const address2Rep = await reputation.methods.balanceOf(accounts[2].address).call();
 
         await increaseTime(650, web3);
 
@@ -351,6 +353,14 @@ describe('Competition', () => {
         const { blockNumber: blockNumberVote1 } =
             await competition.methods.vote(suggestionId1).send({ from: accounts[0].address });
         const { timestamp: timestampVote1 } = await web3.eth.getBlock(blockNumberVote1);
+
+        const { blockNumber: blockNumberVote2 } =
+            await competition.methods.vote(suggestionId2).send({ from: accounts[1].address });
+        const { timestamp: timestampVote2 } = await web3.eth.getBlock(blockNumberVote2);
+
+        const { blockNumber: blockNumberVote3 } =
+            await competition.methods.vote(suggestionId1).send({ from: accounts[2].address });
+        const { timestamp: timestampVote3 } = await web3.eth.getBlock(blockNumberVote3);
 
         let competitionVotesQuery = `{
             competitionVotes {
@@ -379,6 +389,32 @@ describe('Competition', () => {
             reputation: address0Rep,
         });
 
+        expect((await sendQuery(competitionVotesQuery)).competitionVotes).toContainEqual({
+            proposal: {
+                id: proposalId,
+            },
+            // descriptionHash: descHash,
+            suggestion: {
+                suggestionId: suggestionId2.toString(),
+            },
+            voter: accounts[1].address.toLowerCase(),
+            createdAt: timestampVote2.toString(),
+            reputation: address1Rep,
+        });
+
+        expect((await sendQuery(competitionVotesQuery)).competitionVotes).toContainEqual({
+            proposal: {
+                id: proposalId,
+            },
+            // descriptionHash: descHash,
+            suggestion: {
+                suggestionId: suggestionId1.toString(),
+            },
+            voter: accounts[2].address.toLowerCase(),
+            createdAt: timestampVote3.toString(),
+            reputation: address2Rep,
+        });
+
         let proposalVotesQuery = `{
             competitionProposal(id: "${proposalId}") {
                 votes {
@@ -397,11 +433,18 @@ describe('Competition', () => {
         expect((await sendQuery(proposalVotesQuery)).competitionProposal).toEqual({
             votes: [
                 { suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote1.toString() },
+                { suggestion: { suggestionId: suggestionId2.toString() }, createdAt: timestampVote2.toString() },
+                { suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote3.toString() },
             ],
             snapshotBlock: blockNumberVote1.toString(),
-            winningSuggestions: [{
-                suggestionId: suggestionId1.toString(),
-            }],
+            winningSuggestions: [
+                {
+                    suggestionId: suggestionId2.toString(),
+                },
+                {
+                    suggestionId: suggestionId1.toString(),
+                }
+            ],
         });
 
         let suggestionVotesQuery = `{
@@ -418,8 +461,27 @@ describe('Competition', () => {
             suggestionId: suggestionId1,
             votes: [
                 { createdAt: timestampVote1.toString() },
+                { createdAt: timestampVote3.toString() },
             ],
             positionInWinnerList: '0',
+        });
+
+        let suggestionVotesQuery2 = `{
+            competitionSuggestions(where: {suggestionId: "${suggestionId2}"}) {
+                suggestionId
+                votes {
+                    createdAt
+                }
+                positionInWinnerList
+            }
+        }`;
+
+        expect((await sendQuery(suggestionVotesQuery2)).competitionSuggestions).toContainEqual({
+            suggestionId: suggestionId2,
+            votes: [
+                { createdAt: timestampVote2.toString() },
+            ],
+            positionInWinnerList: '1',
         });
 
         const rewardsLeftQuery = `{
@@ -445,6 +507,10 @@ describe('Competition', () => {
             await competition.methods.redeem(suggestionId1, accounts[0].address).send({ from: accounts[0].address });
         const { timestamp: timestampRedeem1 } = await web3.eth.getBlock(blockNumberRedeem1);
 
+        const { blockNumber: blockNumberRedeem2 } =
+            await competition.methods.redeem(suggestionId2, accounts[0].address).send({ from: accounts[0].address });
+        const { timestamp: timestampRedeem2 } = await web3.eth.getBlock(blockNumberRedeem2);
+
         let suggestionRedeemQuery = `{
             competitionSuggestions(where: {suggestionId: "${suggestionId1}"}) {
                 suggestionId
@@ -457,8 +523,24 @@ describe('Competition', () => {
         expect((await sendQuery(suggestionRedeemQuery)).competitionSuggestions).toContainEqual({
             suggestionId: suggestionId1,
             redeemedAt: timestampRedeem1.toString(),
-            rewardPercentage: '100',
+            rewardPercentage: '60',
             positionInWinnerList: '0',
+        });
+
+        let suggestionRedeemQuery2 = `{
+            competitionSuggestions(where: {suggestionId: "${suggestionId2}"}) {
+                suggestionId
+                redeemedAt
+                rewardPercentage
+                positionInWinnerList
+            }
+        }`;
+
+        expect((await sendQuery(suggestionRedeemQuery2)).competitionSuggestions).toContainEqual({
+            suggestionId: suggestionId2,
+            redeemedAt: timestampRedeem2.toString(),
+            rewardPercentage: '40',
+            positionInWinnerList: '1',
         });
 
         expect((await sendQuery(rewardsLeftQuery)).contributionRewardProposal).toEqual({

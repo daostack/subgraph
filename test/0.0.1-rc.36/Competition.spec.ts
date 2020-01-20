@@ -430,7 +430,7 @@ describe('Competition', () => {
             }
         }`;
 
-        expect((await sendQuery(proposalVotesQuery)).competitionProposal).toEqual({
+        expect((await sendQuery(proposalVotesQuery))).toContainEqual({
             votes: [
                 { suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote1.toString() },
                 { suggestion: { suggestionId: suggestionId2.toString() }, createdAt: timestampVote2.toString() },
@@ -439,10 +439,10 @@ describe('Competition', () => {
             snapshotBlock: blockNumberVote1.toString(),
             winningSuggestions: [
                 {
-                    suggestionId: suggestionId1.toString(),
+                    suggestionId: suggestionId2.toString(),
                 },
                 {
-                    suggestionId: suggestionId2.toString(),
+                    suggestionId: suggestionId1.toString(),
                 },
             ],
         });

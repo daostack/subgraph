@@ -1,12 +1,12 @@
 import { Address, BigInt, Bytes , crypto, EthereumValue, log , SmartContract, store} from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { ContributionRewardProposal,
+import { ContractInfo,
+         ContributionRewardProposal,
          ControllerScheme,
          GPReward,
          GPRewardsHelper,
          PreGPReward,
-         Proposal, 
-         ContractInfo} from '../types/schema';
+         Proposal} from '../types/schema';
 import { concat , equalsBytes , equalStrings } from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 

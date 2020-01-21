@@ -41,12 +41,12 @@ describe('Competition', () => {
         const externalToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
             .deploy({ data: DAOToken.bytecode, arguments: ['Test Token', 'TST', '10000000000'] })
             .send();
-        await externalToken.methods.mint(accounts[0].address, '100000').send();
-        await externalToken.methods.mint(addresses.Avatar, '100000').send();
+        await externalToken.methods.mint(accounts[0].address, '1000000').send();
+        await externalToken.methods.mint(addresses.Avatar, '1000000').send();
         await web3.eth.sendTransaction({
             from: accounts[0].address,
             to: addresses.Avatar,
-            value: 4,
+            value: 10,
             gas: 2000000,
             data: '0xABCD',
         });
@@ -66,10 +66,10 @@ describe('Competition', () => {
         const descHash = await writeProposalIPFS(proposalIPFSData);
 
         const rewards = {
-            eth: 4,
-            externalToken: 3,
-            nativeToken: 1,
-            rep: 1,
+            eth: 10,
+            externalToken: 10,
+            nativeToken: 10,
+            rep: 10,
         };
         let rewardSplit = ['50', '30', '10', '10'];
         let block = await web3.eth.getBlock('latest');
@@ -423,16 +423,28 @@ describe('Competition', () => {
                     }
                     createdAt
                 }
+            }
+        }`;
+
+        expect((await sendQuery(proposalVotesQuery)).competitionProposal.votes).toContainEqual({ 
+            suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote1.toString() 
+        });
+
+        expect((await sendQuery(proposalVotesQuery)).competitionProposal.votes).toContainEqual({ 
+            suggestion: { suggestionId: suggestionId2.toString() }, createdAt: timestampVote2.toString() 
+        });
+
+        expect((await sendQuery(proposalVotesQuery)).competitionProposal.votes).toContainEqual({ 
+            suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote3.toString() 
+        });
+
+        let proposalVotesSnapshotBlockQuery = `{
+            competitionProposal(id: "${proposalId}") {
                 snapshotBlock
             }
         }`;
 
-        expect((await sendQuery(proposalVotesQuery)).competitionProposal).toMatchObject({
-            votes: [
-                { suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote1.toString() },
-                { suggestion: { suggestionId: suggestionId2.toString() }, createdAt: timestampVote2.toString() },
-                { suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote3.toString() },
-            ],
+        expect((await sendQuery(proposalVotesSnapshotBlockQuery)).competitionProposal).toMatchObject({
             snapshotBlock: blockNumberVote1.toString(),
         });
 
@@ -450,22 +462,31 @@ describe('Competition', () => {
         expect((await sendQuery(proposalVotesWinningSuggestionsQuery)).competitionProposal.winningSuggestions)
         .toContainEqual({ suggestionId: suggestionId2.toString() });
 
-        let suggestionVotesQuery = `{
+        let suggestionVotesVotesQuery = `{
             competitionSuggestions(where: {suggestionId: "${suggestionId1}"}) {
-                suggestionId
                 votes {
                     createdAt
                 }
+            }
+        }`;
+
+        expect((await sendQuery(suggestionVotesVotesQuery)).competitionSuggestions[0].votes).toContainEqual({
+             createdAt: timestampVote1.toString()
+        });
+
+        expect((await sendQuery(suggestionVotesVotesQuery)).competitionSuggestions[0].votes).toContainEqual({
+            createdAt: timestampVote3.toString()
+       });
+
+        let suggestionVotesQuery = `{
+            competitionSuggestions(where: {suggestionId: "${suggestionId1}"}) {
+                suggestionId
                 positionInWinnerList
             }
         }`;
 
         expect((await sendQuery(suggestionVotesQuery)).competitionSuggestions).toContainEqual({
             suggestionId: suggestionId1,
-            votes: [
-                { createdAt: timestampVote1.toString() },
-                { createdAt: timestampVote3.toString() },
-            ],
             positionInWinnerList: '0',
         });
 

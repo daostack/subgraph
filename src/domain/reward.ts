@@ -5,7 +5,8 @@ import { ContributionRewardProposal,
          GPReward,
          GPRewardsHelper,
          PreGPReward,
-         Proposal } from '../types/schema';
+         Proposal, 
+         ContractInfo} from '../types/schema';
 import { concat , equalsBytes , equalStrings } from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 
@@ -106,6 +107,17 @@ export function shouldRemoveAccountFromUnclaimed(reward: GPReward): boolean {
 }
 
 export function shouldRemoveContributorFromUnclaimed(proposal: ContributionRewardProposal): boolean {
+  let contractInfo = ContractInfo.load(proposal.beneficiary.toHex());
+  if (contractInfo != null && equalStrings(contractInfo.name, 'ContributionRewardExt')) {
+    return (
+      (proposal.nativeTokenReward.isZero() ||
+      (proposal.alreadyRedeemedNativeTokenPeriods !== null)) &&
+      (proposal.externalTokenReward.isZero() ||
+      (proposal.alreadyRedeemedExternalTokenPeriods !== null)) &&
+      (proposal.ethReward.isZero() ||
+      (proposal.alreadyRedeemedEthPeriods !== null))
+    );
+   }
   // Note: This doesn't support the period feature of ContributionReward
   return (
     (proposal.reputationReward.isZero() ||

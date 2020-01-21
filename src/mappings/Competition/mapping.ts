@@ -148,16 +148,16 @@ export function handleNewVote(event: NewVote): void {
         CompetitionSuggestion.load(b as string).totalVotes,
       );
       if (result.gt(BigInt.fromI32(0))) {
-        return 1;
+        return -1;
       } else if (result.equals(BigInt.fromI32(0))) {
         return 0;
       } else {
-        return -1;
+        return 1;
       }
     });
     let lastTotalVotes = BigInt.fromI32(0);
     let idx = BigInt.fromI32(0);
-    for (let i = 0; i < competitionProposal.suggestions.length; i++) {
+    for (let i = 0; i < suggestions.length; i++) {
       let competitionSuggestion = CompetitionSuggestion.load(suggestions[i] as string);
       if (idx >= competitionProposal.numberOfWinners ||
         competitionSuggestion.totalVotes.equals(BigInt.fromI32(0))) {

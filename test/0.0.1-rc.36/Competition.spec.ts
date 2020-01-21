@@ -430,8 +430,8 @@ describe('Competition', () => {
         expect((await sendQuery(proposalVotesQuery)).competitionProposal).toMatchObject({
             votes: [
                 { suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote1.toString() },
-                { suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote3.toString() },
                 { suggestion: { suggestionId: suggestionId2.toString() }, createdAt: timestampVote2.toString() },
+                { suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote3.toString() },
             ],
             snapshotBlock: blockNumberVote1.toString(),
         });

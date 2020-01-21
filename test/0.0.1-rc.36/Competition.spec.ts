@@ -426,16 +426,16 @@ describe('Competition', () => {
             }
         }`;
 
-        expect((await sendQuery(proposalVotesQuery)).competitionProposal.votes).toContainEqual({ 
-            suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote1.toString() 
+        expect((await sendQuery(proposalVotesQuery)).competitionProposal.votes).toContainEqual({
+            suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote1.toString(),
         });
 
-        expect((await sendQuery(proposalVotesQuery)).competitionProposal.votes).toContainEqual({ 
-            suggestion: { suggestionId: suggestionId2.toString() }, createdAt: timestampVote2.toString() 
+        expect((await sendQuery(proposalVotesQuery)).competitionProposal.votes).toContainEqual({
+            suggestion: { suggestionId: suggestionId2.toString() }, createdAt: timestampVote2.toString(),
         });
 
-        expect((await sendQuery(proposalVotesQuery)).competitionProposal.votes).toContainEqual({ 
-            suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote3.toString() 
+        expect((await sendQuery(proposalVotesQuery)).competitionProposal.votes).toContainEqual({
+            suggestion: { suggestionId: suggestionId1.toString() }, createdAt: timestampVote3.toString(),
         });
 
         let proposalVotesSnapshotBlockQuery = `{
@@ -471,11 +471,11 @@ describe('Competition', () => {
         }`;
 
         expect((await sendQuery(suggestionVotesVotesQuery)).competitionSuggestions[0].votes).toContainEqual({
-             createdAt: timestampVote1.toString()
+             createdAt: timestampVote1.toString(),
         });
 
         expect((await sendQuery(suggestionVotesVotesQuery)).competitionSuggestions[0].votes).toContainEqual({
-            createdAt: timestampVote3.toString()
+            createdAt: timestampVote3.toString(),
        });
 
         let suggestionVotesQuery = `{

@@ -1,5 +1,5 @@
 {
-  "name": "Invidious Wheelwright",
+  "name": "Verdant Stick figures",
   "Avatar": "0x66301c44C22E0AEcd8ee8e6073A8300dC138A7af",
   "DAOToken": "0xa6b58AE81c37b45BbeAC4C86866fA4b48e378139",
   "Reputation": "0xB9e9DfAcb27f42357215aC3942810786C0cb75e2",
@@ -15,7 +15,7 @@
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
       "address": "0xA10f1c26d7D4BCB1a93F84652177D2E2b320378B",
-      "arcVersion": "0.0.1-rc.36"
+      "arcVersion": "0.0.1-rc.38"
     }
   ],
   "StandAloneContracts": [
@@ -27,12 +27,12 @@
     {
       "name": "ContributionRewardExt",
       "address": "0xA10f1c26d7D4BCB1a93F84652177D2E2b320378B",
-      "arcVersion": "0.0.1-rc.36"
+      "arcVersion": "0.0.1-rc.38"
     },
     {
       "name": "Competition",
       "address": "0xD65d9Cb0fC54c95Ed021D74cB5164b5B30bB4B86",
-      "arcVersion": "0.0.1-rc.36"
+      "arcVersion": "0.0.1-rc.38"
     }
   ],
   "arcVersion": "0.0.1-rc.37"

@@ -1,4 +1,4 @@
-import { Bytes, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Bytes, ipfs, json, JSONValue, JSONValueKind, store } from '@graphprotocol/graph-ts';
 import { Signal, Proposal } from '../types/schema';
 import { debug } from '../utils';
 
@@ -9,6 +9,7 @@ export function getSignal(id: string): Signal {
   }
   return sig;
 }
+
 
 function saveSignal(signal: Signal): void {
   signal.save()
@@ -75,10 +76,22 @@ function appenddict(keypair: string, signal: Signal, curlybraceclosed:string, co
   saveSignal(signal);
 }
 
+function teststring(key: string, value: string): boolean {
+  var returnboolean: boolean = true;
+  const comma: string = String.fromCharCode(44);
+  let searchkey: number = key.indexOf(comma)
+  let searchvalue: number = value.indexOf(comma)
+  if(searchkey != -1 || searchvalue != -1 ){
+    returnboolean = false
+  }
+  return returnboolean
+}
+
 export function readProposal(id: string, proposalId: string): void {
-  let signal = getSignal(id);
-  var key = '';
-  var value = '';
+  let signal: Signal = getSignal(id);
+  var key: string = null;
+  var value: string = null;
+
   let proposal = store.get('Proposal', proposalId) as Proposal;
 
   let ipfsData = ipfs.cat('/ipfs/' + proposal.descriptionHash);
@@ -94,8 +107,11 @@ export function readProposal(id: string, proposalId: string): void {
     if (descJson.toObject().get('value') != null) {
       value = descJson.toObject().get('value').toString();
     }
-
   }
-  generatestring(key,value,signal)
 
+  if (key !== null && value !== null ){
+      if (teststring(key,value)){
+        generatestring(key,value,signal)
+      }
+  }
 }

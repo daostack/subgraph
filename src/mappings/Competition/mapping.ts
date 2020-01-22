@@ -170,6 +170,7 @@ export function handleNewVote(event: NewVote): void {
       if (lastTotalVotes.lt(competitionSuggestion.totalVotes)) {
         idx = idx.plus(BigInt.fromI32(1));
       }
+      lastTotalVotes = competitionSuggestion.totalVotes;
     }
     competitionProposal.winningSuggestions = winningSuggestions;
     competitionProposal.save();

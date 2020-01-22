@@ -91,7 +91,7 @@ const maintest = async (web3,addresses,opts,proposalIPFSData,matchto) => {
 }`;
 
 
-  let proposal = (await sendQuery(getProposal,80000)).proposal;
+  let proposal = (await sendQuery(getProposal,90000)).proposal;
   expect(proposal).toMatchObject({
     id: p1,
     descriptionHash: descHash,
@@ -230,7 +230,7 @@ describe('Generic Signal Scheme', () => {
     const test = await maintest(web3,addresses,opts,proposalIPFSData,matchto)
 
 
-  }, 100000);
+  }, 200000);
 
   it('generic scheme proposal append ', async () => {
 
@@ -255,7 +255,7 @@ describe('Generic Signal Scheme', () => {
 
     const test = await maintest(web3,addresses,opts,proposalIPFSData,matchto)
 
-  }, 100000);
+  }, 200000);
 
 
   it('generic scheme proposal replace ', async () => {
@@ -282,6 +282,6 @@ describe('Generic Signal Scheme', () => {
     const test = await maintest(web3,addresses,opts,proposalIPFSData,matchto)
 
 
-  }, 100000);
+  }, 200000);
 
 });

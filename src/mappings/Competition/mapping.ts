@@ -156,13 +156,14 @@ export function handleNewVote(event: NewVote): void {
       }
     });
     let lastTotalVotes = BigInt.fromI32(0);
-    let idx = BigInt.fromI32(-1);
+    let idx = BigInt.fromI32(0);
     for (let i = 0; i < suggestions.length; i++) {
       let competitionSuggestion = CompetitionSuggestion.load(suggestions[i] as string);
-      if (lastTotalVotes.lt(competitionSuggestion.totalVotes)) {
+      if (lastTotalVotes.gt(competitionSuggestion.totalVotes)) {
         idx = idx.plus(BigInt.fromI32(1));
       }
-      if (idx >= competitionProposal.numberOfWinners ||
+      if ((lastTotalVotes.notEqual(competitionSuggestion.totalVotes) &&
+        idx >= competitionProposal.numberOfWinners) ||
         competitionSuggestion.totalVotes.equals(BigInt.fromI32(0))) {
         competitionSuggestion.positionInWinnerList = null;
       } else {

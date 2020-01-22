@@ -159,10 +159,10 @@ export function handleNewVote(event: NewVote): void {
     let idx = BigInt.fromI32(-1);
     for (let i = 0; i < suggestions.length; i++) {
       let competitionSuggestion = CompetitionSuggestion.load(suggestions[i] as string);
-      if (lastTotalVotes.lt(competitionSuggestion.totalVotes)) {
-        idx = idx.plus(BigInt.fromI32(1));
-      }
-      if (idx >= competitionProposal.numberOfWinners ||
+      idx = idx.plus(BigInt.fromI32(1));
+      if (
+        (lastTotalVotes.notEqual(competitionSuggestion.totalVotes) ||
+        idx >= competitionProposal.numberOfWinners) ||
         competitionSuggestion.totalVotes.equals(BigInt.fromI32(0))) {
         competitionSuggestion.positionInWinnerList = null;
       } else {
@@ -170,6 +170,9 @@ export function handleNewVote(event: NewVote): void {
         winningSuggestions.push(competitionSuggestion.id as string);
       }
       competitionSuggestion.save();
+      if (lastTotalVotes.equals(competitionSuggestion.totalVotes)) {
+        idx = idx.minus(BigInt.fromI32(1));
+      }
       lastTotalVotes = competitionSuggestion.totalVotes;
     }
     competitionProposal.winningSuggestions = winningSuggestions;

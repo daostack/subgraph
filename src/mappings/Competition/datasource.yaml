@@ -10,7 +10,7 @@ entities:
   - ContributionRewardNewContributionProposal
   - ContributionRewardProposal
 eventHandlers:
-  - event: NewCompetitionProposal(indexed bytes32,uint256,uint256[],uint256,uint256,uint256,uint256,uint256,address)
+  - event: NewCompetitionProposal(indexed bytes32,uint256,uint256[],uint256,uint256,uint256,uint256,uint256,address,address)
     handler: handleNewCompetitionProposal
   - event: Redeem(indexed bytes32,indexed uint256,uint256)
     handler: handleRedeem

@@ -68,7 +68,7 @@ export function handleNewSuggestion(event: NewSuggestion): void {
     competitionSuggestion.suggestionId = event.params._suggestionId;
     competitionSuggestion.proposal = event.params._proposalId.toHex();
     competitionSuggestion.descriptionHash = event.params._descriptionHash;
-    competitionSuggestion.suggester = event.params._suggester;
+    competitionSuggestion.suggester = event.params._beneficiary;
     competitionSuggestion.totalVotes = BigInt.fromI32(0);
     competitionSuggestion.createdAt = event.block.timestamp;
 

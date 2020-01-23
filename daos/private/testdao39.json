@@ -1,0 +1,39 @@
+{
+  "name": "Crapulous Jellybeans",
+  "Avatar": "0x69c348135B7540cfdCeE5E19CA5A20C9d13a83E8",
+  "DAOToken": "0x98d97291de7dE044e1D60f75ace66baE1Ba7cd40",
+  "Reputation": "0xCbc18888E47C555cdEf4D8C68cA90BcABCdA04B9",
+  "Controller": "0x31Ccfa6E061df478f1af147c3E860D5f113A9346",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0xd4e21e63A431a3D1e8c1886c8c355c6dc800e194",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xD54f2D5dDb3c1b89AB1458F8e4B35FdbD0be58f9",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0x7CD480523bec017c726D0555FAED58b525a7C568",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xD54f2D5dDb3c1b89AB1458F8e4B35FdbD0be58f9",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0x872eB3D8E034DF7450be1A5FA266b7C38074e3d5",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

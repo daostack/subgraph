@@ -1,4 +1,5 @@
 import { store } from '@graphprotocol/graph-ts';
+import { debug } from '../../utils';
 
 // Import event types from the Reputation contract ABI
 import {
@@ -23,6 +24,7 @@ function insertNewProposal(event: NewCallProposal): void {
   ent.callData = event.params._callData;
   ent.value = event.params._value;
   ent.executed = false;
+  debug("Test1")
 
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);
 }

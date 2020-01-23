@@ -1,5 +1,4 @@
 import { store } from '@graphprotocol/graph-ts';
-import { debug } from '../../utils';
 
 // Import event types from the Reputation contract ABI
 import {
@@ -53,7 +52,6 @@ export function handleProposalExecuted(
   var signalId = event.params._avatar.toHex();
   var proposalId = event.params._proposalId.toHex();
   domain.addSignal(signalId, proposalId);
-
 
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);
 }

@@ -96,6 +96,7 @@ describe('Competition', () => {
             externalToken.options.address,
             rewardSplit,
             competitionParameters,
+            false,
         );
         const proposalId = await propose.call();
         const { blockNumber: blockNumberPropose } = await propose.send();
@@ -235,7 +236,7 @@ describe('Competition', () => {
 
         await increaseTime(20, web3);
 
-        let suggest = competition.methods.suggest(proposalId, descHash);
+        let suggest = competition.methods.suggest(proposalId, descHash, '0x0000000000000000000000000000000000000000');
 
         let suggestionId1 = await suggest.call();
         const { blockNumber: blockNumberSuggest1 } = await suggest.send({ from: accounts[0].address });
@@ -528,11 +529,11 @@ describe('Competition', () => {
 
         // Redeem
         const { blockNumber: blockNumberRedeem1 } =
-            await competition.methods.redeem(suggestionId1, accounts[0].address).send({ from: accounts[0].address });
+            await competition.methods.redeem(suggestionId1).send({ from: accounts[0].address });
         const { timestamp: timestampRedeem1 } = await web3.eth.getBlock(blockNumberRedeem1);
 
         const { blockNumber: blockNumberRedeem2 } =
-            await competition.methods.redeem(suggestionId2, accounts[0].address).send({ from: accounts[0].address });
+            await competition.methods.redeem(suggestionId2).send({ from: accounts[0].address });
         const { timestamp: timestampRedeem2 } = await web3.eth.getBlock(blockNumberRedeem2);
 
         let suggestionRedeemQuery = `{

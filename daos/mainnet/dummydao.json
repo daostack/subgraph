@@ -9,31 +9,31 @@
         "name": "GenericScheme",
         "alias": "GenericSchemeAlias",
         "address": "0x38d2AD56A9F589c2d6f0a330291F79BfF9B13C6d",
-        "arcVersion": "0.0.1-rc.36"
+        "arcVersion": "0.0.1-rc.39"
       },
       {
         "name": "ContributionRewardExt",
         "alias": "ContributionRewardExt",
         "address": "0x68c29524E583380aF7896f7e63463740225Ac026",
-        "arcVersion": "0.0.1-rc.36"
+        "arcVersion": "0.0.1-rc.39"
       }
     ],
     "StandAloneContracts": [
       {
         "name": "Wallet",
         "address": "0x9AD84A087C55F61e116df9A8c474703E3D58c536",
-        "arcVersion": "0.0.1-rc.36"
+        "arcVersion": "0.0.1-rc.39"
       },
       {
         "name": "ContributionRewardExt",
         "address": "0x68c29524E583380aF7896f7e63463740225Ac026",
-        "arcVersion": "0.0.1-rc.36"
+        "arcVersion": "0.0.1-rc.39"
       },
       {
         "name": "Competition",
         "address": "0x4b7284ac4714e27F9098c57F54306ed74454D05F",
-        "arcVersion": "0.0.1-rc.36"
+        "arcVersion": "0.0.1-rc.39"
       }
     ],
-    "arcVersion": "0.0.1-rc.36"
+    "arcVersion": "0.0.1-rc.39"
   }

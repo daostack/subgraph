@@ -1,40 +1,34 @@
 {
-    "name": "BountyDAO",
-    "Avatar": "0x923D733fD72ba51D5673fA7c63486fa190Ac92c5",
-    "DAOToken": "0xbdC915a59210d41fF3d2B05E3D2E9DE25a3aFeA7",
-    "Reputation": "0x4F4BBC5e7C1c23B056Ccb49Bc9217602dc28B681",
-    "Controller": "0x0F2eD7b1fA6e6734D4e321b0Dc9e1453A871c0f6",
-    "Schemes": [
-      {
-        "name": "ReputationFromToken",
-        "alias": "ReputationFromToken",
-        "address": "0xc985A00b181ee283654077f438466B205d58360c",
-        "arcVersion": "0.0.1-rc.39"
-      },
-      {
-        "name": "ContributionRewardExt",
-        "alias": "ContributionRewardExt",
-        "address": "0xA8D80e21d445dA4FEd6B0a9b56eb2cC28E7a5242",
-        "arcVersion": "0.0.1-rc.39"
-      }
-    ],
-    "StandAloneContracts": [
-      {
-        "name": "PolkaCurve",
-        "address": "0xaF01465EA727cA4f5B43F416ba2a3b41D9d5dDE3",
-        "arcVersion": "0.0.1-rc.39"
-      },
-      {
-        "name": "ContributionRewardExt",
-        "address": "0xA8D80e21d445dA4FEd6B0a9b56eb2cC28E7a5242",
-        "arcVersion": "0.0.1-rc.39"
-      },
-      {
-        "name": "Competition",
-        "address": "0x4083fF38d9fe2222d7DA4D7c107a1312D96C8734",
-        "arcVersion": "0.0.1-rc.39"
-      }
-    ],
-    "arcVersion": "0.0.1-rc.39"
-  }
-  
+  "name": "BountyDAO",
+  "Avatar": "0x00Ea828bf150ec08cad91eE93841785C827B78F4",
+  "DAOToken": "0x41e52e9f7991513F1E0E18Aa125191ce62172e5A",
+  "Reputation": "0xC5c1D68A7d6F2b8c290764d7A0B3ba4110B75e8c",
+  "Controller": "0x99Aa3ABCa850b8c2AbBBe766B57bb9455b0d5961",
+  "Schemes": [
+    {
+      "name": "ReputationFromToken",
+      "alias": "ReputationFromToken",
+      "address": "0x4E7A91332ABeef0f20DeB2d0E75544848C273a50",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x8ED496F34DE646C79Ba99f121f0e2c5DCc6eC13a",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x8ED496F34DE646C79Ba99f121f0e2c5DCc6eC13a",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0xa22f18b02Aea4319EBeE2217aEb88DEf4862b9ED",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

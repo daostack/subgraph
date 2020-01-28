@@ -1,0 +1,34 @@
+{
+  "name": "BountyDAO",
+  "Avatar": "0x00Ea828bf150ec08cad91eE93841785C827B78F4",
+  "DAOToken": "0x41e52e9f7991513F1E0E18Aa125191ce62172e5A",
+  "Reputation": "0xC5c1D68A7d6F2b8c290764d7A0B3ba4110B75e8c",
+  "Controller": "0x99Aa3ABCa850b8c2AbBBe766B57bb9455b0d5961",
+  "Schemes": [
+    {
+      "name": "ReputationFromToken",
+      "alias": "ReputationFromToken",
+      "address": "0x4E7A91332ABeef0f20DeB2d0E75544848C273a50",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x8ED496F34DE646C79Ba99f121f0e2c5DCc6eC13a",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x8ED496F34DE646C79Ba99f121f0e2c5DCc6eC13a",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0xa22f18b02Aea4319EBeE2217aEb88DEf4862b9ED",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

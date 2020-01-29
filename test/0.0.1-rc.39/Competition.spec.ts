@@ -261,6 +261,7 @@ describe('Competition', () => {
                     }
                 }
                 suggester
+                beneficiary
                 votes {
                     id
                 }
@@ -289,6 +290,7 @@ describe('Competition', () => {
             url: proposalUrl,
             tags: tagsList,
             suggester: accounts[0].address.toLowerCase(),
+            beneficiary: accounts[0].address.toLowerCase(),
             totalVotes: '0',
             votes: [],
             createdAt: timestampSuggest1.toString(),
@@ -318,6 +320,7 @@ describe('Competition', () => {
             url: proposalUrl,
             tags: tagsList,
             suggester: accounts[0].address.toLowerCase(),
+            beneficiary: accounts[0].address.toLowerCase(),
             totalVotes: '0',
             votes: [],
             createdAt: timestampSuggest2.toString(),

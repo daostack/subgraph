@@ -215,6 +215,7 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     if (dao != null) {
       dao.numberOfExpiredInQueueProposals = dao.numberOfExpiredInQueueProposals.plus(BigInt.fromI32(1));
     }
+    proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
   } else if (state === 2) {
     // Executed
     proposal.stage = 'Executed';

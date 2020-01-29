@@ -141,6 +141,11 @@ export function insertGPRewards(
   state: number,
 ): void {
   let proposal = getProposal(proposalId.toHex());
+  if (equalStrings(proposal.stage, 'ExpiredInQueue')) {
+    proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
+    proposal.save();
+    return;
+  }
   let genesisProtocol = GenesisProtocol.bind(gpAddress);
   let i = 0;
   let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];

@@ -236,9 +236,10 @@ describe('Competition', () => {
 
         await increaseTime(20, web3);
 
-        let suggest = competition.methods.suggest(proposalId, descHash, '0x0000000000000000000000000000000000000000');
+        let suggest = competition.methods.suggest(proposalId, descHash, accounts[1].address);
 
         let suggestionId1 = await suggest.call();
+
         const { blockNumber: blockNumberSuggest1 } = await suggest.send({ from: accounts[0].address });
         const { timestamp: timestampSuggest1 } = await web3.eth.getBlock(blockNumberSuggest1);
 
@@ -261,6 +262,7 @@ describe('Competition', () => {
                     }
                 }
                 suggester
+                beneficiary
                 votes {
                     id
                 }
@@ -289,11 +291,14 @@ describe('Competition', () => {
             url: proposalUrl,
             tags: tagsList,
             suggester: accounts[0].address.toLowerCase(),
+            beneficiary: accounts[1].address.toLowerCase(),
             totalVotes: '0',
             votes: [],
             createdAt: timestampSuggest1.toString(),
             positionInWinnerList: null,
         });
+
+        suggest = competition.methods.suggest(proposalId, descHash, '0x0000000000000000000000000000000000000000');
 
         let suggestionId2 = await suggest.call();
         const { blockNumber: blockNumberSuggest2 } = await suggest.send({ from: accounts[0].address });
@@ -318,6 +323,7 @@ describe('Competition', () => {
             url: proposalUrl,
             tags: tagsList,
             suggester: accounts[0].address.toLowerCase(),
+            beneficiary: accounts[0].address.toLowerCase(),
             totalVotes: '0',
             votes: [],
             createdAt: timestampSuggest2.toString(),

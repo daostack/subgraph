@@ -9,7 +9,7 @@
     {
       "arcVersion": "0.0.1-rc.33",
       "name": "GenericScheme",
-      "alias": "ENS with fall bacl",
+      "alias": "ENS with fallback",
       "address": "0x1280febf850264caf03667b612c50d5253448dfe"
     }]
 }

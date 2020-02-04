@@ -156,23 +156,23 @@ export function handleNewVote(event: NewVote): void {
         return 1;
       }
     });
-    let lastTotalVotes = BigInt.fromI32(0);
+    let lastTotalWinnerVotes = BigInt.fromI32(0);
     let idx = BigInt.fromI32(0);
     for (let i = 0; i < suggestions.length; i++) {
       let competitionSuggestion = CompetitionSuggestion.load(suggestions[i] as string);
-      if (lastTotalVotes.gt(competitionSuggestion.totalVotes)) {
+      if (lastTotalWinnerVotes.gt(competitionSuggestion.totalVotes)) {
         idx = idx.plus(BigInt.fromI32(1));
       }
-      if ((lastTotalVotes.notEqual(competitionSuggestion.totalVotes) &&
+      if ((lastTotalWinnerVotes.notEqual(competitionSuggestion.totalVotes) &&
         idx >= competitionProposal.numberOfWinners) ||
         competitionSuggestion.totalVotes.equals(BigInt.fromI32(0))) {
         competitionSuggestion.positionInWinnerList = null;
       } else {
         competitionSuggestion.positionInWinnerList = idx;
         winningSuggestions.push(competitionSuggestion.id as string);
+        lastTotalWinnerVotes = competitionSuggestion.totalVotes;
       }
       competitionSuggestion.save();
-      lastTotalVotes = competitionSuggestion.totalVotes;
     }
     competitionProposal.winningSuggestions = winningSuggestions;
     competitionProposal.save();

@@ -1,0 +1,28 @@
+{
+  "name": "Lendroid Taleb",
+  "Avatar": "0x7Fb0d3Ea1Cdc8D1d52f0827d08d142d09156468C",
+  "DAOToken": "0x8A7E6B6e2c4E969784A7b68b9E56A2dafDb200c2",
+  "Reputation": "0x52aA4A7f020F7e5ecc962D081530fBbE92BC1242",
+  "Controller": "0x943e2f3FDaCe8cdb79cC7c455465dE886c2870eC",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x945992b95D15180b5745CB5098447696Dbf748bD",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x945992b95D15180b5745CB5098447696Dbf748bD",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0xd4Ab49D13129Abe22318D68C476800a55d9A8db0",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

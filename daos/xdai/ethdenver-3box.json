@@ -1,0 +1,28 @@
+{
+  "name": "3Box",
+  "Avatar": "0x932B5763CCC0F81ee3934C94a279A3D02E3ad9Ef",
+  "DAOToken": "0x2D575012c2A6E4e4762c878F0284f4920091698E",
+  "Reputation": "0x43DE0742e458750f981CE698f46dF9180eF58A3b",
+  "Controller": "0x0392368b18544c237b154e75645050823a3ADeAd",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x8009B29583DCE489Adc8bf2a62c1d9adDD3452D0",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x8009B29583DCE489Adc8bf2a62c1d9adDD3452D0",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0x67B8daCFb9e9a6144FF3A479D41678D036965b26",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

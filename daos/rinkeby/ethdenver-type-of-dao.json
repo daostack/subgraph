@@ -1,0 +1,28 @@
+{
+    "name": "Type of DAO",
+    "Avatar": "0x1093362288417a5e9d468EB567C476B98A8b2d34",
+    "DAOToken": "0xC38429BDD43BBb0eeb12ADe8119228CAbb212354",
+    "Reputation": "0x64b331365E83cf224b4a8e595583996062284b18",
+    "Controller": "0xDeDdf7dae198A043714799d3eDC25E0C405d016a",
+    "Schemes": [
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0xf0D8f18E5FfCD25923aba032C51d7f71Eb4fE088",
+        "arcVersion": "0.0.1-rc.39"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "ContributionRewardExt",
+        "address": "0xf0D8f18E5FfCD25923aba032C51d7f71Eb4fE088",
+        "arcVersion": "0.0.1-rc.39"
+      },
+      {
+        "name": "Competition",
+        "address": "0x35089b1De6141FEAB5268782b5ad61b948A68E93",
+        "arcVersion": "0.0.1-rc.39"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.39"
+  }

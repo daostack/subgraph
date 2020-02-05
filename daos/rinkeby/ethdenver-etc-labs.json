@@ -1,0 +1,28 @@
+{
+    "name": "ETC Labs DAO",
+    "Avatar": "0xE5D95a299e65D51d13b8Cadd7c9326FFdec2682b",
+    "DAOToken": "0x585BA421717a431b18A8821D67bdba7d317Aa30d",
+    "Reputation": "0xc1335dCeFba0972dDAADE02Ec7cEE4C278c034cf",
+    "Controller": "0x719B4daeBF5ACF0557F497FBE434bFE4a0Dd935c",
+    "Schemes": [
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0x3052F8AC1958246465b7582A95482a0FfB5b4279",
+        "arcVersion": "0.0.1-rc.39"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "ContributionRewardExt",
+        "address": "0x3052F8AC1958246465b7582A95482a0FfB5b4279",
+        "arcVersion": "0.0.1-rc.39"
+      },
+      {
+        "name": "Competition",
+        "address": "0x90b315D7bdcD75bD0906dB7E3063869467e5ce6f",
+        "arcVersion": "0.0.1-rc.39"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.39"
+  }

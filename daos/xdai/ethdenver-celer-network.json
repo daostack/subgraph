@@ -1,0 +1,28 @@
+{
+  "name": "Celer Network",
+  "Avatar": "0xB68866851edE2891fF75b53d9b586b9FB522190E",
+  "DAOToken": "0x952c09a85AdCbAf7e21929e2566848134634Cdc2",
+  "Reputation": "0xE9851A5334E0b964D675e7D9C3be55CCA9dc5F04",
+  "Controller": "0x2081a9208C186A353F8128e4c6D9e6334edf8939",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x460363d60f88FB9063570D5F3dBed8Cb06276777",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x460363d60f88FB9063570D5F3dBed8Cb06276777",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0x21c6c5B0BC3f3294DB0D76b7715EfA5dF34AA45C",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

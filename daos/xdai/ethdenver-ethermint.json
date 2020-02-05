@@ -1,0 +1,28 @@
+{
+  "name": "Ethermint DAO",
+  "Avatar": "0x5e4F70A1e25F19F66474004e0Dc3aEB6800f2Cb4",
+  "DAOToken": "0x881beB594D39db4217548ef021aD13F67254D4Dd",
+  "Reputation": "0x5a68A992bf13199439e30CFEd70301Ac70322Abc",
+  "Controller": "0x732dE4E620177af3b33a4cA08f7d7178c4e9c0a5",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x170723E1C81fFf42A3d320864a6B57D2fC137754",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x170723E1C81fFf42A3d320864a6B57D2fC137754",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0xB4F4b64648f22f22319a97B45aDAC5a2d85b199a",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

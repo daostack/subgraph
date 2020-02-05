@@ -1,0 +1,28 @@
+{
+  "name": "Skale DAO",
+  "Avatar": "0x7E32cA59CE7162b320459377008DA294a09e1B6C",
+  "DAOToken": "0xB0CBDef8e8fe38d947c1C24E3d9f816F7Ab839bc",
+  "Reputation": "0x031337077178Dc48dE2280f2974208897A4995c9",
+  "Controller": "0x18D6D02B93835594C38BEf653b06BCFCb059190b",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xcFD40dF1A96F70b0BDA7b3243509CAB5592d1730",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xcFD40dF1A96F70b0BDA7b3243509CAB5592d1730",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0xf30d166DB23E87CFd3C7C105Ce13E50f84Ac2e87",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

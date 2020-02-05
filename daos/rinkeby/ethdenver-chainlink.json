@@ -1,0 +1,28 @@
+{
+  "name": "Chainlink EthDenver DAO",
+  "Avatar": "0xB95fc0ba448F717b500278eFc8Ab734cFce678F4",
+  "DAOToken": "0x3F89A083c4491E87e144894b74268590c2e0fb21",
+  "Reputation": "0x2e8D300Fc4CFe65A3FdcBC754BF84324b1dE0dA1",
+  "Controller": "0x85bED30fc7949C2200e376bd06A8a2F713eBB9C7",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x3c9AA14F81504d62fDB9Ac5170E96E952F5B13f5",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x3c9AA14F81504d62fDB9Ac5170E96E952F5B13f5",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0xE86c0F9318930C1534428163E45717C9C1F5E36c",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

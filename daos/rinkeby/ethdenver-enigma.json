@@ -1,0 +1,28 @@
+{
+    "name": "Secret DAO",
+    "Avatar": "0x96eB34A4c302e218bc5Aafb33a33f69cc982faaE",
+    "DAOToken": "0xd06aB64EE7D779975E2C84c401C0FA6D1FB3dF74",
+    "Reputation": "0xcd34764Bb6C063605C0a671BaE70e72F52BB6f8A",
+    "Controller": "0x5d472565359A761B3b4a938eE50fd676dBDdE3CA",
+    "Schemes": [
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0xfa35b27A1Af93F81694DF95d5Ed55CbF92e2FD44",
+        "arcVersion": "0.0.1-rc.39"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "ContributionRewardExt",
+        "address": "0xfa35b27A1Af93F81694DF95d5Ed55CbF92e2FD44",
+        "arcVersion": "0.0.1-rc.39"
+      },
+      {
+        "name": "Competition",
+        "address": "0x7627Dafb80ebaec94FB0A4d06281d6F9a22e9a83",
+        "arcVersion": "0.0.1-rc.39"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.39"
+  }

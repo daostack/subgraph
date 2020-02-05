@@ -1,0 +1,28 @@
+{
+  "name": "UX Awards DAO",
+  "Avatar": "0xFB900830991dd238b78A1704Ec9DC41e39Da49bc",
+  "DAOToken": "0x79E2844D2415AeaDcd648FA90782ddd8F54B4a94",
+  "Reputation": "0x25Fcd5A1CCAFF5a66565458658298E1E439131Ac",
+  "Controller": "0x123fCb435e87207D790092c6E31BcE120f7b2159",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x37BD99F0bDc0FcF0812a20f13E836901cE92fE5f",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x37BD99F0bDc0FcF0812a20f13E836901cE92fE5f",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0x0fD025a6b0fBA6009B5D10daB64a7CE60b5593BE",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

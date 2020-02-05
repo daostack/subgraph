@@ -1,0 +1,28 @@
+{
+  "name": "QuorumDAO",
+  "Avatar": "0x08Ff281D4d8B41ABCd4094c706463a64C0519B86",
+  "DAOToken": "0x929fE6E4CCA103F249cD4e488969c3aAdb272A74",
+  "Reputation": "0x20d2466d0312c2205888B0173110b7B5e412339b",
+  "Controller": "0x76CC6424c11B917aD8958f0a0897Ec89B1284883",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x35D7cc9022Ad55b2B1EE3987e6646FA11B4e9A50",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x35D7cc9022Ad55b2B1EE3987e6646FA11B4e9A50",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0xE5E819d685A7dEAe1704f082702431161FCC627B",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

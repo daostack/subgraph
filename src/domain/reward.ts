@@ -141,16 +141,11 @@ export function insertGPRewards(
   state: number,
 ): void {
   let proposal = getProposal(proposalId.toHex());
-  if (equalStrings(proposal.stage, 'ExpiredInQueue')) {
-    proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
-    proposal.save();
-    return;
-  }
   let genesisProtocol = GenesisProtocol.bind(gpAddress);
   let i = 0;
   let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];
   let controllerScheme = ControllerScheme.load(proposal.scheme.toString());
-  if (proposal.contributionReward !== null && equalStrings(proposal.winningOutcome, 'Pass')) {
+  if ((proposal.contributionReward !== null && equalStrings(proposal.winningOutcome, 'Pass')) && state !== 1) {
     let contributionRewardProposal = ContributionRewardProposal.load(proposal.contributionReward.toString());
     addRedeemableRewardOwner(proposal, contributionRewardProposal.beneficiary);
   }

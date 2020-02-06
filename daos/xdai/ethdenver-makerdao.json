@@ -1,0 +1,28 @@
+{
+  "name": "MakerDAODAO",
+  "Avatar": "0x5f354AA66cF9C74699afee180853B557E2A0ACb6",
+  "DAOToken": "0xfF136251ab263164693B4357B01Da46aA4641991",
+  "Reputation": "0x9871353A327d786E9C0562272743A3fa9Cb3D4C7",
+  "Controller": "0xb4d8316c31456938A2C09A9C7A5bA5669C27686c",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x1d49F6EEc0d8eEbFf9E7bf036A47e1b7B986BE3F",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x1d49F6EEc0d8eEbFf9E7bf036A47e1b7B986BE3F",
+      "arcVersion": "0.0.1-rc.40"
+    },
+    {
+      "name": "Competition",
+      "address": "0xB5366e512F719F394dAdd646E6985484252a96eC",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

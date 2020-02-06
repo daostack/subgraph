@@ -1,0 +1,28 @@
+{
+  "name": "iExec DAO",
+  "Avatar": "0xcff210fCDec2C7B6330277577A719F7b54FB1549",
+  "DAOToken": "0x5F4129B1208DE7383a7f3Acb69B4060bf2aF476E",
+  "Reputation": "0x49d65c9884a433ec5414C6f6E28F3ec328Dc1707",
+  "Controller": "0x1f4f3DE46B1f136a9DADeB244293a257a1Ba1aD9",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x1b1a3F24EBa0e174379219dc703e1fbd1a5D42E6",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x1b1a3F24EBa0e174379219dc703e1fbd1a5D42E6",
+      "arcVersion": "0.0.1-rc.40"
+    },
+    {
+      "name": "Competition",
+      "address": "0x0AB412208dA38242e4022849A94e160726Bc41c4",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

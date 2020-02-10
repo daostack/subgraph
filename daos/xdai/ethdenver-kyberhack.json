@@ -9,20 +9,20 @@
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
       "address": "0xa986dd987ffC2884538a9D0724fB6DEa2D8f3F6d",
-      "arcVersion": "0.0.1-rc.41"
+      "arcVersion": "0.0.1-rc.40"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "ContributionRewardExt",
       "address": "0xa986dd987ffC2884538a9D0724fB6DEa2D8f3F6d",
-      "arcVersion": "0.0.1-rc.41"
+      "arcVersion": "0.0.1-rc.40"
     },
     {
       "name": "Competition",
       "address": "0xf13d48BAb429fB3e52d89066A62D518815d24af2",
-      "arcVersion": "0.0.1-rc.41"
+      "arcVersion": "0.0.1-rc.40"
     }
   ],
-  "arcVersion": "0.0.1-rc.41"
+  "arcVersion": "0.0.1-rc.40"
 }

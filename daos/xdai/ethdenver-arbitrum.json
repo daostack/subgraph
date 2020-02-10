@@ -1,0 +1,28 @@
+{
+  "name": "Arbitrum DAO",
+  "Avatar": "0xfD4A08Ba1863718D92467Ad05f13b352c3AE2Cfd",
+  "DAOToken": "0x20Fb26fE1b17711521f73Df4B7922009c8d5d2CC",
+  "Reputation": "0x9617279096a667Ca9F0aaBC8a97D33b84481F6B7",
+  "Controller": "0x8D24778AA43c8e2285aB4eAd72724450dAf68aC5",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x907510A59f0874d5E867A75a8995FaC769adcAA7",
+      "arcVersion": "0.0.1-rc.41"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x907510A59f0874d5E867A75a8995FaC769adcAA7",
+      "arcVersion": "0.0.1-rc.41"
+    },
+    {
+      "name": "Competition",
+      "address": "0x5bAa862C0219f46DEc4B7c492c3fE70Dd9305C77",
+      "arcVersion": "0.0.1-rc.41"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.41"
+}

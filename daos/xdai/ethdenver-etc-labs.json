@@ -1,28 +1,28 @@
 {
   "name": "ETC Labs DAO",
-  "Avatar": "0x819f1A1aa7a2Aba6C3951839Ba743418e3fF9c54",
-  "DAOToken": "0x81127dD185d7C3DB166AAeE4bDEd6101F1474878",
-  "Reputation": "0xA0776287e45a819Ec0E060BF7E69fF27a27958A9",
-  "Controller": "0x35BC7a904CFd78F0154B68F6E5418699e484dE65",
+  "Avatar": "0x7b0b37534FF4DD35ced569B24b09995c117F3cfd",
+  "DAOToken": "0xDd8F0160de40321bb5d19d33e0657a4609358714",
+  "Reputation": "0xdD4EF0D6990905bfe5B03861f484f811D367266B",
+  "Controller": "0x8aD7DaFfE1A9820C5Bd6448a7B9cd3ddd30072f8",
   "Schemes": [
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0xff1eE0b40311B2A585aa9D5f941c4C2eE735c694",
-      "arcVersion": "0.0.1-rc.40"
+      "address": "0xFf43Afb889BBB6719469c1116e20d0D01136ce36",
+      "arcVersion": "0.0.1-rc.41"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "ContributionRewardExt",
-      "address": "0xff1eE0b40311B2A585aa9D5f941c4C2eE735c694",
-      "arcVersion": "0.0.1-rc.40"
+      "address": "0xFf43Afb889BBB6719469c1116e20d0D01136ce36",
+      "arcVersion": "0.0.1-rc.41"
     },
     {
       "name": "Competition",
-      "address": "0x9B71Fd74E5745D491F798bc165D69542f4b569d3",
-      "arcVersion": "0.0.1-rc.40"
+      "address": "0x0FFfe9b7dc4445b302BC660C577a9d9590B02C07",
+      "arcVersion": "0.0.1-rc.41"
     }
   ],
-  "arcVersion": "0.0.1-rc.39"
+  "arcVersion": "0.0.1-rc.41"
 }

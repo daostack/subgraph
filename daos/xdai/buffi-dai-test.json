@@ -1,0 +1,28 @@
+{
+  "name": "xDAItestDAO",
+  "Avatar": "0x4875e1045AF3C72d4C8B6266744b9bdaBBF38D6d",
+  "DAOToken": "0x8D88D2Bc35eeDBFfdA7E4Da5FDAdaAa11468E21B",
+  "Reputation": "0xE8E1842a48435D8940508ACabb7231d39dd7e2eD",
+  "Controller": "0x8eE286edF4d5b4e82eCa459F76a65a2f6Fab17E9",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xD3bd443372D2969CF99CC935610c33df5A11C99b",
+      "arcVersion": "0.0.1-rc.41"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xD3bd443372D2969CF99CC935610c33df5A11C99b",
+      "arcVersion": "0.0.1-rc.41"
+    },
+    {
+      "name": "Competition",
+      "address": "0x3C8Fd3E5234B03079369207b0F652652e8BB33de",
+      "arcVersion": "0.0.1-rc.41"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.41"
+}

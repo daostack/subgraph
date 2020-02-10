@@ -1,0 +1,28 @@
+{
+  "name": "The Graph’s Space Traveler DAO",
+  "Avatar": "0x6bA5472C9C3955C207365FBa4e67918C949Cc4Df",
+  "DAOToken": "0xda26c6550b9469F9E8F01e7B77D995984295EfBA",
+  "Reputation": "0x00dF35ae4cDD2d1b65A93F8091200a6bC6454DB1",
+  "Controller": "0x2B5856423c79B0CD0643D23fCbC73675eb9D0Bbf",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xec10F8CCAdDb795467727c4eF30998B18412A1e6",
+      "arcVersion": "0.0.1-rc.41"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xec10F8CCAdDb795467727c4eF30998B18412A1e6",
+      "arcVersion": "0.0.1-rc.41"
+    },
+    {
+      "name": "Competition",
+      "address": "0x064EF91107E40c02Dd1187F5f1F3FFDE94A6a960",
+      "arcVersion": "0.0.1-rc.41"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.41"
+}

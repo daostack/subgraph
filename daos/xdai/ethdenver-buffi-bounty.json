@@ -1,0 +1,28 @@
+{
+  "name": "BuffiBountyDAO",
+  "Avatar": "0x9789Cbc6099F1a0591cF15BBd44Cd2d05ea37E08",
+  "DAOToken": "0xEe235e3b952654c178D8b70A09d5952dB8773B56",
+  "Reputation": "0x787AF2F2923419e78eA32425C9720428f46eEE02",
+  "Controller": "0xd10baE6db4Ef9CfA6ad0908CD812e0C4B39acF27",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xbAFFf41cF65dfEfF3D6BEeA99022D482EAE344B7",
+      "arcVersion": "0.0.1-rc.41"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xbAFFf41cF65dfEfF3D6BEeA99022D482EAE344B7",
+      "arcVersion": "0.0.1-rc.41"
+    },
+    {
+      "name": "Competition",
+      "address": "0xfC2E1534E79c8655268E47a91239043E424e0e32",
+      "arcVersion": "0.0.1-rc.41"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.41"
+}

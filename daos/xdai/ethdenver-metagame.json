@@ -1,0 +1,28 @@
+{
+  "name": "MetaGame",
+  "Avatar": "0xCf78aE0BA5C8D04d73c5c37c5385b608B7E1fb56",
+  "DAOToken": "0x36a402b45319427Df3f13630FF36B6999C048e13",
+  "Reputation": "0x4f5f070155744cF7E7d88Db9C64F427D566E30e1",
+  "Controller": "0xfb6912e96cC1Bf8107410CA6e1dA97B504A70424",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x83740fDCd55AF05bCA75a57291A715c6ff8Cc5Dd",
+      "arcVersion": "0.0.1-rc.41"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x83740fDCd55AF05bCA75a57291A715c6ff8Cc5Dd",
+      "arcVersion": "0.0.1-rc.41"
+    },
+    {
+      "name": "Competition",
+      "address": "0x409EF50Fb97298efba5243Dfe3b42f1553D192AB",
+      "arcVersion": "0.0.1-rc.41"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.41"
+}

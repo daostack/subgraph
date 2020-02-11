@@ -307,7 +307,8 @@ export function updateGPProposal(
   );
   proposal.gpQueue = proposal.organizationId.toHex();
   let scheme = ControllerScheme.load(proposal.scheme);
-  if (scheme.gpQueue == null) {
+
+  if (scheme != null && scheme.gpQueue == null) {
     scheme.gpQueue = proposal.organizationId.toHex();
     scheme.save();
   }

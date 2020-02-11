@@ -8,7 +8,7 @@ process.env = {
   node_ws: 'http://127.0.0.1:8001/subgraphs/name/daostack',
   test_mnemonic:
     'myth like bonus scare over problem client lizard pioneer submit female collect',
-  ...process.env,
+  ...process.env
 };
 
 const { execute } = require('apollo-link');
@@ -24,9 +24,9 @@ const { node_ws, node_http, ethereum, ipfs, test_mnemonic } = process.env;
 export async function sendQuery(q: string, maxDelay = 1000, url = node_http) {
   await new Promise((res, rej) => setTimeout(res, maxDelay));
   const {
-    data: { data },
+    data: { data }
   } = await axios.post(url, {
-    query: q,
+    query: q
   });
 
   return data;
@@ -43,7 +43,7 @@ export async function getWeb3() {
   Array(10)
     .fill(10)
     .map((_, i) => i)
-    .forEach((i) => {
+    .forEach(i => {
       const pk = hdwallet.accounts[i].privateKey;
       const account = web3.eth.accounts.privateKeyToAccount(pk);
       web3.eth.accounts.wallet.add(account);
@@ -54,7 +54,7 @@ export async function getWeb3() {
 
 export function getContractAddresses() {
   const addresses = require(`@daostack/migration/migration.json`);
-  let arcVersion = '0.0.1-rc.40';
+  let arcVersion = '0.0.1-rc.41';
   return {
     ...addresses.private.test[arcVersion],
     ...addresses.private.dao[arcVersion],
@@ -64,23 +64,26 @@ export function getContractAddresses() {
     NativeToken: addresses.private.dao[arcVersion].DAOToken,
     NativeReputation: addresses.private.dao[arcVersion].Reputation,
     ContributionRewardExt: addresses.private.dao[arcVersion].Schemes[1].address,
-    Competition: addresses.private.dao[arcVersion].StandAloneContracts[2].address,
+    Competition:
+      addresses.private.dao[arcVersion].StandAloneContracts[2].address
   };
 }
 
 export function getArcVersion() {
-  return '0.0.1-rc.40';
+  return '0.0.1-rc.41';
 }
 
 export function getOrgName() {
-  return require(`@daostack/migration/migration.json`).private.dao['0.0.1-rc.40'].name;
+  return require(`@daostack/migration/migration.json`).private.dao[
+    '0.0.1-rc.41'
+  ].name;
 }
 
 export async function getOptions(web3) {
   const block = await web3.eth.getBlock('latest');
   return {
     from: web3.eth.defaultAccount,
-    gas: block.gasLimit - 100000,
+    gas: block.gasLimit - 100000
   };
 }
 
@@ -99,7 +102,7 @@ export function padZeros(str: string, max = 36) {
 export const createSubscriptionObservable = (
   query: string,
   variables = 0,
-  wsurl = node_ws,
+  wsurl = node_ws
 ) => {
   const client = new SubscriptionClient(wsurl, { reconnect: true }, ws);
   const link = new WebSocketLink(client);
@@ -109,7 +112,9 @@ export const createSubscriptionObservable = (
 export async function waitUntilTrue(test: () => Promise<boolean> | boolean) {
   return new Promise((resolve, reject) => {
     (async function waitForIt(): Promise<void> {
-      if (await test()) { return resolve(); }
+      if (await test()) {
+        return resolve();
+      }
       setTimeout(waitForIt, 30);
     })();
   });
@@ -125,33 +130,46 @@ export async function waitUntilSynced() {
     let result = await sendQuery(
       getGraphsSynced,
       1000,
-      'http://127.0.0.1:8000/subgraphs');
-    return ((result.subgraphDeployments.length > 0) && result.subgraphDeployments[0].synced);
-    };
+      'http://127.0.0.1:8000/subgraphs'
+    );
+    return (
+      result.subgraphDeployments.length > 0 &&
+      result.subgraphDeployments[0].synced
+    );
+  };
   await waitUntilTrue(graphIsSynced);
 }
 
 export const increaseTime = async function(duration, web3) {
   const id = await Date.now();
-  web3.providers.HttpProvider.prototype.sendAsync = web3.providers.HttpProvider.prototype.send;
+  web3.providers.HttpProvider.prototype.sendAsync =
+    web3.providers.HttpProvider.prototype.send;
 
   return new Promise((resolve, reject) => {
-    web3.currentProvider.sendAsync({
-      jsonrpc: '2.0',
-      method: 'evm_increaseTime',
-      params: [duration],
-      id,
-    }, (err1) => {
-      if (err1) { return reject(err1); }
-
-      web3.currentProvider.sendAsync({
+    web3.currentProvider.sendAsync(
+      {
         jsonrpc: '2.0',
-        method: 'evm_mine',
-        id: id + 1,
-      }, (err2, res) => {
-        return err2 ? reject(err2) : resolve(res);
-      });
-    });
+        method: 'evm_increaseTime',
+        params: [duration],
+        id
+      },
+      err1 => {
+        if (err1) {
+          return reject(err1);
+        }
+
+        web3.currentProvider.sendAsync(
+          {
+            jsonrpc: '2.0',
+            method: 'evm_mine',
+            id: id + 1
+          },
+          (err2, res) => {
+            return err2 ? reject(err2) : resolve(res);
+          }
+        );
+      }
+    );
   });
 };
 
@@ -160,16 +178,16 @@ export function toFixed(x) {
     // tslint:disable-next-line: radix
     let e = parseInt(x.toString().split('e-')[1]);
     if (e) {
-        x *= Math.pow(10, e - 1);
-        x = '0.' + (new Array(e)).join('0') + x.toString().substring(2);
+      x *= Math.pow(10, e - 1);
+      x = '0.' + new Array(e).join('0') + x.toString().substring(2);
     }
   } else {
     // tslint:disable-next-line: radix
     let e = parseInt(x.toString().split('+')[1]);
     if (e > 20) {
-        e -= 20;
-        x /= Math.pow(10, e);
-        x += (new Array(e + 1)).join('0');
+      e -= 20;
+      x /= Math.pow(10, e);
+      x += new Array(e + 1).join('0');
     }
   }
   return x;

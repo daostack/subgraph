@@ -108,22 +108,22 @@ function updateProposalAfterRedemption(
   if (ent != null) {
     let cr = ContributionRewardExt.bind(contributionRewardAddress);
     let proposal = cr.organizationProposals(proposalId);
-    if (type === 0) {
+    if (type == 0) {
       if (proposal.value1.isZero()) {
         ent.alreadyRedeemedReputationPeriods = BigInt.fromI32(1);
       }
       ent.reputationChangeLeft = proposal.value7;
-    } else if (type === 1) {
+    } else if (type == 1) {
       if (proposal.value0.isZero()) {
         ent.alreadyRedeemedNativeTokenPeriods = BigInt.fromI32(1);
       }
       ent.nativeTokenRewardLeft = proposal.value6;
-    } else if (type === 2) {
+    } else if (type == 2) {
       if (proposal.value2.isZero()) {
         ent.alreadyRedeemedEthPeriods = BigInt.fromI32(1);
       }
       ent.ethRewardLeft = proposal.value8;
-    } else if (type === 3) {
+    } else if (type == 3) {
       if (proposal.value4.isZero()) {
         ent.alreadyRedeemedExternalTokenPeriods = BigInt.fromI32(1);
       }
@@ -132,7 +132,7 @@ function updateProposalAfterRedemption(
     store.set('ContributionRewardProposal', proposalId.toHex(), ent);
     let reward = GPReward.load(crypto.keccak256(concat(proposalId, ent.beneficiary)).toHex());
     if ((reward !== null && shouldRemoveAccountFromUnclaimed(reward as GPReward)) ||
-    (reward === null && shouldRemoveContributorFromUnclaimed(ent))) {
+    (reward == null && shouldRemoveContributorFromUnclaimed(ent))) {
       removeRedeemableRewardOwner(proposalId, ent.beneficiary);
     }
   }
@@ -146,7 +146,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   ) as ContributionRewardProposal;
   if (proposalEnt != null) {
     proposalEnt.executedAt = event.block.timestamp;
-    if (event.params._param.toI32() === 1) {
+    if (event.params._param.toI32() == 1) {
       proposalEnt.reputationChangeLeft = proposalEnt.reputationReward;
       proposalEnt.nativeTokenRewardLeft = proposalEnt.nativeTokenReward;
       proposalEnt.ethRewardLeft = proposalEnt.ethReward;
@@ -159,7 +159,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
-  ent.passed = (event.params._param.toI32() === 1);
+  ent.passed = (event.params._param.toI32() == 1);
   ent.proposalId = event.params._proposalId;
   store.set('ContributionRewardProposalResolved', ent.id, ent);
 }

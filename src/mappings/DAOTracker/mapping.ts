@@ -74,7 +74,7 @@ export function handleTrackDAO(event: TrackDAO): void {
 
   let universalController = UControllerOrganization.load(controller.toHex()) != null;
 
-  if (universalController === false) {
+  if (universalController == false) {
     missingTemplate = missingTemplate || controllerTemplate == null;
   }
 
@@ -90,7 +90,7 @@ export function handleTrackDAO(event: TrackDAO): void {
   createTemplate(daoTokenTemplate, daoToken);
 
   // Track the Controller if it isn't a UController we're already tracking
-  if (universalController === false) {
+  if (universalController == false) {
     createTemplate(controllerTemplate, controller);
   }
 

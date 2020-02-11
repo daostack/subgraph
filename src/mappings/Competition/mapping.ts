@@ -97,7 +97,7 @@ export function getSuggestionIPFSData(suggestion: CompetitionSuggestion): Compet
       let tags: string[] = [];
       let tagsLength = tagsObjects.length < 100 ? tagsObjects.length : 100;
       for (let i = 0; i < tagsLength; i++) {
-        if (tags.indexOf(tagsObjects[i].toString()) === -1) {
+        if (tags.indexOf(tagsObjects[i].toString()) == -1) {
           tags.push(tagsObjects[i].toString());
           let tagEnt = Tag.load(tagsObjects[i].toString());
           if (tagEnt == null) {

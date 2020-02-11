@@ -46,7 +46,7 @@ import { insertVote } from './vote';
 
 function isProposalValid(proposalId: string ): boolean {
   let p = Proposal.load(proposalId);
-  return  ((p != null) && (equalsBytes(p.paramsHash, new Bytes(32)) === false));
+  return  ((p != null) && (equalsBytes(p.paramsHash, new Bytes(32)) == false));
 }
 
 function handleGPProposalPrivate(proposalId: string): void {
@@ -138,7 +138,7 @@ export function handleStake(event: Stake): void {
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  if (event.params._vote.toI32() ===  1) {
+  if (event.params._vote.toI32() ==  1) {
     proposal.stakesFor = proposal.stakesFor.plus(event.params._amount);
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
@@ -163,7 +163,7 @@ export function handleVoteProposal(event: VoteProposal): void {
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  if (event.params._vote.toI32() === 1) {
+  if (event.params._vote.toI32() == 1) {
     proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
   } else {
     proposal.votesAgainst = proposal.votesAgainst.plus(
@@ -273,8 +273,8 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
 export function handleStateChange(event: StateChange): void {
   if (isProposalValid(event.params._proposalId.toHex())) {
       updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
-      if ((event.params._proposalState === 1) ||
-          (event.params._proposalState === 2)) {
+      if ((event.params._proposalState == 1) ||
+          (event.params._proposalState == 2)) {
           insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
       }
 
@@ -290,9 +290,9 @@ export function handleExecutionStateChange(event: GPExecuteProposal): void {
 
 export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): void {
    if (isProposalValid(proposalId.toHex())) {
-       if (type === 'token') {
+       if (type == 'token') {
            tokenRedemption(proposalId, beneficiary, timestamp);
-       } else if (type === 'reputation') {
+       } else if (type == 'reputation') {
            reputationRedemption(proposalId, beneficiary, timestamp);
        } else {
            daoBountyRedemption(proposalId, beneficiary, timestamp);

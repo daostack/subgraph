@@ -1,0 +1,28 @@
+{
+  "name": "Fortmatic DAO",
+  "Avatar": "0x8Bb1dF918669B3CDEA18dE82cCF7D71C0b0bA516",
+  "DAOToken": "0xd2935C2f38B876ef5ae8D6C93e78c929CFa21745",
+  "Reputation": "0x6663C9da413895361A33b7400ea67C0250C43E80",
+  "Controller": "0x6E88893118385BC836a68304bB3CdBC9D0BB0Ecb",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x3947aDB7c0CD2E5EC549BE417379044E6D164B6b",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x3947aDB7c0CD2E5EC549BE417379044E6D164B6b",
+      "arcVersion": "0.0.1-rc.40"
+    },
+    {
+      "name": "Competition",
+      "address": "0x12008D7F81858F740DFfEFa770CC7DBF416e4f87",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.40"
+}

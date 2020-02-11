@@ -8,7 +8,7 @@ process.env = {
   node_ws: 'http://127.0.0.1:8001/subgraphs/name/daostack',
   test_mnemonic:
     'myth like bonus scare over problem client lizard pioneer submit female collect',
-  ...process.env
+  ...process.env,
 };
 
 const { execute } = require('apollo-link');
@@ -24,9 +24,9 @@ const { node_ws, node_http, ethereum, ipfs, test_mnemonic } = process.env;
 export async function sendQuery(q: string, maxDelay = 1000, url = node_http) {
   await new Promise((res, rej) => setTimeout(res, maxDelay));
   const {
-    data: { data }
+    data: { data },
   } = await axios.post(url, {
-    query: q
+    query: q,
   });
 
   return data;
@@ -43,7 +43,7 @@ export async function getWeb3() {
   Array(10)
     .fill(10)
     .map((_, i) => i)
-    .forEach(i => {
+    .forEach((i) => {
       const pk = hdwallet.accounts[i].privateKey;
       const account = web3.eth.accounts.privateKeyToAccount(pk);
       web3.eth.accounts.wallet.add(account);
@@ -65,7 +65,7 @@ export function getContractAddresses() {
     NativeReputation: addresses.private.dao[arcVersion].Reputation,
     ContributionRewardExt: addresses.private.dao[arcVersion].Schemes[1].address,
     Competition:
-      addresses.private.dao[arcVersion].StandAloneContracts[2].address
+      addresses.private.dao[arcVersion].StandAloneContracts[2].address,
   };
 }
 
@@ -83,7 +83,7 @@ export async function getOptions(web3) {
   const block = await web3.eth.getBlock('latest');
   return {
     from: web3.eth.defaultAccount,
-    gas: block.gasLimit - 100000
+    gas: block.gasLimit - 100000,
   };
 }
 
@@ -102,7 +102,7 @@ export function padZeros(str: string, max = 36) {
 export const createSubscriptionObservable = (
   query: string,
   variables = 0,
-  wsurl = node_ws
+  wsurl = node_ws,
 ) => {
   const client = new SubscriptionClient(wsurl, { reconnect: true }, ws);
   const link = new WebSocketLink(client);
@@ -130,7 +130,7 @@ export async function waitUntilSynced() {
     let result = await sendQuery(
       getGraphsSynced,
       1000,
-      'http://127.0.0.1:8000/subgraphs'
+      'http://127.0.0.1:8000/subgraphs',
     );
     return (
       result.subgraphDeployments.length > 0 &&
@@ -151,9 +151,9 @@ export const increaseTime = async function(duration, web3) {
         jsonrpc: '2.0',
         method: 'evm_increaseTime',
         params: [duration],
-        id
+        id,
       },
-      err1 => {
+      (err1) => {
         if (err1) {
           return reject(err1);
         }
@@ -162,13 +162,13 @@ export const increaseTime = async function(duration, web3) {
           {
             jsonrpc: '2.0',
             method: 'evm_mine',
-            id: id + 1
+            id: id + 1,
           },
           (err2, res) => {
             return err2 ? reject(err2) : resolve(res);
-          }
+          },
         );
-      }
+      },
     );
   });
 };

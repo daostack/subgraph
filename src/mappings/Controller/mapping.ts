@@ -313,14 +313,14 @@ export function setContributionRewardParams(
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
-  let contributionRewardParams = new ContributionRewardParam(
-    controllerScheme.paramsHash.toHex(),
-  );
-  contributionRewardParams.votingMachine = vmAddress;
-  contributionRewardParams.voteParams = vmParamsHash.toHex();
-  contributionRewardParams.save();
-  controllerScheme.contributionRewardParams = contributionRewardParams.id;
   if (controllerScheme != null) {
+    let contributionRewardParams = new ContributionRewardParam(
+      controllerScheme.paramsHash.toHex(),
+    );
+    contributionRewardParams.votingMachine = vmAddress;
+    contributionRewardParams.voteParams = vmParamsHash.toHex();
+    contributionRewardParams.save();
+    controllerScheme.contributionRewardParams = contributionRewardParams.id;
     controllerScheme.save();
   }
 }
@@ -343,8 +343,8 @@ export function setContributionRewardExtParams(
   contributionRewardExtParams.voteParams = vmParamsHash.toHex();
   contributionRewardExtParams.rewarder = rewarder;
   contributionRewardExtParams.save();
-  controllerScheme.contributionRewardExtParams = contributionRewardExtParams.id;
   if (controllerScheme != null) {
+    controllerScheme.contributionRewardExtParams = contributionRewardExtParams.id;
     controllerScheme.save();
   }
 }
@@ -361,15 +361,15 @@ export function setSchemeRegistrarParams(
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
-  let schemeRegistrarParams = new SchemeRegistrarParam(
-    controllerScheme.paramsHash.toHex(),
-  );
-  schemeRegistrarParams.votingMachine = vmAddress;
-  schemeRegistrarParams.voteRegisterParams = voteRegisterParams.toHex();
-  schemeRegistrarParams.voteRemoveParams = voteRemoveParams.toHex();
-  schemeRegistrarParams.save();
-  controllerScheme.schemeRegistrarParams = schemeRegistrarParams.id;
   if (controllerScheme != null) {
+    let schemeRegistrarParams = new SchemeRegistrarParam(
+      controllerScheme.paramsHash.toHex(),
+    );
+    schemeRegistrarParams.votingMachine = vmAddress;
+    schemeRegistrarParams.voteRegisterParams = voteRegisterParams.toHex();
+    schemeRegistrarParams.voteRemoveParams = voteRemoveParams.toHex();
+    schemeRegistrarParams.save();
+    controllerScheme.schemeRegistrarParams = schemeRegistrarParams.id;
     controllerScheme.save();
   }
 }
@@ -390,8 +390,8 @@ export function setGenericSchemeParams(
   genericSchemeParams.voteParams = vmParamsHash.toHex();
   genericSchemeParams.contractToCall = contractToCall;
   genericSchemeParams.save();
-  controllerScheme.genericSchemeParams = genericSchemeParams.id;
   if (controllerScheme != null) {
+    controllerScheme.genericSchemeParams = genericSchemeParams.id;
     controllerScheme.save();
   }
 }
@@ -407,6 +407,7 @@ export function setUGenericSchemeParams(
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
+  if (controllerScheme != null) {
   let genericSchemeParams = new UGenericSchemeParam(
     controllerScheme.paramsHash.toHex(),
   );
@@ -415,7 +416,6 @@ export function setUGenericSchemeParams(
   genericSchemeParams.contractToCall = contractToCall;
   genericSchemeParams.save();
   controllerScheme.uGenericSchemeParams = genericSchemeParams.id;
-  if (controllerScheme != null) {
-    controllerScheme.save();
+  controllerScheme.save();
   }
 }

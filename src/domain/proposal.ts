@@ -74,7 +74,7 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
       let tags: string[] = [];
       let tagsLength = tagsObjects.length < 100 ? tagsObjects.length : 100;
       for (let i = 0; i < tagsLength; i++) {
-        if (tags.indexOf(tagsObjects[i].toString()) == -1) {
+        if (tags.indexOf(tagsObjects[i].toString()) === -1) {
           tags.push(tagsObjects[i].toString());
           let tagEnt = Tag.load(tagsObjects[i].toString());
           if (tagEnt == null) {
@@ -124,7 +124,7 @@ export function getIPFSData(descHash: string): IPFSData {
       result.url = descJson.toObject().get('url').toString();
     }
     let tagsData = descJson.toObject().get('tags');
-    if (tagsData != null && tagsData.kind == JSONValueKind.ARRAY) {
+    if (tagsData != null && tagsData.kind === JSONValueKind.ARRAY) {
       result.tags = tagsData.toArray();
     }
   }

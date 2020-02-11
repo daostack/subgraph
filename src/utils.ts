@@ -125,7 +125,7 @@ export function fixJsonQuotes(target: string): string {
      let targetIndex = 0;
      let result = '';
      for (targetIndex = 0; targetIndex < target.length; targetIndex++) {
-       if (target[targetIndex] == '"') {
+       if (target[targetIndex] === '"') {
          result += '\\"';
        } else {
          result += target[targetIndex];

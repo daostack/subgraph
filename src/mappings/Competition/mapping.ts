@@ -81,7 +81,7 @@ export function handleNewSuggestion(event: NewSuggestion): void {
     let competitionSuggestions = competitionProposal.suggestions;
     competitionSuggestions.push(competitionSuggestion.id);
     competitionProposal.suggestions = competitionSuggestions;
-    competitionProposal.totalSubmissions = competitionProposal.totalSubmissions.plus(BigInt.fromI32(0));
+    competitionProposal.totalSubmissions = competitionProposal.totalSubmissions.plus(BigInt.fromI32(1));
     competitionProposal.save();
   }
 }
@@ -177,7 +177,7 @@ export function handleNewVote(event: NewVote): void {
       competitionSuggestion.save();
     }
     competitionProposal.winningSuggestions = winningSuggestions;
-    competitionProposal.totalVotes = competitionProposal.totalVotes.plus(BigInt.fromI32(0));
+    competitionProposal.totalVotes = competitionProposal.totalVotes.plus(BigInt.fromI32(1));
     competitionProposal.save();
   }
 }

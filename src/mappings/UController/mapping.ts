@@ -48,7 +48,7 @@ function insertScheme(
   let perms = uController.getSchemePermissions(scheme, avatarAddress);
   let controllerSchemeId = crypto.keccak256(concat(avatarAddress, scheme)).toHex();
   let controllerScheme = ControllerScheme.load(controllerSchemeId);
-  if (controllerScheme === null) {
+  if (controllerScheme == null) {
      controllerScheme = new ControllerScheme(controllerSchemeId);
      controllerScheme.numberOfQueuedProposals = BigInt.fromI32(0);
      controllerScheme.numberOfPreBoostedProposals = BigInt.fromI32(0);
@@ -58,13 +58,13 @@ function insertScheme(
   controllerScheme.dao = avatarAddress.toHex();
   controllerScheme.paramsHash = paramsHash;
   /* tslint:disable:no-bitwise */
-  controllerScheme.canRegisterSchemes = (perms[3] & 2) === 2;
+  controllerScheme.canRegisterSchemes = (perms[3] & 2) == 2;
   /* tslint:disable:no-bitwise */
-  controllerScheme.canManageGlobalConstraints = (perms[3] & 4) === 4;
+  controllerScheme.canManageGlobalConstraints = (perms[3] & 4) == 4;
   /* tslint:disable:no-bitwise */
-  controllerScheme.canUpgradeController = (perms[3] & 8) === 8;
+  controllerScheme.canUpgradeController = (perms[3] & 8) == 8;
   /* tslint:disable:no-bitwise */
-  controllerScheme.canDelegateCall = (perms[3] & 16) === 16;
+  controllerScheme.canDelegateCall = (perms[3] & 16) == 16;
   controllerScheme.address = scheme;
   let contractInfo = ContractInfo.load(scheme.toHex());
   if (contractInfo != null) {
@@ -226,9 +226,9 @@ export function handleAddGlobalConstraint(event: AddGlobalConstraint): void {
   let when = event.parameters[2].value.toBigInt().toI32();
   let type: string;
 
-  if (when === 0) {
+  if (when == 0) {
     type = 'Pre';
-  } else if (when === 1) {
+  } else if (when == 1) {
     type = 'Post';
   } else {
     type = 'Both';

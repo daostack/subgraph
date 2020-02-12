@@ -203,8 +203,8 @@ describe('Competition', () => {
             votes: [],
             createdAt: timestampPropose.toString(),
             winningSuggestions: [],
-            totalSubmissions: 0,
-            totalVotes: 0,
+            totalSubmissions: '0',
+            totalVotes: '0',
         });
 
         // Pass the ContributionReward proposal to approve the competition
@@ -353,8 +353,8 @@ describe('Competition', () => {
                 { suggestionId: suggestionId2.toString() },
             ],
             winningSuggestions: [],
-            totalSubmissions: 2,
-            totalVotes: 0,
+            totalSubmissions: '2',
+            totalVotes: '0',
         });
 
         // Get rep balance
@@ -463,8 +463,8 @@ describe('Competition', () => {
 
         expect((await sendQuery(proposalVotesSnapshotBlockQuery)).competitionProposal).toMatchObject({
             snapshotBlock: blockNumberVote1.toString(),
-            totalSubmissions: 2,
-            totalVotes: 3,
+            totalSubmissions: '2',
+            totalVotes: '3',
         });
 
         let proposalVotesWinningSuggestionsQuery = `{

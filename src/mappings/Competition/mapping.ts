@@ -27,6 +27,8 @@ export function handleNewCompetitionProposal(event: NewCompetitionProposal): voi
   competitionProposal.createdAt = event.block.timestamp;
   competitionProposal.suggestions = [];
   competitionProposal.winningSuggestions = [];
+  competitionProposal.totalSubmissions = BigInt.fromI32(0);
+  competitionProposal.totalVotes = BigInt.fromI32(0);
   competitionProposal.save();
   let proposal = Proposal.load(competitionProposal.id);
   if (proposal != null) {
@@ -64,7 +66,6 @@ export function handleNewSuggestion(event: NewSuggestion): void {
         ),
       ).toHex(),
     );
-
     competitionSuggestion.suggestionId = event.params._suggestionId;
     competitionSuggestion.proposal = event.params._proposalId.toHex();
     competitionSuggestion.descriptionHash = event.params._descriptionHash;
@@ -80,6 +81,7 @@ export function handleNewSuggestion(event: NewSuggestion): void {
     let competitionSuggestions = competitionProposal.suggestions;
     competitionSuggestions.push(competitionSuggestion.id);
     competitionProposal.suggestions = competitionSuggestions;
+    competitionProposal.totalSubmissions = competitionProposal.totalSubmissions.plus(BigInt.fromI32(1));
     competitionProposal.save();
   }
 }
@@ -175,6 +177,7 @@ export function handleNewVote(event: NewVote): void {
       competitionSuggestion.save();
     }
     competitionProposal.winningSuggestions = winningSuggestions;
+    competitionProposal.totalVotes = competitionProposal.totalVotes.plus(BigInt.fromI32(1));
     competitionProposal.save();
   }
 }

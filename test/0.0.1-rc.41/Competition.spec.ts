@@ -456,9 +456,9 @@ describe('Competition', () => {
         let proposalVotesSnapshotBlockQuery = `{
             competitionProposal(id: "${proposalId}") {
                 snapshotBlock
+                totalSubmissions
+                totalVotes
             }
-            totalSubmissions
-            totalVotes
         }`;
 
         expect((await sendQuery(proposalVotesSnapshotBlockQuery)).competitionProposal).toMatchObject({

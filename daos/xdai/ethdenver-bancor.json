@@ -1,0 +1,28 @@
+{
+  "name": "Bancor DAO",
+  "Avatar": "0x2cec92ed4d1A110032a4A7E5E2AbF64938CF1455",
+  "DAOToken": "0xa67c9a9d46Fa2380b7d5728A4EE5B8C8B5462605",
+  "Reputation": "0xaEa77779EE80967519B91E0ffC923A3A684fE904",
+  "Controller": "0x902BBBDe82AfBb7643c887b56e4383c30803D60a",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xeedF4f017d81CD60458485497082cf595D5Be7DB",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xeedF4f017d81CD60458485497082cf595D5Be7DB",
+      "arcVersion": "0.0.1-rc.40"
+    },
+    {
+      "name": "Competition",
+      "address": "0x5457cb734c9B4971661b6CE4fdfBD23bf4C154C2",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.40"
+}

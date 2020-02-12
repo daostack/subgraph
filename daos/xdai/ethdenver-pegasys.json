@@ -1,0 +1,28 @@
+{
+  "name": "PegaSysDAO",
+  "Avatar": "0x24eA2983E3c53DDD873E4d07a3fe7F523E597910",
+  "DAOToken": "0xBA78832542D68a66EF100b9BE696523b70Fa6a44",
+  "Reputation": "0x556534c7812667eac22BAfc431469f3D25F680fc",
+  "Controller": "0xE84Ee549DfFD837fC6629596f2860cD699dF06cC",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x0c1C0Bf49AF941Fc506f14bD1Da6eAa687EACf5b",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x0c1C0Bf49AF941Fc506f14bD1Da6eAa687EACf5b",
+      "arcVersion": "0.0.1-rc.40"
+    },
+    {
+      "name": "Competition",
+      "address": "0x51B2A53523698813C93C4515130164d6062dB034",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.40"
+}

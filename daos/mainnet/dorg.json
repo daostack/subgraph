@@ -1,8 +1,8 @@
 {
-      "name": "dOrg",
-      "Avatar": "0xbe1a98d3452F6da6e0984589e545d4Fc25AF7526",
-      "DAOToken": "0xa2952B15d34d40C9bCd6596A06F9CBB0561236f0",
-      "Reputation": "0xE0A46B46b9F283285b2461b73ebb027eeF39883d",
-      "Controller": "0x809416858a4d0cAA83a660C54B59c4180C6d1Be3",
-      "arcVersion": "0.0.1-rc.16"
+  "arcVersion": "0.0.1-rc.33",
+  "name": "dOrg",
+  "Avatar": "0xDc91ddDC3027b1b69CD9A583aC6625577b942fF1",
+  "DAOToken": "0x6aB3a6AAD11998A2849963658c3aD6a811600d4C",
+  "Reputation": "0x40f9245B19efdf00Df2AECa64C3ebb79ea647A53",
+  "Controller": "0xdbA58475254ef30d46f1CAE78cFDC68AC02D03aD"
 }

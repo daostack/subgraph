@@ -174,8 +174,10 @@ describe('Competition', () => {
               winningSuggestions {
                 suggestionId
               }
-              totalSubmissions
+              totalSuggestions
               totalVotes
+              numberOfWinningSuggestions
+              admin
             }
           }`);
 
@@ -203,8 +205,10 @@ describe('Competition', () => {
             votes: [],
             createdAt: timestampPropose.toString(),
             winningSuggestions: [],
-            totalSubmissions: '0',
+            totalSuggestions: '0',
             totalVotes: '0',
+            numberOfWinningSuggestions: '0',
+            admin: '0x0000000000000000000000000000000000000000',
         });
 
         // Pass the ContributionReward proposal to approve the competition
@@ -342,8 +346,9 @@ describe('Competition', () => {
                 winningSuggestions {
                     suggestionId
                 }
-                totalSubmissions
+                totalSuggestions
                 totalVotes
+                numberOfWinningSuggestions
             }
         }`;
 
@@ -353,8 +358,9 @@ describe('Competition', () => {
                 { suggestionId: suggestionId2.toString() },
             ],
             winningSuggestions: [],
-            totalSubmissions: '2',
+            totalSuggestions: '2',
             totalVotes: '0',
+            numberOfWinningSuggestions: '0',
         });
 
         // Get rep balance
@@ -456,15 +462,17 @@ describe('Competition', () => {
         let proposalVotesSnapshotBlockQuery = `{
             competitionProposal(id: "${proposalId}") {
                 snapshotBlock
-                totalSubmissions
+                totalSuggestions
                 totalVotes
+                numberOfWinningSuggestions
             }
         }`;
 
         expect((await sendQuery(proposalVotesSnapshotBlockQuery)).competitionProposal).toMatchObject({
             snapshotBlock: blockNumberVote1.toString(),
-            totalSubmissions: '2',
+            totalSuggestions: '2',
             totalVotes: '3',
+            numberOfWinningSuggestions: '2',
         });
 
         let proposalVotesWinningSuggestionsQuery = `{

@@ -176,6 +176,7 @@ describe('Competition', () => {
               }
               totalSubmissions
               totalVotes
+              numWinningSubmissions
             }
           }`);
 
@@ -205,6 +206,7 @@ describe('Competition', () => {
             winningSuggestions: [],
             totalSubmissions: '0',
             totalVotes: '0',
+            numWinningSubmissions: '0',
         });
 
         // Pass the ContributionReward proposal to approve the competition
@@ -344,6 +346,7 @@ describe('Competition', () => {
                 }
                 totalSubmissions
                 totalVotes
+                numWinningSubmissions
             }
         }`;
 
@@ -355,6 +358,7 @@ describe('Competition', () => {
             winningSuggestions: [],
             totalSubmissions: '2',
             totalVotes: '0',
+            numWinningSubmissions: '0',
         });
 
         // Get rep balance
@@ -458,6 +462,7 @@ describe('Competition', () => {
                 snapshotBlock
                 totalSubmissions
                 totalVotes
+                numWinningSubmissions
             }
         }`;
 
@@ -465,6 +470,7 @@ describe('Competition', () => {
             snapshotBlock: blockNumberVote1.toString(),
             totalSubmissions: '2',
             totalVotes: '3',
+            numWinningSubmissions: '2',
         });
 
         let proposalVotesWinningSuggestionsQuery = `{

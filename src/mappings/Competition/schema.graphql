@@ -18,6 +18,7 @@ type CompetitionProposal @entity {
     createdAt: BigInt!
     totalSubmissions: BigInt!
     totalVotes: BigInt!
+    numWinningSubmissions: BigInt!
 }
 
 type CompetitionSuggestion @entity {

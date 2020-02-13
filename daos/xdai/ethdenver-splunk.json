@@ -1,0 +1,28 @@
+{
+  "name": "Splunk and Whiteblock",
+  "Avatar": "0x8e52ACa24A59B146B11ecE2C596cF6d8828cdaa9",
+  "DAOToken": "0x7ed061B576Fa18CDc5F2148863c91DbBdEc6Add9",
+  "Reputation": "0xA67Fc774De6Fff498966C03485C13f1eC3c5297C",
+  "Controller": "0x3e5d7Ef334d75fc051f20B2050b304865690AEd6",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xddD7fFF91b3727Ec96CcBbFaB4463307fac5912d",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xddD7fFF91b3727Ec96CcBbFaB4463307fac5912d",
+      "arcVersion": "0.0.1-rc.40"
+    },
+    {
+      "name": "Competition",
+      "address": "0x1D3e0DC2FCe622477C8e504476f1030a81971F0D",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.40"
+}

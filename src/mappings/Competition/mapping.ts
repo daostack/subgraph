@@ -29,7 +29,7 @@ export function handleNewCompetitionProposal(event: NewCompetitionProposal): voi
   competitionProposal.winningSuggestions = [];
   competitionProposal.totalSuggestions = BigInt.fromI32(0);
   competitionProposal.totalVotes = BigInt.fromI32(0);
-  competitionProposal.numWinningSuggestions = BigInt.fromI32(0);
+  competitionProposal.numberOfWinningSuggestions = BigInt.fromI32(0);
   competitionProposal.admin = event.params._admin;
   competitionProposal.save();
   let proposal = Proposal.load(competitionProposal.id);
@@ -180,7 +180,7 @@ export function handleNewVote(event: NewVote): void {
     }
     competitionProposal.winningSuggestions = winningSuggestions;
     competitionProposal.totalVotes = competitionProposal.totalVotes.plus(BigInt.fromI32(1));
-    competitionProposal.numWinningSuggestions = BigInt.fromI32(winningSuggestions.length);
+    competitionProposal.numberOfWinningSuggestions = BigInt.fromI32(winningSuggestions.length);
     competitionProposal.save();
   }
 }

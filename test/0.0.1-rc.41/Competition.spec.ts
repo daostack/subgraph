@@ -176,7 +176,7 @@ describe('Competition', () => {
               }
               totalSuggestions
               totalVotes
-              numWinningSuggestions
+              numberOfWinningSuggestions
               admin
             }
           }`);
@@ -207,7 +207,7 @@ describe('Competition', () => {
             winningSuggestions: [],
             totalSuggestions: '0',
             totalVotes: '0',
-            numWinningSuggestions: '0',
+            numberOfWinningSuggestions: '0',
             admin: '0x0000000000000000000000000000000000000000',
         });
 
@@ -348,7 +348,7 @@ describe('Competition', () => {
                 }
                 totalSuggestions
                 totalVotes
-                numWinningSuggestions
+                numberOfWinningSuggestions
             }
         }`;
 
@@ -360,7 +360,7 @@ describe('Competition', () => {
             winningSuggestions: [],
             totalSuggestions: '2',
             totalVotes: '0',
-            numWinningSuggestions: '0',
+            numberOfWinningSuggestions: '0',
         });
 
         // Get rep balance
@@ -464,7 +464,7 @@ describe('Competition', () => {
                 snapshotBlock
                 totalSuggestions
                 totalVotes
-                numWinningSuggestions
+                numberOfWinningSuggestions
             }
         }`;
 
@@ -472,7 +472,7 @@ describe('Competition', () => {
             snapshotBlock: blockNumberVote1.toString(),
             totalSuggestions: '2',
             totalVotes: '3',
-            numWinningSuggestions: '2',
+            numberOfWinningSuggestions: '2',
         });
 
         let proposalVotesWinningSuggestionsQuery = `{

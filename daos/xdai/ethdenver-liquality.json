@@ -1,0 +1,28 @@
+{
+  "name": "Liquality DAO",
+  "Avatar": "0x1Ea9426F006a6f335F753Ccc4EE1d11bbD67b53F",
+  "DAOToken": "0xCdC64C253cFA3b0E1d6Dfa7788Fb587A80B276BF",
+  "Reputation": "0x08677dd09b79830d908999365Fd9B956B1082286",
+  "Controller": "0x3B6f987238F67883ff77b3d05c35c09Bb5793645",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xda6A7e73eA56Ab1CD564E9600C6ec918Ca5084D3",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xda6A7e73eA56Ab1CD564E9600C6ec918Ca5084D3",
+      "arcVersion": "0.0.1-rc.40"
+    },
+    {
+      "name": "Competition",
+      "address": "0x1AC2Fef0E114a6FB7f83280Fe84685A1194779F0",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.40"
+}

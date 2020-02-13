@@ -19,6 +19,7 @@ type CompetitionProposal @entity {
     totalSubmissions: BigInt!
     totalVotes: BigInt!
     numWinningSubmissions: BigInt!
+    admin: Bytes!
 }
 
 type CompetitionSuggestion @entity {

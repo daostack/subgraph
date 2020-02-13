@@ -177,6 +177,7 @@ describe('Competition', () => {
               totalSubmissions
               totalVotes
               numWinningSubmissions
+              admin
             }
           }`);
 
@@ -207,6 +208,7 @@ describe('Competition', () => {
             totalSubmissions: '0',
             totalVotes: '0',
             numWinningSubmissions: '0',
+            admin: '0x0000000000000000000000000000000000000000',
         });
 
         // Pass the ContributionReward proposal to approve the competition

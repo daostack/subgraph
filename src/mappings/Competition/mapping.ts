@@ -30,6 +30,7 @@ export function handleNewCompetitionProposal(event: NewCompetitionProposal): voi
   competitionProposal.totalSubmissions = BigInt.fromI32(0);
   competitionProposal.totalVotes = BigInt.fromI32(0);
   competitionProposal.numWinningSubmissions = BigInt.fromI32(0);
+  competitionProposal.admin = event.params._admin;
   competitionProposal.save();
   let proposal = Proposal.load(competitionProposal.id);
   if (proposal != null) {

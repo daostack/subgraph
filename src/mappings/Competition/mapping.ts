@@ -27,7 +27,7 @@ export function handleNewCompetitionProposal(event: NewCompetitionProposal): voi
   competitionProposal.createdAt = event.block.timestamp;
   competitionProposal.suggestions = [];
   competitionProposal.winningSuggestions = [];
-  competitionProposal.totalSubmissions = BigInt.fromI32(0);
+  competitionProposal.totalSuggestions = BigInt.fromI32(0);
   competitionProposal.totalVotes = BigInt.fromI32(0);
   competitionProposal.numWinningSuggestions = BigInt.fromI32(0);
   competitionProposal.admin = event.params._admin;
@@ -83,7 +83,7 @@ export function handleNewSuggestion(event: NewSuggestion): void {
     let competitionSuggestions = competitionProposal.suggestions;
     competitionSuggestions.push(competitionSuggestion.id);
     competitionProposal.suggestions = competitionSuggestions;
-    competitionProposal.totalSubmissions = competitionProposal.totalSubmissions.plus(BigInt.fromI32(1));
+    competitionProposal.totalSuggestions = competitionProposal.totalSuggestions.plus(BigInt.fromI32(1));
     competitionProposal.save();
   }
 }

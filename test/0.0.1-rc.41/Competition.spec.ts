@@ -174,7 +174,7 @@ describe('Competition', () => {
               winningSuggestions {
                 suggestionId
               }
-              totalSubmissions
+              totalSuggestions
               totalVotes
               numWinningSuggestions
               admin
@@ -205,7 +205,7 @@ describe('Competition', () => {
             votes: [],
             createdAt: timestampPropose.toString(),
             winningSuggestions: [],
-            totalSubmissions: '0',
+            totalSuggestions: '0',
             totalVotes: '0',
             numWinningSuggestions: '0',
             admin: '0x0000000000000000000000000000000000000000',
@@ -346,7 +346,7 @@ describe('Competition', () => {
                 winningSuggestions {
                     suggestionId
                 }
-                totalSubmissions
+                totalSuggestions
                 totalVotes
                 numWinningSuggestions
             }
@@ -358,7 +358,7 @@ describe('Competition', () => {
                 { suggestionId: suggestionId2.toString() },
             ],
             winningSuggestions: [],
-            totalSubmissions: '2',
+            totalSuggestions: '2',
             totalVotes: '0',
             numWinningSuggestions: '0',
         });
@@ -462,7 +462,7 @@ describe('Competition', () => {
         let proposalVotesSnapshotBlockQuery = `{
             competitionProposal(id: "${proposalId}") {
                 snapshotBlock
-                totalSubmissions
+                totalSuggestions
                 totalVotes
                 numWinningSuggestions
             }
@@ -470,7 +470,7 @@ describe('Competition', () => {
 
         expect((await sendQuery(proposalVotesSnapshotBlockQuery)).competitionProposal).toMatchObject({
             snapshotBlock: blockNumberVote1.toString(),
-            totalSubmissions: '2',
+            totalSuggestions: '2',
             totalVotes: '3',
             numWinningSuggestions: '2',
         });

@@ -180,7 +180,7 @@ export function handleNewVote(event: NewVote): void {
     }
     competitionProposal.winningSuggestions = winningSuggestions;
     competitionProposal.totalVotes = competitionProposal.totalVotes.plus(BigInt.fromI32(1));
-    competitionProposal.numWinningSubmissions = winningSuggestions.length;
+    competitionProposal.numWinningSubmissions = BigInt.fromI32(winningSuggestions.length);
     competitionProposal.save();
   }
 }

@@ -1,15 +1,15 @@
 {
-   "arcVersion": "0.0.1-rc.33",
-   "name": "DAO Sports Castle",
-   "Avatar": "0x27ea55b89b667560a6b35b14e8a3476fcaa6aa34",
-   "DAOToken": "0x6625087b03056a01c4faf51e01b11f9f9bc09ad5",
-   "Reputation": "0xe761af6531d233d760474540c707d34adbb21778",
-   "Controller": "0xa3afd95b71f8eaeda573dec80106517f7d6a7d96",
-   "Schemes": [
-     {
-       "arcVersion": "0.0.1-rc.33",
-       "name": "GenericScheme",
-       "alias": "bonding curve controll",
-       "address": "0xd035e0f56776d7e9bef91393e54ecfec7ce680db"
-     }]
- }
+  "name": "castle dao",
+  "Avatar": "0xb46715c7FC2b537dbf55F2C59d01a1F080E07149",
+  "DAOToken": "0x52f995ecc3a720B1f617FA4b61e5bdCb20dA1a6F",
+  "Reputation": "0x562A24cAf2cdD41daA5210905e2bcC22e43DAFaC",
+  "Controller": "0xa47F0675acC0d437c5B837B9473177ca2a255eeA",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0xCAEAfACDcD778c637A1c9F88cEF3592cfFAE8Bea"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.34"
+}

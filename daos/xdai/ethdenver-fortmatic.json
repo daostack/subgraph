@@ -1,26 +1,26 @@
 {
   "name": "Fortmatic DAO",
-  "Avatar": "0x8Bb1dF918669B3CDEA18dE82cCF7D71C0b0bA516",
-  "DAOToken": "0xd2935C2f38B876ef5ae8D6C93e78c929CFa21745",
-  "Reputation": "0x6663C9da413895361A33b7400ea67C0250C43E80",
-  "Controller": "0x6E88893118385BC836a68304bB3CdBC9D0BB0Ecb",
+  "Avatar": "0xc09Ae92f62D0484ea68151eb2C9D50F71ec475fF",
+  "DAOToken": "0x271a522bd429E198ba67Da6b30408DBfb875e362",
+  "Reputation": "0x33dcEC8A2c24779Cd4a395788072Ae24d209C714",
+  "Controller": "0x9b71FB509857D57fBc38d0bD0e1e85Be4A3c72Bd",
   "Schemes": [
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0x3947aDB7c0CD2E5EC549BE417379044E6D164B6b",
+      "address": "0xDbb5666c3E5395249d66ec25b9F4FeFF0Ac78f7A",
       "arcVersion": "0.0.1-rc.40"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "ContributionRewardExt",
-      "address": "0x3947aDB7c0CD2E5EC549BE417379044E6D164B6b",
+      "address": "0xDbb5666c3E5395249d66ec25b9F4FeFF0Ac78f7A",
       "arcVersion": "0.0.1-rc.40"
     },
     {
       "name": "Competition",
-      "address": "0x12008D7F81858F740DFfEFa770CC7DBF416e4f87",
+      "address": "0x7543F39950603d2951a78387517f2CA228d9736b",
       "arcVersion": "0.0.1-rc.40"
     }
   ],

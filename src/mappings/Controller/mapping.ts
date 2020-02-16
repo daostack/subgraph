@@ -6,6 +6,7 @@ import {
   Bytes,
   crypto,
   Entity,
+  log,
   store,
 } from '@graphprotocol/graph-ts';
 
@@ -285,21 +286,26 @@ export function setGPParams(gpAddress: Address, gpParamsHash: Bytes): void {
   let gpParams = GenesisProtocolParam.load(gpParamsHash.toHex());
   if (gpParams == null && !equalsBytes(gpParamsHash, new Bytes(32))) {
     gpParams = new GenesisProtocolParam(gpParamsHash.toHex());
-    let params = gp.parameters(gpParamsHash);
-    gpParams.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
-    gpParams.queuedVotePeriodLimit = params.value1; // queuedVotePeriodLimit
-    gpParams.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
-    gpParams.preBoostedVotePeriodLimit = params.value3; // preBoostedVotePeriodLimit
-    gpParams.thresholdConst = params.value4; // thresholdConst
-    gpParams.limitExponentValue = params.value5; // limitExponentValue
-    gpParams.quietEndingPeriod = params.value6; // quietEndingPeriod
-    gpParams.proposingRepReward = params.value7;
-    gpParams.votersReputationLossRatio = params.value8; // votersReputationLossRatio
-    gpParams.minimumDaoBounty = params.value9; // minimumDaoBounty
-    gpParams.daoBountyConst = params.value10; // daoBountyConst
-    gpParams.activationTime = params.value11; // activationTime
-    gpParams.voteOnBehalf = params.value12 as Bytes; // voteOnBehalf
-    gpParams.save();
+    let callResult = gp.try_parameters(gpParamsHash);
+    if (callResult.reverted) {
+        log.info('genesisProtocol try_parameters reverted', []);
+    } else {
+        let params = callResult.value;
+        gpParams.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
+        gpParams.queuedVotePeriodLimit = params.value1; // queuedVotePeriodLimit
+        gpParams.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
+        gpParams.preBoostedVotePeriodLimit = params.value3; // preBoostedVotePeriodLimit
+        gpParams.thresholdConst = params.value4; // thresholdConst
+        gpParams.limitExponentValue = params.value5; // limitExponentValue
+        gpParams.quietEndingPeriod = params.value6; // quietEndingPeriod
+        gpParams.proposingRepReward = params.value7;
+        gpParams.votersReputationLossRatio = params.value8; // votersReputationLossRatio
+        gpParams.minimumDaoBounty = params.value9; // minimumDaoBounty
+        gpParams.daoBountyConst = params.value10; // daoBountyConst
+        gpParams.activationTime = params.value11; // activationTime
+        gpParams.voteOnBehalf = params.value12 as Bytes; // voteOnBehalf
+        gpParams.save();
+   }
   }
 }
 

@@ -30,6 +30,7 @@ import {
   ControllerScheme,
   ControllerUnregisterScheme,
   ControllerUpgradeController,
+  DAO,
   FirstRegisterScheme,
   GenericSchemeParam,
   GenesisProtocolParam,
@@ -281,7 +282,7 @@ export function handleRemoveGlobalConstraint(
   store.set('ControllerRemoveGlobalConstraint', ent.id, ent);
 }
 
-export function setGPParams(gpAddress: Address, gpParamsHash: Bytes): void {
+export function setGPParams(gpAddress: Address, gpParamsHash: Bytes, avatar: Address): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let gpParams = GenesisProtocolParam.load(gpParamsHash.toHex());
   if (gpParams == null && !equalsBytes(gpParamsHash, new Bytes(32))) {
@@ -289,6 +290,11 @@ export function setGPParams(gpAddress: Address, gpParamsHash: Bytes): void {
     let callResult = gp.try_parameters(gpParamsHash);
     if (callResult.reverted) {
         log.info('genesisProtocol try_parameters reverted', []);
+        let dao = DAO.load(avatar.toHex());
+        if (dao != null) {
+          dao.error = 'genesisProtocol try_parameters reverted';
+          dao.save();
+        }
     } else {
         let params = callResult.value;
         gpParams.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
@@ -315,7 +321,7 @@ export function setContributionRewardParams(
   vmAddress: Address,
   vmParamsHash: Bytes,
 ): void {
-  setGPParams(vmAddress, vmParamsHash);
+  setGPParams(vmAddress, vmParamsHash, avatar);
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
@@ -338,7 +344,7 @@ export function setContributionRewardExtParams(
   vmParamsHash: Bytes,
   rewarder: Address,
 ): void {
-  setGPParams(vmAddress, vmParamsHash);
+  setGPParams(vmAddress, vmParamsHash, avatar);
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
@@ -362,8 +368,8 @@ export function setSchemeRegistrarParams(
   voteRegisterParams: Bytes,
   voteRemoveParams: Bytes,
 ): void {
-  setGPParams(vmAddress, voteRegisterParams);
-  setGPParams(vmAddress, voteRemoveParams);
+  setGPParams(vmAddress, voteRegisterParams, avatar);
+  setGPParams(vmAddress, voteRemoveParams, avatar);
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
@@ -387,7 +393,7 @@ export function setGenericSchemeParams(
   vmParamsHash: Bytes,
   contractToCall: Bytes,
 ): void {
-  setGPParams(vmAddress, vmParamsHash);
+  setGPParams(vmAddress, vmParamsHash, avatar);
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
@@ -409,7 +415,7 @@ export function setUGenericSchemeParams(
   vmParamsHash: Bytes,
   contractToCall: Bytes,
 ): void {
-  setGPParams(vmAddress, vmParamsHash);
+  setGPParams(vmAddress, vmParamsHash, avatar);
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );

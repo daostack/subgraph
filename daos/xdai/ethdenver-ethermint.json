@@ -1,28 +1,28 @@
 {
-  "name": "Ethermint DAO",
-  "Avatar": "0x9DF794aaAf05f04FD5b832b843Aaf6b6EdfDb7fb",
-  "DAOToken": "0xd56FD16caf60aF554aBDdd6c552424e2765B4887",
-  "Reputation": "0x668bcbE57fc870420eee678265B548B3A30561FD",
-  "Controller": "0x50aEb87D843306d17ad5790D05D28c638dcCAB10",
+  "name": "Cosmos Ethermint DAO",
+  "Avatar": "0x4bDf38eC4528691025bfCF9FcA66eD1cCCA4034B",
+  "DAOToken": "0xb372e9ADE0c3696FC833792161091a807C834Ac2",
+  "Reputation": "0x994F5958a9A7873297D6fF184d5ae24691CD03a3",
+  "Controller": "0x62418A904Bc211a1822B376B1127cC66aDc5e39B",
   "Schemes": [
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0xb6af0CcAFe048CAcF023b9058AaeFB35F683A6d2",
+      "address": "0x8b5a00d1319e93a49A2280CD69029e29246af45b",
       "arcVersion": "0.0.1-rc.40"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "ContributionRewardExt",
-      "address": "0xb6af0CcAFe048CAcF023b9058AaeFB35F683A6d2",
+      "address": "0x8b5a00d1319e93a49A2280CD69029e29246af45b",
       "arcVersion": "0.0.1-rc.40"
     },
     {
       "name": "Competition",
-      "address": "0x0948A5df3A9AC545d53B09bBD82C71C1bfd70cC6",
+      "address": "0xEe8BF051e7d755Ac3AE7FF45bBF9AE18D4820B45",
       "arcVersion": "0.0.1-rc.40"
     }
   ],
-  "arcVersion": "0.0.1-rc.39"
+  "arcVersion": "0.0.1-rc.40"
 }

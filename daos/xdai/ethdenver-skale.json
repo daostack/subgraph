@@ -1,28 +1,28 @@
 {
-  "name": "Skale DAO",
-  "Avatar": "0x525d05a99Fe8eD40682722B5Ea2832Bd8b9C821D",
-  "DAOToken": "0x87C65A1439246468Ee591C9Fb5D7675040D935ab",
-  "Reputation": "0x092B40b1444c0e9ed9A84CA402d35ce94f5c4491",
-  "Controller": "0x4399bcE2dde775ade1dfb0879346516Aac08b43A",
+  "name": "SKALE DAO",
+  "Avatar": "0xdD8eBE1EB370C2dc2f2E7d136be8d35986A5F5E1",
+  "DAOToken": "0xF469775b4310CB0065086A0923d97d59d571cB54",
+  "Reputation": "0xDD61ED36a80826d2F7E1699487763f27fD3674D1",
+  "Controller": "0xBCB8938895e62f08756FfF36426377082904607d",
   "Schemes": [
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0x83C69087b33eEb54De6d245E4283BAC2466186e2",
+      "address": "0x191afb6f36478f529A0446d0f12857c9EAED991A",
       "arcVersion": "0.0.1-rc.40"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "ContributionRewardExt",
-      "address": "0x83C69087b33eEb54De6d245E4283BAC2466186e2",
+      "address": "0x191afb6f36478f529A0446d0f12857c9EAED991A",
       "arcVersion": "0.0.1-rc.40"
     },
     {
       "name": "Competition",
-      "address": "0xFED940829a91106bB6a9DBF3D5d18A77D9d0d810",
+      "address": "0xC25c4804e70EFfA58e74757cf07878e441cDEA2a",
       "arcVersion": "0.0.1-rc.40"
     }
   ],
-  "arcVersion": "0.0.1-rc.39"
+  "arcVersion": "0.0.1-rc.40"
 }

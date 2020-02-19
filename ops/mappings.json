@@ -31,6 +31,13 @@
           "arcVersion": "0.0.1-rc.16"
         },
         {
+          "name": "NewSignalScheme",
+          "dao": "address",
+          "mapping": "SignalScheme",
+          "arcVersion": "0.0.1-rc.37",
+          "address": "0xE06d896da40B73Cb02650220E480e20F38e7bE18"
+        },
+        {
           "name": "SchemeRegistrar",
           "contractName": "SchemeRegistrar",
           "dao": "base",
@@ -746,6 +753,13 @@
         "dao": "dao",
         "mapping": "DAOToken",
         "arcVersion": "0.0.1-rc.19"
+      },
+      {
+        "name": "NewSignalScheme",
+        "dao": "address",
+        "mapping": "SignalScheme",
+        "arcVersion": "0.0.1-rc.37",
+        "address": "0xE06d896da40B73Cb02650220E480e20F38e7bE18"
       },
       {
         "name": "Reputation",

@@ -1,5 +1,5 @@
-import { Bytes, ipfs, json, JSONValue, JSONValueKind, store } from '@graphprotocol/graph-ts';
-import { Signal, Proposal } from '../types/schema';
+import { Bytes, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Signal } from '../types/schema';
 import { debug } from '../utils';
 
 export function getSignal(id: string): Signal {
@@ -88,13 +88,10 @@ function teststring(key: string, value: string): boolean {
 }
 
 export function readProposal(id: string, proposalId: string): void {
-  let signal: Signal = getSignal(id);
-  var key: string = null;
-  var value: string = null;
-
-  let proposal = store.get('Proposal', proposalId) as Proposal;
-
-  let ipfsData = ipfs.cat('/ipfs/' + proposal.descriptionHash);
+  let signal = getSignal(id);
+  let key = '';
+  let value = '';
+  let ipfsData = ipfs.cat('/ipfs/' + proposalId);
   if (ipfsData != null && ipfsData.toString() !== '{}') {
 
     let descJson = json.fromBytes(ipfsData as Bytes);
@@ -107,11 +104,8 @@ export function readProposal(id: string, proposalId: string): void {
     if (descJson.toObject().get('value') != null) {
       value = descJson.toObject().get('value').toString();
     }
-  }
 
-  if (key !== null && value !== null ){
-      if (teststring(key,value)){
-        generatestring(key,value,signal)
-      }
   }
+  generatestring(key,value,signal)
+
 }

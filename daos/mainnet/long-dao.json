@@ -1,32 +1,37 @@
 {
     "name": "LongDAO",
-    "Avatar": "0x05b59fadd9683B4Fc60E9E09b3a732A455CD3aed",
-    "DAOToken": "0x6f68C766748dE8401Fe0dDC47dB9ae396C2BEf2c",
-    "Reputation": "0x0b090325D5956F65a96fDA79897cabB6422bF743",
-    "Controller": "0xed0e18d438581fb2E4E3477662AA571DAEd9aDAa",
+    "Avatar": "0x044F1Be06D0b93Ec0aB03cCA9BD526022d71ba01",
+    "DAOToken": "0x2E9cc80649718cD5010B1339672870364A2f1c9e",
+    "Reputation": "0x3a19d22115C4bE7A36E6cCA51dB080e08CBF044b",
+    "Controller": "0xEae535994462B26E88122849c4391745EF1E7fb6",
     "Schemes": [
       {
         "name": "ReputationFromToken",
         "alias": "ReputationFromToken",
-        "address": "0x81f314Dd1a6FEb321B4DE1adb548F9319c96c8e7",
+        "address": "0xE75BcdF3a750Bb73A1c912EcC79353aB1b1dfb9B",
         "arcVersion": "0.0.1-rc.41"
       },
       {
         "name": "ContributionRewardExt",
         "alias": "ContributionRewardExt",
-        "address": "0xDA37aD1E8c9a98a2f2f6F7343745C1BBB2CBdd3b",
+        "address": "0xC19B2D202FF9E5f024F0e13d07846BcC8391C28C",
         "arcVersion": "0.0.1-rc.41"
       }
     ],
     "StandAloneContracts": [
       {
         "name": "ContributionRewardExt",
-        "address": "0xDA37aD1E8c9a98a2f2f6F7343745C1BBB2CBdd3b",
+        "address": "0xC19B2D202FF9E5f024F0e13d07846BcC8391C28C",
         "arcVersion": "0.0.1-rc.41"
       },
       {
         "name": "Competition",
-        "address": "0x0dE001A49AeCb7Fd19E138e6a0E9c51feE8AA9d8",
+        "address": "0xB7785348D4A99F9D1F3266B9D3C5fa15BD86FF5F",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "RepAllocation",
+        "address": "0xF29578E00d08eE59b8eb6FA248D1dd74e614B372",
         "arcVersion": "0.0.1-rc.41"
       }
     ],

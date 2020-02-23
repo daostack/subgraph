@@ -1,0 +1,34 @@
+{
+    "name": "LongDAO",
+    "Avatar": "0x05b59fadd9683B4Fc60E9E09b3a732A455CD3aed",
+    "DAOToken": "0x6f68C766748dE8401Fe0dDC47dB9ae396C2BEf2c",
+    "Reputation": "0x0b090325D5956F65a96fDA79897cabB6422bF743",
+    "Controller": "0xed0e18d438581fb2E4E3477662AA571DAEd9aDAa",
+    "Schemes": [
+      {
+        "name": "ReputationFromToken",
+        "alias": "ReputationFromToken",
+        "address": "0x81f314Dd1a6FEb321B4DE1adb548F9319c96c8e7",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0xDA37aD1E8c9a98a2f2f6F7343745C1BBB2CBdd3b",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "ContributionRewardExt",
+        "address": "0xDA37aD1E8c9a98a2f2f6F7343745C1BBB2CBdd3b",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "Competition",
+        "address": "0x0dE001A49AeCb7Fd19E138e6a0E9c51feE8AA9d8",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.41"
+  }

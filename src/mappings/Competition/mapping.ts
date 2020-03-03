@@ -27,6 +27,10 @@ export function handleNewCompetitionProposal(event: NewCompetitionProposal): voi
   competitionProposal.createdAt = event.block.timestamp;
   competitionProposal.suggestions = [];
   competitionProposal.winningSuggestions = [];
+  competitionProposal.totalSuggestions = BigInt.fromI32(0);
+  competitionProposal.totalVotes = BigInt.fromI32(0);
+  competitionProposal.numberOfWinningSuggestions = BigInt.fromI32(0);
+  competitionProposal.admin = event.params._admin;
   competitionProposal.save();
   let proposal = Proposal.load(competitionProposal.id);
   if (proposal != null) {
@@ -64,11 +68,11 @@ export function handleNewSuggestion(event: NewSuggestion): void {
         ),
       ).toHex(),
     );
-
     competitionSuggestion.suggestionId = event.params._suggestionId;
     competitionSuggestion.proposal = event.params._proposalId.toHex();
     competitionSuggestion.descriptionHash = event.params._descriptionHash;
-    competitionSuggestion.suggester = event.params._suggester;
+    competitionSuggestion.suggester = event.transaction.from;
+    competitionSuggestion.beneficiary = event.params._beneficiary;
     competitionSuggestion.totalVotes = BigInt.fromI32(0);
     competitionSuggestion.createdAt = event.block.timestamp;
 
@@ -79,6 +83,7 @@ export function handleNewSuggestion(event: NewSuggestion): void {
     let competitionSuggestions = competitionProposal.suggestions;
     competitionSuggestions.push(competitionSuggestion.id);
     competitionProposal.suggestions = competitionSuggestions;
+    competitionProposal.totalSuggestions = competitionProposal.totalSuggestions.plus(BigInt.fromI32(1));
     competitionProposal.save();
   }
 }
@@ -96,7 +101,7 @@ export function getSuggestionIPFSData(suggestion: CompetitionSuggestion): Compet
       let tags: string[] = [];
       let tagsLength = tagsObjects.length < 100 ? tagsObjects.length : 100;
       for (let i = 0; i < tagsLength; i++) {
-        if (tags.indexOf(tagsObjects[i].toString()) === -1) {
+        if (tags.indexOf(tagsObjects[i].toString()) == -1) {
           tags.push(tagsObjects[i].toString());
           let tagEnt = Tag.load(tagsObjects[i].toString());
           if (tagEnt == null) {
@@ -148,30 +153,34 @@ export function handleNewVote(event: NewVote): void {
         CompetitionSuggestion.load(b as string).totalVotes,
       );
       if (result.gt(BigInt.fromI32(0))) {
-        return 1;
+        return -1;
       } else if (result.equals(BigInt.fromI32(0))) {
         return 0;
       } else {
-        return -1;
+        return 1;
       }
     });
-    let lastTotalVotes = BigInt.fromI32(0);
+    let lastTotalWinnerVotes = BigInt.fromI32(0);
     let idx = BigInt.fromI32(0);
-    for (let i = 0; i < competitionProposal.suggestions.length; i++) {
+    for (let i = 0; i < suggestions.length; i++) {
       let competitionSuggestion = CompetitionSuggestion.load(suggestions[i] as string);
-      if (idx >= competitionProposal.numberOfWinners ||
+      if (lastTotalWinnerVotes.gt(competitionSuggestion.totalVotes)) {
+        idx = idx.plus(BigInt.fromI32(1));
+      }
+      if ((lastTotalWinnerVotes.notEqual(competitionSuggestion.totalVotes) &&
+        idx >= competitionProposal.numberOfWinners) ||
         competitionSuggestion.totalVotes.equals(BigInt.fromI32(0))) {
         competitionSuggestion.positionInWinnerList = null;
       } else {
         competitionSuggestion.positionInWinnerList = idx;
         winningSuggestions.push(competitionSuggestion.id as string);
+        lastTotalWinnerVotes = competitionSuggestion.totalVotes;
       }
       competitionSuggestion.save();
-      if (lastTotalVotes.lt(competitionSuggestion.totalVotes)) {
-        idx = idx.plus(BigInt.fromI32(1));
-      }
     }
     competitionProposal.winningSuggestions = winningSuggestions;
+    competitionProposal.totalVotes = competitionProposal.totalVotes.plus(BigInt.fromI32(1));
+    competitionProposal.numberOfWinningSuggestions = BigInt.fromI32(winningSuggestions.length);
     competitionProposal.save();
   }
 }

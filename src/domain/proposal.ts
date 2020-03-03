@@ -16,7 +16,7 @@ export class IPFSData {
 }
 
 export function parseOutcome(num: BigInt): string {
-  if (num.toI32() === 1) {
+  if (num.toI32() == 1) {
     // Yes
     return 'Pass';
   } else {
@@ -149,7 +149,7 @@ export function updateProposalAfterVote(
   // proposal.winningVote
   proposal.winningOutcome = parseOutcome(gpProposal.value3);
   if (!equalStrings(proposal.winningOutcome, prevOutcome)) {
-    if ((gpProposal.value2 === 6)) {
+    if ((gpProposal.value2 == 6)) {
       setProposalState(proposal, 6, gp.getProposalTimes(proposalId));
     }
     addVoteFlipEvent(proposalId, proposal, voter, timestamp);
@@ -172,7 +172,7 @@ export function updateProposalState(id: Bytes, state: number, gpAddress: Address
                     proposal.scheme,
                     );
    setProposalState(proposal, state, gp.getProposalTimes(id));
-   if (state === 4) {
+   if (state == 4) {
      proposal.confidenceThreshold = gp.proposals(id).value10;
    }
    saveProposal(proposal);
@@ -205,7 +205,7 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
       dao.numberOfBoostedProposals = dao.numberOfBoostedProposals.minus(BigInt.fromI32(1));
     }
   }
-  if (state === 1) {
+  if (state == 1) {
     // Closed
     proposal.stage = 'ExpiredInQueue';
     if (controllerScheme != null) {
@@ -215,10 +215,11 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     if (dao != null) {
       dao.numberOfExpiredInQueueProposals = dao.numberOfExpiredInQueueProposals.plus(BigInt.fromI32(1));
     }
-  } else if (state === 2) {
+    proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
+  } else if (state == 2) {
     // Executed
     proposal.stage = 'Executed';
-  } else if (state === 3) {
+  } else if (state == 3) {
     // Queued
     proposal.stage = 'Queued';
     proposal.closingAt =  proposal.createdAt +
@@ -230,7 +231,7 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     if (dao != null) {
       dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.plus(BigInt.fromI32(1));
     }
-  } else if (state === 4) {
+  } else if (state == 4) {
     // PreBoosted
     proposal.stage = 'PreBoosted';
     proposal.preBoostedAt = gpTimes[2];
@@ -243,7 +244,7 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     if (dao != null) {
       dao.numberOfPreBoostedProposals = dao.numberOfPreBoostedProposals.plus(BigInt.fromI32(1));
     }
-  } else if (state === 5) {
+  } else if (state == 5) {
     // Boosted
     proposal.boostedAt = gpTimes[1];
     proposal.stage = 'Boosted';
@@ -256,7 +257,7 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     if (dao != null) {
       dao.numberOfBoostedProposals = dao.numberOfBoostedProposals.plus(BigInt.fromI32(1));
     }
-  } else if (state === 6) {
+  } else if (state == 6) {
     // QuietEndingPeriod
     proposal.quietEndingPeriodBeganAt = gpTimes[1];
     proposal.closingAt =  proposal.quietEndingPeriodBeganAt +
@@ -306,7 +307,8 @@ export function updateGPProposal(
   );
   proposal.gpQueue = proposal.organizationId.toHex();
   let scheme = ControllerScheme.load(proposal.scheme);
-  if (scheme.gpQueue == null) {
+
+  if (scheme != null && scheme.gpQueue == null) {
     scheme.gpQueue = proposal.organizationId.toHex();
     scheme.save();
   }
@@ -403,15 +405,15 @@ export function updateProposalExecution(
 export function updateProposalExecutionState(id: string, executionState: number): void {
   let proposal = getProposal(id);
   // enum ExecutionState { None, QueueBarCrossed, QueueTimeOut, PreBoostedBarCrossed, BoostedTimeOut, BoostedBarCrossed}
-  if (executionState === 1) {
+  if (executionState == 1) {
     proposal.executionState = 'QueueBarCrossed';
-  } else if (executionState === 2) {
+  } else if (executionState == 2) {
     proposal.executionState = 'QueueTimeOut';
-  } else if (executionState === 3) {
+  } else if (executionState == 3) {
     proposal.executionState = 'PreBoostedBarCrossed';
-  } else if (executionState === 4) {
+  } else if (executionState == 4) {
     proposal.executionState = 'BoostedTimeOut';
-  } else if (executionState === 5) {
+  } else if (executionState == 5) {
     proposal.executionState = 'BoostedBarCrossed';
   }
   saveProposal(proposal);

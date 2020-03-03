@@ -1,0 +1,39 @@
+{
+  "name": "Concomitant Mechanic",
+  "Avatar": "0xB4338a1DAEf80472C9a8041c3dEE03239a8a5ec0",
+  "DAOToken": "0x36BA4e706327BC6bcdd5511f5799A7F46d0dA5Ad",
+  "Reputation": "0x7e075b685A85492d335082bF12EE7CCD06A2b15c",
+  "Controller": "0x30553AE4b803DbDDc8873d5Fc972e0fBfbDaE46D",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0x620610Cb5e4a3e2439807682DbE92246Dc256cE3",
+      "arcVersion": "0.0.1-rc.38"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x97d3dB2767855540b5e290E4Fa931950853875F8",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0x4f89E1754c066e79b30954ED0FFE0AD173D63250",
+      "arcVersion": "0.0.1-rc.38"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x97d3dB2767855540b5e290E4Fa931950853875F8",
+      "arcVersion": "0.0.1-rc.39"
+    },
+    {
+      "name": "Competition",
+      "address": "0xb30796E3d96aA720F7c478e32eCD8a7c97335f54",
+      "arcVersion": "0.0.1-rc.39"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.38"
+}

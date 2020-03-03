@@ -110,25 +110,25 @@ function updateProposalAfterRedemption(
   ) as ContributionRewardProposal;
   if (ent != null) {
     let cr = ContributionReward.bind(contributionRewardAddress);
-    if (type === 0) {
+    if (type == 0) {
       ent.alreadyRedeemedReputationPeriods = cr.getRedeemedPeriods(
         proposalId,
         ent.avatar as Address,
         BigInt.fromI32(0),
       );
-    } else if (type === 1) {
+    } else if (type == 1) {
       ent.alreadyRedeemedNativeTokenPeriods = cr.getRedeemedPeriods(
         proposalId,
         ent.avatar as Address,
         BigInt.fromI32(1),
       );
-    } else if (type === 2) {
+    } else if (type == 2) {
       ent.alreadyRedeemedEthPeriods = cr.getRedeemedPeriods(
         proposalId,
         ent.avatar as Address,
         BigInt.fromI32(2),
       );
-    } else if (type === 3) {
+    } else if (type == 3) {
       ent.alreadyRedeemedExternalTokenPeriods = cr.getRedeemedPeriods(
         proposalId,
         ent.avatar as Address,
@@ -138,7 +138,7 @@ function updateProposalAfterRedemption(
     store.set('ContributionRewardProposal', proposalId.toHex(), ent);
     let reward = GPReward.load(crypto.keccak256(concat(proposalId, ent.beneficiary)).toHex());
     if ((reward !== null && shouldRemoveAccountFromUnclaimed(reward as GPReward)) ||
-    (reward === null && shouldRemoveContributorFromUnclaimed(ent))) {
+    (reward == null && shouldRemoveContributorFromUnclaimed(ent))) {
       removeRedeemableRewardOwner(proposalId, ent.beneficiary);
     }
   }
@@ -161,7 +161,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
-  ent.passed = (event.params._param.toI32() === 1);
+  ent.passed = (event.params._param.toI32() == 1);
   ent.proposalId = event.params._proposalId;
   store.set('ContributionRewardProposalResolved', ent.id, ent);
 }

@@ -1,11 +1,12 @@
 import { Address, BigInt, Bytes , crypto, EthereumValue, log , SmartContract, store} from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
-import { ContributionRewardProposal,
+import { ContractInfo,
+         ContributionRewardProposal,
          ControllerScheme,
          GPReward,
          GPRewardsHelper,
          PreGPReward,
-         Proposal } from '../types/schema';
+         Proposal} from '../types/schema';
 import { concat , equalsBytes , equalStrings } from '../utils';
 import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
 
@@ -30,7 +31,7 @@ export function insertGPRewardsToHelper(proposalId: Bytes, beneficiary: Address)
            break;
        }
   }
-  if (i === gpRewards.length) { // not exist
+  if (i == gpRewards.length) { // not exist
       updatePreGPReward(rewardId, beneficiary);
       gpRewards.push(rewardId);
       gpRewardsHelper.gpRewards = gpRewards;
@@ -95,31 +96,42 @@ export function shouldRemoveAccountFromUnclaimed(reward: GPReward): boolean {
   }
 
   return ((reward.reputationForVoter == null ||
-    reward.reputationForVoterRedeemedAt.isZero() === false) &&
+    reward.reputationForVoterRedeemedAt.isZero() == false) &&
      (reward.reputationForProposer == null ||
-        reward.reputationForProposerRedeemedAt.isZero() === false) &&
+        reward.reputationForProposerRedeemedAt.isZero() == false) &&
         (reward.tokensForStaker == null ||
-          reward.tokensForStakerRedeemedAt.isZero() === false) &&
+          reward.tokensForStakerRedeemedAt.isZero() == false) &&
           (reward.daoBountyForStaker == null ||
-            reward.daoBountyForStakerRedeemedAt.isZero() === false)
+            reward.daoBountyForStakerRedeemedAt.isZero() == false)
      );
 }
 
 export function shouldRemoveContributorFromUnclaimed(proposal: ContributionRewardProposal): boolean {
+  let contractInfo = ContractInfo.load(proposal.beneficiary.toHex());
+  if (contractInfo != null && equalStrings(contractInfo.name, 'ContributionRewardExt')) {
+    return (
+      (proposal.nativeTokenReward.isZero() ||
+      (proposal.alreadyRedeemedNativeTokenPeriods !== null)) &&
+      (proposal.externalTokenReward.isZero() ||
+      (proposal.alreadyRedeemedExternalTokenPeriods !== null)) &&
+      (proposal.ethReward.isZero() ||
+      (proposal.alreadyRedeemedEthPeriods !== null))
+    );
+   }
   // Note: This doesn't support the period feature of ContributionReward
   return (
     (proposal.reputationReward.isZero() ||
     (proposal.alreadyRedeemedReputationPeriods !== null &&
-      BigInt.compare(proposal.alreadyRedeemedReputationPeriods as BigInt, proposal.periods) === 0)) &&
+      BigInt.compare(proposal.alreadyRedeemedReputationPeriods as BigInt, proposal.periods) == 0)) &&
     (proposal.nativeTokenReward.isZero() ||
     (proposal.alreadyRedeemedNativeTokenPeriods !== null &&
-    BigInt.compare(proposal.alreadyRedeemedNativeTokenPeriods as BigInt, proposal.periods) === 0)) &&
+    BigInt.compare(proposal.alreadyRedeemedNativeTokenPeriods as BigInt, proposal.periods) == 0)) &&
     (proposal.externalTokenReward.isZero() ||
     (proposal.alreadyRedeemedExternalTokenPeriods !== null &&
-    BigInt.compare(proposal.alreadyRedeemedExternalTokenPeriods as BigInt, proposal.periods) === 0)) &&
+    BigInt.compare(proposal.alreadyRedeemedExternalTokenPeriods as BigInt, proposal.periods) == 0)) &&
     (proposal.ethReward.isZero() ||
     (proposal.alreadyRedeemedEthPeriods !== null &&
-    BigInt.compare(proposal.alreadyRedeemedEthPeriods as BigInt, proposal.periods) === 0)));
+    BigInt.compare(proposal.alreadyRedeemedEthPeriods as BigInt, proposal.periods) == 0)));
 }
 
 export function insertGPRewards(
@@ -133,13 +145,13 @@ export function insertGPRewards(
   let i = 0;
   let gpRewards: string[] = getGPRewardsHelper(proposalId.toHex()).gpRewards as string[];
   let controllerScheme = ControllerScheme.load(proposal.scheme.toString());
-  if (proposal.contributionReward !== null && equalStrings(proposal.winningOutcome, 'Pass')) {
+  if ((proposal.contributionReward !== null && equalStrings(proposal.winningOutcome, 'Pass')) && state !== 1) {
     let contributionRewardProposal = ContributionRewardProposal.load(proposal.contributionReward.toString());
     addRedeemableRewardOwner(proposal, contributionRewardProposal.beneficiary);
   }
   for (i = 0; i < gpRewards.length; i++) {
     let gpReward = PreGPReward.load(gpRewards[i]);
-    if (gpReward === null) { continue; }
+    if (gpReward == null) { continue; }
     let redeemValues: BigInt[];
     redeemValues[0] = BigInt.fromI32(0);
     redeemValues[1] = BigInt.fromI32(0);
@@ -153,7 +165,7 @@ export function insertGPRewards(
         } else {
             redeemValues = callResult.value;
         }
-        if (state === 2) {// call redeemDaoBounty only on execute
+        if (state == 2) {// call redeemDaoBounty only on execute
            let callResultRedeemDaoBounty =
            genesisProtocol.try_redeemDaoBounty(proposalId, gpReward.beneficiary as Address);
            if (callResultRedeemDaoBounty.reverted) {
@@ -186,7 +198,7 @@ export function insertGPRewards(
               break;
             }
         }
-        if (idx === accountsWithUnclaimedRewards.length) {
+        if (idx == accountsWithUnclaimedRewards.length) {
           addRedeemableRewardOwner(proposal, gpReward.beneficiary);
         }
     } else {
@@ -221,16 +233,16 @@ function updateGPReward(id: string,
         reward.reputationForProposerRedeemedAt = BigInt.fromI32(0);
         reward.daoBountyForStakerRedeemedAt = BigInt.fromI32(0);
       }
-      if (reputationForVoter.isZero() === false) {
+      if (reputationForVoter.isZero() == false) {
           reward.reputationForVoter = reputationForVoter;
       }
-      if (tokensForStaker.isZero() === false) {
+      if (tokensForStaker.isZero() == false) {
           reward.tokensForStaker = tokensForStaker;
       }
-      if (reputationForProposer.isZero() === false) {
+      if (reputationForProposer.isZero() == false) {
           reward.reputationForProposer = reputationForProposer;
       }
-      if (daoBountyForStaker.isZero() === false) {
+      if (daoBountyForStaker.isZero() == false) {
           reward.daoBountyForStaker = daoBountyForStaker;
           let genesisProtocol = GenesisProtocol.bind(gpAddress as Address);
           reward.tokenAddress = genesisProtocol.stakingToken();

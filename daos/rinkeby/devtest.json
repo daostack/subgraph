@@ -1,0 +1,15 @@
+{
+    "name": "DevTest",
+    "Avatar": "0xBeB9C86C8D54e5C7cA2a7Dc67E50419FB98D9c05",
+    "DAOToken": "0x57bae8c98F913c10bBC23342596dE2E58E45466D",
+    "Reputation": "0x57bE0441440dFA2faE4Dd80Ec355Bc6db8257563",
+    "Controller": "0xB460481416B688b7E1c0D407f033567C687Fb607",
+    "Schemes": [
+      {
+        "name": "GenericScheme",
+        "alias": "GenericSchemeAlias",
+        "address": "0xad96d9685783bF29cB31eB038A44eC808aC17265"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.31"
+  }

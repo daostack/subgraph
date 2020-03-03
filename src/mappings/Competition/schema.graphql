@@ -16,6 +16,10 @@ type CompetitionProposal @entity {
     winningSuggestions: [CompetitionSuggestion!]
     votes: [CompetitionVote!] @derivedFrom(field: "proposal")
     createdAt: BigInt!
+    totalSuggestions: BigInt!
+    totalVotes: BigInt!
+    numberOfWinningSuggestions: BigInt!
+    admin: Bytes!
 }
 
 type CompetitionSuggestion @entity {
@@ -29,6 +33,7 @@ type CompetitionSuggestion @entity {
     fulltext: [String!]
     tags: [Tag!]
     suggester: Bytes!
+    beneficiary: Bytes!
     votes: [CompetitionVote!] @derivedFrom(field: "suggestion")
     totalVotes: BigInt!
     createdAt: BigInt!

@@ -1,0 +1,45 @@
+{
+    "name": "BuffiDAO",
+    "Avatar": "0x45cF7D5c503B6417d570929368b8f4c4567aD9Eb",
+    "DAOToken": "0x62BB92a45e4132449cAB13670d858d9320b3F9Df",
+    "Reputation": "0x1d995A9898D20923DB530d7aA505FB418e7c72dD",
+    "Controller": "0x70898C9c222A8221B4445498eF3F7cEC995b3768",
+    "Schemes": [
+      {
+        "name": "ReputationFromToken",
+        "alias": "ReputationFromToken",
+        "address": "0x6A0c2D5F8fd6c0D25081e905341C28BfA90bB8eA",
+        "arcVersion": "0.0.1-rc.39"
+      },
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0xF8AfC6106b91545171ecdc13aCb48AB5f6363702",
+        "arcVersion": "0.0.1-rc.39"
+      },
+      {
+        "name": "ReputationAdmin",
+        "alias": "ReputationAdmin",
+        "address": "0x0Ea2836Fe6612e79f8380a2eC8Df18022a67A28b",
+        "arcVersion": "0.0.1-rc.39"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "ContributionRewardExt",
+        "address": "0xF8AfC6106b91545171ecdc13aCb48AB5f6363702",
+        "arcVersion": "0.0.1-rc.39"
+      },
+      {
+        "name": "Competition",
+        "address": "0xFE0BE41f95A98CfA9D3FD4cCc57fB99B75545ced",
+        "arcVersion": "0.0.1-rc.39"
+      },
+      {
+        "name": "RepAllocation",
+        "address": "0x896e70f77FC1B58DBfC6674DFaDAF4C414fbceBc",
+        "arcVersion": "0.0.1-rc.39"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.39"
+  }

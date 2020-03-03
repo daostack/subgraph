@@ -1,0 +1,28 @@
+{
+  "name": "tBTC DAO",
+  "Avatar": "0x5721b7851509030d471A8507a2f31a2d7CE481d9",
+  "DAOToken": "0xD9420DE6fDfCb7ed1D739D7a09d96e7750486249",
+  "Reputation": "0x6F100fFA117e1588390d74f9CAB2E63Dd3D5b135",
+  "Controller": "0x688824DfA2b477e50f3F9f8F77b871B1eF3fC8D7",
+  "Schemes": [
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x8A568dd644b835d1BC31397789814fCc21581Cf6",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x8A568dd644b835d1BC31397789814fCc21581Cf6",
+      "arcVersion": "0.0.1-rc.40"
+    },
+    {
+      "name": "Competition",
+      "address": "0x98369ECFa578DE3E87d95dD5A650eF3226170A57",
+      "arcVersion": "0.0.1-rc.40"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.40"
+}

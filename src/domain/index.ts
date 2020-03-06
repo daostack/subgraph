@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, Bytes, Entity, store, Value } from '@graphprotocol/graph-ts';
 import { setContractsInfo, setTemplatesInfo } from '../contractsInfo';
 import { Transfer } from '../types/DAOToken/DAOToken';
 import {
@@ -36,23 +36,23 @@ import {
 import {
   daoBountyRedemption,
   insertGPRewards,
-  insertGPRewardsToHelper ,
-  reputationRedemption ,
+  insertGPRewardsToHelper,
+  reputationRedemption,
   tokenRedemption,
 } from './reward';
+import { writeSignal } from './signal';
 import { insertStake } from './stake';
 import { getToken, insertToken, updateTokenTotalSupply } from './token';
 import { insertVote } from './vote';
-import { writesignal } from './signal'
 
-function isProposalValid(proposalId: string ): boolean {
+function isProposalValid(proposalId: string): boolean {
   let p = Proposal.load(proposalId);
-  return  ((p != null) && (equalsBytes(p.paramsHash, new Bytes(32)) == false));
+  return ((p != null) && (equalsBytes(p.paramsHash, new Bytes(32)) == false));
 }
 
 function handleGPProposalPrivate(proposalId: string): void {
-   let gpProposal = GenesisProtocolProposal.load(proposalId);
-   if (gpProposal != null) {
+  let gpProposal = GenesisProtocolProposal.load(proposalId);
+  if (gpProposal != null) {
     updateGPProposal(
       gpProposal.address as Address,
       gpProposal.proposalId,
@@ -67,7 +67,7 @@ function handleGPProposalPrivate(proposalId: string): void {
       3, // Queued
       gpProposal.address as Address,
     );
-   }
+  }
 }
 
 export function handleNewContributionProposal(
@@ -93,26 +93,26 @@ export function handleNewContributionProposal(
 }
 
 export function handleNewSchemeRegisterProposal(
-   proposalId: string,
-   timestamp: BigInt,
-   avatar: Bytes,
-   votingMachine: Bytes,
-   descriptionHash: string,
-   schemeAddress: Address,
- ): void {
-    if (!daoModule.exists(avatar as Address)) {
-      return;
-    }
-    updateSRProposal(
-      proposalId,
-      timestamp,
-      avatar as Address,
-      votingMachine as Address,
-      descriptionHash,
-      schemeAddress,
-    );
-    handleGPProposalPrivate(proposalId);
- }
+  proposalId: string,
+  timestamp: BigInt,
+  avatar: Bytes,
+  votingMachine: Bytes,
+  descriptionHash: string,
+  schemeAddress: Address,
+): void {
+  if (!daoModule.exists(avatar as Address)) {
+    return;
+  }
+  updateSRProposal(
+    proposalId,
+    timestamp,
+    avatar as Address,
+    votingMachine as Address,
+    descriptionHash,
+    schemeAddress,
+  );
+  handleGPProposalPrivate(proposalId);
+}
 
 export function handleNewCallProposal(
   avatar: Address,
@@ -139,12 +139,12 @@ export function handleStake(event: Stake): void {
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  if (event.params._vote.toI32() ==  1) {
+  if (event.params._vote.toI32() == 1) {
     proposal.stakesFor = proposal.stakesFor.plus(event.params._amount);
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
-  proposal.confidence =  (new BigDecimal(proposal.stakesFor)) / (new BigDecimal(proposal.stakesAgainst));
+  proposal.confidence = (new BigDecimal(proposal.stakesFor)) / (new BigDecimal(proposal.stakesAgainst));
   saveProposal(proposal);
   insertStake(
     eventId(event),
@@ -193,16 +193,12 @@ export function handleVoteProposal(event: VoteProposal): void {
 
 export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {
   if (isProposalValid(proposalId.toHex())) {
-      updateProposalconfidence(proposalId, confidenceThreshold);
+    updateProposalconfidence(proposalId, confidenceThreshold);
   }
 }
 
-export function handleRegisterScheme(avatar: Address,
-                                     nativeTokenAddress: Address,
-                                     nativeReputationAddress: Address,
-                                     scheme: Address ,
-                                     paramsHash: Bytes,
-                                     timestamp: BigInt): void {
+export function handleRegisterScheme(avatar: Address, nativeTokenAddress: Address, nativeReputationAddress: Address,
+                                     scheme: Address, paramsHash: Bytes, timestamp: BigInt): void {
   // Detect the first register scheme event which indicates a new DAO
   let isFirstRegister = store.get(
     'FirstRegisterSchemeFlag',
@@ -210,7 +206,7 @@ export function handleRegisterScheme(avatar: Address,
   );
   if (isFirstRegister == null) {
     setContractsInfo();
-    let dao = daoModule.insertNewDAO(avatar, nativeTokenAddress , nativeReputationAddress);
+    let dao = daoModule.insertNewDAO(avatar, nativeTokenAddress, nativeReputationAddress);
     insertToken(hexToAddress(dao.nativeToken), avatar.toHex());
     insertReputation(
       hexToAddress(dao.nativeReputation),
@@ -266,20 +262,20 @@ export function handleNativeTokenTransfer(event: Transfer): void {
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
-   if (isProposalValid(event.params._proposalId.toHex())) {
-       updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
-    }
+  if (isProposalValid(event.params._proposalId.toHex())) {
+    updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
+  }
 }
 
 export function handleStateChange(event: StateChange): void {
   if (isProposalValid(event.params._proposalId.toHex())) {
-      updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
-      if ((event.params._proposalState == 1) ||
-          (event.params._proposalState == 2)) {
-          insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
-      }
+    updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
+    if ((event.params._proposalState == 1) ||
+      (event.params._proposalState == 2)) {
+      insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
+    }
 
-      addProposalStateChangeEvent(event.params._proposalId, event.transaction.from, event.block.timestamp);
+    addProposalStateChangeEvent(event.params._proposalId, event.transaction.from, event.block.timestamp);
   }
 }
 
@@ -289,20 +285,20 @@ export function handleExecutionStateChange(event: GPExecuteProposal): void {
   }
 }
 
-export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): void {
-   if (isProposalValid(proposalId.toHex())) {
-       if (type == 'token') {
-           tokenRedemption(proposalId, beneficiary, timestamp);
-       } else if (type == 'reputation') {
-           reputationRedemption(proposalId, beneficiary, timestamp);
-       } else {
-           daoBountyRedemption(proposalId, beneficiary, timestamp);
-       }
+export function handleGPRedemption(proposalId: Bytes, beneficiary: Address, timestamp: BigInt, type: string): void {
+  if (isProposalValid(proposalId.toHex())) {
+    if (type == 'token') {
+      tokenRedemption(proposalId, beneficiary, timestamp);
+    } else if (type == 'reputation') {
+      reputationRedemption(proposalId, beneficiary, timestamp);
+    } else {
+      daoBountyRedemption(proposalId, beneficiary, timestamp);
     }
+  }
 }
 
 export function daoRegister(dao: Address, tag: string): void {
-   daoModule.register(dao, tag);
+  daoModule.register(dao, tag);
 }
 
 export function addDaoMember(reputationHolder: ReputationHolder): void {
@@ -322,14 +318,14 @@ export function addDaoMember(reputationHolder: ReputationHolder): void {
 }
 
 export function removeDaoMember(reputationHolder: ReputationHolder): void {
-   let dao = getReputation(reputationHolder.contract.toHex()).dao;
-   if (dao == null) {
-     // reputation that's not attached to a DAO
-     return;
-   }
-   daoModule.decreaseDAOmembersCount(dao);
+  let dao = getReputation(reputationHolder.contract.toHex()).dao;
+  if (dao == null) {
+    // reputation that's not attached to a DAO
+    return;
+  }
+  daoModule.decreaseDAOmembersCount(dao);
 }
 
-export function addSignal(signalId: string, proposalId: string): void{
-  writesignal(signalId,proposalId);
+export function addSignal(signalId: string, proposalId: string): void {
+  writeSignal(signalId, proposalId);
 }

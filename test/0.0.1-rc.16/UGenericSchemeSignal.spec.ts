@@ -14,8 +14,7 @@ const ActionMock = require('@daostack/migration/contracts/' + getArcVersion() + 
 const GenericScheme = require('@daostack/migration/contracts/' + getArcVersion() + '/GenericScheme.json');
 const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
 
-
-const maintest = async (web3,addresses,opts,proposalIPFSData,matchto) => {
+const maintest = async (web3, addresses, opts, proposalIPFSData, matchto) => {
   const accounts = web3.eth.accounts.wallet;
 
   const genericScheme = new web3.eth.Contract(
@@ -60,7 +59,7 @@ const maintest = async (web3,addresses,opts,proposalIPFSData,matchto) => {
   }
 
   const { proposalId: p1, timestamp: p1Creation } = await propose();
-  //console.log(p1)
+  // console.log(p1)
   const getProposal = `{
     proposal(id: "${p1}") {
         id
@@ -90,8 +89,7 @@ const maintest = async (web3,addresses,opts,proposalIPFSData,matchto) => {
     }
 }`;
 
-
-  let proposal = (await sendQuery(getProposal,90000)).proposal;
+  let proposal = (await sendQuery(getProposal, 90000)).proposal;
   expect(proposal).toMatchObject({
     id: p1,
     descriptionHash: descHash,
@@ -177,8 +175,7 @@ const maintest = async (web3,addresses,opts,proposalIPFSData,matchto) => {
       id
       data
     }
-  }`
-
+  }`;
 
   // const metaq = `{
   //   debugs{
@@ -187,13 +184,10 @@ const maintest = async (web3,addresses,opts,proposalIPFSData,matchto) => {
   //   }
   // }`
 
-
   const metadata = await sendQuery(metaq, 15000);
   expect(metadata).toMatchObject(matchto);
 
-}
-
-
+};
 
 describe('Generic Signal Scheme', () => {
   let web3;
@@ -217,18 +211,17 @@ describe('Generic Signal Scheme', () => {
     };
 
     let matchto = {
-      signals:[
+      signals: [
          {
            data:
              '{"Header":"https://de.wikipedia.org/wiki/Wald#/media/Datei:Laurisilva_en_el_Cubo_de_la_Galga.jpg"}',
            id:
-             '0x86e9fe552e75e4fc51f46e4efc128628ecd5ada7'
-         }
-       ]
-    }
+             '0x86e9fe552e75e4fc51f46e4efc128628ecd5ada7',
+         },
+       ],
+    };
 
-    const test = await maintest(web3,addresses,opts,proposalIPFSData,matchto)
-
+    const test = await maintest(web3, addresses, opts, proposalIPFSData, matchto);
 
   }, 200000);
 
@@ -243,20 +236,19 @@ describe('Generic Signal Scheme', () => {
     };
 
     let matchto = {
-      signals:[
+      signals: [
          {
            data:
              '{"Header":"https://de.wikipedia.org/wiki/Wald#/media/Datei:Laurisilva_en_el_Cubo_de_la_Galga.jpg","Icon":"https://en.wikipedia.org/wiki/River#/media/File:Melting_Toe_of_Athabasca_Glacier.jpg"}',
            id:
-             '0x86e9fe552e75e4fc51f46e4efc128628ecd5ada7'
-         }
-       ]
-    }
+             '0x86e9fe552e75e4fc51f46e4efc128628ecd5ada7',
+         },
+       ],
+    };
 
-    const test = await maintest(web3,addresses,opts,proposalIPFSData,matchto)
+    const test = await maintest(web3, addresses, opts, proposalIPFSData, matchto);
 
   }, 200000);
-
 
   it('generic scheme proposal replace ', async () => {
 
@@ -269,18 +261,17 @@ describe('Generic Signal Scheme', () => {
     };
 
     let matchto = {
-      signals:[
+      signals: [
          {
            data:
              '{"Header":"https://de.wikipedia.org/wiki/Wasserfall#/media/Datei:Russell_Falls_2.jpg","Icon":"https://en.wikipedia.org/wiki/River#/media/File:Melting_Toe_of_Athabasca_Glacier.jpg"}',
            id:
-             '0x86e9fe552e75e4fc51f46e4efc128628ecd5ada7'
-         }
-       ]
-    }
+             '0x86e9fe552e75e4fc51f46e4efc128628ecd5ada7',
+         },
+       ],
+    };
 
-    const test = await maintest(web3,addresses,opts,proposalIPFSData,matchto)
-
+    const test = await maintest(web3, addresses, opts, proposalIPFSData, matchto);
 
   }, 200000);
 

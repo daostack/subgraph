@@ -49,8 +49,8 @@ export function handleProposalExecuted(
     ent.returnValue = event.params._genericCallReturnValue;
   }
 
-  var signalId = event.params._avatar.toHex();
-  var proposalId = event.params._proposalId.toHex();
+  let signalId = event.params._avatar.toHex();
+  let proposalId = event.params._proposalId.toHex();
   domain.addSignal(signalId, proposalId);
 
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);

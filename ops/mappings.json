@@ -9,6 +9,13 @@
         "arcVersion": "0.0.1-rc.16"
       },
       {
+        "name": "NewSignalScheme",
+        "dao": "address",
+        "mapping": "SignalScheme",
+        "arcVersion": "0.0.1-rc.37",
+        "address": "0x383A20B3635a10a4da8f733E8eA256cBcAcB4D4E"
+      },
+      {
         "name": "GenesisProtocol",
         "contractName": "GenesisProtocol",
         "dao": "base",

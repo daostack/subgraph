@@ -35,6 +35,10 @@ describe('Generic Signal Scheme', () => {
   let signalScheme;
   let genericScheme;
 
+  /**
+   * Deploy a DAO with Generic Scheme (that has address of the SignalScheme)
+   *
+   */
   beforeAll(async () => {
     web3 = await getWeb3();
     const addresses = getContractAddresses();
@@ -193,50 +197,24 @@ describe('Generic Signal Scheme', () => {
 
 });
 
+/**
+ * Creates a Signal Scheme proposal and then votes on it until it is executed (>50%)
+ */
 const mainTest = async (web3, avatar, genericScheme, genesisProtocol, signalScheme, proposalIPFSData, matchto) => {
   const accounts = web3.eth.accounts.wallet;
 
   const descHash = await writeProposalIPFS(proposalIPFSData);
   const callData = await signalScheme.methods.signal(descHash).encodeABI();
 
-  async function propose() {
-    const prop = genericScheme.methods.proposeCall(callData, 0, descHash);
-    const proposalId = await prop.call();
-    const { blockNumber } = await prop.send();
-    const { timestamp } = await web3.eth.getBlock(blockNumber);
-    return { proposalId, timestamp };
-  }
-
-  const [PASS, FAIL] = [1, 2];
-  async function vote({ proposalId, outcome, voter, amount = 0 }) {
-    const { blockNumber } = await genesisProtocol.methods.vote(proposalId, outcome, amount, voter)
-      .send({ from: voter, gas: 5000000 });
-    const { timestamp } = await web3.eth.getBlock(blockNumber);
-    return timestamp;
-  }
-
-  const { proposalId: p1 } = await propose();
-
-  await vote({
-    proposalId: p1,
-    outcome: PASS,
-    amount: 0,
-    voter: accounts[0].address,
-  });
-
-  await vote({
-    proposalId: p1,
-    outcome: PASS,
-    amount: 0,
-    voter: accounts[1].address,
-  });
-
-  await vote({
-    proposalId: p1,
-    outcome: PASS,
-    amount: 0,
-    voter: accounts[2].address,
-  });
+  const prop = genericScheme.methods.proposeCall(callData, 0, descHash);
+  const proposalId = await prop.call();
+  await prop.send();
+  await genesisProtocol.methods.vote(proposalId, 1 /** YES */, 0, accounts[0].address)
+    .send({ from: accounts[0].address });
+  await genesisProtocol.methods.vote(proposalId, 1 /** YES */, 0, accounts[1].address)
+    .send({ from: accounts[1].address });
+  await genesisProtocol.methods.vote(proposalId, 1 /** YES */, 0, accounts[2].address)
+    .send({ from: accounts[2].address });
 
   const metaq = `{
       signal(id: "${avatar.options.address.toLowerCase()}"){

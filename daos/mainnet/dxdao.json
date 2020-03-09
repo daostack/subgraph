@@ -16,5 +16,11 @@
     "alias": "GenericSchemeENSRegistry",
     "address": "0x46df3ea38a680fbc84e744d92b0a8ec717b2ea7e",
     "arcVersion": "0.0.1-rc.36"
+  },
+  {
+    "name": "GenericScheme",
+    "alias": "GenericSchemeENSETHRegistry",
+    "address": "0x973ce4e81bdc3bd39f46038f3aaa928b04558b08",
+    "arcVersion": "0.0.1-rc.36"
   }]
 }

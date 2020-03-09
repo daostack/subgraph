@@ -1,6 +1,0 @@
-abis:
-  - NewSignalScheme
-
-eventHandlers:
-  - event: SignalLog(indexed address,string)
-    handler: handleSignal

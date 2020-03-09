@@ -1,5 +1,5 @@
 import { Bytes, ipfs, json, JSONValueKind, store } from '@graphprotocol/graph-ts';
-import { Signal } from '../types/schema';
+import { Proposal, Signal } from '../types/schema';
 import { debug } from '../utils';
 
 function getSignal(id: string): Signal {
@@ -75,12 +75,14 @@ function appendDict(keypair: string, signal: Signal, curlybraceclosed: string, c
   signal.save();
 }
 
-function readProposal(id: string, proposalIpfsId: string): void {
+function readProposal(id: string, proposalId: string): void {
   let signal = getSignal(id);
   let key = '';
   let value = '';
+  let proposal = store.get('Proposal', proposalId) as Proposal;
+  let proposalIpfsId = proposal.descriptionHash;
   let ipfsData = ipfs.cat('/ipfs/' + proposalIpfsId);
-  debug('Proposal ID ' + proposalIpfsId);
+  debug('IPFS: ' + ipfsData.toString());
   if (ipfsData != null && ipfsData.toString() !== '{}') {
 
     let descJson = json.fromBytes(ipfsData as Bytes);
@@ -89,13 +91,15 @@ function readProposal(id: string, proposalIpfsId: string): void {
     }
     if (descJson.toObject().get('key') != null) {
       key = descJson.toObject().get('key').toString();
-      debug(key);
+      debug('Key: ' + key);
     }
     if (descJson.toObject().get('value') != null) {
       value = descJson.toObject().get('value').toString();
-      debug(value);
+      debug('Value: ' + value);
     }
 
   }
+  debug('Key2: ' + key);
+  debug('Value2: ' + value);
   generateString(key, value, signal);
 }

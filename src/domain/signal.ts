@@ -92,14 +92,11 @@ function readProposal(id: string, proposalId: string): void {
     if (descJson.toObject().get('key') != null) {
       key = descJson.toObject().get('key').toString();
       debug('Key: ' + key);
+      if (descJson.toObject().get('value') != null) {
+        value = descJson.toObject().get('value').toString();
+        debug('Value: ' + value);
+      }
+      generateString(key, value, signal);
     }
-    if (descJson.toObject().get('value') != null) {
-      value = descJson.toObject().get('value').toString();
-      debug('Value: ' + value);
-    }
-
   }
-  debug('Key2: ' + key);
-  debug('Value2: ' + value);
-  generateString(key, value, signal);
 }

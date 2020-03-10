@@ -1,6 +1,6 @@
 import { BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
 import {
-  Competition, NewCompetitionProposal, NewSuggestion, NewVote, Redeem, SnapshotBlock,
+  NewCompetitionProposal, NewSuggestion, NewVote, Redeem, SnapshotBlock,
 } from '../../types/Competition/Competition';
 
 import { getIPFSData } from '../../domain/proposal';

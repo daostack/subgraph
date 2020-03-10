@@ -222,8 +222,8 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
   } else if (state == 3) {
     // Queued
     proposal.stage = 'Queued';
-    proposal.closingAt =  proposal.createdAt +
-                          GenesisProtocolParam.load(proposal.genesisProtocolParams).queuedVotePeriodLimit;
+    proposal.closingAt =
+      proposal.createdAt.plus(GenesisProtocolParam.load(proposal.genesisProtocolParams).queuedVotePeriodLimit);
     if (controllerScheme != null) {
       controllerScheme.numberOfQueuedProposals = controllerScheme
       .numberOfQueuedProposals.plus(BigInt.fromI32(1));
@@ -235,8 +235,9 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     // PreBoosted
     proposal.stage = 'PreBoosted';
     proposal.preBoostedAt = gpTimes[2];
-    proposal.closingAt =  proposal.preBoostedAt +
-                          GenesisProtocolParam.load(proposal.genesisProtocolParams).preBoostedVotePeriodLimit;
+    proposal.closingAt =
+      proposal.preBoostedAt.plus(GenesisProtocolParam.load(proposal.genesisProtocolParams).preBoostedVotePeriodLimit);
+
     if (controllerScheme != null) {
       controllerScheme.numberOfPreBoostedProposals = controllerScheme
       .numberOfPreBoostedProposals.plus(BigInt.fromI32(1));
@@ -248,8 +249,8 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     // Boosted
     proposal.boostedAt = gpTimes[1];
     proposal.stage = 'Boosted';
-    proposal.closingAt =  proposal.boostedAt +
-                          GenesisProtocolParam.load(proposal.genesisProtocolParams).boostedVotePeriodLimit;
+    proposal.closingAt =
+      proposal.boostedAt.plus(GenesisProtocolParam.load(proposal.genesisProtocolParams).boostedVotePeriodLimit);
     if (controllerScheme != null) {
       controllerScheme.numberOfBoostedProposals = controllerScheme
       .numberOfBoostedProposals.plus(BigInt.fromI32(1));
@@ -260,8 +261,10 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
   } else if (state == 6) {
     // QuietEndingPeriod
     proposal.quietEndingPeriodBeganAt = gpTimes[1];
-    proposal.closingAt =  proposal.quietEndingPeriodBeganAt +
-                          GenesisProtocolParam.load(proposal.genesisProtocolParams).quietEndingPeriod;
+    proposal.closingAt =
+      proposal.quietEndingPeriodBeganAt.plus(
+        GenesisProtocolParam.load(proposal.genesisProtocolParams).quietEndingPeriod,
+      );
     proposal.stage = 'QuietEndingPeriod';
   }
   if (controllerScheme != null) {
@@ -318,8 +321,8 @@ export function updateGPProposal(
   saveDAO(dao);
   let reputation = getReputation(dao.nativeReputation);
   proposal.totalRepWhenCreated = reputation.totalSupply;
-  proposal.closingAt =  proposal.createdAt +
-                        GenesisProtocolParam.load(proposal.genesisProtocolParams).queuedVotePeriodLimit;
+  proposal.closingAt =
+    proposal.createdAt.plus(GenesisProtocolParam.load(proposal.genesisProtocolParams).queuedVotePeriodLimit);
   let controllerScheme = ControllerScheme.load(proposal.scheme);
   if (controllerScheme != null) {
     controllerScheme.numberOfQueuedProposals = controllerScheme.numberOfQueuedProposals.plus(BigInt.fromI32(1));

@@ -1,5 +1,4 @@
-import { Address, BigDecimal, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
-import { setContractsInfo, setTemplatesInfo } from '../contractsInfo';
+import { Address, BigDecimal, BigInt, Bytes} from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/DAOToken/DAOToken';
 import {
   ExecuteProposal,
@@ -9,10 +8,10 @@ import {
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
-import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
-import { concat, equalsBytes, eventId, hexToAddress } from '../utils';
+import { GenesisProtocolProposal, Proposal, ReputationHolder } from '../types/schema';
+import { equalsBytes, eventId } from '../utils';
 import * as daoModule from './dao';
-import { addNewDAOEvent, addNewReputationHolderEvent, addProposalStateChangeEvent } from './event';
+import { addNewReputationHolderEvent, addProposalStateChangeEvent } from './event';
 import * as gpqueueModule from './gpqueue';
 import {
   getProposal,
@@ -143,7 +142,7 @@ export function handleStake(event: Stake): void {
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
-  proposal.confidence =  (new BigDecimal(proposal.stakesFor)) / (new BigDecimal(proposal.stakesAgainst));
+  proposal.confidence = (new BigDecimal(proposal.stakesFor)) / (new BigDecimal(proposal.stakesAgainst));
   saveProposal(proposal);
   insertStake(
     eventId(event),

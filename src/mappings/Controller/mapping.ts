@@ -1,18 +1,12 @@
-import 'allocator/arena';
-
 import {
   Address,
   BigInt,
   Bytes,
   crypto,
-  Entity,
   log,
   store,
 } from '@graphprotocol/graph-ts';
 
-import { Avatar } from '../../types/Controller/Avatar';
-import { DAOToken } from '../../types/Controller/DAOToken';
-import { Reputation } from '../../types/Controller/Reputation';
 import { GenesisProtocol } from '../../types/GenesisProtocol/GenesisProtocol';
 
 import * as domain from '../../domain';
@@ -31,12 +25,9 @@ import {
   ControllerUnregisterScheme,
   ControllerUpgradeController,
   DAO,
-  FirstRegisterScheme,
   GenericSchemeParam,
   GenesisProtocolParam,
-  ReputationContract,
   SchemeRegistrarParam,
-  TokenContract,
 } from '../../types/schema';
 
 import {
@@ -255,7 +246,7 @@ export function setContributionRewardParams(avatar: Address,
                                             scheme: Address,
                                             vmAddress: Address,
                                             vmParamsHash: Bytes): void {
-    setGPParams(vmAddress, vmParamsHash);
+    setGPParams(vmAddress, vmParamsHash, avatar);
     let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
     let contributionRewardParams = new ContributionRewardParam(scheme.toHex());
     contributionRewardParams.votingMachine = vmAddress;
@@ -264,15 +255,14 @@ export function setContributionRewardParams(avatar: Address,
     controllerScheme.contributionRewardParams = contributionRewardParams.id;
     controllerScheme.save();
   }
-}
 
 export function setSchemeRegistrarParams(avatar: Address,
                                          scheme: Address,
                                          vmAddress: Address,
                                          voteRegisterParams: Bytes,
                                          voteRemoveParams: Bytes): void {
-   setGPParams(vmAddress, voteRegisterParams);
-   setGPParams(vmAddress, voteRemoveParams);
+   setGPParams(vmAddress, voteRegisterParams, avatar);
+   setGPParams(vmAddress, voteRemoveParams, avatar);
    let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
    let schemeRegistrarParams = new SchemeRegistrarParam(scheme.toHex());
    schemeRegistrarParams.votingMachine = vmAddress;
@@ -281,33 +271,29 @@ export function setSchemeRegistrarParams(avatar: Address,
    schemeRegistrarParams.save();
    controllerScheme.schemeRegistrarParams = schemeRegistrarParams.id;
    controllerScheme.save();
+}
 
-   export function setSchemeRegistrarParams(
+export function setContributionRewardExtParams(
   avatar: Address,
   scheme: Address,
   vmAddress: Address,
-  voteRegisterParams: Bytes,
-  voteRemoveParams: Bytes,
+  vmParamsHash: Bytes,
+  rewarder: Address,
 ): void {
-  setGPParams(vmAddress, voteRegisterParams, avatar);
-  setGPParams(vmAddress, voteRemoveParams, avatar);
-  let controllerScheme = ControllerScheme.load(
-    crypto.keccak256(concat(avatar, scheme)).toHex(),
-  );
+  setGPParams(vmAddress, vmParamsHash, avatar);
+  let controllerScheme = ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
+  let contributionRewardExtParams = new ContributionRewardExtParam(scheme.toHex());
+  contributionRewardExtParams.votingMachine = vmAddress;
+  contributionRewardExtParams.voteParams = vmParamsHash.toHex();
+  contributionRewardExtParams.rewarder = rewarder;
+  contributionRewardExtParams.save();
   if (controllerScheme != null) {
-    let schemeRegistrarParams = new SchemeRegistrarParam(
-      controllerScheme.paramsHash.toHex(),
-    );
-    schemeRegistrarParams.votingMachine = vmAddress;
-    schemeRegistrarParams.voteRegisterParams = voteRegisterParams.toHex();
-    schemeRegistrarParams.voteRemoveParams = voteRemoveParams.toHex();
-    schemeRegistrarParams.save();
-    controllerScheme.schemeRegistrarParams = schemeRegistrarParams.id;
+    controllerScheme.contributionRewardExtParams = contributionRewardExtParams.id;
     controllerScheme.save();
   }
 }
 
-   export function setGenericSchemeParams(
+export function setGenericSchemeParams(
   avatar: Address,
   scheme: Address,
   vmAddress: Address,

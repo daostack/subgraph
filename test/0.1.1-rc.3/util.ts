@@ -54,7 +54,7 @@ export async function getWeb3() {
 
 export function getContractAddresses() {
   const addresses = require(`@daostack/migration-experimental/migration.json`);
-  let arcVersion = '0.1.1-rc.3';
+  let arcVersion = '0.1.1-rc.4';
 
   return {
     ...addresses.private.package[arcVersion],
@@ -70,11 +70,11 @@ export function getContractAddresses() {
 }
 
 export function getArcVersion() {
-  return '0.1.1-rc.3';
+  return '0.1.1-rc.4';
 }
 
 export function getOrgName() {
-  return require(`@daostack/migration-experimental/migration.json`).private.dao['0.1.1-rc.3'].name;
+  return require(`@daostack/migration-experimental/migration.json`).private.dao['0.1.1-rc.4'].name;
 }
 
 export async function getOptions(web3) {
@@ -133,9 +133,9 @@ export async function waitUntilSynced() {
 }
 
 export async function registerAdminAccountScheme(web3, addresses, opts, accounts) {
-  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/Controller.json');
-  const SchemeRegistrar = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/SchemeRegistrar.json');
-  const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/GenesisProtocol.json');
+  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.4/Controller.json');
+  const SchemeRegistrar = require('@daostack/migration-experimental/contracts/0.1.1-rc.4/SchemeRegistrar.json');
+  const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.4/GenesisProtocol.json');
 
   const controller = new web3.eth.Contract(Controller.abi, addresses.Controller, opts);
   const genesisProtocol = new web3.eth.Contract(GenesisProtocol.abi, addresses.GenesisProtocol, opts);
@@ -160,8 +160,8 @@ export async function registerAdminAccountScheme(web3, addresses, opts, accounts
 }
 
 export async function prepareReputation(web3, addresses, opts, accounts) {
-  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/Controller.json');
-  const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/Reputation.json');
+  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.4/Controller.json');
+  const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.4/Reputation.json');
 
   await registerAdminAccountScheme(web3, addresses, opts, accounts);
   const controller = new web3.eth.Contract(Controller.abi, addresses.Controller, opts);

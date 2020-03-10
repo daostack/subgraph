@@ -10,12 +10,12 @@ import {
 } from './util';
 
 const ContributionRewardExt = require(
-    '@daostack/migration/contracts/' + getArcVersion() + '/ContributionRewardExt.json',
+    '@daostack/migration-experimental/contracts/' + getArcVersion() + '/ContributionRewardExt.json',
 );
-const Competition = require('@daostack/migration/contracts/' + getArcVersion() + '/Competition.json');
-const DAOToken = require('@daostack/migration/contracts/' + getArcVersion() + '/DAOToken.json');
-const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
-const Reputation = require('@daostack/migration/contracts/' + getArcVersion() + '/Reputation.json');
+const Competition = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Competition.json');
+const DAOToken = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOToken.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/GenesisProtocol.json');
+const Reputation = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Reputation.json');
 
 describe('Competition', () => {
     let web3;
@@ -38,11 +38,12 @@ describe('Competition', () => {
     it('Sanity', async () => {
         const accounts = web3.eth.accounts.wallet;
 
-        const externalToken = await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-            .deploy({ data: DAOToken.bytecode, arguments: ['Test Token', 'TST', '10000000000'] })
-            .send();
-        await externalToken.methods.mint(accounts[0].address, '1000000').send();
-        await externalToken.methods.mint(addresses.Avatar, '1000000').send();
+        const externalToken =
+          await new web3.eth.Contract(DAOToken.abi, undefined, opts)
+          .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
+        await externalToken.methods.initialize('Test Token', 'TST', '10000000000', accounts[1].address).send();
+        await externalToken.methods.mint(accounts[0].address, '1000000').send({ from: accounts[1].address });
+        await externalToken.methods.mint(addresses.Avatar, '1000000').send({ from: accounts[1].address });
         await web3.eth.sendTransaction({
             from: accounts[0].address,
             to: addresses.Avatar,
@@ -98,6 +99,7 @@ describe('Competition', () => {
             competitionParameters,
             false,
         );
+        console.log(competition.options.address)
         const proposalId = await propose.call();
         const { blockNumber: blockNumberPropose } = await propose.send();
         const { timestamp: timestampPropose } = await web3.eth.getBlock(blockNumberPropose);

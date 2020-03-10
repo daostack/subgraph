@@ -9,8 +9,8 @@ import {
   waitUntilTrue,
 } from './util';
 
-const Reputation = require('@daostack/migration/contracts/' + getArcVersion() + '/Reputation.json');
-const Controller = require('@daostack/migration/contracts/' + getArcVersion() + '/Controller.json');
+const Reputation = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Reputation.json');
+const Controller = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Controller.json');
 
 const gql = require('graphql-tag');
 

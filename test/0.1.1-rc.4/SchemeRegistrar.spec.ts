@@ -8,8 +8,8 @@ import {
   waitUntilTrue,
 } from './util';
 
-const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
-const SchemeRegistrar = require('@daostack/migration/contracts/' + getArcVersion() + '/SchemeRegistrar.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/GenesisProtocol.json');
+const SchemeRegistrar = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/SchemeRegistrar.json');
 
 describe('SchemeRegistrar', () => {
     let web3;

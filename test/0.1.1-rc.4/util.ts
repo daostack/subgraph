@@ -66,6 +66,8 @@ export function getContractAddresses() {
     GlobalConstraintRegistrar: addresses.private.dao[arcVersion].Schemes[2].address,
     UpgradeScheme: addresses.private.dao[arcVersion].Schemes[3].address,
     GenericScheme: addresses.private.dao[arcVersion].Schemes[4].address,
+    ContributionRewardExt: addresses.private.dao[arcVersion].StandAloneContracts[1].address,
+    Competition: addresses.private.dao[arcVersion].StandAloneContracts[2].address,
   };
 }
 
@@ -118,8 +120,16 @@ export async function waitUntilTrue(test: () => Promise<boolean> | boolean) {
 
 export async function waitUntilSynced() {
   const getGraphsSynced = `{
-    subgraphDeployments {
-      synced
+    subgraphs {
+      name
+      currentVersion {
+        deployment {
+          latestEthereumBlockNumber
+          totalEthereumBlocksCount
+          failed
+          synced
+        }
+      }
     }
   }`;
   const graphIsSynced = async () => {
@@ -127,7 +137,7 @@ export async function waitUntilSynced() {
       getGraphsSynced,
       1000,
       'http://127.0.0.1:8000/subgraphs');
-    return ((result.subgraphDeployments.length > 0) && result.subgraphDeployments[0].synced);
+    return ((result.subgraphs.length > 0) && result.subgraphs[0].currentVersion.deployment.synced);
     };
   return waitUntilTrue(graphIsSynced);
 }

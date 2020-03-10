@@ -9,9 +9,9 @@ import {
     waitUntilTrue,
 } from './util';
 
-const ContributionReward = require('@daostack/migration/contracts/' + getArcVersion() + '/ContributionReward.json');
-const DAOToken = require('@daostack/migration/contracts/' + getArcVersion() + '/DAOToken.json');
-const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
+const ContributionReward = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/ContributionReward.json');
+const DAOToken = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOToken.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/GenesisProtocol.json');
 
 describe('ContributionReward', () => {
     let web3;

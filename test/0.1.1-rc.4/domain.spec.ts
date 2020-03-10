@@ -13,12 +13,12 @@ import {
   writeProposalIPFS,
 } from './util';
 
-const ContributionReward = require('@daostack/migration/contracts/' + getArcVersion() + '/ContributionReward.json');
-const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
-const DAOToken = require('@daostack/migration/contracts/' + getArcVersion() + '/DAOToken.json');
-const Reputation = require('@daostack/migration/contracts/' + getArcVersion() + '/Reputation.json');
-const Avatar = require('@daostack/migration/contracts/' + getArcVersion() + '/Avatar.json');
-const DAORegistry = require('@daostack/arc-hive/build/contracts/DAORegistry.json');
+const ContributionReward = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/ContributionReward.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/GenesisProtocol.json');
+const DAOToken = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOToken.json');
+const Reputation = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Reputation.json');
+const Avatar = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Avatar.json');
+const DAORegistry = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAORegistry.json');
 
 const REAL_FBITS = 40;
 describe('Domain Layer', () => {

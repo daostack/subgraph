@@ -111,3 +111,16 @@ export function fetchTemplateName(name: string, version: string): string | null 
 export function createTemplate(templateName: string, address: Address): void {
   DataSourceTemplate.create(templateName, [address.toHex()]);
 }
+
+export function fixJsonQuotes(target: string): string {
+     let targetIndex = 0;
+     let result = '';
+     for (targetIndex = 0; targetIndex < target.length; targetIndex++) {
+       if (target[targetIndex] === '"') {
+         result += '\\"';
+       } else {
+         result += target[targetIndex];
+       }
+     }
+     return result;
+}

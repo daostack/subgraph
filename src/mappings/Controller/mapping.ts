@@ -6,6 +6,7 @@ import {
   Bytes,
   crypto,
   Entity,
+  log,
   store,
 } from '@graphprotocol/graph-ts';
 
@@ -19,6 +20,7 @@ import * as domain from '../../domain';
 import {
   AvatarContract,
   ContractInfo,
+  ContributionRewardExtParam,
   ContributionRewardParam,
   ControllerAddGlobalConstraint,
   ControllerGlobalConstraint,
@@ -28,6 +30,7 @@ import {
   ControllerScheme,
   ControllerUnregisterScheme,
   ControllerUpgradeController,
+  DAO,
   FirstRegisterScheme,
   GenericSchemeParam,
   GenesisProtocolParam,
@@ -56,29 +59,29 @@ function insertScheme(
   let perms = controller.schemesPermissions(scheme);
   let controllerSchemeId = crypto.keccak256(concat(avatarAddress, scheme)).toHex();
   let controllerScheme = ControllerScheme.load(controllerSchemeId);
-  if (controllerScheme === null) {
-     controllerScheme = new ControllerScheme(controllerSchemeId);
-     controllerScheme.numberOfQueuedProposals = BigInt.fromI32(0);
-     controllerScheme.numberOfPreBoostedProposals = BigInt.fromI32(0);
-     controllerScheme.numberOfBoostedProposals = BigInt.fromI32(0);
-     controllerScheme.numberOfExpiredInQueueProposals = BigInt.fromI32(0);
+  if (controllerScheme == null) {
+    controllerScheme = new ControllerScheme(controllerSchemeId);
+    controllerScheme.numberOfQueuedProposals = BigInt.fromI32(0);
+    controllerScheme.numberOfPreBoostedProposals = BigInt.fromI32(0);
+    controllerScheme.numberOfBoostedProposals = BigInt.fromI32(0);
+    controllerScheme.numberOfExpiredInQueueProposals = BigInt.fromI32(0);
   }
   controllerScheme.dao = avatarAddress.toHex();
   /* tslint:disable:no-bitwise */
-  controllerScheme.canRegisterSchemes = (perms[3] & 2) === 2;
+  controllerScheme.canRegisterSchemes = (perms[3] & 2) == 2;
   /* tslint:disable:no-bitwise */
-  controllerScheme.canManageGlobalConstraints = (perms[3] & 4) === 4;
+  controllerScheme.canManageGlobalConstraints = (perms[3] & 4) == 4;
   /* tslint:disable:no-bitwise */
-  controllerScheme.canUpgradeController = (perms[3] & 8) === 8;
+  controllerScheme.canUpgradeController = (perms[3] & 8) == 8;
   /* tslint:disable:no-bitwise */
-  controllerScheme.canDelegateCall = (perms[3] & 16) === 16;
+  controllerScheme.canDelegateCall = (perms[3] & 16) == 16;
   controllerScheme.address = scheme;
 
   let contractInfo = ContractInfo.load(scheme.toHex());
   if (contractInfo != null) {
-     controllerScheme.name = contractInfo.name;
-     controllerScheme.version = contractInfo.version;
-     controllerScheme.alias = contractInfo.alias;
+    controllerScheme.name = contractInfo.name;
+    controllerScheme.version = contractInfo.version;
+    controllerScheme.alias = contractInfo.alias;
   }
   controllerScheme.save();
 }
@@ -131,7 +134,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   let avatar = controller.avatar();
 
   if (AvatarContract.load(avatar.toHex()) == null) {
-      return;
+    return;
   }
   let token = controller.nativeToken();
   let reputation = controller.nativeReputation();
@@ -176,9 +179,9 @@ export function handleAddGlobalConstraint(event: AddGlobalConstraint): void {
   let when = event.parameters[2].value.toBigInt().toI32();
   let type: string;
 
-  if (when === 0) {
+  if (when == 0) {
     type = 'Pre';
-  } else if (when === 1) {
+  } else if (when == 1) {
     type = 'Post';
   } else {
     type = 'Both';
@@ -215,13 +218,21 @@ export function handleRemoveGlobalConstraint(
   store.set('ControllerRemoveGlobalConstraint', ent.id, ent);
 }
 
-export function setGPParams(gpAddress: Address,
-                            gpParamsHash: Bytes): void {
-    let gp = GenesisProtocol.bind(gpAddress);
-    let gpParams = GenesisProtocolParam.load(gpParamsHash.toHex());
-    if (gpParams == null && !equalsBytes(gpParamsHash, new Bytes(32))) {
-        gpParams = new  GenesisProtocolParam(gpParamsHash.toHex());
-        let params = gp.parameters(gpParamsHash);
+export function setGPParams(gpAddress: Address, gpParamsHash: Bytes, avatar: Address): void {
+  let gp = GenesisProtocol.bind(gpAddress);
+  let gpParams = GenesisProtocolParam.load(gpParamsHash.toHex());
+  if (gpParams == null && !equalsBytes(gpParamsHash, new Bytes(32))) {
+    gpParams = new GenesisProtocolParam(gpParamsHash.toHex());
+    let callResult = gp.try_parameters(gpParamsHash);
+    if (callResult.reverted) {
+        log.info('genesisProtocol try_parameters reverted', []);
+        let dao = DAO.load(avatar.toHex());
+        if (dao != null) {
+          dao.error = 'genesisProtocol try_parameters reverted';
+          dao.save();
+        }
+    } else {
+        let params = callResult.value;
         gpParams.queuedVoteRequiredPercentage = params.value0; // queuedVoteRequiredPercentage
         gpParams.queuedVotePeriodLimit = params.value1; // queuedVotePeriodLimit
         gpParams.boostedVotePeriodLimit = params.value2; // boostedVotePeriodLimit
@@ -236,6 +247,7 @@ export function setGPParams(gpAddress: Address,
         gpParams.activationTime = params.value11; // activationTime
         gpParams.voteOnBehalf = params.value12 as Bytes; // voteOnBehalf
         gpParams.save();
+   }
   }
 }
 
@@ -251,6 +263,7 @@ export function setContributionRewardParams(avatar: Address,
     contributionRewardParams.save();
     controllerScheme.contributionRewardParams = contributionRewardParams.id;
     controllerScheme.save();
+  }
 }
 
 export function setSchemeRegistrarParams(avatar: Address,
@@ -269,20 +282,49 @@ export function setSchemeRegistrarParams(avatar: Address,
    controllerScheme.schemeRegistrarParams = schemeRegistrarParams.id;
    controllerScheme.save();
 
+   export function setSchemeRegistrarParams(
+  avatar: Address,
+  scheme: Address,
+  vmAddress: Address,
+  voteRegisterParams: Bytes,
+  voteRemoveParams: Bytes,
+): void {
+  setGPParams(vmAddress, voteRegisterParams, avatar);
+  setGPParams(vmAddress, voteRemoveParams, avatar);
+  let controllerScheme = ControllerScheme.load(
+    crypto.keccak256(concat(avatar, scheme)).toHex(),
+  );
+  if (controllerScheme != null) {
+    let schemeRegistrarParams = new SchemeRegistrarParam(
+      controllerScheme.paramsHash.toHex(),
+    );
+    schemeRegistrarParams.votingMachine = vmAddress;
+    schemeRegistrarParams.voteRegisterParams = voteRegisterParams.toHex();
+    schemeRegistrarParams.voteRemoveParams = voteRemoveParams.toHex();
+    schemeRegistrarParams.save();
+    controllerScheme.schemeRegistrarParams = schemeRegistrarParams.id;
+    controllerScheme.save();
+  }
 }
 
-export function setGenericSchemeParams(avatar: Address,
-                                       scheme: Address,
-                                       vmAddress: Address,
-                                       vmParamsHash: Bytes,
-                                       contractToCall: Bytes): void {
-   setGPParams(vmAddress, vmParamsHash);
-   let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
-   let genericSchemeParams = new GenericSchemeParam(scheme.toHex());
-   genericSchemeParams.votingMachine = vmAddress;
-   genericSchemeParams.voteParams = vmParamsHash.toHex();
-   genericSchemeParams.contractToCall = contractToCall;
-   genericSchemeParams.save();
-   controllerScheme.genericSchemeParams = genericSchemeParams.id;
-   controllerScheme.save();
+   export function setGenericSchemeParams(
+  avatar: Address,
+  scheme: Address,
+  vmAddress: Address,
+  vmParamsHash: Bytes,
+  contractToCall: Bytes,
+): void {
+  setGPParams(vmAddress, vmParamsHash, avatar);
+  let controllerScheme = ControllerScheme.load(
+    crypto.keccak256(concat(avatar, scheme)).toHex(),
+  );
+  let genericSchemeParams = new GenericSchemeParam(scheme.toHex());
+  genericSchemeParams.votingMachine = vmAddress;
+  genericSchemeParams.voteParams = vmParamsHash.toHex();
+  genericSchemeParams.contractToCall = contractToCall;
+  genericSchemeParams.save();
+  if (controllerScheme != null) {
+    controllerScheme.genericSchemeParams = genericSchemeParams.id;
+    controllerScheme.save();
+  }
 }

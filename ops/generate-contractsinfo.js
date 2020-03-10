@@ -20,12 +20,16 @@ async function generateContractInfo(opts={}) {
   buffer += "/* tslint:disable:max-line-length */\n";
 
   buffer += "export function setContractsInfo(): void {\n";
+  let contractsAddresses = {};
   for (var version in versions) {
     if (versions.hasOwnProperty(version)) {
         let addresses = migration[network].package[version];
         for (var name in addresses) {
           if (addresses.hasOwnProperty(name)) {
+            if(!contractsAddresses[addresses[name]]) {
               buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+name+"'"+", "+"'"+name+"', "+"'"+version+"'"+");\n";
+            }
+            contractsAddresses[addresses[name]] = true;
           }
         }
     }

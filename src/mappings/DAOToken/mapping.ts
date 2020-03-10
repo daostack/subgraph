@@ -107,7 +107,7 @@ function updateTokenContract(contract: Address , tokenHolder: string): void {
   if (tokenHolder != null) {
       let tokenHolders = tokenContract.tokenHolders;
       let i = tokenHolders.indexOf(tokenHolder);
-      if (i === -1) {
+      if (i == -1) {
           tokenHolders.push(tokenHolder);
       }
       tokenContract.tokenHolders = tokenHolders;

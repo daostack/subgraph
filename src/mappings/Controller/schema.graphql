@@ -19,6 +19,7 @@ type ControllerScheme @entity {
 	version: String
 	alias: String
 	contributionRewardParams: ContributionRewardParam
+	contributionRewardExtParams: ContributionRewardExtParam
 	schemeRegistrarParams: SchemeRegistrarParam
 	genericSchemeParams: GenericSchemeParam
 	numberOfQueuedProposals: BigInt!
@@ -77,6 +78,13 @@ type ContributionRewardParam @entity {
 	id: ID!
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam!
+}
+
+type ContributionRewardExtParam @entity {
+	id: ID!
+	votingMachine: Bytes!
+	voteParams: GenesisProtocolParam!
+	rewarder: Bytes!
 }
 
 type SchemeRegistrarParam @entity {

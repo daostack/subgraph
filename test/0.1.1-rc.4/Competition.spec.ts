@@ -99,7 +99,7 @@ describe('Competition', () => {
             competitionParameters,
             false,
         );
-        console.log(competition.options.address)
+
         const proposalId = await propose.call();
         const { blockNumber: blockNumberPropose } = await propose.send();
         const { timestamp: timestampPropose } = await web3.eth.getBlock(blockNumberPropose);

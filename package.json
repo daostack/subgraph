@@ -32,7 +32,7 @@
     "test:watch": "npm run test -- --watch"
   },
   "devDependencies": {
-    "@daostack/migration-experimental": "0.1.1-rc.4-v1",
+    "@daostack/migration-experimental": "0.1.1-rc.4-v3",
     "@types/jest": "^23.3.7",
     "@types/mocha": "^5.2.5",
     "babel-eslint": "^10.0.1",

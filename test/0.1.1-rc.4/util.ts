@@ -66,8 +66,8 @@ export function getContractAddresses() {
     GlobalConstraintRegistrar: addresses.private.dao[arcVersion].Schemes[2].address,
     UpgradeScheme: addresses.private.dao[arcVersion].Schemes[3].address,
     GenericScheme: addresses.private.dao[arcVersion].Schemes[4].address,
-    ContributionRewardExt: addresses.private.dao[arcVersion].StandAloneContracts[1].address,
-    Competition: addresses.private.dao[arcVersion].StandAloneContracts[2].address,
+    ContributionRewardExt: addresses.private.dao[arcVersion].Schemes[6].address,
+    Competition: addresses.private.dao[arcVersion].StandAloneContracts[1].address,
   };
 }
 

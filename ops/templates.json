@@ -26,6 +26,16 @@
       "start_arcVersion": "0.1.1-rc.4"
     },
     {
+      "name": "ContributionRewardExt",
+      "mapping": "ContributionRewardExt",
+      "start_arcVersion": "0.1.1-rc.4"
+    },
+    {
+      "name": "Competition",
+      "mapping": "Competition",
+      "start_arcVersion": "0.1.1-rc.4"
+    },
+    {
       "name": "GenericScheme",
       "mapping": "GenericScheme",
       "start_arcVersion": "0.1.1-rc.4"

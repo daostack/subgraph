@@ -127,8 +127,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
   if (AvatarContract.load(avatar.toHex()) == null) {
     return;
   }
-  let token = controller.nativeToken();
-  let reputation = controller.nativeReputation();
+
   insertScheme(event.address, avatar, event.params._scheme);
 
   domain.handleRegisterScheme(avatar, event.params._scheme);

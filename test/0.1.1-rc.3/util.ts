@@ -70,7 +70,7 @@ export function getContractAddresses() {
 }
 
 export function getArcVersion() {
-  return '0.0.1-rc.16';
+  return '0.1.1-rc.3';
 }
 
 export function getOrgName() {

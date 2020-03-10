@@ -35,6 +35,7 @@ function getDAOFactoryContract(address: Address): DAOFactoryContract {
 export function handleNewOrg(event: NewOrg): void {
   let reputation = event.params._reputation;
   let reputationContract = new ReputationContract(reputation.toHex());
+  reputationContract.reputationHolders = new Array<string>();
   let rep = Reputation.bind(reputation);
   reputationContract.address = reputation;
   reputationContract.totalSupply = rep.totalSupply();
@@ -42,6 +43,7 @@ export function handleNewOrg(event: NewOrg): void {
 
   let token = event.params._daotoken;
   let tokenContract = new TokenContract(token.toHex());
+  tokenContract.tokenHolders = new Array<string>();
   let daotoken = DAOToken.bind(token);
   tokenContract.address = token;
   tokenContract.totalSupply = daotoken.totalSupply();

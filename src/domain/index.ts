@@ -269,20 +269,11 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
 
 export function handleStateChange(event: StateChange): void {
   if (isProposalValid(event.params._proposalId.toHex())) {
-<<<<<<< HEAD
     updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
     if ((event.params._proposalState == 1) ||
       (event.params._proposalState == 2)) {
       insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
     }
-=======
-      updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
-      if ((event.params._proposalState == 1) ||
-          (event.params._proposalState == 2)) {
-          insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
-      }
->>>>>>> 39677d5f5bd78cd334a27a30599e243a5f59c0e8
-
     addProposalStateChangeEvent(event.params._proposalId, event.transaction.from, event.block.timestamp);
   }
 }
@@ -293,7 +284,6 @@ export function handleExecutionStateChange(event: GPExecuteProposal): void {
   }
 }
 
-<<<<<<< HEAD
 export function handleGPRedemption(proposalId: Bytes, beneficiary: Address, timestamp: BigInt, type: string): void {
   if (isProposalValid(proposalId.toHex())) {
     if (type == 'token') {
@@ -302,17 +292,6 @@ export function handleGPRedemption(proposalId: Bytes, beneficiary: Address, time
       reputationRedemption(proposalId, beneficiary, timestamp);
     } else {
       daoBountyRedemption(proposalId, beneficiary, timestamp);
-=======
-export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): void {
-   if (isProposalValid(proposalId.toHex())) {
-       if (type == 'token') {
-           tokenRedemption(proposalId, beneficiary, timestamp);
-       } else if (type == 'reputation') {
-           reputationRedemption(proposalId, beneficiary, timestamp);
-       } else {
-           daoBountyRedemption(proposalId, beneficiary, timestamp);
-       }
->>>>>>> 39677d5f5bd78cd334a27a30599e243a5f59c0e8
     }
   }
 }

@@ -1,9 +1,17 @@
-import { getContractAddresses, getOptions, getWeb3, increaseTime, prepareReputation, sendQuery, waitUntilTrue } from './util';
+import {
+    getArcVersion,
+    getContractAddresses,
+    getOptions,
+    getWeb3,
+    increaseTime,
+    prepareReputation,
+    sendQuery,
+    waitUntilTrue,
+} from './util';
 
-const ContributionReward = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/ContributionReward.json');
-const DAOToken = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/DAOToken.json');
-const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/Reputation.json');
-const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/GenesisProtocol.json');
+const ContributionReward = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/ContributionReward.json');
+const DAOToken = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOToken.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/GenesisProtocol.json');
 
 describe('ContributionReward', () => {
     let web3;

@@ -3,7 +3,7 @@ import 'allocator/arena';
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Avatar contract ABI
-import { Avatar, OwnershipTransferred, ReceiveEther, SendEther } from '../../types/Avatar/Avatar';
+import { Avatar, OwnershipTransferred } from '../../types/Avatar/Avatar';
 
 // Import entity types generated from the GraphQL schema
 import { AvatarContract } from '../../types/schema';
@@ -27,13 +27,13 @@ function handleAvatarBalance(
   store.set('AvatarContract', avatar.id, avatar);
 }
 
-export function handleSendEth(event: SendEther): void {
-  handleAvatarBalance(event.address, event.params._amountInWei, false);
-}
+// export function handleSendEth(event: SendEther): void {
+//   handleAvatarBalance(event.address, event.params._amountInWei, false);
+// }
 
-export function handleReceiveEth(event: ReceiveEther): void {
-  handleAvatarBalance(event.address, event.params._value, true);
-}
+// export function handleReceiveEth(event: ReceiveEther): void {
+//   handleAvatarBalance(event.address, event.params._value, true);
+// }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   let avatar = AvatarContract.load(event.address.toHex());

@@ -54,7 +54,7 @@ export async function getWeb3() {
 
 export function getContractAddresses() {
   const addresses = require(`@daostack/migration-experimental/migration.json`);
-  let arcVersion = '0.1.1-rc.3';
+  let arcVersion = '0.1.1-rc.4';
 
   return {
     ...addresses.private.package[arcVersion],
@@ -66,11 +66,17 @@ export function getContractAddresses() {
     GlobalConstraintRegistrar: addresses.private.dao[arcVersion].Schemes[2].address,
     UpgradeScheme: addresses.private.dao[arcVersion].Schemes[3].address,
     GenericScheme: addresses.private.dao[arcVersion].Schemes[4].address,
+    ContributionRewardExt: addresses.private.dao[arcVersion].Schemes[6].address,
+    Competition: addresses.private.dao[arcVersion].StandAloneContracts[1].address,
   };
 }
 
+export function getArcVersion() {
+  return '0.1.1-rc.4';
+}
+
 export function getOrgName() {
-  return require(`@daostack/migration-experimental/migration.json`).private.dao['0.1.1-rc.3'].name;
+  return require(`@daostack/migration-experimental/migration.json`).private.dao['0.1.1-rc.4'].name;
 }
 
 export async function getOptions(web3) {
@@ -114,8 +120,16 @@ export async function waitUntilTrue(test: () => Promise<boolean> | boolean) {
 
 export async function waitUntilSynced() {
   const getGraphsSynced = `{
-    subgraphDeployments {
-      synced
+    subgraphs {
+      name
+      currentVersion {
+        deployment {
+          latestEthereumBlockNumber
+          totalEthereumBlocksCount
+          failed
+          synced
+        }
+      }
     }
   }`;
   const graphIsSynced = async () => {
@@ -123,15 +137,15 @@ export async function waitUntilSynced() {
       getGraphsSynced,
       1000,
       'http://127.0.0.1:8000/subgraphs');
-    return ((result.subgraphDeployments.length > 0) && result.subgraphDeployments[0].synced);
+    return ((result.subgraphs.length > 0) && result.subgraphs[0].currentVersion.deployment.synced);
     };
   return waitUntilTrue(graphIsSynced);
 }
 
 export async function registerAdminAccountScheme(web3, addresses, opts, accounts) {
-  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/Controller.json');
-  const SchemeRegistrar = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/SchemeRegistrar.json');
-  const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/GenesisProtocol.json');
+  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.4/Controller.json');
+  const SchemeRegistrar = require('@daostack/migration-experimental/contracts/0.1.1-rc.4/SchemeRegistrar.json');
+  const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.4/GenesisProtocol.json');
 
   const controller = new web3.eth.Contract(Controller.abi, addresses.Controller, opts);
   const genesisProtocol = new web3.eth.Contract(GenesisProtocol.abi, addresses.GenesisProtocol, opts);
@@ -156,8 +170,8 @@ export async function registerAdminAccountScheme(web3, addresses, opts, accounts
 }
 
 export async function prepareReputation(web3, addresses, opts, accounts) {
-  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/Controller.json');
-  const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/Reputation.json');
+  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.4/Controller.json');
+  const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.4/Reputation.json');
 
   await registerAdminAccountScheme(web3, addresses, opts, accounts);
   const controller = new web3.eth.Contract(Controller.abi, addresses.Controller, opts);

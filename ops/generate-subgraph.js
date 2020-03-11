@@ -18,15 +18,9 @@ async function generateSubgraph(opts={}) {
   const addresses = JSON.parse(fs.readFileSync(migrationFile, "utf-8"));
   const missingAddresses = {};
 
-  // Filter out 0.0.1-rc.18 & 0.0.1-rc.17
-  const latestMappings = mappings.filter(mapping =>
-    !(mapping.arcVersion === "0.0.1-rc.18" ||
-      mapping.arcVersion === "0.0.1-rc.17")
-  );
-
   // Build our subgraph's datasources from the mapping fragments
   const dataSources = combineFragments(
-    latestMappings, false, addresses, missingAddresses
+    mappings, false, addresses, missingAddresses
   ).filter(el => el != null);
 
   // Throw an error if there are contracts that're missing an address

@@ -1,17 +1,15 @@
-import 'allocator/arena';
-
 import { Address, BigInt, Bytes, crypto, store } from '@graphprotocol/graph-ts';
 
-// Import event types from the Reputation contract ABI
+// Import event types from the ContributionRewardExt contract ABI
 import {
-  ContributionReward,
+  ContributionRewardExt,
   NewContributionProposal,
   ProposalExecuted,
   RedeemEther,
   RedeemExternalToken,
   RedeemNativeToken,
   RedeemReputation,
-} from '../../types/ContributionReward/ContributionReward';
+} from '../../types/ContributionRewardExt/ContributionRewardExt';
 
 import * as domain from '../../domain';
 
@@ -94,8 +92,7 @@ function insertNewProposal(event: NewContributionProposal): void {
   ent.nativeTokenReward = rewards.shift(); // native tokens
   ent.ethReward = rewards.shift(); // eth
   ent.externalTokenReward = rewards.shift(); // external tokens
-  ent.periodLength = rewards.shift(); // period length
-  ent.periods = rewards.shift(); // number of periods
+  ent.periods = BigInt.fromI32(1); // number of periods
   store.set('ContributionRewardProposal', ent.id, ent);
 }
 
@@ -109,27 +106,28 @@ function updateProposalAfterRedemption(
     proposalId.toHex(),
   ) as ContributionRewardProposal;
   if (ent != null) {
-    let cr = ContributionReward.bind(contributionRewardAddress);
+    let cr = ContributionRewardExt.bind(contributionRewardAddress);
+    let proposal = cr.organizationProposals(proposalId);
     if (type == 0) {
-      ent.alreadyRedeemedReputationPeriods = cr.getRedeemedPeriods(
-        proposalId,
-        BigInt.fromI32(0),
-      );
+      if (proposal.value1.isZero()) {
+        ent.alreadyRedeemedReputationPeriods = BigInt.fromI32(1);
+      }
+      ent.reputationChangeLeft = proposal.value7;
     } else if (type == 1) {
-      ent.alreadyRedeemedNativeTokenPeriods = cr.getRedeemedPeriods(
-        proposalId,
-        BigInt.fromI32(1),
-      );
+      if (proposal.value0.isZero()) {
+        ent.alreadyRedeemedNativeTokenPeriods = BigInt.fromI32(1);
+      }
+      ent.nativeTokenRewardLeft = proposal.value6;
     } else if (type == 2) {
-      ent.alreadyRedeemedEthPeriods = cr.getRedeemedPeriods(
-        proposalId,
-        BigInt.fromI32(2),
-      );
+      if (proposal.value2.isZero()) {
+        ent.alreadyRedeemedEthPeriods = BigInt.fromI32(1);
+      }
+      ent.ethRewardLeft = proposal.value8;
     } else if (type == 3) {
-      ent.alreadyRedeemedExternalTokenPeriods = cr.getRedeemedPeriods(
-        proposalId,
-        BigInt.fromI32(3),
-      );
+      if (proposal.value4.isZero()) {
+        ent.alreadyRedeemedExternalTokenPeriods = BigInt.fromI32(1);
+      }
+      ent.externalTokenRewardLeft = proposal.value9;
     }
     store.set('ContributionRewardProposal', proposalId.toHex(), ent);
     let reward = GPReward.load(crypto.keccak256(concat(proposalId, ent.beneficiary)).toHex());
@@ -141,15 +139,19 @@ function updateProposalAfterRedemption(
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
-  let cr = ContributionReward.bind(event.address);
   let proposalId = event.params._proposalId;
   let proposalEnt = store.get(
     'ContributionRewardProposal',
     proposalId.toHex(),
   ) as ContributionRewardProposal;
   if (proposalEnt != null) {
-    let proposal = cr.organizationProposals(proposalId);
-    proposalEnt.executedAt = proposal.value8;
+    proposalEnt.executedAt = event.block.timestamp;
+    if (event.params._param.toI32() == 1) {
+      proposalEnt.reputationChangeLeft = proposalEnt.reputationReward;
+      proposalEnt.nativeTokenRewardLeft = proposalEnt.nativeTokenReward;
+      proposalEnt.ethRewardLeft = proposalEnt.ethReward;
+      proposalEnt.externalTokenRewardLeft = proposalEnt.externalTokenReward;
+    }
     store.set('ContributionRewardProposal', proposalId.toHex(), proposalEnt);
   }
 
@@ -189,7 +191,6 @@ export function handleNewContributionProposal(
   ent.nativeTokenReward = rewards.shift(); // native tokens
   ent.ethReward = rewards.shift(); // eth
   ent.externalTokenReward = rewards.shift(); // external tokens
-  ent.periodLength = rewards.shift(); // period length
-  ent.periods = rewards.shift(); // number of periods
+  ent.periods = BigInt.fromI32(1); // number of periods
   store.set('ContributionRewardNewContributionProposal', ent.id, ent);
 }

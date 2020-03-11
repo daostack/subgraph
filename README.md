@@ -1,6 +1,8 @@
-# DAOstack subgraph
+# DAOstack Subgraph
 
-DAOstack subgraph for [TheGraph](https://thegraph.com/) project.
+DAOstack subgraph for [TheGraph](https://thegraph.com/) project. A feature article is available [here](https://thegraph.com/blog/daostack-alchemy). 
+
+![image](https://github.com/pat-daostack/subgraph/blob/master/images/arcgraph.jpg)
 
 Our latest gratest [master branch subgraph](https://thegraph.com/explorer/subgraph/daostack/master).
 

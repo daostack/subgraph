@@ -1,9 +1,11 @@
 import { Address, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
-import { setContributionRewardParams,
+import { setContributionRewardExtParams,
+         setContributionRewardParams,
          setGenericSchemeParams,
          setSchemeRegistrarParams,
         } from '../mappings/Controller/mapping';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
+import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
 import {GenericScheme} from '../types/GenericScheme/GenericScheme';
 import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
@@ -49,7 +51,16 @@ export function create(dao: Address,
        setContributionRewardParams(dao, scheme, gpAddress, voteParams);
        isGPQue = true;
      }
-
+   }
+   if (equalStrings(contractInfo.name, 'ContributionRewardExt')) {
+    let contributionRewardExt =  ContributionRewardExt.bind(scheme);
+    setContributionRewardExtParams(
+                    dao,
+                    scheme,
+                    contributionRewardExt.votingMachine(),
+                    contributionRewardExt.voteParams(),
+                    contributionRewardExt.rewarder());
+    isGPQue = true;
    }
    if (equalStrings(contractInfo.name, 'SchemeRegistrar')) {
      let schemeRegistrar =  SchemeRegistrar.bind(scheme);

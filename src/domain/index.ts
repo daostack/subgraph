@@ -1,9 +1,4 @@
-import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, Entity, store, Value} from '@graphprotocol/graph-ts';
-import { setContractsInfo, setTemplatesInfo } from '../contractsInfo';
-import {
-  NewContributionProposal,
-  ProposalExecuted,
-} from '../types/ContributionReward/ContributionReward';
+import { Address, BigDecimal, BigInt, Bytes} from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/DAOToken/DAOToken';
 import {
   ExecuteProposal,
@@ -13,10 +8,10 @@ import {
   VoteProposal,
 } from '../types/GenesisProtocol/GenesisProtocol';
 import { Burn, Mint } from '../types/Reputation/Reputation';
-import { GenesisProtocolProposal, Proposal, ReputationContract, ReputationHolder } from '../types/schema';
-import { concat, equalsBytes, eventId, hexToAddress } from '../utils';
+import { GenesisProtocolProposal, Proposal, ReputationHolder } from '../types/schema';
+import { equalsBytes, eventId } from '../utils';
 import * as daoModule from './dao';
-import { addNewDAOEvent, addNewReputationHolderEvent, addProposalStateChangeEvent } from './event';
+import { addNewReputationHolderEvent, addProposalStateChangeEvent } from './event';
 import * as gpqueueModule from './gpqueue';
 import {
   getProposal,
@@ -50,7 +45,7 @@ import { insertVote } from './vote';
 
 function isProposalValid(proposalId: string ): boolean {
   let p = Proposal.load(proposalId);
-  return  ((p != null) && (equalsBytes(p.paramsHash, new Bytes(32)) === false));
+  return  ((p != null) && (equalsBytes(p.paramsHash, new Bytes(32)) == false));
 }
 
 function handleGPProposalPrivate(proposalId: string): void {
@@ -74,21 +69,25 @@ function handleGPProposalPrivate(proposalId: string): void {
 }
 
 export function handleNewContributionProposal(
-  event: NewContributionProposal,
+  proposalId: Bytes,
+  avatar: Address,
+  timestamp: BigInt,
+  intVoteInterface: Address,
+  descriptionHash: string,
+  contract: Address,
 ): void {
-  if (!daoModule.exists(event.params._avatar)) {
+  if (!daoModule.exists(avatar)) {
     return;
   }
   updateCRProposal(
-    event.params._proposalId,
-    event.block.timestamp,
-    event.params._avatar,
-    event.params._intVoteInterface,
-    event.params._descriptionHash,
-    event.params._beneficiary,
-    event.address,
+    proposalId,
+    timestamp,
+    avatar,
+    intVoteInterface,
+    descriptionHash,
+    contract,
   );
-  handleGPProposalPrivate(event.params._proposalId.toHex());
+  handleGPProposalPrivate(proposalId.toHex());
 }
 
 export function handleNewSchemeRegisterProposal(
@@ -138,12 +137,12 @@ export function handleStake(event: Stake): void {
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  if (event.params._vote.toI32() ===  1) {
+  if (event.params._vote.toI32() ==  1) {
     proposal.stakesFor = proposal.stakesFor.plus(event.params._amount);
   } else {
     proposal.stakesAgainst = proposal.stakesAgainst.plus(event.params._amount);
   }
-  proposal.confidence =  (new BigDecimal(proposal.stakesFor)) / (new BigDecimal(proposal.stakesAgainst));
+  proposal.confidence = (new BigDecimal(proposal.stakesFor)) / (new BigDecimal(proposal.stakesAgainst));
   saveProposal(proposal);
   insertStake(
     eventId(event),
@@ -163,14 +162,20 @@ export function handleVoteProposal(event: VoteProposal): void {
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
     return;
   }
-  if (event.params._vote.toI32() === 1) {
+  if (event.params._vote.toI32() == 1) {
     proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
   } else {
     proposal.votesAgainst = proposal.votesAgainst.plus(
       event.params._reputation,
     );
   }
-  updateProposalAfterVote(proposal, event.address, event.params._proposalId, event.block.timestamp);
+  updateProposalAfterVote(
+    proposal,
+    event.address,
+    event.params._proposalId,
+    event.params._voter,
+    event.block.timestamp,
+  );
   saveProposal(proposal);
   insertVote(
     eventId(event),
@@ -182,11 +187,6 @@ export function handleVoteProposal(event: VoteProposal): void {
     event.params._reputation,
   );
   insertGPRewardsToHelper(event.params._proposalId, event.params._voter);
-}
-
-export function handleProposalExecuted(event: ProposalExecuted): void {
-  // this already handled at handleExecuteProposal
-  // updateProposalExecution(event.params._proposalId, null, event.block.timestamp,event.address);
 }
 
 export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {
@@ -238,11 +238,12 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
 export function handleStateChange(event: StateChange): void {
   if (isProposalValid(event.params._proposalId.toHex())) {
       updateProposalState(event.params._proposalId, event.params._proposalState, event.address);
-      if ((event.params._proposalState === 1) ||
-          (event.params._proposalState === 2)) {
+      if ((event.params._proposalState == 1) ||
+          (event.params._proposalState == 2)) {
           insertGPRewards(event.params._proposalId, event.block.timestamp, event.address, event.params._proposalState);
       }
-      addProposalStateChangeEvent(event.params._proposalId, event.block.timestamp);
+
+      addProposalStateChangeEvent(event.params._proposalId, event.transaction.from, event.block.timestamp);
   }
 }
 
@@ -254,9 +255,9 @@ export function handleExecutionStateChange(event: GPExecuteProposal): void {
 
 export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): void {
    if (isProposalValid(proposalId.toHex())) {
-       if (type === 'token') {
+       if (type == 'token') {
            tokenRedemption(proposalId, beneficiary, timestamp);
-       } else if (type === 'reputation') {
+       } else if (type == 'reputation') {
            reputationRedemption(proposalId, beneficiary, timestamp);
        } else {
            daoBountyRedemption(proposalId, beneficiary, timestamp);

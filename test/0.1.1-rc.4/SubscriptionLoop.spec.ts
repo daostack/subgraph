@@ -1,5 +1,6 @@
 import {
   createSubscriptionObservable,
+  getArcVersion,
   getContractAddresses,
   getOptions,
   getWeb3,
@@ -8,8 +9,9 @@ import {
   waitUntilTrue,
 } from './util';
 
-const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/Controller.json');
-const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.3/Reputation.json');
+const Reputation = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Reputation.json');
+const Controller = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Controller.json');
+
 const gql = require('graphql-tag');
 
 describe('Subscriptions Loop', () => {

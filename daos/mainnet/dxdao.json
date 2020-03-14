@@ -22,5 +22,11 @@
     "alias": "GenericSchemeENSETHRegistry",
     "address": "0x973ce4e81bdc3bd39f46038f3aaa928b04558b08",
     "arcVersion": "0.0.1-rc.36"
+  },
+  {
+    "name": "GenericScheme",
+    "alias": "GenericSchemeENSRegistryWithFallback",
+    "address": "0x9cea0dd05c4344a769b2f4c2f8890eda8a700d64",
+    "arcVersion": "0.0.1-rc.36"
   }]
 }

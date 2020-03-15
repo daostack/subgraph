@@ -26,6 +26,7 @@ type ControllerScheme @entity {
 	numberOfPreBoostedProposals: BigInt!
 	numberOfBoostedProposals: BigInt!
 	numberOfExpiredInQueueProposals: BigInt!
+	isRegistered: Boolean!
 }
 
 type ControllerGlobalConstraint @entity {

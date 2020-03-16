@@ -6,7 +6,7 @@ const Avatar = require('@daostack/migration-experimental/contracts/' + getArcVer
 const ContributionReward = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/ContributionReward.json');
 const GenesisProtocol = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/GenesisProtocol.json');
 
-describe('DAOTracker', () => {
+describe('DAOFactory', () => {
   let web3;
   let addresses;
   let opts;

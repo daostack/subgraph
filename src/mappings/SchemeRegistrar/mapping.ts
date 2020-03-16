@@ -34,7 +34,7 @@ export function handleNewSchemeProposal(event: NewSchemeProposal): void {
   // need to fill up other fileds.
   ent.save();
 
-  domain.handleNewSchemeRegisterProposal(event.params._proposalId.toHex(),
+  domain.handleNewSchemeRegistrarProposal(event.params._proposalId.toHex(),
                                          event.block.timestamp,
                                          ent.avatar,
                                          ent.votingMachine,
@@ -65,7 +65,7 @@ export function handleRemoveSchemeProposal(event: RemoveSchemeProposal): void {
                               ent.proposalId,
                               ent.scheme);
 
-  domain.handleNewSchemeRegisterProposal(event.params._proposalId.toHex(),
+  domain.handleNewSchemeRegistrarProposal(event.params._proposalId.toHex(),
                                          event.block.timestamp,
                                          ent.avatar,
                                          ent.votingMachine,

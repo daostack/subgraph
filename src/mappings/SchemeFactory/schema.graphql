@@ -1,0 +1,36 @@
+type SchemeFactoryNewSchemeProposal @entity {
+	id: ID!
+	txHash: Bytes!
+	contract: Bytes!
+	avatar: Bytes!
+	proposalId: Bytes!
+	votingMachine: Bytes!
+	schemeName: String!
+	schemeData: Bytes!
+	packageVersion: [BigInt!]
+	permission: Bytes!
+	schemeToReplace: Bytes!
+	descriptionHash: String!
+}
+
+type SchemeFactoryProposalExecuted @entity {
+	id: ID!
+	txHash: Bytes!
+	contract: Bytes!
+	avatar: Bytes!
+	proposalId: Bytes!
+	decision: BigInt!
+}
+
+type SchemeFactoryProposal @entity {
+	id: ID!
+	dao: DAO!
+	schemeToRegisterName: String
+	schemeToRegisterData: Bytes
+	schemeToRegisterPackageVersion: [BigInt!]
+	schemeToRegisterPermission: Bytes
+	schemeToRemove: Bytes
+	decision: BigInt
+	schemeRegistered: Boolean
+	schemeRemoved: Boolean
+}

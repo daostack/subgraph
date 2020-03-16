@@ -20,12 +20,14 @@ type ControllerScheme @entity {
 	alias: String
 	contributionRewardParams: ContributionRewardParam
 	contributionRewardExtParams: ContributionRewardExtParam
+	schemeFactoryParams: SchemeFactoryParam
 	schemeRegistrarParams: SchemeRegistrarParam
 	genericSchemeParams: GenericSchemeParam
 	numberOfQueuedProposals: BigInt!
 	numberOfPreBoostedProposals: BigInt!
 	numberOfBoostedProposals: BigInt!
 	numberOfExpiredInQueueProposals: BigInt!
+	isRegistered: Boolean!
 }
 
 type ControllerGlobalConstraint @entity {
@@ -85,6 +87,13 @@ type ContributionRewardExtParam @entity {
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam!
 	rewarder: Bytes!
+}
+
+type SchemeFactoryParam @entity {
+	id: ID!
+	votingMachine: Bytes!
+	voteParams: GenesisProtocolParam!
+	daoFactory: Bytes!
 }
 
 type SchemeRegistrarParam @entity {

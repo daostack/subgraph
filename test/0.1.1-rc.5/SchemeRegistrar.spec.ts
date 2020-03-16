@@ -162,6 +162,7 @@ describe('SchemeRegistrar', () => {
               id
             }
             address
+            isRegistered
           }
         }`;
 
@@ -189,6 +190,7 @@ describe('SchemeRegistrar', () => {
                 id: addresses.Avatar.toLowerCase(),
               },
               address: accounts[0].address.toLowerCase(),
+              isRegistered: true,
             });
             expect((await sendQuery(getDAO)).dao.schemes).toContainEqual(
               {

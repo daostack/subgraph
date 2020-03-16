@@ -2,12 +2,14 @@ import { Address, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-
 import { setContributionRewardExtParams,
          setContributionRewardParams,
          setGenericSchemeParams,
+         setSchemeFactoryParams,
          setSchemeRegistrarParams,
         } from '../mappings/Controller/mapping';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
 import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
 import {GenericScheme} from '../types/GenericScheme/GenericScheme';
 import { ContractInfo, GPQueue } from '../types/schema';
+import {SchemeFactory} from '../types/SchemeFactory/SchemeFactory';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
 import { concat, equalStrings} from '../utils';
 
@@ -62,6 +64,18 @@ export function create(dao: Address,
                     contributionRewardExt.rewarder());
     isGPQue = true;
    }
+
+   if (equalStrings(contractInfo.name, 'SchemeFactory')) {
+    let schemeFactory =  SchemeFactory.bind(scheme);
+    gpAddress = schemeFactory.votingMachine();
+    let voteParams = schemeFactory.voteParams();
+    let daoFactory = schemeFactory.daoFactory();
+    if (!equalStrings(gpAddress.toHex(), addressZero)) {
+        setSchemeFactoryParams(dao, scheme, gpAddress, voteParams, daoFactory);
+        isGPQue = true;
+    }
+  }
+
    if (equalStrings(contractInfo.name, 'SchemeRegistrar')) {
      let schemeRegistrar =  SchemeRegistrar.bind(scheme);
      gpAddress = schemeRegistrar.votingMachine();

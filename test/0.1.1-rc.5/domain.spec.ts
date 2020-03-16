@@ -342,6 +342,15 @@ describe('Domain Layer', () => {
         },
     );
 
+    expect(dao.schemes).toContainEqual(
+      {
+          address: addresses.SchemeFactory.toLowerCase(),
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
+          },
+        },
+    );
+
     // check reputation reputationHolders
     const { reputationHolders } = await sendQuery(`{
       reputationHolders (where: {contract: "${NativeReputation.toLowerCase()}"}){

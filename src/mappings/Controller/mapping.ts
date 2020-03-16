@@ -27,6 +27,7 @@ import {
   DAO,
   GenericSchemeParam,
   GenesisProtocolParam,
+  SchemeFactoryParam,
   SchemeRegistrarParam,
 } from '../../types/schema';
 
@@ -256,6 +257,22 @@ export function setContributionRewardParams(avatar: Address,
     controllerScheme.contributionRewardParams = contributionRewardParams.id;
     controllerScheme.save();
   }
+
+export function setSchemeFactoryParams(avatar: Address,
+                                       scheme: Address,
+                                       vmAddress: Address,
+                                       voteParams: Bytes,
+                                       daoFactory: Address): void {
+    setGPParams(vmAddress, voteParams, avatar);
+    let controllerScheme = ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
+    let schemeFactoryParams = new SchemeFactoryParam(scheme.toHex());
+    schemeFactoryParams.votingMachine = vmAddress;
+    schemeFactoryParams.voteParams = voteParams.toHex();
+    schemeFactoryParams.daoFactory = daoFactory;
+    schemeFactoryParams.save();
+    controllerScheme.schemeFactoryParams = schemeFactoryParams.id;
+    controllerScheme.save();
+}
 
 export function setSchemeRegistrarParams(avatar: Address,
                                          scheme: Address,

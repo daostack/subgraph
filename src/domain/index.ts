@@ -25,6 +25,7 @@ import {
   updateProposalExecution,
   updateProposalExecutionState,
   updateProposalState,
+  updateSFProposal,
   updateSRProposal,
 } from './proposal';
 import {
@@ -90,7 +91,29 @@ export function handleNewContributionProposal(
   handleGPProposalPrivate(proposalId.toHex());
 }
 
-export function handleNewSchemeRegisterProposal(
+export function handleNewSchemeFactoryProposal(
+  proposalId: string,
+  timestamp: BigInt,
+  avatar: Bytes,
+  votingMachine: Bytes,
+  descriptionHash: string,
+  schemeAddress: Address,
+): void {
+   if (!daoModule.exists(avatar as Address)) {
+     return;
+   }
+   updateSFProposal(
+     proposalId,
+     timestamp,
+     avatar as Address,
+     votingMachine as Address,
+     descriptionHash,
+     schemeAddress,
+   );
+   handleGPProposalPrivate(proposalId);
+}
+
+export function handleNewSchemeRegistrarProposal(
    proposalId: string,
    timestamp: BigInt,
    avatar: Bytes,

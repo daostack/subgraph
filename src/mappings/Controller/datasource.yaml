@@ -3,6 +3,7 @@ abis:
   - Avatar
   - Reputation
   - DAOToken
+  - SchemeFactory
   - SchemeRegistrar
   - ContributionReward
   - ContributionRewardExt

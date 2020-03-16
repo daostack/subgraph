@@ -1,0 +1,12 @@
+abis:
+  - SchemeFactory
+  - GenesisProtocol
+entities:
+  - SchemeFactoryNewProposal
+  - SchemeFactoryProposalExecuted
+
+eventHandlers:
+  - event: NewSchemeProposal(indexed address,indexed bytes32,indexed address,string,bytes,uint64[3],bytes4,address,string)
+    handler: handleNewSchemeProposal
+  - event: ProposalExecuted(indexed address,indexed bytes32,int256)
+    handler: handleProposalExecuted

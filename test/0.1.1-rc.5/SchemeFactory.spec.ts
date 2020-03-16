@@ -41,16 +41,16 @@ describe('SchemeFactory', () => {
 
         const schemeFactoryNewSchemeProposalsQuery = `{
           schemeFactoryNewSchemeProposals {
-            txHash,
-            contract,
-            avatar,
-            descriptionHash,
-            votingMachine,
-            proposalId,
-            schemeName,
-            schemeData,
-            packageVersion,
-            permission,
+            txHash
+            contract
+            avatar
+            descriptionHash
+            votingMachine
+            proposalId
+            schemeName
+            schemeData
+            packageVersion
+            permission
             schemeToReplace
           }
         }`;

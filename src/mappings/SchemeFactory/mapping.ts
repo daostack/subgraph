@@ -17,10 +17,7 @@ import {
 import { equalsBytes, equalStrings, eventId } from '../../utils';
 
 export function handleNewSchemeProposal(event: NewSchemeProposal): void {
-  let ent = SchemeFactoryNewSchemeProposal.load(eventId(event));
-  if (ent == null) {
-    ent = new SchemeFactoryNewSchemeProposal(eventId(event));
-  }
+  let ent = new SchemeFactoryNewSchemeProposal(event.params._proposalId.toHex());
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;
@@ -50,10 +47,7 @@ export function handleNewSchemeProposal(event: NewSchemeProposal): void {
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
-  let ent = SchemeFactoryProposalExecuted.load(eventId(event));
-  if (ent == null) {
-    ent = new SchemeFactoryProposalExecuted(eventId(event));
-  }
+  let ent = new SchemeFactoryProposalExecuted(event.params._proposalId.toHex());
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
   ent.avatar = event.params._avatar;

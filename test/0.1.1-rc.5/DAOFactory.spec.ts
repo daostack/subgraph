@@ -198,6 +198,7 @@ describe('DAOTracker', () => {
             contributionRewardParams {
                 votingMachine
             }
+            isRegistered
         }
       }
     }`, 15000);
@@ -219,11 +220,18 @@ describe('DAOTracker', () => {
       },
       schemes: [
         {
+          address: addresses.DAOFactoryInstance.toLowerCase(),
+          contributionRewardParams: null,
+          name: 'DAOFactoryInstance',
+          isRegistered: false,
+        },
+        {
           address: contributionRewardAddress.toLowerCase(),
           contributionRewardParams: {
               votingMachine: genesisProtocol.options.address.toLowerCase(),
           },
           name: 'ContributionReward',
+          isRegistered: true,
         },
       ],
     });

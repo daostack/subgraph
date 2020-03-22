@@ -2,6 +2,7 @@ import {
   getArcVersion,
   getContractAddresses,
   getOptions,
+  getPackageVersion,
   getWeb3,
   prepareReputation,
   sendQuery,
@@ -97,7 +98,7 @@ describe('SchemeFactory', () => {
             votingMachine: addresses.GenesisProtocol.toLowerCase(),
             schemeName: 'SchemeFactory',
             schemeData: initData,
-            packageVersion: ['0', '1', '5'],
+            packageVersion: getPackageVersion(),
             permission: '0x0000001f',
             schemeToReplace: schemeFactory.options.address.toLowerCase(),
         });

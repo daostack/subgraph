@@ -240,7 +240,7 @@ describe('SchemeFactory', () => {
           id: proposalId,
           schemeToRegisterName: 'SchemeFactory',
           schemeToRegisterData: initData,
-          schemeToRegisterPackageVersion: ['0', '1', '5'],
+          schemeToRegisterPackageVersion: getPackageVersion(),
           schemeToRegisterPermission: '0x0000001f',
           schemeToRemove: schemeFactory.options.address.toLowerCase(),
           decision: '1',

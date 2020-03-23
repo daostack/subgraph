@@ -69,7 +69,7 @@ describe('SchemeFactory', () => {
                             (await schemeFactory.methods.daoFactory().call()),
                           ).encodeABI();
         let propose = schemeFactory.methods.proposeScheme(
-          getArcVersion(),
+          getPackageVersion(),
           'SchemeFactory',
           initData,
           '0x0000001f',

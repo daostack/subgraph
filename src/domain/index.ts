@@ -27,6 +27,7 @@ import {
   updateProposalState,
   updateSFProposal,
   updateSRProposal,
+  updateUSProposal,
 } from './proposal';
 import {
   getReputation,
@@ -146,6 +147,26 @@ export function handleNewCallProposal(
     return;
   }
   updateGSProposal(
+    proposalId,
+    timestamp,
+    avatar,
+    descriptionHash,
+    eventAddress,
+  );
+  handleGPProposalPrivate(proposalId.toHex());
+}
+
+export function handleNewUpgradeProposal(
+  avatar: Address,
+  proposalId: Bytes,
+  timestamp: BigInt,
+  descriptionHash: string,
+  eventAddress: Address,
+): void {
+  if (!daoModule.exists(avatar)) {
+    return;
+  }
+  updateUSProposal(
     proposalId,
     timestamp,
     avatar,

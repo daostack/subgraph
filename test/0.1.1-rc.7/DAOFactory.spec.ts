@@ -66,7 +66,7 @@ describe('DAOFactory', () => {
       [opts.from],
       [0],
       [0],
-      [0, 1, 0],
+      getArcVersion(),
     );
 
     let avatarAddress = await tx.call();

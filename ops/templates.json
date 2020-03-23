@@ -3,52 +3,57 @@
     {
       "name": "Avatar",
       "mapping": "Avatar",
-      "start_arcVersion": "0.1.1-rc.6"
+      "start_arcVersion": "0.1.1-rc.7"
     },
     {
       "name": "Controller",
       "mapping": "Controller",
-      "start_arcVersion": "0.1.1-rc.6"
+      "start_arcVersion": "0.1.1-rc.7"
     },
     {
       "name": "DAOToken",
       "mapping": "DAOToken",
-      "start_arcVersion": "0.1.1-rc.6"
+      "start_arcVersion": "0.1.1-rc.7"
     },
     {
       "name": "Reputation",
       "mapping": "Reputation",
-      "start_arcVersion": "0.1.1-rc.6"
+      "start_arcVersion": "0.1.1-rc.7"
     },
     {
       "name": "ContributionReward",
       "mapping": "ContributionReward",
-      "start_arcVersion": "0.1.1-rc.6"
+      "start_arcVersion": "0.1.1-rc.7"
     },
     {
       "name": "ContributionRewardExt",
       "mapping": "ContributionRewardExt",
-      "start_arcVersion": "0.1.1-rc.6"
+      "start_arcVersion": "0.1.1-rc.7"
     },
     {
       "name": "Competition",
       "mapping": "Competition",
-      "start_arcVersion": "0.1.1-rc.6"
+      "start_arcVersion": "0.1.1-rc.7"
     },
     {
       "name": "GenericScheme",
       "mapping": "GenericScheme",
-      "start_arcVersion": "0.1.1-rc.6"
+      "start_arcVersion": "0.1.1-rc.7"
+    },
+    {
+      "name": "UpgradeScheme",
+      "mapping": "UpgradeScheme",
+      "start_arcVersion": "0.1.1-rc.7"
     },
     {
       "name": "SchemeFactory",
       "mapping": "SchemeFactory",
-      "start_arcVersion": "0.1.1-rc.6"
+      "start_arcVersion": "0.1.1-rc.7"
     },
     {
       "name": "SchemeRegistrar",
       "mapping": "SchemeRegistrar",
-      "start_arcVersion": "0.1.1-rc.6"
+      "start_arcVersion": "0.1.1-rc.7"
     }
   ]
 }

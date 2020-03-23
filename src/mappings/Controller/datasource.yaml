@@ -8,6 +8,7 @@ abis:
   - ContributionReward
   - ContributionRewardExt
   - GenericScheme
+  - UpgradeScheme
   - GenesisProtocol
 entities:
   - ControllerOrganization

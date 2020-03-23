@@ -7,91 +7,98 @@
           "contractName": "DAOToken",
           "dao": "package",
           "mapping": "DAOToken",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "Reputation",
           "contractName": "Reputation",
           "dao": "package",
           "mapping": "Reputation",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "Avatar",
           "contractName": "Avatar",
           "dao": "package",
           "mapping": "Avatar",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "Controller",
           "contractName": "Controller",
           "dao": "package",
           "mapping": "Controller",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "GenesisProtocol",
           "contractName": "GenesisProtocol",
           "dao": "package",
           "mapping": "GenesisProtocol",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "DAORegistry",
           "contractName": "DAORegistryInstance",
           "dao": "package",
           "mapping": "DAORegistry",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "DAOFactory",
           "contractName": "DAOFactoryInstance",
           "dao": "package",
           "mapping": "DAOFactory",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "ContributionReward",
           "contractName": "ContributionReward",
           "dao": "package",
           "mapping": "ContributionReward",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "ContributionRewardExt",
           "contractName": "ContributionRewardExt",
           "dao": "package",
           "mapping": "ContributionRewardExt",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "Competition",
           "contractName": "Competition",
           "dao": "package",
           "mapping": "Competition",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "SchemeFactory",
           "contractName": "SchemeFactory",
           "dao": "package",
           "mapping": "SchemeFactory",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "SchemeRegistrar",
           "contractName": "SchemeRegistrar",
           "dao": "package",
           "mapping": "SchemeRegistrar",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
         },
         {
           "name": "GenericScheme",
           "contractName": "GenericScheme",
           "dao": "package",
           "mapping": "GenericScheme",
-          "arcVersion": "0.1.1-rc.6"
+          "arcVersion": "0.1.1-rc.7"
+        },
+        {
+          "name": "UpgradeScheme",
+          "contractName": "UpgradeScheme",
+          "dao": "package",
+          "mapping": "UpgradeScheme",
+          "arcVersion": "0.1.1-rc.7"
         }
       ]
   },

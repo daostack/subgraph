@@ -1,0 +1,9 @@
+type UpgradeSchemeProposal @entity {
+    id: ID!
+ 	dao: DAO!
+	packageVersion: [BigInt!]
+    contractsNames: [Bytes!]
+    contractsToUpgrade: [Bytes!]
+    descriptionHash: String!
+    executed: Boolean!
+}

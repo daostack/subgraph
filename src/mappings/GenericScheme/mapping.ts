@@ -1,8 +1,6 @@
 import { store } from '@graphprotocol/graph-ts';
 
-// Import event types from the Reputation contract ABI
 import {
-  GenericScheme,
   NewCallProposal,
   ProposalExecuted,
 } from '../../types/GenericScheme/GenericScheme';

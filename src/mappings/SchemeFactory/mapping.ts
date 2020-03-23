@@ -1,6 +1,5 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 
-// Import event types from the Reputation contract ABI
 import {
   NewSchemeProposal,
   ProposalExecuted,
@@ -14,7 +13,7 @@ import {
    SchemeFactoryProposal,
    SchemeFactoryProposalExecuted,
 } from '../../types/schema';
-import { equalsBytes, equalStrings, eventId } from '../../utils';
+import { equalsBytes, equalStrings } from '../../utils';
 
 export function handleNewSchemeProposal(event: NewSchemeProposal): void {
   let ent = new SchemeFactoryNewSchemeProposal(event.params._proposalId.toHex());

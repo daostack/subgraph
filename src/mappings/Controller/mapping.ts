@@ -29,6 +29,7 @@ import {
   GenesisProtocolParam,
   SchemeFactoryParam,
   SchemeRegistrarParam,
+  UpgradeSchemeParam,
 } from '../../types/schema';
 
 import {
@@ -329,6 +330,28 @@ export function setGenericSchemeParams(
   genericSchemeParams.save();
   if (controllerScheme != null) {
     controllerScheme.genericSchemeParams = genericSchemeParams.id;
+    controllerScheme.save();
+  }
+}
+
+export function setUpgradeSchemeParams(
+  avatar: Address,
+  scheme: Address,
+  vmAddress: Address,
+  vmParamsHash: Bytes,
+  arcPackage: Bytes,
+): void {
+  setGPParams(vmAddress, vmParamsHash, avatar);
+  let controllerScheme = ControllerScheme.load(
+    crypto.keccak256(concat(avatar, scheme)).toHex(),
+  );
+  let upgradeSchemeParams = new UpgradeSchemeParam(scheme.toHex());
+  upgradeSchemeParams.votingMachine = vmAddress;
+  upgradeSchemeParams.voteParams = vmParamsHash.toHex();
+  upgradeSchemeParams.arcPackage = arcPackage;
+  upgradeSchemeParams.save();
+  if (controllerScheme != null) {
+    controllerScheme.upgradeSchemeParams = upgradeSchemeParams.id;
     controllerScheme.save();
   }
 }

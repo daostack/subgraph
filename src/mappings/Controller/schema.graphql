@@ -23,6 +23,7 @@ type ControllerScheme @entity {
 	schemeFactoryParams: SchemeFactoryParam
 	schemeRegistrarParams: SchemeRegistrarParam
 	genericSchemeParams: GenericSchemeParam
+	upgradeSchemeParams: UpgradeSchemeParam
 	numberOfQueuedProposals: BigInt!
 	numberOfPreBoostedProposals: BigInt!
 	numberOfBoostedProposals: BigInt!
@@ -108,6 +109,13 @@ type GenericSchemeParam @entity {
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam!
 	contractToCall: Bytes!
+}
+
+type UpgradeSchemeParam @entity {
+	id: ID!
+	votingMachine: Bytes!
+	voteParams: GenesisProtocolParam!
+	arcPackage: Bytes!
 }
 
 type GenesisProtocolParam @entity {

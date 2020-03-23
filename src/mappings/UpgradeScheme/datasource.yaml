@@ -1,0 +1,10 @@
+abis:
+  - UpgradeScheme
+  - GenesisProtocol
+entities:
+  - UpgradeSchemeProposal
+eventHandlers:
+  - event: ProposalExecuted(indexed address,indexed bytes32,bool)
+    handler: handleProposalExecuted
+  - event: NewUpgradeProposal(indexed address,indexed bytes32,uint64[3],bytes32[],address[],string)
+    handler: handleNewUpgradeProposal

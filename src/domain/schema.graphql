@@ -105,6 +105,9 @@ type Proposal @entity {
 	# Generic Scheme params
 	genericScheme: GenericSchemeProposal
 
+	# Upgrade Scheme params
+	upgradeScheme: UpgradeSchemeProposal
+
 	# SchemeRegistrar proposal
   	schemeFactory: SchemeFactoryProposal
 	  

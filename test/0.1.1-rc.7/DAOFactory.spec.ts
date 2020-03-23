@@ -1,4 +1,4 @@
-import { getArcVersion, getContractAddresses, getOptions, getWeb3, sendQuery } from './util';
+import { getArcVersion, getContractAddresses, getOptions, getPackageVersion, getWeb3, sendQuery } from './util';
 
 const DAOFactory = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOFactory.json');
 const DAOToken = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOToken.json');
@@ -66,7 +66,7 @@ describe('DAOFactory', () => {
       [opts.from],
       [0],
       [0],
-      [0, 1, 0],
+      getPackageVersion(),
     );
 
     let avatarAddress = await tx.call();

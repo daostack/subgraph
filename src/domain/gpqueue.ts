@@ -4,13 +4,15 @@ import { setContributionRewardExtParams,
          setGenericSchemeParams,
          setSchemeFactoryParams,
          setSchemeRegistrarParams,
+         setUpgradeSchemeParams,
         } from '../mappings/Controller/mapping';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
 import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
-import {GenericScheme} from '../types/GenericScheme/GenericScheme';
+import { GenericScheme } from '../types/GenericScheme/GenericScheme';
 import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeFactory} from '../types/SchemeFactory/SchemeFactory';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
+import { UpgradeScheme } from '../types/UpgradeScheme/UpgradeScheme';
 import { concat, equalStrings} from '../utils';
 
 export function getGPQueue(id: string): GPQueue {
@@ -94,6 +96,17 @@ export function create(dao: Address,
     let contractToCall = genericScheme.contractToCall();
     if (!equalStrings(gpAddress.toHex(), addressZero)) {
         setGenericSchemeParams(dao, scheme, gpAddress, voteParams, contractToCall);
+        isGPQue = true;
+    }
+  }
+
+   if (equalStrings(contractInfo.name, 'UpgradeScheme')) {
+    let upgradeScheme =  UpgradeScheme.bind(scheme);
+    gpAddress = upgradeScheme.votingMachine();
+    let voteParams = upgradeScheme.voteParams();
+    let arcPackage = upgradeScheme.arcPackage();
+    if (!equalStrings(gpAddress.toHex(), addressZero)) {
+        setUpgradeSchemeParams(dao, scheme, gpAddress, voteParams, arcPackage);
         isGPQue = true;
     }
   }

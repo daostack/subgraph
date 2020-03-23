@@ -2,6 +2,7 @@ import {
   getArcVersion,
   getContractAddresses,
   getOptions,
+  getPackageVersion,
   getWeb3,
   prepareReputation,
   sendQuery,
@@ -68,7 +69,7 @@ describe('SchemeFactory', () => {
                             (await schemeFactory.methods.daoFactory().call()),
                           ).encodeABI();
         let propose = schemeFactory.methods.proposeScheme(
-          [0, 1, 5],
+          getPackageVersion(),
           'SchemeFactory',
           initData,
           '0x0000001f',
@@ -97,7 +98,7 @@ describe('SchemeFactory', () => {
             votingMachine: addresses.GenesisProtocol.toLowerCase(),
             schemeName: 'SchemeFactory',
             schemeData: initData,
-            packageVersion: ['0', '1', '5'],
+            packageVersion: getPackageVersion(),
             permission: '0x0000001f',
             schemeToReplace: schemeFactory.options.address.toLowerCase(),
         });
@@ -239,7 +240,7 @@ describe('SchemeFactory', () => {
           id: proposalId,
           schemeToRegisterName: 'SchemeFactory',
           schemeToRegisterData: initData,
-          schemeToRegisterPackageVersion: ['0', '1', '5'],
+          schemeToRegisterPackageVersion: getPackageVersion(),
           schemeToRegisterPermission: '0x0000001f',
           schemeToRemove: schemeFactory.options.address.toLowerCase(),
           decision: '1',

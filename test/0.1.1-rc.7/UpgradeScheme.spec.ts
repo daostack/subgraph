@@ -112,9 +112,9 @@ describe('Generic Scheme', () => {
           },
           packageVersion: getPackageVersion(),
           contractsNames: [
-            web3.utils.fromAscii('Avatar') + "0000000000000000000000000000000000000000000000000000",
-            web3.utils.fromAscii('Reputation') + "00000000000000000000000000000000000000000000",
-            web3.utils.fromAscii('DAOToken') + "000000000000000000000000000000000000000000000000",
+            web3.utils.fromAscii('Avatar') + '0000000000000000000000000000000000000000000000000000',
+            web3.utils.fromAscii('Reputation') + '00000000000000000000000000000000000000000000',
+            web3.utils.fromAscii('DAOToken') + '000000000000000000000000000000000000000000000000',
           ],
           contractsToUpgrade: [
             addresses.Avatar.toLowerCase(),
@@ -178,9 +178,9 @@ describe('Generic Scheme', () => {
           },
           packageVersion: getPackageVersion(),
           contractsNames: [
-            web3.utils.fromAscii('Avatar') + "0000000000000000000000000000000000000000000000000000",
-            web3.utils.fromAscii('Reputation') + "00000000000000000000000000000000000000000000",
-            web3.utils.fromAscii('DAOToken') + "000000000000000000000000000000000000000000000000",
+            web3.utils.fromAscii('Avatar') + '0000000000000000000000000000000000000000000000000000',
+            web3.utils.fromAscii('Reputation') + '00000000000000000000000000000000000000000000',
+            web3.utils.fromAscii('DAOToken') + '000000000000000000000000000000000000000000000000',
           ],
           contractsToUpgrade: [
             addresses.Avatar.toLowerCase(),

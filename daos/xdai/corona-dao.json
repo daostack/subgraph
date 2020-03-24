@@ -1,0 +1,34 @@
+{
+    "name": "COVDAO",
+    "Avatar": "0x7C23a1FEa5BFf38205D8EEe54dD61F5511f6AC0B",
+    "DAOToken": "0x246e2B2c6205fDBEBDeb6766cdFC6153c9b63e64",
+    "Reputation": "0x17402CebE7B44A713e329090A8fD6A61cCfBAC09",
+    "Controller": "0x35130F1779767C1421dEB3A2359f6a1A414B963F",
+    "Schemes": [
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0x0A62efa3D93562823B39B3AC2eb7E033e2d9d1D9",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "ReputationAdmin",
+        "alias": "ReputationAdmin",
+        "address": "0x80deE77A24028cd8D3b4b8772EaeE3617E19E07C",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "ContributionRewardExt",
+        "address": "0x0A62efa3D93562823B39B3AC2eb7E033e2d9d1D9",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "Competition",
+        "address": "0x09a5e21dd918943785F01a3FC4aC1e15da5512e8",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.41"
+  }

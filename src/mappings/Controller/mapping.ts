@@ -69,6 +69,7 @@ function insertScheme(
     controllerScheme.numberOfPreBoostedProposals = BigInt.fromI32(0);
     controllerScheme.numberOfBoostedProposals = BigInt.fromI32(0);
     controllerScheme.numberOfExpiredInQueueProposals = BigInt.fromI32(0);
+    controllerScheme.isRegistered = true;
   }
   controllerScheme.dao = avatarAddress.toHex();
   controllerScheme.paramsHash = paramsHash;
@@ -91,11 +92,12 @@ function insertScheme(
   controllerScheme.save();
 }
 
-function deleteScheme(avatarAddress: Address, scheme: Address): void {
-  store.remove(
-    'ControllerScheme',
-    crypto.keccak256(concat(avatarAddress, scheme)).toHex(),
-  );
+function unregisterScheme(avatarAddress: Address, scheme: Address): void {
+  let controllerScheme = ControllerScheme.load(crypto.keccak256(concat(avatarAddress, scheme)).toHex());
+  if (controllerScheme != null) {
+    controllerScheme.isRegistered = false;
+    controllerScheme.save();
+  }
 }
 
 function insertOrganization(
@@ -215,7 +217,7 @@ export function handleRegisterScheme(event: RegisterScheme): void {
 export function handleUnregisterScheme(event: UnregisterScheme): void {
   let controller = Controller.bind(event.address);
   let avatar = controller.avatar();
-  deleteScheme(avatar, event.params._scheme);
+  unregisterScheme(avatar, event.params._scheme);
 
   let ent = new ControllerUnregisterScheme(eventId(event));
   ent.txHash = event.transaction.hash;

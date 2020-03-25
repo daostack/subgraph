@@ -242,6 +242,7 @@ describe('UController', () => {
         numberOfPreBoostedProposals
         numberOfBoostedProposals
         numberOfExpiredInQueueProposals
+        isRegistered
       }
     }`);
 
@@ -260,6 +261,7 @@ describe('UController', () => {
       numberOfExpiredInQueueProposals: '0',
       numberOfPreBoostedProposals: '0',
       numberOfQueuedProposals: '0',
+      isRegistered: true,
     });
     expect(controllerSchemes).toContainEqual({
       dao: {
@@ -276,6 +278,19 @@ describe('UController', () => {
       numberOfExpiredInQueueProposals: '0',
       numberOfPreBoostedProposals: '0',
       numberOfQueuedProposals: '0',
+      isRegistered: true,
+    });
+
+    const isRegisteredScheme = await sendQuery(`{
+      controllerSchemes(where: { address: "${accounts[3].address.toLowerCase()}" }) {
+        address
+        isRegistered
+      }
+    }`);
+
+    expect(isRegisteredScheme.controllerSchemes).toContainEqual({
+      address: accounts[3].address.toLowerCase(),
+      isRegistered: false,
     });
 
     const { ucontrollerAddGlobalConstraints } = await sendQuery(`{

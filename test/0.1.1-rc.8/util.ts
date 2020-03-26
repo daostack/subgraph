@@ -69,6 +69,8 @@ export function getContractAddresses() {
     ContributionRewardExt: addresses.private.dao[arcVersion].Schemes[6].address,
     Competition: addresses.private.dao[arcVersion].StandAloneContracts[1].address,
     SchemeFactory: addresses.private.dao[arcVersion].Schemes[7].address,
+    JoinAndQuit: addresses.private.dao[arcVersion].Schemes[8].address,
+    FundingRequest: addresses.private.dao[arcVersion].Schemes[9].address,
   };
 }
 

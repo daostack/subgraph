@@ -20,6 +20,7 @@ import {
   updateCRProposal,
   updateGPProposal,
   updateGSProposal,
+  updateJQProposal,
   updateProposalAfterVote,
   updateProposalconfidence,
   updateProposalExecution,
@@ -167,6 +168,26 @@ export function handleNewUpgradeProposal(
     return;
   }
   updateUSProposal(
+    proposalId,
+    timestamp,
+    avatar,
+    descriptionHash,
+    eventAddress,
+  );
+  handleGPProposalPrivate(proposalId.toHex());
+}
+
+export function handleNewJoinAndQuitProposal(
+  avatar: Address,
+  proposalId: Bytes,
+  timestamp: BigInt,
+  descriptionHash: string,
+  eventAddress: Address,
+): void {
+  if (!daoModule.exists(avatar)) {
+    return;
+  }
+  updateJQProposal(
     proposalId,
     timestamp,
     avatar,

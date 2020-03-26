@@ -24,6 +24,7 @@ type ControllerScheme @entity {
 	schemeRegistrarParams: SchemeRegistrarParam
 	genericSchemeParams: GenericSchemeParam
 	upgradeSchemeParams: UpgradeSchemeParam
+	joinAndQuitParams: JoinAndQuitParam
 	numberOfQueuedProposals: BigInt!
 	numberOfPreBoostedProposals: BigInt!
 	numberOfBoostedProposals: BigInt!
@@ -116,6 +117,17 @@ type UpgradeSchemeParam @entity {
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam!
 	arcPackage: Bytes!
+}
+
+type JoinAndQuitParam @entity {
+	id: ID!
+	votingMachine: Bytes!
+	voteParams: GenesisProtocolParam!
+	fundingToken: Bytes!
+	minFeeToJoin: BigInt!
+	memberReputation: BigInt!
+	fundingGoal: BigInt!
+	fundingGoalDeadLine: BigInt!
 }
 
 type GenesisProtocolParam @entity {

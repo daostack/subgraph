@@ -1,0 +1,9 @@
+type JoinAndQuitProposal @entity {
+	id: ID!
+	dao: DAO!
+	proposedMember: Bytes!
+	funder: Bytes!
+	funding: BigInt!
+	executed: Boolean!
+	reputationMinted: BigInt!
+}

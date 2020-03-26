@@ -2,7 +2,6 @@ import {
     getArcVersion,
     getContractAddresses,
     getOptions,
-    getPackageVersion,
     getWeb3,
     prepareReputation,
     sendQuery,

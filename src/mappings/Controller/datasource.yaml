@@ -10,6 +10,7 @@ abis:
   - GenericScheme
   - UpgradeScheme
   - JoinAndQuit
+  - FundingRequest
   - GenesisProtocol
 entities:
   - ControllerOrganization

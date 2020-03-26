@@ -407,6 +407,24 @@ export function updateJQProposal(
   saveProposal(proposal);
 }
 
+export function updateFRProposal(
+  proposalId: Bytes,
+  createdAt: BigInt,
+  avatarAddress: Address,
+  descriptionHash: string,
+  schemeAddress: Address,
+): void {
+  let proposal = getProposal(proposalId.toHex());
+  proposal.dao = avatarAddress.toHex();
+  proposal.fundingRequest = proposalId.toHex();
+  proposal.createdAt = createdAt;
+  proposal.descriptionHash = descriptionHash;
+  proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
+  getProposalIPFSData(proposal);
+
+  saveProposal(proposal);
+}
+
 export function updateSFProposal(
   proposalId: string,
   createdAt: BigInt,

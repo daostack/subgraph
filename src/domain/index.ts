@@ -18,6 +18,7 @@ import {
   parseOutcome,
   saveProposal,
   updateCRProposal,
+  updateFRProposal,
   updateGPProposal,
   updateGSProposal,
   updateJQProposal,
@@ -32,7 +33,6 @@ import {
 } from './proposal';
 import {
   getReputation,
-  insertReputation,
   updateReputationTotalSupply,
 } from './reputation';
 import {
@@ -188,6 +188,26 @@ export function handleNewJoinAndQuitProposal(
     return;
   }
   updateJQProposal(
+    proposalId,
+    timestamp,
+    avatar,
+    descriptionHash,
+    eventAddress,
+  );
+  handleGPProposalPrivate(proposalId.toHex());
+}
+
+export function handleNewFundingRequestProposal(
+  avatar: Address,
+  proposalId: Bytes,
+  timestamp: BigInt,
+  descriptionHash: string,
+  eventAddress: Address,
+): void {
+  if (!daoModule.exists(avatar)) {
+    return;
+  }
+  updateFRProposal(
     proposalId,
     timestamp,
     avatar,

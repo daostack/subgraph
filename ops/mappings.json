@@ -106,6 +106,13 @@
           "dao": "package",
           "mapping": "JoinAndQuit",
           "arcVersion": "0.1.1-rc.8"
+        },
+        {
+          "name": "FundingRequest",
+          "contractName": "FundingRequest",
+          "dao": "package",
+          "mapping": "FundingRequest",
+          "arcVersion": "0.1.1-rc.8"
         }
       ]
   },
@@ -216,6 +223,13 @@
         "dao": "package",
         "mapping": "JoinAndQuit",
         "arcVersion": "0.1.1-rc.8"
+      },
+      {
+        "name": "FundingRequest",
+        "contractName": "FundingRequest",
+        "dao": "package",
+        "mapping": "FundingRequest",
+        "arcVersion": "0.1.1-rc.8"
       }
     ]
   },
@@ -325,6 +339,13 @@
         "contractName": "JoinAndQuit",
         "dao": "package",
         "mapping": "JoinAndQuit",
+        "arcVersion": "0.1.1-rc.8"
+      },
+      {
+        "name": "FundingRequest",
+        "contractName": "FundingRequest",
+        "dao": "package",
+        "mapping": "FundingRequest",
         "arcVersion": "0.1.1-rc.8"
       }
     ]

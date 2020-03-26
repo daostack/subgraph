@@ -111,6 +111,9 @@ type Proposal @entity {
 	# JoinAndQuit Scheme params
 	joinAndQuit: JoinAndQuitProposal
 
+	# FundingRequest Scheme params
+	fundingRequest: FundingRequestProposal
+
 	# SchemeRegistrar proposal
   	schemeFactory: SchemeFactoryProposal
 	  

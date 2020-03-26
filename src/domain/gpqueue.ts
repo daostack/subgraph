@@ -1,6 +1,7 @@
 import { Address, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
 import { setContributionRewardExtParams,
          setContributionRewardParams,
+         setFundingRequestParams,
          setGenericSchemeParams,
          setJoinAndQuitParams,
          setSchemeFactoryParams,
@@ -9,6 +10,7 @@ import { setContributionRewardExtParams,
         } from '../mappings/Controller/mapping';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
 import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
+import { FundingRequest } from '../types/FundingRequest/FundingRequest';
 import { GenericScheme } from '../types/GenericScheme/GenericScheme';
 import { JoinAndQuit } from '../types/JoinAndQuit/JoinAndQuit';
 import { ContractInfo, GPQueue } from '../types/schema';
@@ -134,6 +136,24 @@ export function create(dao: Address,
           memberReputation,
           fundingGoal,
           fundingGoalDeadLine,
+        );
+        isGPQue = true;
+    }
+  }
+
+   if (equalStrings(contractInfo.name, 'FundingRequest')) {
+    let fundingRequest =  FundingRequest.bind(scheme);
+    gpAddress = fundingRequest.votingMachine();
+    let voteParams = fundingRequest.voteParams();
+    let fundingToken = fundingRequest.fundingToken();
+
+    if (!equalStrings(gpAddress.toHex(), addressZero)) {
+        setFundingRequestParams(
+          dao,
+          scheme,
+          gpAddress,
+          voteParams,
+          fundingToken,
         );
         isGPQue = true;
     }

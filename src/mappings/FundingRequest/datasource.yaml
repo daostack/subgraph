@@ -1,0 +1,12 @@
+abis:
+  - FundingRequest
+  - GenesisProtocol
+entities:
+  - FundingRequestProposal
+eventHandlers:
+  - event: ProposalExecuted(indexed address,indexed bytes32,bool)
+    handler: handleProposalExecuted
+  - event: NewFundingProposal(indexed address,indexed bytes32,address,uint256,string)
+    handler: handleNewFundingRequestProposal
+  - event: Redeem(indexed address,indexed bytes32,indexed address,uint256)
+    handler: handleRedeem

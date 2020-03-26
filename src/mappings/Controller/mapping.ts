@@ -25,6 +25,7 @@ import {
   ControllerUnregisterScheme,
   ControllerUpgradeController,
   DAO,
+  FundingRequestParam,
   GenericSchemeParam,
   GenesisProtocolParam,
   JoinAndQuitParam,
@@ -383,6 +384,28 @@ export function setJoinAndQuitParams(
   joinAndQuitParams.save();
   if (controllerScheme != null) {
     controllerScheme.joinAndQuitParams = joinAndQuitParams.id;
+    controllerScheme.save();
+  }
+}
+
+export function setFundingRequestParams(
+  avatar: Address,
+  scheme: Address,
+  vmAddress: Address,
+  vmParamsHash: Bytes,
+  fundingToken: Address,
+): void {
+  setGPParams(vmAddress, vmParamsHash, avatar);
+  let controllerScheme = ControllerScheme.load(
+    crypto.keccak256(concat(avatar, scheme)).toHex(),
+  );
+  let fundingRequestParams = new FundingRequestParam(scheme.toHex());
+  fundingRequestParams.votingMachine = vmAddress;
+  fundingRequestParams.voteParams = vmParamsHash.toHex();
+  fundingRequestParams.fundingToken = fundingToken;
+  fundingRequestParams.save();
+  if (controllerScheme != null) {
+    controllerScheme.fundingRequestParams = fundingRequestParams.id;
     controllerScheme.save();
   }
 }

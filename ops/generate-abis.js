@@ -11,15 +11,15 @@ const getDirectories = source =>
  */
 async function generateAbis () {
   getDirectories('./node_modules/@daostack/migration-experimental/contracts/').forEach(arcVersion => {
-    if (!fs.existsSync('./abis/' + arcVersion)) {
-        fs.mkdirSync('./abis/' + arcVersion, { recursive: true })
+    if (!fs.existsSync(`${__dirname}/../abis/` + arcVersion)) {
+        fs.mkdirSync(`${__dirname}/../abis/` + arcVersion, { recursive: true })
     }
-      
+
     const files = fs.readdirSync('./node_modules/@daostack/migration-experimental/contracts/' + arcVersion)
     files.forEach(file => {
       const { abi } = JSON.parse(fs.readFileSync(path.join('./node_modules/@daostack/migration-experimental/contracts/' + arcVersion, file), 'utf-8'))
       fs.writeFileSync(
-        path.join('./abis/' + arcVersion, file),
+        path.join(`${__dirname}/../abis/` + arcVersion, file),
         JSON.stringify(abi, undefined, 2),
         'utf-8'
       )

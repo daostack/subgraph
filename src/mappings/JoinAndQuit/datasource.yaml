@@ -3,6 +3,7 @@ abis:
   - GenesisProtocol
 entities:
   - JoinAndQuitProposal
+  - RageQuitted
 eventHandlers:
   - event: ProposalExecuted(indexed address,indexed bytes32,int256)
     handler: handleProposalExecuted
@@ -10,3 +11,5 @@ eventHandlers:
     handler: handleNewJoinAndQuitProposal
   - event: RedeemReputation(indexed address,indexed bytes32,indexed address,uint256)
     handler: handleRedeemReputation
+  - event: RageQuit(indexed address,indexed address,indexed uint256)
+    handler: handleRageQuit

@@ -1,6 +1,7 @@
 import {
   JoinInProposal,
   ProposalExecuted,
+  RageQuit,
   RedeemReputation,
 } from '../../types/JoinAndQuit/JoinAndQuit';
 
@@ -8,13 +9,13 @@ import * as domain from '../../domain';
 
 // Import entity types generated from the GraphQL schema
 import { BigInt } from '@graphprotocol/graph-ts';
-import { JoinAndQuitProposal } from '../../types/schema';
+import { JoinAndQuitProposal, RageQuitted } from '../../types/schema';
+import { eventId } from '../../utils';
 
 function insertNewProposal(event: JoinInProposal): void {
   let proposal = new JoinAndQuitProposal(event.params._proposalId.toHex());
   proposal.dao = event.params._avatar.toHex();
   proposal.proposedMember = event.params._proposedMember;
-  proposal.funder = event.transaction.from;
   proposal.funding = event.params._feeAmount;
   proposal.executed = false;
   proposal.reputationMinted = BigInt.fromI32(0);
@@ -53,4 +54,15 @@ export function handleRedeemReputation(
     proposal.reputationMinted = event.params._amount;
     proposal.save();
   }
+}
+
+export function handleRageQuit(
+  event: RageQuit,
+): void {
+  let rageQuitted = new RageQuitted(eventId(event));
+  rageQuitted.dao = event.params._avatar.toHex();
+  rageQuitted.rageQuitter = event.params._rageQuitter;
+  rageQuitted.refund = event.params._refund;
+
+  rageQuitted.save();
 }

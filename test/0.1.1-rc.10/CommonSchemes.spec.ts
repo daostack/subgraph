@@ -8,9 +8,13 @@ import {
     waitUntilTrue,
   } from './util';
 
-const FundingRequest = require('@daostack/migration-experimental/contracts/0.1.1-rc.8/FundingRequest.json');
-const JoinAndQuit = require('@daostack/migration-experimental/contracts/0.1.1-rc.8/JoinAndQuit.json');
-const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.8/GenesisProtocol.json');
+const Avatar = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Avatar.json');
+const Reputation = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Reputation.json');
+const FundingRequest = require(
+  '@daostack/migration-experimental/contracts/' + getArcVersion() + '/FundingRequest.json',
+);
+const JoinAndQuit = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/JoinAndQuit.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/GenesisProtocol.json');
 
 describe('JoinAndQuit Scheme', () => {
     let web3;
@@ -27,7 +31,7 @@ describe('JoinAndQuit Scheme', () => {
     }, 100000);
 
     it('JoinAndQuit proposal', async () => {
-
+      const avatar = new web3.eth.Contract(Avatar.abi, addresses.Avatar, opts);
       const joinAndQuit = new web3.eth.Contract(
         JoinAndQuit.abi,
         addresses.JoinAndQuit,
@@ -41,15 +45,15 @@ describe('JoinAndQuit Scheme', () => {
 
       const descHash =
         '0x000000000000000000000000000000000000000000000000000000000000abcd';
+      const minFee = 100;
       const goal = 1000;
-      async function propose() {
+      async function propose({ from }) {
         const prop = joinAndQuit.methods.proposeToJoin(
           descHash,
-          goal,
-          accounts[6].address,
+          minFee * 5,
         );
-        const proposalId = await prop.call({ value: goal });
-        const { blockNumber } = await prop.send({ value: goal });
+        const proposalId = await prop.call({ value: minFee * 5, from });
+        const { blockNumber } = await prop.send({ value: minFee * 5, from });
         const { timestamp } = await web3.eth.getBlock(blockNumber);
         return { proposalId, timestamp };
       }
@@ -69,7 +73,14 @@ describe('JoinAndQuit Scheme', () => {
         return timestamp;
       }
 
-      const { proposalId: p1, timestamp: p1Creation } = await propose();
+      async function rageQuit({ quitter }) {
+        const { blockNumber } = await joinAndQuit.methods.rageQuit().send({from: quitter});
+        const { timestamp } = await web3.eth.getBlock(blockNumber);
+        return timestamp;
+      }
+
+      const { proposalId: p1, timestamp: p1Creation } = await propose({ from: accounts[6].address });
+      const { proposalId: p2 } = await propose({ from: accounts[7].address });
 
       const getProposal = `{
         proposal(id: "${p1}") {
@@ -87,7 +98,6 @@ describe('JoinAndQuit Scheme', () => {
                  id
               }
               proposedMember
-              funder
               funding
               executed
               reputationMinted
@@ -111,7 +121,7 @@ describe('JoinAndQuit Scheme', () => {
         stage: 'Queued',
         createdAt: p1Creation.toString(),
         executedAt: null,
-        proposer: web3.eth.defaultAccount.toLowerCase(),
+        proposer: accounts[6].address.toLowerCase(),
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
         joinAndQuit: {
@@ -120,8 +130,7 @@ describe('JoinAndQuit Scheme', () => {
             id: addresses.Avatar.toLowerCase(),
           },
           proposedMember: accounts[6].address.toLowerCase(),
-          funder: accounts[0].address.toLowerCase(),
-          funding: goal.toString(),
+          funding: (minFee * 5).toString(),
           executed: false,
           reputationMinted: '0',
         },
@@ -167,7 +176,7 @@ describe('JoinAndQuit Scheme', () => {
         stage: 'Executed',
         createdAt: p1Creation.toString(),
         executedAt: executedAt + '',
-        proposer: web3.eth.defaultAccount.toLowerCase(),
+        proposer: accounts[6].address.toLowerCase(),
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
         joinAndQuit: {
@@ -176,8 +185,7 @@ describe('JoinAndQuit Scheme', () => {
             id: addresses.Avatar.toLowerCase(),
           },
           proposedMember: accounts[6].address.toLowerCase(),
-          funder: accounts[0].address.toLowerCase(),
-          funding: goal.toString(),
+          funding: (minFee * 5).toString(),
           executed: true,
           reputationMinted: '0',
         },
@@ -197,7 +205,7 @@ describe('JoinAndQuit Scheme', () => {
         stage: 'Executed',
         createdAt: p1Creation.toString(),
         executedAt: executedAt + '',
-        proposer: web3.eth.defaultAccount.toLowerCase(),
+        proposer: accounts[6].address.toLowerCase(),
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
         joinAndQuit: {
@@ -206,13 +214,53 @@ describe('JoinAndQuit Scheme', () => {
             id: addresses.Avatar.toLowerCase(),
           },
           proposedMember: accounts[6].address.toLowerCase(),
-          funder: accounts[0].address.toLowerCase(),
-          funding: goal.toString(),
+          funding: (minFee * 5).toString(),
           executed: true,
           reputationMinted: '100',
         },
       });
 
+      await vote({
+        proposalId: p2,
+        outcome: PASS,
+        voter: accounts[0].address,
+      });
+
+      await vote({
+        proposalId: p2,
+        outcome: PASS,
+        voter: accounts[1].address,
+      });
+
+      await vote({
+        proposalId: p2,
+        outcome: PASS,
+        voter: accounts[2].address,
+      });
+
+      await rageQuit({ quitter: accounts[7].address });
+
+      let vault = await avatar.methods.vault().call();
+      let refund = await web3.eth.getBalance((vault));
+
+      const getRageQuits = `{
+        rageQuitteds {
+          dao {
+            id
+         }
+          rageQuitter
+          refund
+        }
+      }`;
+
+      let rageQuits = (await sendQuery(getRageQuits)).rageQuitteds;
+      expect(rageQuits).toContainEqual({
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
+        },
+        rageQuitter: accounts[7].address.toLowerCase(),
+        refund: refund.toString(),
+      });
     }, 100000);
 
     it('FundingRequest proposal', async () => {

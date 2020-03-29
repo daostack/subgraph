@@ -48,9 +48,7 @@ describe('JoinAndQuit Scheme', () => {
           goal,
           accounts[6].address,
         );
-        console.log('hi1');
         const proposalId = await prop.call({ value: goal });
-        console.log('hi2');
         const { blockNumber } = await prop.send({ value: goal });
         const { timestamp } = await web3.eth.getBlock(blockNumber);
         return { proposalId, timestamp };
@@ -58,7 +56,6 @@ describe('JoinAndQuit Scheme', () => {
 
       const [PASS, FAIL] = [1, 2];
       async function vote({ proposalId, outcome, voter, amount = 0 }) {
-        console.log('hi3');
         const { blockNumber } = await genesisProtocol.methods
           .vote(proposalId, outcome, amount, voter)
           .send({ from: voter });
@@ -67,7 +64,6 @@ describe('JoinAndQuit Scheme', () => {
       }
 
       async function redeem({ proposalId }) {
-        console.log('hi4');
         const { blockNumber } = await joinAndQuit.methods.redeemReputation(proposalId).send();
         const { timestamp } = await web3.eth.getBlock(blockNumber);
         return timestamp;
@@ -152,16 +148,10 @@ describe('JoinAndQuit Scheme', () => {
         voter: accounts[1].address,
       });
 
-      await vote({
-        proposalId: p1,
-        outcome: PASS,
-        voter: accounts[2].address,
-      });
-
       let executedAt = await vote({
         proposalId: p1,
         outcome: PASS,
-        voter: accounts[3].address,
+        voter: accounts[2].address,
       });
 
       const executedIsIndexed = async () => {

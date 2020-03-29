@@ -136,16 +136,10 @@ describe('Generic Scheme', () => {
         voter: accounts[1].address,
       });
 
-      await vote({
-        proposalId: p1,
-        outcome: PASS,
-        voter: accounts[2].address,
-      });
-
       let executedAt = await vote({
         proposalId: p1,
         outcome: PASS,
-        voter: accounts[3].address,
+        voter: accounts[2].address,
       });
 
       const executedIsIndexed = async () => {

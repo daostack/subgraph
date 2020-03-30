@@ -1,16 +1,15 @@
 import {
-    getArcVersion,
     getContractAddresses,
     getOptions,
-    getPackageVersion,
     getWeb3,
     prepareReputation,
     sendQuery,
     waitUntilTrue,
   } from './util';
 
-const UpgradeScheme = require('@daostack/migration-experimental/contracts/0.1.1-rc.10/UpgradeScheme.json');
-const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.10/GenesisProtocol.json');
+const ActionMock = require('@daostack/migration-experimental/contracts/0.1.1-rc.11/ActionMock.json');
+const GenericScheme = require('@daostack/migration-experimental/contracts/0.1.1-rc.11/GenericScheme.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.11/GenesisProtocol.json');
 
 describe('Generic Scheme', () => {
     let web3;
@@ -28,9 +27,9 @@ describe('Generic Scheme', () => {
 
     it('generic scheme proposal', async () => {
 
-      const upgradeScheme = new web3.eth.Contract(
-        UpgradeScheme.abi,
-        addresses.UpgradeScheme,
+      const genericScheme = new web3.eth.Contract(
+        GenericScheme.abi,
+        addresses.GenericScheme,
         opts,
       );
       const genesisProtocol = new web3.eth.Contract(
@@ -39,16 +38,18 @@ describe('Generic Scheme', () => {
         opts,
       );
 
+      const actionMock = new web3.eth.Contract(
+        ActionMock.abi,
+        addresses.ActionMock,
+        opts,
+      );
+
       const descHash =
         '0x000000000000000000000000000000000000000000000000000000000000abcd';
+      let callData = await actionMock.methods.test2(addresses.Avatar).encodeABI();
 
       async function propose() {
-        const prop = upgradeScheme.methods.proposeUpgrade(
-          getPackageVersion(),
-          [web3.utils.fromAscii('Avatar'), web3.utils.fromAscii('Reputation'), web3.utils.fromAscii('DAOToken')],
-          [addresses.Avatar.toLowerCase(), addresses.Reputation.toLowerCase(), addresses.DAOToken.toLowerCase()],
-          descHash,
-        );
+        const prop = genericScheme.methods.proposeCall(callData, 0, descHash);
         const proposalId = await prop.call();
         const { blockNumber } = await prop.send();
         const { timestamp } = await web3.eth.getBlock(blockNumber);
@@ -76,20 +77,20 @@ describe('Generic Scheme', () => {
             proposer
             votingMachine
 
-            upgradeScheme {
+            genericScheme {
               id
-              dao {
+                 dao {
                  id
               }
-              packageVersion
-              contractsNames
-              contractsToUpgrade
-              descriptionHash
+                 contractToCall
+              callData
+              value
               executed
+              returnValue
             }
             scheme {
-              upgradeSchemeParams {
-                arcPackage
+              genericSchemeParams {
+                contractToCall
               }
             }
         }
@@ -105,28 +106,20 @@ describe('Generic Scheme', () => {
         proposer: web3.eth.defaultAccount.toLowerCase(),
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
-        upgradeScheme: {
+        genericScheme: {
           id: p1,
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
-          packageVersion: getPackageVersion(),
-          contractsNames: [
-            web3.utils.fromAscii('Avatar') + '0000000000000000000000000000000000000000000000000000',
-            web3.utils.fromAscii('Reputation') + '00000000000000000000000000000000000000000000',
-            web3.utils.fromAscii('DAOToken') + '000000000000000000000000000000000000000000000000',
-          ],
-          contractsToUpgrade: [
-            addresses.Avatar.toLowerCase(),
-            addresses.Reputation.toLowerCase(),
-            addresses.DAOToken.toLowerCase(),
-          ],
-          descriptionHash: descHash,
+          contractToCall: '0x0000000000000000000000000000000000000000',
+          callData,
+          value: '0',
           executed: false,
+          returnValue: null,
         },
         scheme: {
-          upgradeSchemeParams: {
-            arcPackage: addresses.Package.toLowerCase(),
+          genericSchemeParams: {
+            contractToCall: '0x0000000000000000000000000000000000000000',
           },
         },
       });
@@ -165,39 +158,18 @@ describe('Generic Scheme', () => {
         proposer: web3.eth.defaultAccount.toLowerCase(),
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
-        upgradeScheme: {
+        genericScheme: {
           id: p1,
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
-          packageVersion: getPackageVersion(),
-          contractsNames: [
-            web3.utils.fromAscii('Avatar') + '0000000000000000000000000000000000000000000000000000',
-            web3.utils.fromAscii('Reputation') + '00000000000000000000000000000000000000000000',
-            web3.utils.fromAscii('DAOToken') + '000000000000000000000000000000000000000000000000',
-          ],
-          contractsToUpgrade: [
-            addresses.Avatar.toLowerCase(),
-            addresses.Reputation.toLowerCase(),
-            addresses.DAOToken.toLowerCase(),
-          ],
-          descriptionHash: descHash,
+          contractToCall: '0x0000000000000000000000000000000000000000',
+          callData,
+          value: '0',
           executed: true,
+          returnValue: '0x',
         },
       });
 
-      const { contractInfos } = await sendQuery(`{
-        contractInfos(where: {id: "${addresses.Avatar.toLowerCase()}"}) {
-          id
-          name
-          version
-        }
-      }`);
-
-      expect(contractInfos).toContainEqual({
-        id: addresses.Avatar.toLowerCase(),
-        name: 'Avatar',
-        version: getArcVersion(),
-      });
     }, 100000);
   });

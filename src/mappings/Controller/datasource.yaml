@@ -9,6 +9,8 @@ abis:
   - ContributionRewardExt
   - GenericScheme
   - UpgradeScheme
+  - JoinAndQuit
+  - FundingRequest
   - GenesisProtocol
 entities:
   - ControllerOrganization

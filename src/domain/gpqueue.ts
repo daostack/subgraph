@@ -1,14 +1,18 @@
 import { Address, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
 import { setContributionRewardExtParams,
          setContributionRewardParams,
+         setFundingRequestParams,
          setGenericSchemeParams,
+         setJoinAndQuitParams,
          setSchemeFactoryParams,
          setSchemeRegistrarParams,
          setUpgradeSchemeParams,
         } from '../mappings/Controller/mapping';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
 import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
+import { FundingRequest } from '../types/FundingRequest/FundingRequest';
 import { GenericScheme } from '../types/GenericScheme/GenericScheme';
+import { JoinAndQuit } from '../types/JoinAndQuit/JoinAndQuit';
 import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeFactory} from '../types/SchemeFactory/SchemeFactory';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
@@ -107,6 +111,50 @@ export function create(dao: Address,
     let arcPackage = upgradeScheme.arcPackage();
     if (!equalStrings(gpAddress.toHex(), addressZero)) {
         setUpgradeSchemeParams(dao, scheme, gpAddress, voteParams, arcPackage);
+        isGPQue = true;
+    }
+  }
+
+   if (equalStrings(contractInfo.name, 'JoinAndQuit')) {
+    let joinAndQuit =  JoinAndQuit.bind(scheme);
+    gpAddress = joinAndQuit.votingMachine();
+    let voteParams = joinAndQuit.voteParams();
+    let fundingToken = joinAndQuit.fundingToken();
+    let minFeeToJoin = joinAndQuit.minFeeToJoin();
+    let memberReputation = joinAndQuit.memberReputation();
+    let fundingGoal = joinAndQuit.fundingGoal();
+    let fundingGoalDeadLine = joinAndQuit.fundingGoalDeadLine();
+
+    if (!equalStrings(gpAddress.toHex(), addressZero)) {
+        setJoinAndQuitParams(
+          dao,
+          scheme,
+          gpAddress,
+          voteParams,
+          fundingToken,
+          minFeeToJoin,
+          memberReputation,
+          fundingGoal,
+          fundingGoalDeadLine,
+        );
+        isGPQue = true;
+    }
+  }
+
+   if (equalStrings(contractInfo.name, 'FundingRequest')) {
+    let fundingRequest =  FundingRequest.bind(scheme);
+    gpAddress = fundingRequest.votingMachine();
+    let voteParams = fundingRequest.voteParams();
+    let fundingToken = fundingRequest.fundingToken();
+
+    if (!equalStrings(gpAddress.toHex(), addressZero)) {
+        setFundingRequestParams(
+          dao,
+          scheme,
+          gpAddress,
+          voteParams,
+          fundingToken,
+        );
         isGPQue = true;
     }
   }

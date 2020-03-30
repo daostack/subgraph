@@ -149,7 +149,6 @@ describe('ContributionReward', () => {
         });
 
         // pass the proposal
-        await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[2].address });
         await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[3].address });
         await genesisProtocol.methods.vote(proposalId, 1, 0, accounts[0].address).send({ from: accounts[4].address });
         let passTx = await genesisProtocol.methods.vote(

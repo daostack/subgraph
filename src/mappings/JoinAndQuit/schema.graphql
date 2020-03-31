@@ -1,0 +1,15 @@
+type JoinAndQuitProposal @entity {
+	id: ID!
+	dao: DAO!
+	proposedMember: Bytes!
+	funding: BigInt!
+	executed: Boolean!
+	reputationMinted: BigInt!
+}
+
+type RageQuitted @entity {
+	id: ID!
+	dao: DAO!
+	rageQuitter: Bytes!
+	refund: BigInt!
+}

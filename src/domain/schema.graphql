@@ -108,6 +108,12 @@ type Proposal @entity {
 	# Upgrade Scheme params
 	upgradeScheme: UpgradeSchemeProposal
 
+	# JoinAndQuit Scheme params
+	joinAndQuit: JoinAndQuitProposal
+
+	# FundingRequest Scheme params
+	fundingRequest: FundingRequestProposal
+
 	# SchemeRegistrar proposal
   	schemeFactory: SchemeFactoryProposal
 	  

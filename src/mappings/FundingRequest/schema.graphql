@@ -1,0 +1,8 @@
+type FundingRequestProposal @entity {
+	id: ID!
+	dao: DAO!
+	beneficiary: Bytes!
+	amount: BigInt!
+	executed: Boolean!
+	amountRedeemed: BigInt!
+}

@@ -68,7 +68,7 @@ export function handleProposalExecuted(
             let v0 = v0Int.toString();
             let v1 = v1Int.toString();
             let v2 = v2Int.toString();
-            // 0.1.1-rc.7
+            // 0.1.1-rc.11
             contractInfo.version = v0 + '.' + v1 + '.' + v1 + '-rc.' + v2;
             contractInfo.name = (proposal.contractsNames as Bytes[])[i].toString();
             contractInfo.save();

@@ -133,10 +133,10 @@ export function handleNewCallProposal(
   handleGPProposalPrivate(proposalId.toHex());
 }
 
-export function handleStake(event: Stake): void {
+export function handleStake(event: Stake): boolean {
   let proposal = getProposal(event.params._proposalId.toHex());
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
-    return;
+    return false;
   }
   if (event.params._vote.toI32() ==  1) {
     proposal.stakesFor = proposal.stakesFor.plus(event.params._amount);
@@ -155,13 +155,14 @@ export function handleStake(event: Stake): void {
     parseOutcome(event.params._vote),
   );
   insertGPRewardsToHelper(event.params._proposalId, event.params._staker);
+  return true;
 }
 
-export function handleVoteProposal(event: VoteProposal): void {
+export function handleVoteProposal(event: VoteProposal): boolean {
   let proposal = getProposal(event.params._proposalId.toHex());
 
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {
-    return;
+    return false;
   }
   if (event.params._vote.toI32() == 1) {
     proposal.votesFor = proposal.votesFor.plus(event.params._reputation);
@@ -188,6 +189,7 @@ export function handleVoteProposal(event: VoteProposal): void {
     event.params._reputation,
   );
   insertGPRewardsToHelper(event.params._proposalId, event.params._voter);
+  return true;
 }
 
 export function confidenceLevelUpdate(proposalId: Bytes, confidenceThreshold: BigInt): void {
@@ -264,10 +266,12 @@ export function handleNativeTokenTransfer(event: Transfer): void {
   updateTokenTotalSupply(event.address);
 }
 
-export function handleExecuteProposal(event: ExecuteProposal): void {
+export function handleExecuteProposal(event: ExecuteProposal): boolean {
    if (isProposalValid(event.params._proposalId.toHex())) {
        updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
+       return true;
     }
+    return false;
 }
 
 export function handleStateChange(event: StateChange): void {
@@ -282,13 +286,15 @@ export function handleStateChange(event: StateChange): void {
   }
 }
 
-export function handleExecutionStateChange(event: GPExecuteProposal): void {
+export function handleExecutionStateChange(event: GPExecuteProposal): boolean {
   if (isProposalValid(event.params._proposalId.toHex())) {
     updateProposalExecutionState(event.params._proposalId.toHex(), event.params._executionState);
+    return true;
   }
+  return false;
 }
 
-export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): void {
+export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): boolean {
    if (isProposalValid(proposalId.toHex())) {
        if (type == 'token') {
            tokenRedemption(proposalId, beneficiary, timestamp);
@@ -297,7 +303,9 @@ export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , tim
        } else {
            daoBountyRedemption(proposalId, beneficiary, timestamp);
        }
+       return true;
     }
+    return false;
 }
 
 export function daoRegister(dao: Address, tag: string): void {

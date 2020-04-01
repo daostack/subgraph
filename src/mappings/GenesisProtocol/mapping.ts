@@ -50,7 +50,9 @@ export function handleNewProposal(event: NewProposal): void {
 }
 
 export function handleVoteProposal(event: VoteProposal): void {
-  domain.handleVoteProposal(event);
+  if (domain.handleVoteProposal(event) == false) {
+    return;
+  }
   let uniqueId = concat(event.params._proposalId, event.params._voter).toHex();
   let ent = new GenesisProtocolVote(uniqueId);
 
@@ -72,7 +74,9 @@ export function handleVoteProposal(event: VoteProposal): void {
 }
 
 export function handleStake(event: Stake): void {
-  domain.handleStake(event);
+  if (domain.handleStake(event) == false) {
+    return;
+  }
   let uniqueId = concat(event.params._proposalId, event.params._staker).toHex();
 
   let ent = new GenesisProtocolStake(uniqueId);
@@ -112,7 +116,9 @@ export function handleStake(event: Stake): void {
 }
 
 export function handleGPExecuteProposal(event: GPExecuteProposal): void {
-  domain.handleExecutionStateChange(event);
+  if (domain.handleExecutionStateChange(event) == false) {
+    return;
+  }
 
   let proposal = store.get(
     'GenesisProtocolProposal',
@@ -142,7 +148,9 @@ export function handleGPExecuteProposal(event: GPExecuteProposal): void {
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
-  domain.handleExecuteProposal(event);
+  if (domain.handleExecuteProposal(event) == false) {
+    return;
+  }
 
   let proposal = store.get(
     'GenesisProtocolProposal',
@@ -178,7 +186,9 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
 }
 
 export function handleRedeem(event: Redeem): void {
-  domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'token');
+  if (domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'token')== false) {
+     return;
+  }
   let rewardType = new Uint8Array(1);
   rewardType[0] = 5;
   updateRedemption(
@@ -200,7 +210,9 @@ export function handleExpirationCallBounty(event: ExpirationCallBounty): void {
 }
 
 export function handleRedeemDaoBounty(event: RedeemDaoBounty): void {
-  domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'daobounty');
+  if (domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'daobounty') == false) {
+    return;
+  }
   let rewardType = new Uint8Array(1);
   rewardType[0] = 6;
   updateRedemption(
@@ -218,7 +230,9 @@ export function handleConfidenceLevelChange(event: ConfidenceLevelChange): void 
 }
 
 export function handleRedeemReputation(event: RedeemReputation): void {
-  domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'reputation');
+  if (domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'reputation') == false) {
+    return;
+  }
   let rewardType = new Uint8Array(1);
   rewardType[0] = 4;
   updateRedemption(

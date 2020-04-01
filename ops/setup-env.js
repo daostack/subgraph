@@ -1,5 +1,4 @@
 const path = require('path')
-const subgraphRepo = path.resolve(`${__dirname}/..`)
 const { migrationFileLocation, subgraphName: defaultSubgraphName } = require('./settings')
 const fs = require('fs')
 
@@ -38,7 +37,7 @@ async function setupenv (opts={}) {
   await require(`../ops/graph-codegen`)(opts)
 
   console.log('Deploying subgraph')
-  await require(`${subgraphRepo}/ops/graph-deploy`)(opts)
+  await require(`../ops/graph-deploy`)(opts)
 
   console.log('Subgraph deployed successfully')
 }

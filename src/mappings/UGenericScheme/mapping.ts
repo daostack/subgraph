@@ -37,7 +37,7 @@ export function handleNewCallProposal(
     event.params._descriptionHash,
     event.address) == false) {
       return;
-    };
+    }
 
   insertNewProposal(event);
 }
@@ -49,6 +49,8 @@ export function handleProposalExecuted(
   if (ent != null) {
     ent.executed = true;
     ent.returnValue = event.params._genericCallReturnValue;
+  } else {
+    return;
   }
 
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);

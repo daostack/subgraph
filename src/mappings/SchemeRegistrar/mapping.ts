@@ -42,7 +42,7 @@ export function handleNewSchemeProposal(event: NewSchemeProposal): void {
                                          ent.descriptionHash,
                                          event.address) == false) {
                                            return;
-  };
+  }
   insertNewProposalRegister(ent.avatar as Address,
                           ent.proposalId,
                           ent.scheme,
@@ -121,7 +121,7 @@ function insertNewProposalUnRegister(avatar: Address, proposalId: Bytes, scheme:
 function updateProposalExecution(proposalId: Bytes, decision: BigInt): void {
   let ent = SchemeRegistrarProposal.load(proposalId.toHex());
   if (ent == null) {
-    ent = new SchemeRegistrarProposal(proposalId.toHex());
+    return;
   }
   ent.decision = decision;
   if (ent.schemeToRegister != null) {

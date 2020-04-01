@@ -35,12 +35,14 @@ export function handleNewSchemeProposal(event: NewSchemeProposal): void {
   // need to fill up other fileds.
   ent.save();
 
-  domain.handleNewSchemeRegisterProposal(event.params._proposalId.toHex(),
+  if (domain.handleNewSchemeRegisterProposal(event.params._proposalId.toHex(),
                                          event.block.timestamp,
                                          ent.avatar,
                                          ent.votingMachine,
                                          ent.descriptionHash,
-                                         event.address);
+                                         event.address) == false) {
+                                           return;
+  };
   insertNewProposalRegister(ent.avatar as Address,
                           ent.proposalId,
                           ent.scheme,

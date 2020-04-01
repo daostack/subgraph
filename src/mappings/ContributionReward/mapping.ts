@@ -169,14 +169,16 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
 export function handleNewContributionProposal(
   event: NewContributionProposal,
 ): void {
-  domain.handleNewContributionProposal(
-    event.params._proposalId,
-    event.params._avatar,
-    event.block.timestamp,
-    event.params._intVoteInterface,
-    event.params._descriptionHash,
-    event.address,
-  );
+  if (domain.handleNewContributionProposal(
+      event.params._proposalId,
+      event.params._avatar,
+      event.block.timestamp,
+      event.params._intVoteInterface,
+      event.params._descriptionHash,
+      event.address,
+  ) == false) {
+    return;
+  }
 
   insertNewProposal(event);
   let ent = new ContributionRewardNewContributionProposal(eventId(event));

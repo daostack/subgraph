@@ -76,9 +76,9 @@ export function handleNewContributionProposal(
   intVoteInterface: Address,
   descriptionHash: string,
   contract: Address,
-): void {
+): boolean {
   if (!daoModule.exists(avatar)) {
-    return;
+    return false;
   }
   updateCRProposal(
     proposalId,
@@ -89,6 +89,7 @@ export function handleNewContributionProposal(
     contract,
   );
   handleGPProposalPrivate(proposalId.toHex());
+  return true;
 }
 
 export function handleNewSchemeRegisterProposal(
@@ -98,9 +99,9 @@ export function handleNewSchemeRegisterProposal(
    votingMachine: Bytes,
    descriptionHash: string,
    schemeAddress: Address,
- ): void {
+ ): boolean {
     if (!daoModule.exists(avatar as Address)) {
-      return;
+      return false;
     }
     updateSRProposal(
       proposalId,
@@ -111,6 +112,7 @@ export function handleNewSchemeRegisterProposal(
       schemeAddress,
     );
     handleGPProposalPrivate(proposalId);
+    return true;
  }
 
 export function handleNewCallProposal(
@@ -119,9 +121,9 @@ export function handleNewCallProposal(
   timestamp: BigInt,
   descriptionHash: string,
   eventAddress: Address,
-): void {
+): boolean {
   if (!daoModule.exists(avatar)) {
-    return;
+    return false;
   }
   updateGSProposal(
     proposalId,
@@ -131,6 +133,7 @@ export function handleNewCallProposal(
     eventAddress,
   );
   handleGPProposalPrivate(proposalId.toHex());
+  return true;
 }
 
 export function handleStake(event: Stake): boolean {

@@ -30,12 +30,14 @@ export function handleNewCallProposal(
   event: NewCallProposal,
 ): void {
 
-  domain.handleNewCallProposal(
+  if (domain.handleNewCallProposal(
     event.params._avatar,
     event.params._proposalId,
     event.block.timestamp,
     event.params._descriptionHash,
-    event.address);
+    event.address) == false) {
+      return;
+    };
 
   insertNewProposal(event);
 }

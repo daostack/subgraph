@@ -107,7 +107,8 @@ export function getIPFSData(descHash: string): IPFSData {
   result.tags = [];
 
   let ipfsData = ipfs.cat('/ipfs/' + descHash);
-  if (ipfsData != null && ipfsData.toString() !== '{}') {
+  if (ipfsData != null && ipfsData.toString() !== '{}' && (ipfsData as Bytes)[0] === 123) {
+    // 123 =='{'
     let descJson = json.fromBytes(ipfsData as Bytes);
     if (descJson.kind !== JSONValueKind.OBJECT) {
       return result;

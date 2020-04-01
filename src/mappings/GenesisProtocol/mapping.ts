@@ -186,7 +186,10 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
 }
 
 export function handleRedeem(event: Redeem): void {
-  if (domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'token')== false) {
+  if (domain.handleGPRedemption(event.params._proposalId,
+                         event.params._beneficiary,
+                         event.block.timestamp,
+                         'token') == false) {
      return;
   }
   let rewardType = new Uint8Array(1);
@@ -210,7 +213,10 @@ export function handleExpirationCallBounty(event: ExpirationCallBounty): void {
 }
 
 export function handleRedeemDaoBounty(event: RedeemDaoBounty): void {
-  if (domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'daobounty') == false) {
+  if (domain.handleGPRedemption(event.params._proposalId,
+                                event.params._beneficiary,
+                                event.block.timestamp,
+                                'daobounty') == false) {
     return;
   }
   let rewardType = new Uint8Array(1);
@@ -230,7 +236,10 @@ export function handleConfidenceLevelChange(event: ConfidenceLevelChange): void 
 }
 
 export function handleRedeemReputation(event: RedeemReputation): void {
-  if (domain.handleGPRedemption(event.params._proposalId, event.params._beneficiary, event.block.timestamp, 'reputation') == false) {
+  if (domain.handleGPRedemption(event.params._proposalId,
+                                event.params._beneficiary,
+                                event.block.timestamp,
+                                'reputation') == false) {
     return;
   }
   let rewardType = new Uint8Array(1);

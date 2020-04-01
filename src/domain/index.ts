@@ -271,7 +271,7 @@ export function handleExecuteProposal(event: ExecuteProposal): boolean {
        updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
        return true;
     }
-    return false;
+   return false;
 }
 
 export function handleStateChange(event: StateChange): void {
@@ -294,7 +294,11 @@ export function handleExecutionStateChange(event: GPExecuteProposal): boolean {
   return false;
 }
 
-export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , timestamp: BigInt , type: string): boolean {
+export function handleGPRedemption(
+   proposalId: Bytes,
+   beneficiary: Address ,
+   timestamp: BigInt ,
+   type: string): boolean {
    if (isProposalValid(proposalId.toHex())) {
        if (type == 'token') {
            tokenRedemption(proposalId, beneficiary, timestamp);
@@ -305,7 +309,7 @@ export function handleGPRedemption(proposalId: Bytes, beneficiary: Address , tim
        }
        return true;
     }
-    return false;
+   return false;
 }
 
 export function daoRegister(dao: Address, tag: string): void {

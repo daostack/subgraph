@@ -107,7 +107,11 @@ export function getIPFSData(descHash: string): IPFSData {
   result.tags = [];
 
   let ipfsData = ipfs.cat('/ipfs/' + descHash);
-  if (ipfsData != null && ipfsData.toString() !== '{}') {
+  if (ipfsData != null &&
+     !equalStrings(ipfsData.toString(), '{}') &&
+     equalStrings(ipfsData.toString().substr(0, 1), '{') &&
+     equalStrings(ipfsData.toString().substr(ipfsData.toString().length - 1, 1), '}')
+     ) {
     let descJson = json.fromBytes(ipfsData as Bytes);
     if (descJson.kind !== JSONValueKind.OBJECT) {
       return result;

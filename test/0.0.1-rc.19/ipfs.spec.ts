@@ -5,7 +5,7 @@ import {
   getWeb3,
   sendQuery,
   writeProposalIPFS,
-  writeProposalIPFSInvalid
+  writeProposalIPFSInvalid,
 } from './util';
 
 const ContributionReward = require('@daostack/migration/contracts/' + getArcVersion() + '/ContributionReward.json');

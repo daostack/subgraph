@@ -17,7 +17,7 @@ async function generateSubgraph(opts={}) {
   opts.subgraphLocation = opts.subgraphLocation || defaultSubgraphLocation;
   const addresses = JSON.parse(fs.readFileSync(migrationFile, "utf-8"));
   const missingAddresses = {};
-  if (network === 'xdai' || network === 'sokol' ) {
+  if (network === 'xdai' || network === 'sokol') {
    mappings.push(  //workaround :(
      {name: 'UGenericScheme',
       contractName: 'UGenericScheme',

@@ -1,0 +1,17 @@
+{
+  "name": "Wiki Test",
+  "Avatar": "0xe0924AddB1de3F638Cf761D06D229a8177Bd0e1B",
+  "DAOToken": "0x096936dEB7C25Ff05faD720a867E366b58b978A1",
+  "Reputation": "0xe82806e90d85963402C4F5929b6EcebD585E3fd8",
+  "Controller": "0x8d9CF661cEaae7FB96ef8528579dD22c7bABE946",
+  "Schemes": [
+    {
+      "arcVersion": "0.0.1-rc.33",
+      "name": "GenericScheme",
+      "alias": "underscore protocol",
+      "address": "0xe40E400abE5732F1c367925be32C3DFb94557DDC"
+    }
+  ],
+  "StandAloneContracts": [],
+  "arcVersion": "0.0.1-rc.33"
+}

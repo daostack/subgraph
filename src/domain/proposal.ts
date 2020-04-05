@@ -106,6 +106,14 @@ export function getIPFSData(descHash: string): IPFSData {
   result.fulltext = [];
   result.tags = [];
 
+  if (equalStrings(descHash, 'QmNgVb81SH6CMmbCc2Wtdq2DmfUquWcPtbQm9EXJC3PGg1')) {
+    return result;
+  }
+
+  if (equalStrings(descHash, 'QmXLPKwaPfXikx47Hmg1h5tKrnvBLj3o6hHVesEJ5RA5Nf')) {
+    return result;
+  }
+
   let ipfsData = ipfs.cat('/ipfs/' + descHash);
   if (ipfsData != null &&
      !equalStrings(ipfsData.toString(), '{}') &&

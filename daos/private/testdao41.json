@@ -1,5 +1,5 @@
 {
-  "name": "Invidious Pancake",
+  "name": "Pervasive Hot air balloon",
   "Avatar": "0x5951c93dCb47068fcbe1AcE235B2ea625d9823a5",
   "DAOToken": "0x820FbBC729B157f91CA5C2659aF2971C766e6A4b",
   "Reputation": "0xADb82bc43A7e402f40E1F166FC238c849791A928",
@@ -15,7 +15,7 @@
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
       "address": "0xC94424eb26839a2B195eBb7230f7a43C00F20428",
-      "arcVersion": "0.0.1-rc.40"
+      "arcVersion": "0.0.1-rc.41"
     }
   ],
   "StandAloneContracts": [
@@ -27,12 +27,12 @@
     {
       "name": "ContributionRewardExt",
       "address": "0xC94424eb26839a2B195eBb7230f7a43C00F20428",
-      "arcVersion": "0.0.1-rc.40"
+      "arcVersion": "0.0.1-rc.41"
     },
     {
       "name": "Competition",
       "address": "0x218DFb4f7295FE4f0B6cF64AA7121F60Ea36deDa",
-      "arcVersion": "0.0.1-rc.40"
+      "arcVersion": "0.0.1-rc.41"
     }
   ],
   "arcVersion": "0.0.1-rc.41"

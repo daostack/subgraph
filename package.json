@@ -64,7 +64,7 @@
     "graphql": "^14.2.1",
     "graphql-request": "^1.8.2",
     "graphql-tag": "^2.10.0",
-    "handlebars": "^4.3.1",
+    "handlebars": "^4.7.6",
     "hdwallet-accounts": "0.0.1",
     "jest": "^25.2.4",
     "js-yaml": "^3.13.1",

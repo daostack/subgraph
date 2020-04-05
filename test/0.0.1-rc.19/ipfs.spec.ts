@@ -5,6 +5,7 @@ import {
   getWeb3,
   sendQuery,
   writeProposalIPFS,
+  writeProposalIPFSInvalid,
 } from './util';
 
 const ContributionReward = require('@daostack/migration/contracts/' + getArcVersion() + '/ContributionReward.json');
@@ -275,6 +276,22 @@ describe('Domain Layer', () => {
       title: '',
       description: '',
       url: '',
+    });
+
+    // Invalid IPFS data3
+    let invalidIPFSData3 = 'invalid ipfs data!';
+
+    descHash = await writeProposalIPFSInvalid(invalidIPFSData3);
+
+    const { proposalId: p7 } = await propose({
+      proposalDescHash: descHash,
+      rep: 10,
+      tokens: 10,
+      eth: 10,
+      external: 10,
+      periodLength: 0,
+      periods: 1,
+      beneficiary: accounts[1].address,
     });
 
   }, 100000);

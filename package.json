@@ -1,6 +1,6 @@
 {
   "name": "@daostack/subgraph-experimental",
-  "version": "0.1.1-rc.7-v1",
+  "version": "0.1.1-rc.7-v2",
   "author": "DAOstack (https://www.daostack.io)",
   "license": "GPL-3.0",
   "description": "A caching layer for daostack using The Graph",
@@ -15,7 +15,7 @@
   "scripts": {
     "codegen": "node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js && node ops/generate-contractsinfo.js && node ops/graph-codegen.js",
     "codegen:watch": "watch 'npm run codegen' src/mappings src/domain",
-    "deploy": "rm -rf src/types && node ops/setup-env.js",
+    "deploy": "rm -rf src/types && rm -rf abis && node ops/setup-env.js",
     "deploy:watch": "npm run deploy -- --watch",
     "docker:stop": "docker-compose down -v",
     "docker:run": "node ops/set-docker-network.js private && docker-compose up -d",
@@ -32,7 +32,7 @@
     "test:watch": "npm run test -- --watch"
   },
   "devDependencies": {
-    "@daostack/migration-experimental": "0.1.1-rc.11-v0",
+    "@daostack/migration-experimental": "0.1.1-rc.12-v1",
     "@types/jest": "^23.3.7",
     "@types/mocha": "^5.2.5",
     "babel-eslint": "^10.0.1",
@@ -59,12 +59,12 @@
     "ethereumjs-wallet": "^0.6.0",
     "fs-extra": "^8.0.1",
     "fstream": "^1.0.12",
-    "ganache-cli": "^6.7.0",
+    "ganache-cli": "^6.9.1",
     "glob": "^7.1.3",
     "graphql": "^14.2.1",
     "graphql-request": "^1.8.2",
     "graphql-tag": "^2.10.0",
-    "handlebars": "^4.3.1",
+    "handlebars": "^4.7.6",
     "hdwallet-accounts": "0.0.1",
     "jest": "^24.7.1",
     "js-yaml": "^3.13.1",
@@ -77,7 +77,7 @@
     "tslint": "^5.15.0",
     "typedarray-to-buffer": "^3.1.5",
     "typescript": "^3.4.2",
-    "web3": "1.0.0-beta.37",
+    "web3": "1.2.6",
     "winston": "^3.1.0",
     "yaeti": "^1.0.2",
     "yargs": "^12.0.2"

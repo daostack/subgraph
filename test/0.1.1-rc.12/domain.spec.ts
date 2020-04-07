@@ -28,7 +28,7 @@ describe('Domain Layer', () => {
   let accounts;
   const orgName = getOrgName();
   const tokenName = orgName + ' Token';
-  const tokenSymbol = orgName[0] + orgName.split(' ')[1][0] + 'T';
+  const tokenSymbol = 'MY';
 
   beforeAll(async () => {
     web3 = await getWeb3();

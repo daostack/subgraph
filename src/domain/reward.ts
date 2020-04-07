@@ -158,7 +158,7 @@ export function insertGPRewards(
     redeemValues[2] = BigInt.fromI32(0);
     let daoBountyForStaker: BigInt = BigInt.fromI32(0);
 
-    if (controllerScheme !== null ) {
+    if (controllerScheme !== null && controllerScheme.isRegistered) {
         let callResult = genesisProtocol.try_redeem(proposalId, gpReward.beneficiary as Address);
         if (callResult.reverted) {
             log.info('genesisProtocol try_redeem reverted', []);

@@ -1,4 +1,15 @@
-import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, ipfs, json, JSONValue, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Address,
+         BigDecimal,
+         BigInt,
+         ByteArray,
+         Bytes,
+         crypto,
+         ipfs,
+         json,
+         JSONValue,
+         JSONValueKind,
+         log,
+         store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ControllerScheme, DAO, GenesisProtocolParam, Proposal, Tag } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
@@ -106,21 +117,20 @@ export function getIPFSData(descHash: string): IPFSData {
   result.fulltext = [];
   result.tags = [];
 
-  if (equalStrings(descHash, 'QmNgVb81SH6CMmbCc2Wtdq2DmfUquWcPtbQm9EXJC3PGg1')) {
-    return result;
-  }
-
-  if (equalStrings(descHash, 'QmXLPKwaPfXikx47Hmg1h5tKrnvBLj3o6hHVesEJ5RA5Nf')) {
-    return result;
-  }
-
   let ipfsData = ipfs.cat('/ipfs/' + descHash);
   if (ipfsData != null &&
      !equalStrings(ipfsData.toString(), '{}') &&
      equalStrings(ipfsData.toString().substr(0, 1), '{') &&
      equalStrings(ipfsData.toString().substr(ipfsData.toString().length - 1, 1), '}')
      ) {
-    let descJson = json.fromBytes(ipfsData as Bytes);
+
+    let resultFromBytes = json.try_fromBytes(ipfsData as Bytes);
+
+    if (resultFromBytes.error) {
+       log.info('getIPFSData try_fromBytes reverted', []);
+       return result;
+    }
+    let descJson = resultFromBytes.value;
     if (descJson.kind !== JSONValueKind.OBJECT) {
       return result;
     }

@@ -126,7 +126,7 @@ export function getIPFSData(descHash: string): IPFSData {
 
     let resultFromBytes = json.try_fromBytes(ipfsData as Bytes);
 
-    if (resultFromBytes.error) {
+    if (resultFromBytes.isError) {
        log.info('getIPFSData try_fromBytes reverted', []);
        return result;
     }

@@ -21,7 +21,7 @@ services:
       GRAPH_MAX_IPFS_FILE_BYTES: '300000'
       GRAPH_GRAPHQL_MAX_FIRST: '1000'
   ipfs:
-    image: ipfs/go-ipfs:v0.4.23
+    image: 'ipfs/go-ipfs:v0.4.23'
     ports:
       - '5001:5001'
   postgres:

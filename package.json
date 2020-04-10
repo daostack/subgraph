@@ -15,7 +15,7 @@
   "scripts": {
     "codegen": "node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js && node ops/generate-daos-subgraph.js && node ops/generate-contractsinfo.js && node ops/graph-codegen.js",
     "codegen:watch": "watch 'npm run codegen' src/mappings src/domain",
-    "deploy": "rm -rf src/types && node ops/setup-env.js",
+    "deploy": "rm -rf src/types && rm -rf abis && node ops/setup-env.js",
     "deploy:watch": "npm run deploy -- --watch",
     "docker:stop": "docker-compose down -v",
     "docker:run": "node ops/set-docker-network.js private && docker-compose up -d",

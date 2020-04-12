@@ -5,7 +5,7 @@ import {
   Bytes,
   crypto,
   DataSourceTemplate,
-  EthereumEvent,
+  ethereum,
   store,
   Value,
 } from '@graphprotocol/graph-ts';
@@ -26,7 +26,7 @@ export function concat(a: ByteArray, b: ByteArray): ByteArray {
   return out as ByteArray;
 }
 
-export function eventId(event: EthereumEvent): string {
+export function eventId(event: ethereum.Event): string {
   return crypto
     .keccak256(
       concat(event.transaction.hash, event.transactionLogIndex as ByteArray),

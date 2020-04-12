@@ -4,7 +4,6 @@ import {
   ByteArray,
   Bytes,
   crypto,
-  EthereumValue,
   store,
 } from '@graphprotocol/graph-ts';
 
@@ -100,7 +99,7 @@ export function handleStake(event: Stake): void {
     event.params._proposalId.toHex(),
   ) as GenesisProtocolProposal;
 
-  proposal.state = state(event.params._proposalId, event.address).toI32();
+  proposal.state = state(event.params._proposalId, event.address);
 
   store.set(
     'GenesisProtocolProposal',
@@ -152,10 +151,7 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
   proposal.executionTime = event.block.timestamp;
   proposal.decision = event.params._decision;
   proposal.totalReputation = event.params._totalReputation;
-  // todo:figure out why reading uint8 param does not work .
-  // for now use a workaround.
-  // https://github.com/graphprotocol/graph-node/issues/569
-  proposal.state = state(event.params._proposalId, event.address).toI32();
+  proposal.state = state(event.params._proposalId, event.address);
   store.set(
     'GenesisProtocolProposal',
     event.params._proposalId.toHex(),
@@ -272,10 +268,7 @@ function updateRedemption(
   }
 }
 
-function state(proposalId: Bytes, address: Address): BigInt {
+function state(proposalId: Bytes, address: Address): i32 {
   let genesisProtocol = GenesisProtocol.bind(address);
-  let result = genesisProtocol.call('state', [
-    EthereumValue.fromFixedBytes(proposalId),
-  ]);
-  return result[0].toBigInt();
+  return genesisProtocol.state(proposalId);
 }

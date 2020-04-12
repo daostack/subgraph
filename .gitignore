@@ -6,6 +6,6 @@ abis
 yarn.lock
 src/types
 /schema.graphql
-.env
+.env*
 build/
 src/contractsInfo.ts

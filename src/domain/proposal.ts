@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto, ipfs, json, JSONValue, JSONValueKind, store } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, Bytes, crypto, ipfs, json, JSONValue, JSONValueKind, log, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ControllerScheme, DAO, GenesisProtocolParam, Proposal, Tag } from '../types/schema';
 import { concat, equalsBytes, equalStrings } from '../utils';
@@ -108,7 +108,13 @@ export function getIPFSData(descHash: string): IPFSData {
 
   let ipfsData = ipfs.cat('/ipfs/' + descHash);
   if (ipfsData != null && ipfsData.toString() !== '{}') {
-    let descJson = json.fromBytes(ipfsData as Bytes);
+    let resultFromBytes = json.try_fromBytes(ipfsData as Bytes);
+
+    if (resultFromBytes.isError) {
+      log.info('getIPFSData try_fromBytes reverted', []);
+      return result;
+    }
+    let descJson = resultFromBytes.value;
     if (descJson.kind !== JSONValueKind.OBJECT) {
       return result;
     }

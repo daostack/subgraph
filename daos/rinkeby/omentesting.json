@@ -1,0 +1,30 @@
+
+  "name": "Omen Testing",
+  "Avatar": "0xd94c5810a43ae1560569592e041bf839e490cd1b",
+  "DAOToken": "0xc89dcfea2aef3a26a55e67a40593715bdea6ac4c",
+  "Reputation": "0xcae8cb5d5d9ceefd2a5f3e56fb33e6104e552bd8",
+  "Controller": "0xc2103ff0ae40dcbf4a61009998d96e2dd1b5cb75",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeOmenDisputeResolution",
+      "address": "0x67883470ae73347a6742376d3db8bf13bc9358a8"
+    },
+    {
+      "name": "ExchangeTokenRegistry",
+      "alias": "ExchangeTokenRegistry",
+      "address": "0xF86ab09C6a17c48B535D29fB69F95875c4856658"
+    },
+    {
+      "name": "MixTokenRegistry",
+      "alias": "MixTokenRegistry",
+      "address": "0x92d468e25bbBe47d0d266A58d0eb1E51f2276893"
+    },
+    {
+      "name": "OmenTokenRegistry",
+      "alias": "OmenTokenRegistry",
+      "address": "0x1BB96C24CbA4522810d9129db2e5d24546241F24"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.30"
+}

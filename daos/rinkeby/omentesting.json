@@ -11,20 +11,20 @@
       "address": "0x67883470ae73347a6742376d3db8bf13bc9358a8"
     },
     {
-      "name": "ExchangeTokenRegistry",
-      "alias": "ExchangeTokenRegistry",
+      "name": "GenericScheme",
+      "alias": "GenericSchemeExchangeTokenRegistry",
       "address": "0xF86ab09C6a17c48B535D29fB69F95875c4856658"
     },
     {
-      "name": "MixTokenRegistry",
-      "alias": "MixTokenRegistry",
+      "name": "GenericScheme",
+      "alias": "GenericSchemeMixTokenRegistry",
       "address": "0x92d468e25bbBe47d0d266A58d0eb1E51f2276893"
     },
     {
-      "name": "OmenTokenRegistry",
-      "alias": "OmenTokenRegistry",
+      "name": "GenericScheme",
+      "alias": "GenericSchemeOmenTokenRegistry",
       "address": "0x1BB96C24CbA4522810d9129db2e5d24546241F24"
     }
   ],
-  "arcVersion": "0.0.1-rc.30"
+  "arcVersion": "0.0.1-rc.33"
 }

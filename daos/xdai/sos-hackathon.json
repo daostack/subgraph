@@ -1,0 +1,34 @@
+{
+    "name": "SoS Cooperative",
+    "Avatar": "0xFaf05FEDF06cAc499B899d6A2052f23ae239B29d",
+    "DAOToken": "0x80B5A8dAEA84f2004846984e4dd39B2Db9ABF731",
+    "Reputation": "0xb24f5c82462634421b005dc7352bcFaD04BC8D3a",
+    "Controller": "0x9773181427b6F3bB61ff143B6e42E7b4D7D58d0b",
+    "Schemes": [
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0x72Dd068961cB3A7621a5fd6Bc41Cb5495B3005fa",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "ReputationAdmin",
+        "alias": "ReputationAdmin",
+        "address": "0x6414ee3df614Bb56df6e92C36C9e863F47b952F9",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "ContributionRewardExt",
+        "address": "0x72Dd068961cB3A7621a5fd6Bc41Cb5495B3005fa",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "Competition",
+        "address": "0xB6C202BaF0555b5DBB5526528aBC5da06158bb51",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.41"
+  }

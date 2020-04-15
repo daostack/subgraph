@@ -13,17 +13,17 @@
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeExchangeTokenRegistry",
-      "address": "0xF86ab09C6a17c48B535D29fB69F95875c4856658"
+      "address": "0x12E07e5e3A448B6aFDb8d61Ea6DF4dabf60027ea"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeMixTokenRegistry",
-      "address": "0x92d468e25bbBe47d0d266A58d0eb1E51f2276893"
+      "address": "0x3DC5560A592E1305f6f9851464d9Dd6e59b52239"
     },
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeOmenTokenRegistry",
-      "address": "0x1BB96C24CbA4522810d9129db2e5d24546241F24"
+      "address": "0xec169e3Cc004D0bdd464535de49f9902e35f2822"
     }
   ],
   "arcVersion": "0.0.1-rc.33"

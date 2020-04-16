@@ -54,7 +54,7 @@ export function create(dao: Address,
    if (equalStrings(contractInfo.name, 'ContributionReward')) {
      let contributionReward =  ContributionReward.bind(scheme);
      gpAddress = contributionReward.votingMachine();
-     let voteParams = contributionReward.voteParams();
+     let voteParams = contributionReward.voteParamsHash();
      if (!equalStrings(voteParams.toHex(), addressZero)) {
        setContributionRewardParams(dao, scheme, gpAddress, voteParams);
        isGPQue = true;
@@ -66,7 +66,7 @@ export function create(dao: Address,
                     dao,
                     scheme,
                     contributionRewardExt.votingMachine(),
-                    contributionRewardExt.voteParams(),
+                    contributionRewardExt.voteParamsHash(),
                     contributionRewardExt.rewarder());
     isGPQue = true;
    }
@@ -74,7 +74,7 @@ export function create(dao: Address,
    if (equalStrings(contractInfo.name, 'SchemeFactory')) {
     let schemeFactory =  SchemeFactory.bind(scheme);
     gpAddress = schemeFactory.votingMachine();
-    let voteParams = schemeFactory.voteParams();
+    let voteParams = schemeFactory.voteParamsHash();
     let daoFactory = schemeFactory.daoFactory();
     if (!equalStrings(gpAddress.toHex(), addressZero)) {
         setSchemeFactoryParams(dao, scheme, gpAddress, voteParams, daoFactory);
@@ -85,8 +85,8 @@ export function create(dao: Address,
    if (equalStrings(contractInfo.name, 'SchemeRegistrar')) {
      let schemeRegistrar =  SchemeRegistrar.bind(scheme);
      gpAddress = schemeRegistrar.votingMachine();
-     let voteRegisterParams = schemeRegistrar.voteRegisterParams();
-     let voteRemoveParams = schemeRegistrar.voteRemoveParams();
+     let voteRegisterParams = schemeRegistrar.voteRegisterParamsHash();
+     let voteRemoveParams = schemeRegistrar.voteRemoveParamsHash();
      if (!equalStrings(gpAddress.toHex(), addressZero)) {
          setSchemeRegistrarParams(dao, scheme, gpAddress, voteRegisterParams, voteRemoveParams);
          isGPQue = true;
@@ -96,7 +96,7 @@ export function create(dao: Address,
    if (equalStrings(contractInfo.name, 'GenericScheme')) {
     let genericScheme =  GenericScheme.bind(scheme);
     gpAddress = genericScheme.votingMachine();
-    let voteParams = genericScheme.voteParams();
+    let voteParams = genericScheme.voteParamsHash();
     let contractToCall = genericScheme.contractToCall();
     if (!equalStrings(gpAddress.toHex(), addressZero)) {
         setGenericSchemeParams(dao, scheme, gpAddress, voteParams, contractToCall);
@@ -107,7 +107,7 @@ export function create(dao: Address,
    if (equalStrings(contractInfo.name, 'UpgradeScheme')) {
     let upgradeScheme =  UpgradeScheme.bind(scheme);
     gpAddress = upgradeScheme.votingMachine();
-    let voteParams = upgradeScheme.voteParams();
+    let voteParams = upgradeScheme.voteParamsHash();
     let arcPackage = upgradeScheme.arcPackage();
     if (!equalStrings(gpAddress.toHex(), addressZero)) {
         setUpgradeSchemeParams(dao, scheme, gpAddress, voteParams, arcPackage);
@@ -118,7 +118,7 @@ export function create(dao: Address,
    if (equalStrings(contractInfo.name, 'JoinAndQuit')) {
     let joinAndQuit =  JoinAndQuit.bind(scheme);
     gpAddress = joinAndQuit.votingMachine();
-    let voteParams = joinAndQuit.voteParams();
+    let voteParams = joinAndQuit.voteParamsHash();
     let fundingToken = joinAndQuit.fundingToken();
     let minFeeToJoin = joinAndQuit.minFeeToJoin();
     let memberReputation = joinAndQuit.memberReputation();
@@ -144,7 +144,7 @@ export function create(dao: Address,
    if (equalStrings(contractInfo.name, 'FundingRequest')) {
     let fundingRequest =  FundingRequest.bind(scheme);
     gpAddress = fundingRequest.votingMachine();
-    let voteParams = fundingRequest.voteParams();
+    let voteParams = fundingRequest.voteParamsHash();
     let fundingToken = fundingRequest.fundingToken();
 
     if (!equalStrings(gpAddress.toHex(), addressZero)) {

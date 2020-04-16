@@ -12,7 +12,20 @@ describe('DAOFactory', () => {
   let opts;
   let daoFactory;
   let genesisProtocol;
-  let vmParamsHash;
+  const gpParams = {
+    queuedVoteRequiredPercentage: 50,
+    queuedVotePeriodLimit: 60,
+    boostedVotePeriodLimit: 5,
+    preBoostedVotePeriodLimit: 0,
+    thresholdConst: 2000,
+    quietEndingPeriod: 0,
+    proposingRepReward: 60,
+    votersReputationLossRatio: 10,
+    minimumDaoBounty: 15,
+    daoBountyConst: 10,
+    activationTime: 0,
+    voteOnBehalf: '0x0000000000000000000000000000000000000000',
+  };
 
   beforeAll(async () => {
     web3 = await getWeb3();
@@ -20,39 +33,6 @@ describe('DAOFactory', () => {
     opts = await getOptions(web3);
     daoFactory = new web3.eth.Contract(DAOFactory.abi, addresses.DAOFactoryInstance, opts);
     genesisProtocol = await new web3.eth.Contract(GenesisProtocol.abi, addresses.GenesisProtocol, opts);
-
-    const gpParams = {
-      queuedVoteRequiredPercentage: 50,
-      queuedVotePeriodLimit: 60,
-      boostedVotePeriodLimit: 5,
-      preBoostedVotePeriodLimit: 0,
-      thresholdConst: 2000,
-      quietEndingPeriod: 0,
-      proposingRepReward: 60,
-      votersReputationLossRatio: 10,
-      minimumDaoBounty: 15,
-      daoBountyConst: 10,
-      activationTime: 0,
-      voteOnBehalf: '0x0000000000000000000000000000000000000000',
-    };
-    const vmSetParams = genesisProtocol.methods.setParameters(
-      [
-        gpParams.queuedVoteRequiredPercentage,
-        gpParams.queuedVotePeriodLimit,
-        gpParams.boostedVotePeriodLimit,
-        gpParams.preBoostedVotePeriodLimit,
-        gpParams.thresholdConst,
-        gpParams.quietEndingPeriod,
-        gpParams.proposingRepReward,
-        gpParams.votersReputationLossRatio,
-        gpParams.minimumDaoBounty,
-        gpParams.daoBountyConst,
-        gpParams.activationTime,
-      ],
-      gpParams.voteOnBehalf,
-    );
-    vmParamsHash = await vmSetParams.call();
-    await vmSetParams.send();
   });
 
   it('Controller e2e', async () => {
@@ -142,7 +122,25 @@ describe('DAOFactory', () => {
     // Add a scheme
     let crData = await new web3.eth.Contract(ContributionReward.abi)
     .methods
-    .initialize(avatar.options.address, addresses.GenesisProtocol, vmParamsHash)
+    .initialize(
+      avatar.options.address,
+      addresses.GenesisProtocol,
+      [
+        gpParams.queuedVoteRequiredPercentage,
+        gpParams.queuedVotePeriodLimit,
+        gpParams.boostedVotePeriodLimit,
+        gpParams.preBoostedVotePeriodLimit,
+        gpParams.thresholdConst,
+        gpParams.quietEndingPeriod,
+        gpParams.proposingRepReward,
+        gpParams.votersReputationLossRatio,
+        gpParams.minimumDaoBounty,
+        gpParams.daoBountyConst,
+        gpParams.activationTime,
+      ],
+      gpParams.voteOnBehalf,
+      '0x0000000000000000000000000000000000000000000000000000000000000000',
+    )
     .encodeABI();
 
     const getBytesLength = function(bytes) {

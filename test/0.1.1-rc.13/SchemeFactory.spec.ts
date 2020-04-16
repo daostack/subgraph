@@ -65,6 +65,8 @@ describe('SchemeFactory', () => {
                          .initialize(
                             (await schemeFactory.methods.avatar().call()),
                             (await schemeFactory.methods.votingMachine().call()),
+                            [],
+                            '0x0000000000000000000000000000000000000000',
                             (await schemeFactory.methods.voteParamsHash().call()),
                             (await schemeFactory.methods.daoFactory().call()),
                           ).encodeABI();

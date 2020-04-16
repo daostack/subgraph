@@ -28,5 +28,23 @@
     "alias": "GenericSchemeENSRegistryWithFallback",
     "address": "0x9cea0dd05c4344a769b2f4c2f8890eda8a700d64",
     "arcVersion": "0.0.1-rc.36"
+  },
+  {
+    "name": "GenericScheme",
+    "alias": "GenericSchemeOmenTokenRegistry",
+    "address": "0x1f1d9cd773c762ccdd8216ce77a0574105cb4c39",
+    "arcVersion": "0.0.1-rc.39"
+  },
+  {
+    "name": "GenericScheme",
+    "alias": "GenericSchemeMixTokenRegistry",
+    "address": "0x3f56b94a1704253aee984571d113c7f4de7a2997",
+    "arcVersion": "0.0.1-rc.39"
+  },
+  {
+    "name": "GenericScheme",
+    "alias": "GenericSchemeExchangeTokenRegistry",
+    "address": "0x019199289a6fad231e60616b16e946ff6d9e631f",
+    "arcVersion": "0.0.1-rc.39"
   }]
 }

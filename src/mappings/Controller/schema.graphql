@@ -82,48 +82,48 @@ type ControllerRemoveGlobalConstraint @entity {
 type ContributionRewardParam @entity {
 	id: ID!
 	votingMachine: Bytes!
-	voteParams: GenesisProtocolParam!
+	voteParams: GenesisProtocolParam
 }
 
 type ContributionRewardExtParam @entity {
 	id: ID!
 	votingMachine: Bytes!
-	voteParams: GenesisProtocolParam!
+	voteParams: GenesisProtocolParam
 	rewarder: Bytes!
 }
 
 type SchemeFactoryParam @entity {
 	id: ID!
 	votingMachine: Bytes!
-	voteParams: GenesisProtocolParam!
+	voteParams: GenesisProtocolParam
 	daoFactory: Bytes!
 }
 
 type SchemeRegistrarParam @entity {
 	id: ID!
 	votingMachine: Bytes!
-	voteRegisterParams: GenesisProtocolParam!
-	voteRemoveParams: GenesisProtocolParam!
+	voteRegisterParams: GenesisProtocolParam
+	voteRemoveParams: GenesisProtocolParam
 }
 
 type GenericSchemeParam @entity {
 	id: ID!
 	votingMachine: Bytes!
-	voteParams: GenesisProtocolParam!
+	voteParams: GenesisProtocolParam
 	contractToCall: Bytes!
 }
 
 type UpgradeSchemeParam @entity {
 	id: ID!
 	votingMachine: Bytes!
-	voteParams: GenesisProtocolParam!
+	voteParams: GenesisProtocolParam
 	arcPackage: Bytes!
 }
 
 type JoinAndQuitParam @entity {
 	id: ID!
 	votingMachine: Bytes!
-	voteParams: GenesisProtocolParam!
+	voteParams: GenesisProtocolParam
 	fundingToken: Bytes!
 	minFeeToJoin: BigInt!
 	memberReputation: BigInt!
@@ -134,7 +134,7 @@ type JoinAndQuitParam @entity {
 type FundingRequestParam @entity {
 	id: ID!
 	votingMachine: Bytes!
-	voteParams: GenesisProtocolParam!
+	voteParams: GenesisProtocolParam
 	fundingToken: Bytes!
 }
 

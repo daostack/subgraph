@@ -32,19 +32,19 @@
   {
     "name": "GenericScheme",
     "alias": "GenericSchemeOmenTokenRegistry",
-    "address": "0x1f1d9cd773c762ccdd8216ce77a0574105cb4c39",
+    "address": "0xcb363df48fb6ecbf085305ca08883ed47f9161a5",
     "arcVersion": "0.0.1-rc.39"
   },
   {
     "name": "GenericScheme",
     "alias": "GenericSchemeMixTokenRegistry",
-    "address": "0x3f56b94a1704253aee984571d113c7f4de7a2997",
+    "address": "0xedec2c30a3b20dc96b809203b1fa1405ac63877c",
     "arcVersion": "0.0.1-rc.39"
   },
   {
     "name": "GenericScheme",
     "alias": "GenericSchemeExchangeTokenRegistry",
-    "address": "0x019199289a6fad231e60616b16e946ff6d9e631f",
+    "address": "0xe5b9a8470741fd0dcfcb21c6cb7a2799447a404d",
     "arcVersion": "0.0.1-rc.39"
   }]
 }

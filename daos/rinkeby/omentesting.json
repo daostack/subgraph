@@ -7,11 +7,6 @@
   "Schemes": [
     {
       "name": "GenericScheme",
-      "alias": "GenericSchemeOmenDisputeResolution",
-      "address": "0x67883470ae73347a6742376d3db8bf13bc9358a8"
-    },
-    {
-      "name": "GenericScheme",
       "alias": "GenericSchemeExchangeTokenRegistry",
       "address": "0x12E07e5e3A448B6aFDb8d61Ea6DF4dabf60027ea"
     },

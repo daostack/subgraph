@@ -4,5 +4,23 @@
   "DAOToken": "0xabC5784f7577F17085c85175A4ef185D8Db191d2",
   "Reputation": "0x11885c5e02f4A064d85c7e5c049518f837879a0F",
   "Controller": "0x1FEc243D5932c905Eb075819263aD9947B302D91",
-  "arcVersion": "0.0.1-rc.19"
+  "arcVersion": "0.0.1-rc.19",
+  "Schemes": [{
+    "name": "GenericScheme",
+    "alias": "GenericSchemeOmenTokenRegistry",
+    "address": "0x458bcd0cbb73abe3d6705ca758ad8d1228e8d623",
+    "arcVersion": "0.0.1-rc.39"
+  },
+  {
+    "name": "GenericScheme",
+    "alias": "GenericSchemeMixTokenRegistry",
+    "address": "0xf7c2204d07b289e6c462c7ee5d0be4a51943be67",
+    "arcVersion": "0.0.1-rc.39"
+  },
+  {
+    "name": "GenericScheme",
+    "alias": "GenericSchemeExchangeTokenRegistry",
+    "address": "0xae7a7ac6872359b161ec3cc05d91aa26980ff965",
+    "arcVersion": "0.0.1-rc.39"
+  }]
 }

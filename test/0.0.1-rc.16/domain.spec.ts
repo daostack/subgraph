@@ -131,7 +131,7 @@ describe('Domain Layer', () => {
     }`;
 
     const profile = await Box.getProfile('0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1');
-    console.log(profile);
+
     reputationHolders = (await sendQuery(getMigrationDaoMembersProfiles)).dao.reputationHolders;
     expect(reputationHolders).toContainEqual({
       address: '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1',

@@ -12,6 +12,8 @@ import {
   writeProposalIPFS,
 } from './util';
 
+const Box = require('3box');
+
 const ContributionReward = require('@daostack/migration/contracts/' + getArcVersion() + '/ContributionReward.json');
 const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
 const DAOToken = require('@daostack/migration/contracts/' + getArcVersion() + '/DAOToken.json');
@@ -113,6 +115,31 @@ describe('Domain Layer', () => {
     let reputationHolders = (await sendQuery(getMigrationDaoMembers)).dao.reputationHolders;
     expect(reputationHolders).toContainEqual({
       balance: '1000000000000000000000',
+    });
+
+    const getMigrationDaoMembersProfiles = `{
+      dao(id: "${addresses.Avatar.toLowerCase()}") {
+        reputationHolders {
+          address
+          boxName
+          boxImage
+          boxCoverPhoto
+          boxEmoji
+          boxDescription
+        }
+      }
+    }`;
+
+    const profile = await Box.getProfile('0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1');
+    console.log(profile);
+    reputationHolders = (await sendQuery(getMigrationDaoMembersProfiles)).dao.reputationHolders;
+    expect(reputationHolders).toContainEqual({
+      address: '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1',
+      boxCoverPhoto: profile.coverPhoto != null ? profile.coverPhoto[0].contentUrl['/'] : null,
+      boxDescription: profile.description,
+      boxEmoji: profile.emoji,
+      boxImage: profile.image != null ? profile.image[0].contentUrl['/'] : null,
+      boxName: profile.name,
     });
 
     const getRegister = `{

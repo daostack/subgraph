@@ -12,6 +12,11 @@ type ReputationHolder @entity {
 	balance: BigInt!
 	dao: DAO
 	createdAt: BigInt!
+	boxName: String
+	boxImage: String
+	boxCoverPhoto: String
+	boxEmoji: String
+	boxDescription: String
 }
 
 type ReputationMint @entity {

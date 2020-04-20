@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, Bytes, Entity, store, Value} from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, box, Bytes, Entity, json, JSONValue, JSONValueKind, store, Value} from '@graphprotocol/graph-ts';
 import { setContractsInfo, setTemplatesInfo } from '../contractsInfo';
 import { Transfer } from '../types/DAOToken/DAOToken';
 import {
@@ -318,6 +318,26 @@ export function addDaoMember(reputationHolder: ReputationHolder): void {
   addNewReputationHolderEvent(reputationHolder);
 
   daoModule.increaseDAOmembersCount(dao);
+  let profile = box.profile(reputationHolder.address.toHex());
+  if (profile !== null) {
+    if (!profile.get('name').isNull()) {
+      reputationHolder.boxName = profile.get('name').toString();
+    }
+
+    let imageData = profile.get('image');
+    reputationHolder.boxImage = getBoxImageHash(imageData);
+
+    let coverPhotoData = profile.get('coverPhoto');
+    reputationHolder.boxCoverPhoto = getBoxImageHash(coverPhotoData);
+
+    if (!profile.get('emoji').isNull()) {
+      reputationHolder.boxEmoji = profile.get('emoji').toString();
+    }
+    if (!profile.get('description').isNull()) {
+      reputationHolder.boxDescription = profile.get('description').toString();
+    }
+    reputationHolder.save();
+  }
 }
 
 export function removeDaoMember(reputationHolder: ReputationHolder): void {
@@ -327,4 +347,26 @@ export function removeDaoMember(reputationHolder: ReputationHolder): void {
      return;
    }
    daoModule.decreaseDAOmembersCount(dao);
+}
+
+function getBoxImageHash(imageData: JSONValue | null): string {
+  if (!imageData.isNull() && imageData.kind == JSONValueKind.ARRAY) {
+    let imageValues = imageData.toArray();
+    if (imageValues.length > 0) {
+      let imageValue = imageValues[0] as JSONValue;
+      if (imageValue.kind == JSONValueKind.OBJECT) {
+        let image = imageValue.toObject();
+        let contentUrlValue = image.get('contentUrl');
+        if (contentUrlValue.kind == JSONValueKind.OBJECT) {
+          let contentUrl = contentUrlValue.toObject();
+          let ipfsHashValue = contentUrl.get('/');
+          if (ipfsHashValue.kind == JSONValueKind.STRING) {
+            let ipfsHash = ipfsHashValue.toString();
+            return ipfsHash;
+          }
+        }
+      }
+    }
+  }
+  return null;
 }

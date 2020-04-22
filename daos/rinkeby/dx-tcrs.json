@@ -1,0 +1,15 @@
+{
+  "name": "DX_TCRS",
+  "Avatar": "0x63e991af16a5f0b889774431e9b958eb3a7df274",
+  "DAOToken": "0xdd1baa7768e68ce6180baf9d62e7658e843f312c",
+  "Reputation": "0xa53786d74fecada649ec7d5b7d90e23fa7e519df",
+  "Controller": "0x894ed7cc931d0e3fb0b75d7cea8998e07a8abc41",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeDXTokenRegistry",
+      "address": "0x9ae876681307d4a46932332ad6d2eeb504edd04a"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.39"
+}

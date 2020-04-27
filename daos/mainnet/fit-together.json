@@ -1,0 +1,34 @@
+{
+    "name": "FitTogether",
+    "Avatar": "0x006087d6ac20840c23ba298512DB454a05C19b10",
+    "DAOToken": "0xA3820E0f6be1C306C0a76746AF80b60c228d99C2",
+    "Reputation": "0x63853faCE2FA44c4E7a8b4Cf2371416c5aF8e68b",
+    "Controller": "0x0A23f3Ca789Fe18a08F774de7262aDF13d5b48C6",
+    "Schemes": [
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0xD598aAd8700bA3c588c3A2d3A43de6C5D69De23b",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "ReputationAdmin",
+        "alias": "ReputationAdmin",
+        "address": "0x550F422C14780f64685A0959da12b528531847BA",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "ContributionRewardExt",
+        "address": "0xD598aAd8700bA3c588c3A2d3A43de6C5D69De23b",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "Competition",
+        "address": "0xB3d24c0e4411819338BF5efe9702C916B2709a04",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.41"
+  }

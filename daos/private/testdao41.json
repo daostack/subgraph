@@ -1,37 +1,37 @@
 {
-  "name": "Pervasive Hot air balloon",
-  "Avatar": "0x5951c93dCb47068fcbe1AcE235B2ea625d9823a5",
-  "DAOToken": "0x820FbBC729B157f91CA5C2659aF2971C766e6A4b",
-  "Reputation": "0xADb82bc43A7e402f40E1F166FC238c849791A928",
-  "Controller": "0xFa4F3a023874075Ae061de75E7e0E82a66ED7f1F",
+  "name": "Uxorious Soaper",
+  "Avatar": "0x1EaddB8b4095320cf44cEE3448ac73eeCD9A2D6D",
+  "DAOToken": "0x375f4ecc738EE3175FA00F5bC13a47DC15AbeBd7",
+  "Reputation": "0xcBDFAB17efb4F1b5cd3B05615D7e32415fa80d10",
+  "Controller": "0x923F16917b0929CC08F5Fa35113F3e207aEE4fB3",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0x49f4dc93c37949C2c682c94700547C7EcE44C439",
+      "address": "0x158CBa029dE5D141f0e6e264de7b4F22C1c6A700",
       "arcVersion": "0.0.1-rc.41"
     },
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0xC94424eb26839a2B195eBb7230f7a43C00F20428",
+      "address": "0x3f63362ef1a187dcec09C5C951DB47be3FddBF11",
       "arcVersion": "0.0.1-rc.41"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "Wallet",
-      "address": "0x492D7121bc673a2acAEc76C57531ee6E046ffdBd",
+      "address": "0x12eb8682598481A2AEb01F86B3d9DBF00291Ef7D",
       "arcVersion": "0.0.1-rc.41"
     },
     {
       "name": "ContributionRewardExt",
-      "address": "0xC94424eb26839a2B195eBb7230f7a43C00F20428",
+      "address": "0x3f63362ef1a187dcec09C5C951DB47be3FddBF11",
       "arcVersion": "0.0.1-rc.41"
     },
     {
       "name": "Competition",
-      "address": "0x218DFb4f7295FE4f0B6cF64AA7121F60Ea36deDa",
+      "address": "0xd5484bb1F891023ABC512902d6F5949E3AC063e4",
       "arcVersion": "0.0.1-rc.41"
     }
   ],

@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes , crypto, EthereumValue, log , SmartContract, store} from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, crypto, log, store} from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ContractInfo,
          ContributionRewardProposal,

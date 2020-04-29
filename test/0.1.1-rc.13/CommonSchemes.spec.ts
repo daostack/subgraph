@@ -108,7 +108,7 @@ describe('JoinAndQuit Scheme', () => {
                 minFeeToJoin
                 memberReputation
                 fundingGoal
-                fundingGoalDeadLine
+                fundingGoalDeadline
               }
             }
         }
@@ -140,7 +140,7 @@ describe('JoinAndQuit Scheme', () => {
             minFeeToJoin: (goal / 10).toString(),
             memberReputation: '100',
             fundingGoal: goal.toString(),
-            fundingGoalDeadLine: '10000000000',
+            fundingGoalDeadline: '10000000000',
           },
         },
       });

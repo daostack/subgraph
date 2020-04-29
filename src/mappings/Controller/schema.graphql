@@ -128,7 +128,7 @@ type JoinAndQuitParam @entity {
 	minFeeToJoin: BigInt!
 	memberReputation: BigInt!
 	fundingGoal: BigInt!
-	fundingGoalDeadLine: BigInt!
+	fundingGoalDeadline: BigInt!
 }
 
 type FundingRequestParam @entity {

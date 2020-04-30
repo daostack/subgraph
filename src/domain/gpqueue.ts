@@ -123,7 +123,7 @@ export function create(dao: Address,
     let minFeeToJoin = joinAndQuit.minFeeToJoin();
     let memberReputation = joinAndQuit.memberReputation();
     let fundingGoal = joinAndQuit.fundingGoal();
-    let fundingGoalDeadLine = joinAndQuit.fundingGoalDeadLine();
+    let fundingGoalDeadline = joinAndQuit.fundingGoalDeadline();
 
     if (!equalStrings(gpAddress.toHex(), addressZero)) {
         setJoinAndQuitParams(
@@ -135,7 +135,7 @@ export function create(dao: Address,
           minFeeToJoin,
           memberReputation,
           fundingGoal,
-          fundingGoalDeadLine,
+          fundingGoalDeadline,
         );
         isGPQue = true;
     }

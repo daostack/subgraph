@@ -367,7 +367,7 @@ export function setJoinAndQuitParams(
   minFeeToJoin: BigInt,
   memberReputation: BigInt,
   fundingGoal: BigInt,
-  fundingGoalDeadLine: BigInt,
+  fundingGoalDeadline: BigInt,
 ): void {
   setGPParams(vmAddress, vmParamsHash, avatar);
   let controllerScheme = ControllerScheme.load(
@@ -380,7 +380,7 @@ export function setJoinAndQuitParams(
   joinAndQuitParams.minFeeToJoin = minFeeToJoin;
   joinAndQuitParams.memberReputation = memberReputation;
   joinAndQuitParams.fundingGoal = fundingGoal;
-  joinAndQuitParams.fundingGoalDeadLine = fundingGoalDeadLine;
+  joinAndQuitParams.fundingGoalDeadline = fundingGoalDeadline;
   joinAndQuitParams.save();
   if (controllerScheme != null) {
     controllerScheme.joinAndQuitParams = joinAndQuitParams.id;

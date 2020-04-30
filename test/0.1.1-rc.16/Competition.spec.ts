@@ -318,7 +318,7 @@ describe('Competition', () => {
         for (let tag of proposalTags) {
             tagsList.unshift({
                     id: tag, numberOfSuggestions: '2',
-                    competitionSuggestions: [{ suggestionId: suggestionId2 }, { suggestionId: suggestionId1 }],
+                    competitionSuggestions: [{ suggestionId: suggestionId1 }, { suggestionId: suggestionId2 }],
                 });
         }
         expect((await sendQuery(competitionSuggestionsQuery)).competitionSuggestions).toContainEqual({

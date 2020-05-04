@@ -4,5 +4,12 @@
   "DAOToken": "0xabC5784f7577F17085c85175A4ef185D8Db191d2",
   "Reputation": "0x11885c5e02f4A064d85c7e5c049518f837879a0F",
   "Controller": "0x1FEc243D5932c905Eb075819263aD9947B302D91",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeDXTokenRegistry",
+      "address": "0xca090ec785deaeb1136884eb2c79aab7a517441f"
+    }
+  ],
   "arcVersion": "0.0.1-rc.19"
 }

@@ -8,7 +8,8 @@
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeDXTokenRegistry",
-      "address": "0xca090ec785deaeb1136884eb2c79aab7a517441f"
+      "address": "0xca090ec785deaeb1136884eb2c79aab7a517441f",
+      "arcVersion": "0.0.1-rc.41"
     }
   ],
   "arcVersion": "0.0.1-rc.19"

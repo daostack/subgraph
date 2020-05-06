@@ -288,8 +288,10 @@ export function handleRemoveGlobalConstraint(
 export function setGPParams(gpAddress: Address, gpParamsHash: Bytes, avatar: Address): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let gpParams = GenesisProtocolParam.load(gpParamsHash.toHex());
-  if (gpParams == null && !equalsBytes(gpParamsHash, new Bytes(32))) {
-    gpParams = new GenesisProtocolParam(gpParamsHash.toHex());
+  if (!equalsBytes(gpParamsHash, new Bytes(32))) {
+    if (gpParams == null) {
+        gpParams = new GenesisProtocolParam(gpParamsHash.toHex());
+    }
     let callResult = gp.try_parameters(gpParamsHash);
     if (callResult.reverted) {
         log.info('genesisProtocol try_parameters reverted', []);

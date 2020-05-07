@@ -129,6 +129,7 @@ type JoinAndQuitParam @entity {
 	memberReputation: BigInt!
 	fundingGoal: BigInt!
 	fundingGoalDeadline: BigInt!
+	rageQuitEnable: Boolean!
 }
 
 type FundingRequestParam @entity {

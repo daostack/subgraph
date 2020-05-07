@@ -109,6 +109,7 @@ describe('JoinAndQuit Scheme', () => {
                 memberReputation
                 fundingGoal
                 fundingGoalDeadline
+                rageQuitEnable
               }
             }
         }
@@ -141,6 +142,7 @@ describe('JoinAndQuit Scheme', () => {
             memberReputation: '100',
             fundingGoal: goal.toString(),
             fundingGoalDeadline: '10000000000',
+            rageQuitEnable: true,
           },
         },
       });

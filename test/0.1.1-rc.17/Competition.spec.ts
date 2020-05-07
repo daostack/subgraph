@@ -25,12 +25,14 @@ describe('Competition', () => {
     let competition;
     let genesisProtocol;
     let reputation;
+    let competitionAddress;
     beforeAll(async () => {
         web3 = await getWeb3();
         addresses = getContractAddresses();
         opts = await getOptions(web3);
         contributionReward = new web3.eth.Contract(ContributionRewardExt.abi, addresses.ContributionRewardExt, opts);
-        competition = new web3.eth.Contract(Competition.abi, addresses.Competition, opts);
+        competitionAddress = await contributionReward.methods.rewarder().call();
+        competition = new web3.eth.Contract(Competition.abi, competitionAddress, opts);
         genesisProtocol = new web3.eth.Contract(GenesisProtocol.abi, addresses.GenesisProtocol, opts);
         reputation = await new web3.eth.Contract(Reputation.abi, addresses.NativeReputation, opts);
     });
@@ -188,7 +190,7 @@ describe('Competition', () => {
             proposal: {
                 id: proposalId,
             },
-            contract: addresses.Competition.toLowerCase(),
+            contract: competitionAddress.toLowerCase(),
             dao: {
                 id: addresses.Avatar.toLowerCase(),
             },
@@ -318,7 +320,7 @@ describe('Competition', () => {
         for (let tag of proposalTags) {
             tagsList.unshift({
                     id: tag, numberOfSuggestions: '2',
-                    competitionSuggestions: [{ suggestionId: suggestionId1 }, { suggestionId: suggestionId2 }],
+                    competitionSuggestions: [{ suggestionId: suggestionId2 }, { suggestionId: suggestionId1 }],
                 });
         }
         expect((await sendQuery(competitionSuggestionsQuery)).competitionSuggestions).toContainEqual({

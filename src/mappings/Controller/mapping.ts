@@ -69,8 +69,9 @@ function insertScheme(
     controllerScheme.numberOfPreBoostedProposals = BigInt.fromI32(0);
     controllerScheme.numberOfBoostedProposals = BigInt.fromI32(0);
     controllerScheme.numberOfExpiredInQueueProposals = BigInt.fromI32(0);
-    controllerScheme.isRegistered = true;
   }
+
+  controllerScheme.isRegistered = true;
   controllerScheme.dao = avatarAddress.toHex();
   controllerScheme.paramsHash = paramsHash;
   /* tslint:disable:no-bitwise */
@@ -287,8 +288,10 @@ export function handleRemoveGlobalConstraint(
 export function setGPParams(gpAddress: Address, gpParamsHash: Bytes, avatar: Address): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let gpParams = GenesisProtocolParam.load(gpParamsHash.toHex());
-  if (gpParams == null && !equalsBytes(gpParamsHash, new Bytes(32))) {
-    gpParams = new GenesisProtocolParam(gpParamsHash.toHex());
+  if (!equalsBytes(gpParamsHash, new Bytes(32))) {
+    if (gpParams == null) {
+        gpParams = new GenesisProtocolParam(gpParamsHash.toHex());
+    }
     let callResult = gp.try_parameters(gpParamsHash);
     if (callResult.reverted) {
         log.info('genesisProtocol try_parameters reverted', []);

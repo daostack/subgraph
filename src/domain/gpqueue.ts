@@ -124,6 +124,7 @@ export function create(dao: Address,
     let memberReputation = joinAndQuit.memberReputation();
     let fundingGoal = joinAndQuit.fundingGoal();
     let fundingGoalDeadline = joinAndQuit.fundingGoalDeadline();
+    let rageQuitEnable = joinAndQuit.rageQuitEnable();
 
     if (!equalStrings(gpAddress.toHex(), addressZero)) {
         setJoinAndQuitParams(
@@ -136,6 +137,7 @@ export function create(dao: Address,
           memberReputation,
           fundingGoal,
           fundingGoalDeadline,
+          rageQuitEnable,
         );
         isGPQue = true;
     }

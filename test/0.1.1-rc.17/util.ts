@@ -54,7 +54,7 @@ export async function getWeb3() {
 
 export function getContractAddresses() {
   const addresses = require(`@daostack/migration-experimental/migration.json`);
-  let arcVersion = '0.1.1-rc.16';
+  let arcVersion = '0.1.1-rc.17';
 
   return {
     ...addresses.private.package[arcVersion],
@@ -67,7 +67,6 @@ export function getContractAddresses() {
     UpgradeScheme: addresses.private.dao[arcVersion].Schemes[3].address,
     GenericScheme: addresses.private.dao[arcVersion].Schemes[4].address,
     ContributionRewardExt: addresses.private.dao[arcVersion].Schemes[5].address,
-    Competition: addresses.private.dao[arcVersion].StandAloneContracts[1].address,
     SchemeFactory: addresses.private.dao[arcVersion].Schemes[6].address,
     JoinAndQuit: addresses.private.dao[arcVersion].Schemes[7].address,
     FundingRequest: addresses.private.dao[arcVersion].Schemes[8].address,
@@ -75,7 +74,7 @@ export function getContractAddresses() {
 }
 
 export function getArcVersion() {
-  return '0.1.1-rc.16';
+  return '0.1.1-rc.17';
 }
 
 export function getPackageVersion() {
@@ -83,7 +82,7 @@ export function getPackageVersion() {
 }
 
 export function getOrgName() {
-  return require(`@daostack/migration-experimental/migration.json`).private.dao['0.1.1-rc.16'].name;
+  return require(`@daostack/migration-experimental/migration.json`).private.dao['0.1.1-rc.17'].name;
 }
 
 export async function getOptions(web3) {
@@ -150,9 +149,9 @@ export async function waitUntilSynced() {
 }
 
 export async function registerAdminAccountScheme(web3, addresses, opts, accounts) {
-  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.16/Controller.json');
-  const SchemeRegistrar = require('@daostack/migration-experimental/contracts/0.1.1-rc.16/SchemeRegistrar.json');
-  const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.16/GenesisProtocol.json');
+  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.17/Controller.json');
+  const SchemeRegistrar = require('@daostack/migration-experimental/contracts/0.1.1-rc.17/SchemeRegistrar.json');
+  const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.1-rc.17/GenesisProtocol.json');
 
   const controller = new web3.eth.Contract(Controller.abi, addresses.Controller, opts);
   const genesisProtocol = new web3.eth.Contract(GenesisProtocol.abi, addresses.GenesisProtocol, opts);
@@ -177,8 +176,8 @@ export async function registerAdminAccountScheme(web3, addresses, opts, accounts
 }
 
 export async function prepareReputation(web3, addresses, opts, accounts) {
-  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.16/Controller.json');
-  const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.16/Reputation.json');
+  const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.17/Controller.json');
+  const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.17/Reputation.json');
 
   await registerAdminAccountScheme(web3, addresses, opts, accounts);
   const controller = new web3.eth.Contract(Controller.abi, addresses.Controller, opts);

@@ -5,3 +5,5 @@ eventHandlers:
   # TODO: Add send and receive ETH with Vault support
   - event: OwnershipTransferred(indexed address,indexed address)
     handler: handleOwnershipTransferred
+  - event: MetaData(string)
+    handler: handleMetaData

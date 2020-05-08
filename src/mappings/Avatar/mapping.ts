@@ -3,10 +3,12 @@ import 'allocator/arena';
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Avatar contract ABI
-import { Avatar, OwnershipTransferred } from '../../types/Avatar/Avatar';
+import { Avatar, MetaData, OwnershipTransferred } from '../../types/Avatar/Avatar';
 
 // Import entity types generated from the GraphQL schema
 import { AvatarContract } from '../../types/schema';
+
+import * as domain from '../../domain';
 
 function handleAvatarBalance(
   address: Address,
@@ -45,7 +47,17 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
     avatar.nativeReputation = avatarSC.nativeReputation();
     avatar.nativeToken = avatarSC.nativeToken();
     avatar.balance = BigInt.fromI32(0);
+    avatar.metadataHash = '';
   }
   avatar.owner = event.params.newOwner;
   avatar.save();
+}
+
+export function handleMetaData(event: MetaData): void {
+  let avatar = AvatarContract.load(event.address.toHex());
+  if (avatar != null) {
+      avatar.metadataHash = event.params._metaData;
+      avatar.save();
+  }
+  domain.setDaoMetadata(event);
 }

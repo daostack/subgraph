@@ -1,4 +1,10 @@
-import { getArcVersion, getContractAddresses, getOptions, getPackageVersion, getWeb3, sendQuery } from './util';
+import { getArcVersion,
+         getContractAddresses,
+         getOptions,
+         getPackageVersion,
+         getWeb3,
+         sendQuery,
+         writeToIPFS } from './util';
 
 const DAOFactory = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOFactory.json');
 const DAOToken = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOToken.json');
@@ -146,6 +152,8 @@ describe('DAOFactory', () => {
     const getBytesLength = function(bytes) {
         return Number(bytes.slice(2).length) / 2;
     };
+    let metadata = 'meta data';
+    let metadataHash = await writeToIPFS(metadata);
 
     tx = await daoFactory.methods.setSchemes(
         avatar.options.address,
@@ -153,7 +161,7 @@ describe('DAOFactory', () => {
         crData,
         [getBytesLength(crData)],
         ['0x0000000F'],
-        'metaData',
+        metadataHash,
     ).send();
     const contributionRewardAddress = tx.events.SchemeInstance.returnValues._scheme;
     // Ensure the scheme is in the subgraph
@@ -198,6 +206,8 @@ describe('DAOFactory', () => {
             }
             isRegistered
         }
+        metadataHash
+        metadata
       }
     }`, 15000);
 
@@ -232,6 +242,8 @@ describe('DAOFactory', () => {
           isRegistered: true,
         },
       ],
+      metadata,
+      metadataHash,
     });
   }, 120000);
 });

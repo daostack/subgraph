@@ -27,6 +27,8 @@ type DAO @entity {
 	numberOfBoostedProposals: BigInt!
 	numberOfExpiredInQueueProposals: BigInt!
 	error: String
+	metadata: String!
+	metadataHash: String!
 }
 
 type GPQueue @entity {
@@ -116,7 +118,7 @@ type Proposal @entity {
 
 	# SchemeRegistrar proposal
   	schemeFactory: SchemeFactoryProposal
-	  
+
 	# SchemeRegistrar proposal
   	schemeRegistrar: SchemeRegistrarProposal
 

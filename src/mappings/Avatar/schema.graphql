@@ -6,4 +6,5 @@ type AvatarContract @entity {
 	nativeReputation: Bytes!
 	balance: BigInt!
 	owner: Bytes!
+	metadataHash: String!
 }

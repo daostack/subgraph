@@ -1,4 +1,5 @@
 import { Address, BigDecimal, BigInt, Bytes} from '@graphprotocol/graph-ts';
+import { MetaData } from '../types/Avatar/Avatar';
 import { Transfer } from '../types/DAOToken/DAOToken';
 import {
   ExecuteProposal,
@@ -368,6 +369,10 @@ export function addDaoMember(reputationHolder: ReputationHolder): void {
   addNewReputationHolderEvent(reputationHolder);
 
   daoModule.increaseDAOmembersCount(dao);
+}
+
+export function setDaoMetadata(event: MetaData): void {
+  daoModule.metadata(event.address, event.params._metaData);
 }
 
 export function removeDaoMember(reputationHolder: ReputationHolder): void {

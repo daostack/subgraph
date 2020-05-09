@@ -1,4 +1,4 @@
-import { Address, BigInt, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, ipfs, store } from '@graphprotocol/graph-ts';
 import { Avatar } from '../types/Controller/Avatar';
 import { DAO } from '../types/schema';
 
@@ -43,6 +43,8 @@ export function insertNewDAO(
   dao.nativeReputation = nativeReputationAddress.toHex();
   dao.reputationHoldersCount = BigInt.fromI32(0);
   dao.register = 'na';
+  dao.metadata = '';
+  dao.metadataHash = '';
   saveDAO(dao);
 
   return dao;
@@ -55,6 +57,18 @@ export function register(
   let dao = DAO.load(avatar.toHex());
   if (dao != null) {
     dao.register = tag;
+    dao.save();
+  }
+}
+
+export function metadata(
+  avatar: Address,
+  metadataHash: string,
+): void {
+  let dao = DAO.load(avatar.toHex());
+  if (dao != null) {
+    dao.metadataHash = metadataHash;
+    dao.metadata = (ipfs.cat('/ipfs/' + metadataHash)).toString();
     dao.save();
   }
 }

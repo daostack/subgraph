@@ -100,6 +100,13 @@ export async function writeProposalIPFS(data: any) {
   return ipfsResponse[0].path;
 }
 
+export async function writeToIPFS(data: string) {
+  const ipfsClient = IPFSClient(ipfs);
+  const ipfsResponse = await ipfsClient.add(new Buffer(data));
+
+  return ipfsResponse[0].path;
+}
+
 export function padZeros(str: string, max = 36) {
   str = str.toString();
   return str.length < max ? padZeros('0' + str, max) : str;

@@ -22,6 +22,7 @@ describe('Avatar', () => {
         nativeReputation
         balance
         owner
+        metadataHash
       }
     }`;
     const { avatarContract } = await sendQuery(avatarQuery, 5000);
@@ -34,6 +35,7 @@ describe('Avatar', () => {
       nativeReputation: addresses.NativeReputation.toLowerCase(),
       balance,
       owner: addresses.Controller.toLowerCase(),
+      metadataHash: 'Deployment Metadata',
     });
 
     await web3.eth.sendTransaction({
@@ -54,6 +56,7 @@ describe('Avatar', () => {
       nativeReputation: addresses.NativeReputation.toLowerCase(),
       balance,
       owner: addresses.Controller.toLowerCase(),
+      metadataHash: 'Deployment Metadata',
     });
   }, 20000);
 });

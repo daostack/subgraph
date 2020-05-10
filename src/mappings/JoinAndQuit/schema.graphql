@@ -13,3 +13,10 @@ type RageQuitted @entity {
 	rageQuitter: Bytes!
 	refund: BigInt!
 }
+
+type Refunded @entity {
+	id: ID!
+	dao: DAO!
+	beneficiary: Bytes!
+	refund: BigInt!
+}

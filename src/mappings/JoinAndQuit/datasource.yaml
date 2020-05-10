@@ -13,3 +13,5 @@ eventHandlers:
     handler: handleRedeemReputation
   - event: RageQuit(indexed address,indexed address,indexed uint256)
     handler: handleRageQuit
+  - event: Refund(indexed address,indexed address,indexed uint256)
+    handler: handleRefund

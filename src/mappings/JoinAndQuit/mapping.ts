@@ -3,13 +3,14 @@ import {
   ProposalExecuted,
   RageQuit,
   RedeemReputation,
+  Refund,
 } from '../../types/JoinAndQuit/JoinAndQuit';
 
 import * as domain from '../../domain';
 
 // Import entity types generated from the GraphQL schema
 import { BigInt } from '@graphprotocol/graph-ts';
-import { JoinAndQuitProposal, RageQuitted } from '../../types/schema';
+import { JoinAndQuitProposal, RageQuitted, Refunded } from '../../types/schema';
 import { eventId } from '../../utils';
 
 function insertNewProposal(event: JoinInProposal): void {
@@ -65,4 +66,15 @@ export function handleRageQuit(
   rageQuitted.refund = event.params._refund;
 
   rageQuitted.save();
+}
+
+export function handleRefund(
+  event: Refund,
+): void {
+  let refund = new Refunded(eventId(event));
+  refund.dao = event.params._avatar.toHex();
+  refund.beneficiary = event.params._beneficiary;
+  refund.refund = event.params._refund;
+
+  refund.save();
 }

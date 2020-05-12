@@ -1,5 +1,6 @@
 type FundingRequestProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	dao: DAO!
 	beneficiary: Bytes!
 	amount: BigInt!

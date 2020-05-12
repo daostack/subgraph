@@ -1,5 +1,6 @@
 import { Address, BigInt, crypto, store } from '@graphprotocol/graph-ts';
 import { ProposalVote } from '../types/schema';
+import { save } from '../utils';
 import { addVoteEvent } from './event';
 
 export function getVote(id: string): ProposalVote {
@@ -10,8 +11,8 @@ export function getVote(id: string): ProposalVote {
   return vote;
 }
 
-export function saveVote(vote: ProposalVote): void {
-  store.set('ProposalVote', vote.id, vote);
+export function saveVote(vote: ProposalVote, timestamp: BigInt): void {
+  save(vote, 'ProposalVote', timestamp);
 }
 
 export function insertVote(
@@ -30,7 +31,7 @@ export function insertVote(
   vote.proposal = proposalId;
   vote.dao = daoId;
   vote.outcome = outcome;
-  saveVote(vote);
+  saveVote(vote, timestamp);
 
   addVoteEvent(eventId, proposalId, outcome, reputation, voter, daoId, timestamp);
 }

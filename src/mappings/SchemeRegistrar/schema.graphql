@@ -1,5 +1,6 @@
 type SchemeRegistrarNewSchemeProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	avatar: Bytes!
@@ -12,6 +13,7 @@ type SchemeRegistrarNewSchemeProposal @entity {
 
 type SchemeRegistrarRemoveSchemeProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	avatar: Bytes!
@@ -23,6 +25,7 @@ type SchemeRegistrarRemoveSchemeProposal @entity {
 
 type SchemeRegistrarProposalExecuted @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	avatar: Bytes!
@@ -32,6 +35,7 @@ type SchemeRegistrarProposalExecuted @entity {
 
 type SchemeRegistrarProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	dao: DAO!
 	schemeToRegister: Bytes
 	schemeToRegisterPermission: Bytes

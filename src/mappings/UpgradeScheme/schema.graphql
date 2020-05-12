@@ -1,5 +1,6 @@
 type UpgradeSchemeProposal @entity {
     id: ID!
+	lastUpdatedAt: BigInt!
  	dao: DAO!
 	packageVersion: [BigInt!]
     contractsNames: [Bytes!]

@@ -1,4 +1,4 @@
-import { Address, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import {
   setContractsInfo,
   setTemplatesInfo,
@@ -15,9 +15,9 @@ import { DAOFactory, NewOrg, ProxyCreated } from '../../types/DAOFactory/DAOFact
 import {
   ControllerOrganization, DAOFactoryContract, ReputationContract, ReputationHolder, TokenContract,
 } from '../../types/schema';
-import { createTemplate, fetchTemplateName, hexToAddress, setContractInfo } from '../../utils';
+import { createTemplate, fetchTemplateName, hexToAddress, save, setContractInfo } from '../../utils';
 
-function getDAOFactoryContract(address: Address): DAOFactoryContract {
+function getDAOFactoryContract(address: Address, timestamp: BigInt): DAOFactoryContract {
   let daoFactory = DAOFactoryContract.load(address.toHex()) as DAOFactoryContract;
   if (daoFactory == null) {
     daoFactory = new DAOFactoryContract(address.toHex());
@@ -25,7 +25,7 @@ function getDAOFactoryContract(address: Address): DAOFactoryContract {
     let daoFactoryContract = DAOFactory.bind(address);
     daoFactory.packageName = daoFactoryContract.PACKAGE_NAME();
     daoFactory.app = daoFactoryContract.app();
-    daoFactory.save();
+    save(daoFactory, 'DAOFactoryContract', timestamp);
     setContractsInfo();
     setTemplatesInfo();
   }
@@ -39,7 +39,7 @@ export function handleNewOrg(event: NewOrg): void {
   let rep = Reputation.bind(reputation);
   reputationContract.address = reputation;
   reputationContract.totalSupply = rep.totalSupply();
-  store.set('ReputationContract', reputationContract.id, reputationContract);
+  save(reputationContract, 'ReputationContract', event.block.timestamp);
 
   let token = event.params._daotoken;
   let tokenContract = new TokenContract(token.toHex());
@@ -48,7 +48,7 @@ export function handleNewOrg(event: NewOrg): void {
   tokenContract.address = token;
   tokenContract.totalSupply = daotoken.totalSupply();
   tokenContract.owner = event.params._controller;
-  store.set('TokenContract', tokenContract.id, tokenContract);
+  save(tokenContract, 'TokenContract', event.block.timestamp);
 
   let ent = new ControllerOrganization(event.params._avatar.toHex());
   ent.avatarAddress = event.params._avatar;
@@ -56,13 +56,14 @@ export function handleNewOrg(event: NewOrg): void {
   ent.nativeReputation = reputation.toHex();
   ent.controller = event.params._controller;
 
-  store.set('ControllerOrganization', ent.id, ent);
+  save(ent, 'ControllerOrganization', event.block.timestamp);
 
-  let dao = insertNewDAO(event.params._avatar, token , reputation);
-  insertToken(hexToAddress(dao.nativeToken), event.params._avatar.toHex());
+  let dao = insertNewDAO(event.params._avatar, token , reputation, event.block.timestamp);
+  insertToken(hexToAddress(dao.nativeToken), event.params._avatar.toHex(), event.block.timestamp);
   insertReputation(
     hexToAddress(dao.nativeReputation),
     event.params._avatar.toHex(),
+    event.block.timestamp,
   );
   // the following code handle cases where the reputation and token minting are done before the dao creation
   // (e.g using daocreator)
@@ -71,9 +72,9 @@ export function handleNewOrg(event: NewOrg): void {
   let holders: string[] = repContract.reputationHolders as string[];
   for (let i = 0; i < holders.length; i++) {
     let reputationHolder = store.get('ReputationHolder', holders[i]) as ReputationHolder;
-    addDaoMember(reputationHolder);
+    addDaoMember(reputationHolder, event.block.timestamp);
   }
-  updateTokenTotalSupply(hexToAddress(dao.nativeToken));
+  updateTokenTotalSupply(hexToAddress(dao.nativeToken), event.block.timestamp);
 
   addNewDAOEvent(event.params._avatar, dao.name, event.block.timestamp);
 
@@ -81,7 +82,7 @@ export function handleNewOrg(event: NewOrg): void {
 
 export function handleProxyCreated(event: ProxyCreated): void {
   // Ensure the FactoryContract has been added to the store
-  getDAOFactoryContract(event.address);
+  getDAOFactoryContract(event.address, event.block.timestamp);
 
   let fullVersion = event.params._version;
   let version = '0.1.1-rc.' + fullVersion[2].toString();

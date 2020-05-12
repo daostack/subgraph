@@ -1,5 +1,6 @@
 type JoinAndQuitProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	dao: DAO!
 	proposedMember: Bytes!
 	funding: BigInt!
@@ -9,6 +10,7 @@ type JoinAndQuitProposal @entity {
 
 type RageQuitted @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	dao: DAO!
 	rageQuitter: Bytes!
 	refund: BigInt!
@@ -16,6 +18,7 @@ type RageQuitted @entity {
 
 type Refunded @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	dao: DAO!
 	beneficiary: Bytes!
 	refund: BigInt!

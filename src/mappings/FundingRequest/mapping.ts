@@ -9,6 +9,7 @@ import * as domain from '../../domain';
 // Import entity types generated from the GraphQL schema
 import { BigInt } from '@graphprotocol/graph-ts';
 import { FundingRequestProposal } from '../../types/schema';
+import { save } from '../../utils';
 
 function insertNewProposal(event: NewFundingProposal): void {
   let proposal = new FundingRequestProposal(event.params._proposalId.toHex());
@@ -18,7 +19,7 @@ function insertNewProposal(event: NewFundingProposal): void {
   proposal.executed = false;
   proposal.amountRedeemed = BigInt.fromI32(0);
 
-  proposal.save();
+  save(proposal, 'FundingRequestProposal', event.block.timestamp);
 }
 
 export function handleNewFundingRequestProposal(
@@ -40,7 +41,7 @@ export function handleProposalExecuted(
   let proposal = FundingRequestProposal.load(event.params._proposalId.toHex());
   if (proposal != null) {
     proposal.executed = true;
-    proposal.save();
+    save(proposal, 'FundingRequestProposal', event.block.timestamp);
   }
 }
 
@@ -50,6 +51,6 @@ export function handleRedeem(
   let proposal = FundingRequestProposal.load(event.params._proposalId.toHex());
   if (proposal != null) {
     proposal.amountRedeemed = event.params._amount;
-    proposal.save();
+    save(proposal, 'FundingRequestProposal', event.block.timestamp);
   }
 }

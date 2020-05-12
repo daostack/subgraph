@@ -1,6 +1,6 @@
 import { Address, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
 import { Event, Proposal, ReputationHolder } from '../types/schema';
-import { concat, fixJsonQuotes} from '../utils';
+import { concat, fixJsonQuotes, save } from '../utils';
 
 export function addNewDAOEvent(avatar: Address, daoName: string, timestamp: BigInt): void {
     addEvent(
@@ -121,5 +121,5 @@ function addEvent(
     eventEnt.user = user;
     eventEnt.dao = dao;
     eventEnt.timestamp = timestamp;
-    eventEnt.save();
+    save(eventEnt, 'Event', timestamp);
 }

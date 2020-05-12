@@ -43,12 +43,14 @@ import {
   UpgradeController,
 } from '../../types/Controller/Controller';
 
-import { concat, equalsBytes, eventId } from '../../utils';
+import { saveDAO } from '../../domain/dao';
+import { concat, equalsBytes, eventId, save } from '../../utils';
 
 function insertScheme(
   controllerAddress: Address,
   avatarAddress: Address,
   scheme: Address,
+  timestamp: BigInt,
 ): void {
   let controller = Controller.bind(controllerAddress);
   let perms = controller.schemesPermissions(scheme);
@@ -80,20 +82,21 @@ function insertScheme(
     controllerScheme.version = contractInfo.version;
     controllerScheme.alias = contractInfo.alias;
   }
-  controllerScheme.save();
+  save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
 }
 
-function unregisterScheme(avatarAddress: Address, scheme: Address): void {
+function unregisterScheme(avatarAddress: Address, scheme: Address, timestamp: BigInt): void {
   let controllerScheme = ControllerScheme.load(crypto.keccak256(concat(avatarAddress, scheme)).toHex());
   if (controllerScheme != null) {
     controllerScheme.isRegistered = false;
-    controllerScheme.save();
+    save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
   }
 }
 
 function updateController(
   avatarAddress: Address,
   newController: Address,
+  timestamp: BigInt,
 ): void {
   let ent = store.get(
     'ControllerOrganization',
@@ -101,7 +104,7 @@ function updateController(
   ) as ControllerOrganization;
   if (ent != null) {
     ent.controller = newController;
-    store.set('ControllerOrganization', avatarAddress.toHex(), ent);
+    save(ent, 'ControllerOrganization', timestamp);
   }
 }
 
@@ -109,12 +112,13 @@ function insertGlobalConstraint(
   avatarAddress: Address,
   globalConstraint: Address,
   type: string,
+  timestamp: BigInt,
 ): void {
   let ent = new ControllerGlobalConstraint(crypto.keccak256(concat(avatarAddress, globalConstraint)).toHex());
   ent.address = globalConstraint;
   ent.type = type;
 
-  store.set('ControllerGlobalConstraint', ent.id, ent);
+  save(ent, 'ControllerGlobalConstraint', timestamp);
 }
 
 function deleteGlobalConstraint(
@@ -135,41 +139,41 @@ export function handleRegisterScheme(event: RegisterScheme): void {
     return;
   }
 
-  insertScheme(event.address, avatar, event.params._scheme);
+  insertScheme(event.address, avatar, event.params._scheme, event.block.timestamp);
 
-  domain.handleRegisterScheme(avatar, event.params._scheme);
+  domain.handleRegisterScheme(avatar, event.params._scheme, event.block.timestamp);
 
   let ent = new ControllerRegisterScheme(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.controller = event.address;
   ent.contract = event.params._sender;
   ent.scheme = event.params._scheme;
-  store.set('ControllerRegisterScheme', ent.id, ent);
+  save(ent, 'ControllerRegisterScheme', event.block.timestamp);
 }
 
 export function handleUnregisterScheme(event: UnregisterScheme): void {
   let controller = Controller.bind(event.address);
   let avatar = controller.avatar();
-  unregisterScheme(avatar, event.params._scheme);
+  unregisterScheme(avatar, event.params._scheme, event.block.timestamp);
 
   let ent = new ControllerUnregisterScheme(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.controller = event.address;
   ent.contract = event.params._sender;
   ent.scheme = event.params._scheme;
-  store.set('ControllerUnregisterScheme', ent.id, ent);
+  save(ent, 'ControllerUnregisterScheme', event.block.timestamp);
 }
 
 export function handleUpgradeController(event: UpgradeController): void {
   let controller = Controller.bind(event.address);
   let avatar = controller.avatar();
-  updateController(avatar, event.params._newController);
+  updateController(avatar, event.params._newController, event.block.timestamp);
 
   let ent = new ControllerUpgradeController(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.controller = event.params._oldController;
   ent.newController = event.params._newController;
-  store.set('ControllerUpgradeController', ent.id, ent);
+  save(ent, 'ControllerUpgradeController', event.block.timestamp);
 }
 
 export function handleAddGlobalConstraint(event: AddGlobalConstraint): void {
@@ -189,6 +193,7 @@ export function handleAddGlobalConstraint(event: AddGlobalConstraint): void {
     avatar,
     event.params._globalConstraint,
     type,
+    event.block.timestamp,
   );
 
   let ent = new ControllerAddGlobalConstraint(eventId(event));
@@ -197,7 +202,7 @@ export function handleAddGlobalConstraint(event: AddGlobalConstraint): void {
   ent.globalConstraint = event.params._globalConstraint;
   ent.type = type;
 
-  store.set('ControllerAddGlobalConstraint', ent.id, ent);
+  save(ent, 'ControllerAddGlobalConstraint', event.block.timestamp);
 }
 
 export function handleRemoveGlobalConstraint(
@@ -212,10 +217,10 @@ export function handleRemoveGlobalConstraint(
   ent.controller = event.address;
   ent.globalConstraint = event.params._globalConstraint;
   ent.isPre = event.params._isPre;
-  store.set('ControllerRemoveGlobalConstraint', ent.id, ent);
+  save(ent, 'ControllerRemoveGlobalConstraint', event.block.timestamp);
 }
 
-export function setGPParams(gpAddress: Address, gpParamsHash: Bytes, avatar: Address): void {
+export function setGPParams(gpAddress: Address, gpParamsHash: Bytes, avatar: Address, timestamp: BigInt): void {
   let gp = GenesisProtocol.bind(gpAddress);
   let gpParams = GenesisProtocolParam.load(gpParamsHash.toHex());
   if (!equalsBytes(gpParamsHash, new Bytes(32))) {
@@ -228,7 +233,7 @@ export function setGPParams(gpAddress: Address, gpParamsHash: Bytes, avatar: Add
         let dao = DAO.load(avatar.toHex());
         if (dao != null) {
           dao.error = 'genesisProtocol try_parameters reverted';
-          dao.save();
+          saveDAO(dao as DAO, timestamp);
         }
     } else {
         let params = callResult.value;
@@ -245,7 +250,7 @@ export function setGPParams(gpAddress: Address, gpParamsHash: Bytes, avatar: Add
         gpParams.daoBountyConst = params.value10; // daoBountyConst
         gpParams.activationTime = params.value11; // activationTime
         gpParams.voteOnBehalf = params.value12 as Bytes; // voteOnBehalf
-        gpParams.save();
+        save(gpParams as GenesisProtocolParam, 'GenesisProtocolParam', timestamp);
    }
   }
 }
@@ -253,48 +258,51 @@ export function setGPParams(gpAddress: Address, gpParamsHash: Bytes, avatar: Add
 export function setContributionRewardParams(avatar: Address,
                                             scheme: Address,
                                             vmAddress: Address,
-                                            vmParamsHash: Bytes): void {
-    setGPParams(vmAddress, vmParamsHash, avatar);
+                                            vmParamsHash: Bytes,
+                                            timestamp: BigInt): void {
+    setGPParams(vmAddress, vmParamsHash, avatar, timestamp);
     let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
     let contributionRewardParams = new ContributionRewardParam(scheme.toHex());
     contributionRewardParams.votingMachine = vmAddress;
     contributionRewardParams.voteParams = vmParamsHash.toHex();
-    contributionRewardParams.save();
+    save(contributionRewardParams, 'ContributionRewardParam', timestamp);
     controllerScheme.contributionRewardParams = contributionRewardParams.id;
-    controllerScheme.save();
+    save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
   }
 
 export function setSchemeFactoryParams(avatar: Address,
                                        scheme: Address,
                                        vmAddress: Address,
                                        voteParams: Bytes,
-                                       daoFactory: Address): void {
-    setGPParams(vmAddress, voteParams, avatar);
+                                       daoFactory: Address,
+                                       timestamp: BigInt): void {
+    setGPParams(vmAddress, voteParams, avatar, timestamp);
     let controllerScheme = ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
     let schemeFactoryParams = new SchemeFactoryParam(scheme.toHex());
     schemeFactoryParams.votingMachine = vmAddress;
     schemeFactoryParams.voteParams = voteParams.toHex();
     schemeFactoryParams.daoFactory = daoFactory;
-    schemeFactoryParams.save();
+    save(schemeFactoryParams, 'SchemeFactoryParam', timestamp);
     controllerScheme.schemeFactoryParams = schemeFactoryParams.id;
-    controllerScheme.save();
+    save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
 }
 
 export function setSchemeRegistrarParams(avatar: Address,
                                          scheme: Address,
                                          vmAddress: Address,
                                          voteRegisterParams: Bytes,
-                                         voteRemoveParams: Bytes): void {
-   setGPParams(vmAddress, voteRegisterParams, avatar);
-   setGPParams(vmAddress, voteRemoveParams, avatar);
+                                         voteRemoveParams: Bytes,
+                                         timestamp: BigInt): void {
+   setGPParams(vmAddress, voteRegisterParams, avatar, timestamp);
+   setGPParams(vmAddress, voteRemoveParams, avatar, timestamp);
    let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
    let schemeRegistrarParams = new SchemeRegistrarParam(scheme.toHex());
    schemeRegistrarParams.votingMachine = vmAddress;
    schemeRegistrarParams.voteRegisterParams = voteRegisterParams.toHex();
    schemeRegistrarParams.voteRemoveParams = voteRemoveParams.toHex();
-   schemeRegistrarParams.save();
+   save(schemeRegistrarParams, 'SchemeRegistrarParam', timestamp);
    controllerScheme.schemeRegistrarParams = schemeRegistrarParams.id;
-   controllerScheme.save();
+   save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
 }
 
 export function setContributionRewardExtParams(
@@ -303,17 +311,18 @@ export function setContributionRewardExtParams(
   vmAddress: Address,
   vmParamsHash: Bytes,
   rewarder: Address,
+  timestamp: BigInt,
 ): void {
-  setGPParams(vmAddress, vmParamsHash, avatar);
+  setGPParams(vmAddress, vmParamsHash, avatar, timestamp);
   let controllerScheme = ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
   let contributionRewardExtParams = new ContributionRewardExtParam(scheme.toHex());
   contributionRewardExtParams.votingMachine = vmAddress;
   contributionRewardExtParams.voteParams = vmParamsHash.toHex();
   contributionRewardExtParams.rewarder = rewarder;
-  contributionRewardExtParams.save();
+  save(contributionRewardExtParams, 'ContributionRewardExtParam', timestamp);
   if (controllerScheme != null) {
     controllerScheme.contributionRewardExtParams = contributionRewardExtParams.id;
-    controllerScheme.save();
+    save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
   }
 }
 
@@ -323,8 +332,9 @@ export function setGenericSchemeParams(
   vmAddress: Address,
   vmParamsHash: Bytes,
   contractToCall: Bytes,
+  timestamp: BigInt,
 ): void {
-  setGPParams(vmAddress, vmParamsHash, avatar);
+  setGPParams(vmAddress, vmParamsHash, avatar, timestamp);
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
@@ -332,10 +342,10 @@ export function setGenericSchemeParams(
   genericSchemeParams.votingMachine = vmAddress;
   genericSchemeParams.voteParams = vmParamsHash.toHex();
   genericSchemeParams.contractToCall = contractToCall;
-  genericSchemeParams.save();
+  save(genericSchemeParams, 'GenericSchemeParam', timestamp);
   if (controllerScheme != null) {
     controllerScheme.genericSchemeParams = genericSchemeParams.id;
-    controllerScheme.save();
+    save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
   }
 }
 
@@ -345,8 +355,9 @@ export function setUpgradeSchemeParams(
   vmAddress: Address,
   vmParamsHash: Bytes,
   arcPackage: Bytes,
+  timestamp: BigInt,
 ): void {
-  setGPParams(vmAddress, vmParamsHash, avatar);
+  setGPParams(vmAddress, vmParamsHash, avatar, timestamp);
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
@@ -354,10 +365,10 @@ export function setUpgradeSchemeParams(
   upgradeSchemeParams.votingMachine = vmAddress;
   upgradeSchemeParams.voteParams = vmParamsHash.toHex();
   upgradeSchemeParams.arcPackage = arcPackage;
-  upgradeSchemeParams.save();
+  save(upgradeSchemeParams, 'UpgradeSchemeParam', timestamp);
   if (controllerScheme != null) {
     controllerScheme.upgradeSchemeParams = upgradeSchemeParams.id;
-    controllerScheme.save();
+    save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
   }
 }
 
@@ -372,8 +383,9 @@ export function setJoinAndQuitParams(
   fundingGoal: BigInt,
   fundingGoalDeadline: BigInt,
   rageQuitEnable: boolean,
+  timestamp: BigInt,
 ): void {
-  setGPParams(vmAddress, vmParamsHash, avatar);
+  setGPParams(vmAddress, vmParamsHash, avatar, timestamp);
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
@@ -386,10 +398,10 @@ export function setJoinAndQuitParams(
   joinAndQuitParams.fundingGoal = fundingGoal;
   joinAndQuitParams.fundingGoalDeadline = fundingGoalDeadline;
   joinAndQuitParams.rageQuitEnable = rageQuitEnable;
-  joinAndQuitParams.save();
+  save(joinAndQuitParams, 'JoinAndQuitParam', timestamp);
   if (controllerScheme != null) {
     controllerScheme.joinAndQuitParams = joinAndQuitParams.id;
-    controllerScheme.save();
+    save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
   }
 }
 
@@ -399,8 +411,9 @@ export function setFundingRequestParams(
   vmAddress: Address,
   vmParamsHash: Bytes,
   fundingToken: Address,
+  timestamp: BigInt,
 ): void {
-  setGPParams(vmAddress, vmParamsHash, avatar);
+  setGPParams(vmAddress, vmParamsHash, avatar, timestamp);
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
@@ -408,9 +421,9 @@ export function setFundingRequestParams(
   fundingRequestParams.votingMachine = vmAddress;
   fundingRequestParams.voteParams = vmParamsHash.toHex();
   fundingRequestParams.fundingToken = fundingToken;
-  fundingRequestParams.save();
+  save(fundingRequestParams, 'FundingRequestParam', timestamp);
   if (controllerScheme != null) {
     controllerScheme.fundingRequestParams = fundingRequestParams.id;
-    controllerScheme.save();
+    save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
   }
 }

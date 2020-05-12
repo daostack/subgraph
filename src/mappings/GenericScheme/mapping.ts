@@ -12,6 +12,7 @@ import {
   GenericSchemeParam,
   GenericSchemeProposal,
 } from '../../types/schema';
+import { save } from '../../utils';
 
 function insertNewProposal(event: NewCallProposal): void {
   let genericSchemeParams = GenericSchemeParam.load(event.address.toHex());
@@ -22,7 +23,7 @@ function insertNewProposal(event: NewCallProposal): void {
   ent.value = event.params._value;
   ent.executed = false;
 
-  store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);
+  save(ent, 'GenericSchemeProposal', event.block.timestamp);
 }
 
 export function handleNewCallProposal(
@@ -47,5 +48,5 @@ export function handleProposalExecuted(
     ent.returnValue = event.params._genericCallReturnValue;
   }
 
-  store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);
+  save(ent, 'GenericSchemeProposal', event.block.timestamp);
 }

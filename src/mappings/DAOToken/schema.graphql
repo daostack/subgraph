@@ -1,5 +1,6 @@
 type TokenContract @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	address: Bytes!
 	totalSupply: BigInt!
 	owner: Bytes!
@@ -8,6 +9,7 @@ type TokenContract @entity {
 
 type TokenHolder @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	contract: Bytes!
 	address: Bytes!
 	balance: BigInt!
@@ -15,6 +17,7 @@ type TokenHolder @entity {
 
 type Allowance @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	token: Bytes!
 	owner: Bytes!
 	spender: Bytes!
@@ -23,6 +26,7 @@ type Allowance @entity {
 
 type TokenTransfer @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	from: Bytes!
@@ -32,6 +36,7 @@ type TokenTransfer @entity {
 
 type TokenApproval @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	owner: Bytes!

@@ -7,7 +7,7 @@ import {
   OwnershipTransferred,
   Transfer,
 } from '../../types/DAOToken/DAOToken';
-import { concat, eventId } from '../../utils';
+import { concat, eventId, save } from '../../utils';
 
 // Import entity types generated from the GraphQL schema
 import {
@@ -20,7 +20,7 @@ import {
 
 import * as domain from '../../domain';
 
-function update(contract: Address, owner: Address): void {
+function update(contract: Address, owner: Address, timestamp: BigInt): void {
   let token = DAOToken.bind(contract);
   let ent = new TokenHolder(crypto.keccak256(concat(contract, owner)).toHex());
   ent.contract = contract;
@@ -29,19 +29,20 @@ function update(contract: Address, owner: Address): void {
   ent.balance = balance;
 
   if (!balance.isZero()) {
-    store.set('TokenHolder', ent.id, ent);
+    save(ent, 'TokenHolder', timestamp);
   } else {
+    // TODO: What about that?
     store.remove('TokenHolder', ent.id);
   }
 
-  updateTokenContract(contract, ent.id);
+  updateTokenContract(contract, ent.id, timestamp);
 }
 
 export function handleTransfer(event: Transfer): void {
   domain.handleNativeTokenTransfer(event);
 
-  update(event.address, event.params.to as Address);
-  update(event.address, event.params.from as Address);
+  update(event.address, event.params.to as Address, event.block.timestamp);
+  update(event.address, event.params.from as Address, event.block.timestamp);
   let ent = new TokenTransfer(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -49,10 +50,10 @@ export function handleTransfer(event: Transfer): void {
   ent.to = event.params.to;
   ent.value = event.params.value;
 
-  store.set('TokenTransfer', ent.id, ent);
+  save(ent, 'TokenTransfer', event.block.timestamp);
 
   if (event.params.from !== event.transaction.from) {
-    updateAllowance(event.address, event.params.from, event.transaction.from);
+    updateAllowance(event.address, event.params.from, event.transaction.from, event.block.timestamp);
   }
 }
 
@@ -64,12 +65,12 @@ export function handleApproval(event: Approval): void {
   ent.value = event.params.value;
   ent.owner = event.params.owner;
 
-  store.set('TokenApproval', ent.id, ent);
+  save(ent, 'TokenApproval', event.block.timestamp);
 
-  updateAllowance(event.address, event.params.owner, event.params.spender);
+  updateAllowance(event.address, event.params.owner, event.params.spender, event.block.timestamp);
 }
 
-export function updateAllowance(contract: Bytes, owner: Bytes, spender: Bytes): void {
+export function updateAllowance(contract: Bytes, owner: Bytes, spender: Bytes, timestamp: BigInt): void {
   let id = crypto.keccak256(concat(concat(contract, owner), spender)).toHex();
   let allowance = store.get('Allowance', id) as Allowance;
 
@@ -89,14 +90,14 @@ export function updateAllowance(contract: Bytes, owner: Bytes, spender: Bytes): 
   }
   allowance.amount = allowanceAmount;
 
-  store.set('Allowance', id, allowance);
+  save(allowance, 'Allowance', timestamp);
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  updateTokenContract(event.address, null);
+  updateTokenContract(event.address, null, event.block.timestamp);
 }
 
-function updateTokenContract(contract: Address , tokenHolder: string): void {
+function updateTokenContract(contract: Address , tokenHolder: string, timestamp: BigInt): void {
   let token = DAOToken.bind(contract);
   let tokenContract = TokenContract.load(contract.toHex());
   if (tokenContract == null) {
@@ -115,5 +116,5 @@ function updateTokenContract(contract: Address , tokenHolder: string): void {
   tokenContract.address = contract;
   tokenContract.totalSupply = token.totalSupply();
   tokenContract.owner = token.owner();
-  tokenContract.save();
+  save(tokenContract as TokenContract, 'TokenContract', timestamp);
 }

@@ -27,10 +27,10 @@ import {
   ContributionRewardRedeemReputation,
   GPReward,
 } from '../../types/schema';
-import { concat, eventId } from '../../utils';
+import { concat, eventId, save } from '../../utils';
 
 export function handleRedeemReputation(event: RedeemReputation): void {
-  updateProposalAfterRedemption(event.address, event.params._proposalId, 0);
+  updateProposalAfterRedemption(event.address, event.params._proposalId, 0, event.block.timestamp);
   let ent = new ContributionRewardRedeemReputation(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -38,11 +38,11 @@ export function handleRedeemReputation(event: RedeemReputation): void {
   ent.avatar = event.params._avatar;
   ent.beneficiary = event.params._beneficiary;
   ent.proposalId = event.params._proposalId;
-  store.set('ContributionRewardRedeemReputation', ent.id, ent);
+  save(ent, 'ContributionRewardRedeemReputation', event.block.timestamp);
 }
 
 export function handleRedeemNativeToken(event: RedeemNativeToken): void {
-  updateProposalAfterRedemption(event.address, event.params._proposalId, 1);
+  updateProposalAfterRedemption(event.address, event.params._proposalId, 1, event.block.timestamp);
   let ent = new ContributionRewardRedeemNativeToken(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -50,11 +50,11 @@ export function handleRedeemNativeToken(event: RedeemNativeToken): void {
   ent.avatar = event.params._avatar;
   ent.beneficiary = event.params._beneficiary;
   ent.proposalId = event.params._proposalId;
-  store.set('ContributionRewardRedeemNativeToken', ent.id, ent);
+  save(ent, 'ContributionRewardRedeemNativeToken', event.block.timestamp);
 }
 
 export function handleRedeemEther(event: RedeemEther): void {
-  updateProposalAfterRedemption(event.address, event.params._proposalId, 2);
+  updateProposalAfterRedemption(event.address, event.params._proposalId, 2, event.block.timestamp);
   let ent = new ContributionRewardRedeemEther(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -62,11 +62,11 @@ export function handleRedeemEther(event: RedeemEther): void {
   ent.avatar = event.params._avatar;
   ent.beneficiary = event.params._beneficiary;
   ent.proposalId = event.params._proposalId;
-  store.set('ContributionRewardRedeemEther', ent.id, ent);
+  save(ent, 'ContributionRewardRedeemEther', event.block.timestamp);
 }
 
 export function handleRedeemExternalToken(event: RedeemExternalToken): void {
-  updateProposalAfterRedemption(event.address, event.params._proposalId, 3);
+  updateProposalAfterRedemption(event.address, event.params._proposalId, 3, event.block.timestamp);
   let ent = new ContributionRewardRedeemExternalToken(eventId(event));
   ent.txHash = event.transaction.hash;
   ent.contract = event.address;
@@ -74,7 +74,7 @@ export function handleRedeemExternalToken(event: RedeemExternalToken): void {
   ent.avatar = event.params._avatar;
   ent.beneficiary = event.params._beneficiary;
   ent.proposalId = event.params._proposalId;
-  store.set('ContributionRewardRedeemExternalToken', ent.id, ent);
+  save(ent, 'ContributionRewardRedeemExternalToken', event.block.timestamp);
 }
 
 function insertNewProposal(event: NewContributionProposal): void {
@@ -93,13 +93,14 @@ function insertNewProposal(event: NewContributionProposal): void {
   ent.externalTokenReward = rewards.shift(); // external tokens
   ent.periodLength = rewards.shift(); // period length
   ent.periods = rewards.shift(); // number of periods
-  store.set('ContributionRewardProposal', ent.id, ent);
+  save(ent, 'ContributionRewardProposal', event.block.timestamp);
 }
 
 function updateProposalAfterRedemption(
   contributionRewardAddress: Address,
   proposalId: Bytes,
   type: number,
+  timestamp: BigInt,
 ): void {
   let ent = store.get(
     'ContributionRewardProposal',
@@ -128,11 +129,11 @@ function updateProposalAfterRedemption(
         BigInt.fromI32(3),
       );
     }
-    store.set('ContributionRewardProposal', proposalId.toHex(), ent);
+    save(ent, 'ContributionRewardProposal', timestamp);
     let reward = GPReward.load(crypto.keccak256(concat(proposalId, ent.beneficiary)).toHex());
     if ((reward !== null && shouldRemoveAccountFromUnclaimed(reward as GPReward)) ||
     (reward == null && shouldRemoveContributorFromUnclaimed(ent))) {
-      removeRedeemableRewardOwner(proposalId, ent.beneficiary);
+      removeRedeemableRewardOwner(proposalId, ent.beneficiary,  timestamp);
     }
   }
 }
@@ -147,7 +148,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   if (proposalEnt != null) {
     let proposal = cr.organizationProposals(proposalId);
     proposalEnt.executedAt = proposal.value8;
-    store.set('ContributionRewardProposal', proposalId.toHex(), proposalEnt);
+    save(proposalEnt, 'ContributionRewardProposal', event.block.timestamp);
   }
 
   let ent = new ContributionRewardProposalResolved(eventId(event));
@@ -156,7 +157,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   ent.avatar = event.params._avatar;
   ent.passed = (event.params._param.toI32() == 1);
   ent.proposalId = event.params._proposalId;
-  store.set('ContributionRewardProposalResolved', ent.id, ent);
+  save(ent, 'ContributionRewardProposalResolved', event.block.timestamp);
 }
 
 export function handleNewContributionProposal(
@@ -188,5 +189,5 @@ export function handleNewContributionProposal(
   ent.externalTokenReward = rewards.shift(); // external tokens
   ent.periodLength = rewards.shift(); // period length
   ent.periods = rewards.shift(); // number of periods
-  store.set('ContributionRewardNewContributionProposal', ent.id, ent);
+  save(ent, 'ContributionRewardNewContributionProposal', event.block.timestamp);
 }

@@ -1,6 +1,7 @@
 import { Address, BigInt, ipfs, store } from '@graphprotocol/graph-ts';
 import { Avatar } from '../types/Controller/Avatar';
 import { DAO } from '../types/schema';
+import { save } from '../utils';
 
 export function getDAO(id: string): DAO {
   let dao = store.get('DAO', id) as DAO;
@@ -15,26 +16,27 @@ export function getDAO(id: string): DAO {
   return dao;
 }
 
-export function increaseDAOmembersCount(id: string): void {
+export function increaseDAOmembersCount(id: string, timestamp: BigInt): void {
   let dao = getDAO(id);
   dao.reputationHoldersCount = dao.reputationHoldersCount.plus(BigInt.fromI32(1));
-  saveDAO(dao);
+  saveDAO(dao, timestamp);
 }
 
-export function decreaseDAOmembersCount(id: string): void {
+export function decreaseDAOmembersCount(id: string, timestamp: BigInt): void {
   let dao = getDAO(id);
   dao.reputationHoldersCount = dao.reputationHoldersCount.minus(BigInt.fromI32(1));
-  saveDAO(dao);
+  saveDAO(dao, timestamp);
 }
 
-export function saveDAO(dao: DAO): void {
-  store.set('DAO', dao.id, dao);
+export function saveDAO(dao: DAO, timestamp: BigInt): void {
+  save(dao, 'DAO', timestamp);
 }
 
 export function insertNewDAO(
   avatarAddress: Address,
   nativeTokenAddress: Address,
   nativeReputationAddress: Address,
+  timestamp: BigInt,
 ): DAO {
   let avatar = Avatar.bind(avatarAddress);
   let dao = getDAO(avatarAddress.toHex());
@@ -45,7 +47,7 @@ export function insertNewDAO(
   dao.register = 'na';
   dao.metadata = '';
   dao.metadataHash = '';
-  saveDAO(dao);
+  saveDAO(dao, timestamp);
 
   return dao;
 }
@@ -53,23 +55,25 @@ export function insertNewDAO(
 export function register(
   avatar: Address,
   tag: string,
+  timestamp: BigInt,
 ): void {
   let dao = DAO.load(avatar.toHex());
   if (dao != null) {
     dao.register = tag;
-    dao.save();
+    saveDAO(dao as DAO, timestamp);
   }
 }
 
 export function metadata(
   avatar: Address,
   metadataHash: string,
+  timestamp: BigInt,
 ): void {
   let dao = DAO.load(avatar.toHex());
   if (dao != null) {
     dao.metadataHash = metadataHash;
     dao.metadata = (ipfs.cat('/ipfs/' + metadataHash)).toString();
-    dao.save();
+    saveDAO(dao as DAO, timestamp);
   }
 }
 

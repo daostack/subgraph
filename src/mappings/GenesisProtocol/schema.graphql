@@ -1,5 +1,6 @@
 type GenesisProtocolProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	proposalId: Bytes!
 	submittedTime: BigInt!
 	proposer: Bytes!
@@ -16,6 +17,7 @@ type GenesisProtocolProposal @entity {
 
 type GenesisProtocolVote @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	avatarAddress: Bytes!
 	voterAddress: Bytes!
 	reputation: BigInt!
@@ -25,6 +27,7 @@ type GenesisProtocolVote @entity {
 
 type GenesisProtocolStake @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	avatarAddress: Bytes!
 	stakerAddress: Bytes!
 	prediction: BigInt!
@@ -34,6 +37,7 @@ type GenesisProtocolStake @entity {
 
 type GenesisProtocolRedemption @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	rewardId: GenesisProtocolReward!
 	proposalId: ID!
 	redeemer: Bytes!
@@ -41,12 +45,14 @@ type GenesisProtocolRedemption @entity {
 
 type GenesisProtocolReward @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	type: GenesisProtocolRewardType
 	amount: BigInt!
 }
 
 type GenesisProtocolExecuteProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	proposalId: Bytes!
@@ -57,13 +63,14 @@ type GenesisProtocolExecuteProposal @entity {
 
 type GenesisProtocolGPExecuteProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	proposalId: Bytes!
 	executionState: Int
 }
 
-enum GenesisProtocolRewardType @entity {
+enum GenesisProtocolRewardType {
 	beneficiaryEth
 	beneficiaryNativeToken
 	beneficiaryReputation

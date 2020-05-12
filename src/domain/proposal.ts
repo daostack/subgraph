@@ -1,7 +1,7 @@
 import { Address, BigDecimal, BigInt, Bytes, crypto, ipfs, json, JSONValue, JSONValueKind, log, store } from '@graphprotocol/graph-ts';
 import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
 import { ControllerScheme, DAO, GenesisProtocolParam, Proposal, Tag } from '../types/schema';
-import { concat, equalsBytes, equalStrings } from '../utils';
+import { concat, equalsBytes, equalStrings, save } from '../utils';
 import { getDAO, saveDAO } from './dao';
 import { addNewProposalEvent, addVoteFlipEvent } from './event';
 import { updateThreshold } from './gpqueue';
@@ -88,7 +88,7 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
           tagProposals.push(proposal.id);
           tagEnt.proposals = tagProposals;
           tagEnt.numberOfProposals = tagEnt.numberOfProposals.plus(BigInt.fromI32(1));
-          tagEnt.save();
+          save(tagEnt as Tag, 'Tag', proposal.createdAt);
         }
       }
       proposal.tags = tags;
@@ -137,8 +137,8 @@ export function getIPFSData(descHash: string): IPFSData {
   return result;
 }
 
-export function saveProposal(proposal: Proposal): void {
-  store.set('Proposal', proposal.id, proposal);
+export function saveProposal(proposal: Proposal, timestamp: BigInt): void {
+  save(proposal, 'Proposal', timestamp);
 }
 
 export function updateProposalAfterVote(
@@ -156,19 +156,19 @@ export function updateProposalAfterVote(
   proposal.winningOutcome = parseOutcome(gpProposal.value3);
   if (!equalStrings(proposal.winningOutcome, prevOutcome)) {
     if ((gpProposal.value2 == 6)) {
-      setProposalState(proposal, 6, gp.getProposalTimes(proposalId));
+      setProposalState(proposal, 6, gp.getProposalTimes(proposalId), timestamp);
     }
     addVoteFlipEvent(proposalId, proposal, voter, timestamp);
   }
 }
 
-export function updateProposalconfidence(id: Bytes, confidence: BigInt): void {
+export function updateProposalconfidence(id: Bytes, confidence: BigInt, timestamp: BigInt): void {
    let proposal = getProposal(id.toHex());
    proposal.confidenceThreshold = confidence;
-   saveProposal(proposal);
+   saveProposal(proposal, timestamp);
 }
 
-export function updateProposalState(id: Bytes, state: number, gpAddress: Address): void {
+export function updateProposalState(id: Bytes, state: number, gpAddress: Address, timestamp: BigInt): void {
    let gp = GenesisProtocol.bind(gpAddress);
    let proposal = getProposal(id.toHex());
    updateThreshold(proposal.dao.toString(),
@@ -176,15 +176,16 @@ export function updateProposalState(id: Bytes, state: number, gpAddress: Address
                     gp.threshold(proposal.paramsHash, proposal.organizationId),
                     proposal.organizationId,
                     proposal.scheme,
+                    timestamp,
                     );
-   setProposalState(proposal, state, gp.getProposalTimes(id));
+   setProposalState(proposal, state, gp.getProposalTimes(id), timestamp);
    if (state == 4) {
      proposal.confidenceThreshold = gp.proposals(id).value10;
    }
-   saveProposal(proposal);
+   saveProposal(proposal, timestamp);
 }
 
-export function setProposalState(proposal: Proposal, state: number, gpTimes: BigInt[]): void {
+export function setProposalState(proposal: Proposal, state: number, gpTimes: BigInt[], timestamp: BigInt): void {
   // enum ProposalState { None, ExpiredInQueue, Executed, Queued, PreBoosted, Boosted, QuietEndingPeriod}
   let controllerScheme = ControllerScheme.load(proposal.scheme);
   let dao = DAO.load(proposal.dao);
@@ -274,10 +275,10 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     proposal.stage = 'QuietEndingPeriod';
   }
   if (controllerScheme != null) {
-    controllerScheme.save();
+    save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
   }
   if (dao != null) {
-    dao.save();
+    saveDAO(dao as DAO, timestamp);
   }
 }
 
@@ -313,18 +314,19 @@ export function updateGPProposal(
     gp.threshold(proposal.paramsHash, proposal.organizationId),
     proposal.organizationId,
     proposal.scheme,
+    timestamp,
   );
   proposal.gpQueue = proposal.organizationId.toHex();
   let scheme = ControllerScheme.load(proposal.scheme);
 
   if (scheme != null && scheme.gpQueue == null) {
     scheme.gpQueue = proposal.organizationId.toHex();
-    scheme.save();
+    save(scheme as ControllerScheme, 'ControllerScheme', timestamp);
   }
 
   let dao = getDAO(avatarAddress.toHex());
   dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.plus(BigInt.fromI32(1));
-  saveDAO(dao);
+  saveDAO(dao, timestamp);
   let reputation = getReputation(dao.nativeReputation);
   proposal.totalRepWhenCreated = reputation.totalSupply;
   proposal.closingAt =
@@ -332,12 +334,12 @@ export function updateGPProposal(
   let controllerScheme = ControllerScheme.load(proposal.scheme);
   if (controllerScheme != null) {
     controllerScheme.numberOfQueuedProposals = controllerScheme.numberOfQueuedProposals.plus(BigInt.fromI32(1));
-    controllerScheme.save();
+    save(controllerScheme as ControllerScheme, 'ControllerScheme', timestamp);
   }
 
   addNewProposalEvent(proposalId, proposal, timestamp);
 
-  saveProposal(proposal);
+  saveProposal(proposal, timestamp);
 }
 
 export function updateCRProposal(
@@ -356,7 +358,7 @@ export function updateCRProposal(
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
   getProposalIPFSData(proposal);
-  saveProposal(proposal);
+  saveProposal(proposal, createdAt);
 }
 
 export function updateGSProposal(
@@ -374,7 +376,7 @@ export function updateGSProposal(
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
   getProposalIPFSData(proposal);
 
-  saveProposal(proposal);
+  saveProposal(proposal, createdAt);
 }
 
 export function updateUSProposal(
@@ -392,7 +394,7 @@ export function updateUSProposal(
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
   getProposalIPFSData(proposal);
 
-  saveProposal(proposal);
+  saveProposal(proposal, createdAt);
 }
 
 export function updateJQProposal(
@@ -410,7 +412,7 @@ export function updateJQProposal(
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
   getProposalIPFSData(proposal);
 
-  saveProposal(proposal);
+  saveProposal(proposal, createdAt);
 }
 
 export function updateFRProposal(
@@ -428,7 +430,7 @@ export function updateFRProposal(
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
   getProposalIPFSData(proposal);
 
-  saveProposal(proposal);
+  saveProposal(proposal, createdAt);
 }
 
 export function updateSFProposal(
@@ -448,7 +450,7 @@ export function updateSFProposal(
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
   getProposalIPFSData(proposal);
 
-  saveProposal(proposal);
+  saveProposal(proposal, createdAt);
 }
 
 export function updateSRProposal(
@@ -468,7 +470,7 @@ export function updateSRProposal(
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
   getProposalIPFSData(proposal);
 
-  saveProposal(proposal);
+  saveProposal(proposal, createdAt);
 }
 
 export function updateProposalExecution(
@@ -482,10 +484,10 @@ export function updateProposalExecution(
   if (totalReputation != null) {
     proposal.totalRepWhenExecuted = totalReputation;
   }
-  saveProposal(proposal);
+  saveProposal(proposal, timestamp);
 }
 
-export function updateProposalExecutionState(id: string, executionState: number): void {
+export function updateProposalExecutionState(id: string, executionState: number, timestamp: BigInt): void {
   let proposal = getProposal(id);
   // enum ExecutionState { None, QueueBarCrossed, QueueTimeOut, PreBoostedBarCrossed, BoostedTimeOut, BoostedBarCrossed}
   if (executionState == 1) {
@@ -499,7 +501,7 @@ export function updateProposalExecutionState(id: string, executionState: number)
   } else if (executionState == 5) {
     proposal.executionState = 'BoostedBarCrossed';
   }
-  saveProposal(proposal);
+  saveProposal(proposal, timestamp);
 }
 
 export function addRedeemableRewardOwner(
@@ -515,6 +517,7 @@ export function addRedeemableRewardOwner(
 export function removeRedeemableRewardOwner(
   proposalId: Bytes,
   redeemer: Bytes,
+  timestamp: BigInt,
 ): void {
   let proposal = getProposal(proposalId.toHex());
   let accounts: Bytes[] = proposal.accountsWithUnclaimedRewards as Bytes[];
@@ -527,6 +530,6 @@ export function removeRedeemableRewardOwner(
   if (idx !== accounts.length) {
     accounts.splice(idx, 1);
     proposal.accountsWithUnclaimedRewards = accounts;
-    saveProposal(proposal);
+    saveProposal(proposal, timestamp);
   }
 }

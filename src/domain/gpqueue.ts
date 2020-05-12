@@ -17,7 +17,7 @@ import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeFactory} from '../types/SchemeFactory/SchemeFactory';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
 import { UpgradeScheme } from '../types/UpgradeScheme/UpgradeScheme';
-import { concat, equalStrings} from '../utils';
+import { concat, equalStrings, save} from '../utils';
 
 export function getGPQueue(id: string): GPQueue {
   let gpQueue = GPQueue.load(id) ;
@@ -33,17 +33,19 @@ export function updateThreshold(dao: string,
                                 gpAddress: Address,
                                 threshold: BigInt,
                                 organizationId: Bytes,
-                                scheme: string ): void {
+                                scheme: string,
+                                timestamp: BigInt): void {
   let gpQueue = getGPQueue(organizationId.toHex());
   gpQueue.threshold =  threshold;
   gpQueue.votingMachine = gpAddress;
   gpQueue.scheme = scheme;
   gpQueue.dao = dao;
-  gpQueue.save();
+  save(gpQueue, 'GPQueue', timestamp);
 }
 
 export function create(dao: Address,
-                       scheme: Address): void {
+                       scheme: Address,
+                       timestamp: BigInt): void {
    let contractInfo = ContractInfo.load(scheme.toHex());
    if (contractInfo ==  null) {
      return;
@@ -56,7 +58,7 @@ export function create(dao: Address,
      gpAddress = contributionReward.votingMachine();
      let voteParams = contributionReward.voteParamsHash();
      if (!equalStrings(voteParams.toHex(), addressZero)) {
-       setContributionRewardParams(dao, scheme, gpAddress, voteParams);
+       setContributionRewardParams(dao, scheme, gpAddress, voteParams, timestamp);
        isGPQue = true;
      }
    }
@@ -67,7 +69,8 @@ export function create(dao: Address,
                     scheme,
                     contributionRewardExt.votingMachine(),
                     contributionRewardExt.voteParamsHash(),
-                    contributionRewardExt.rewarder());
+                    contributionRewardExt.rewarder(),
+                    timestamp);
     isGPQue = true;
    }
 
@@ -77,7 +80,7 @@ export function create(dao: Address,
     let voteParams = schemeFactory.voteParamsHash();
     let daoFactory = schemeFactory.daoFactory();
     if (!equalStrings(gpAddress.toHex(), addressZero)) {
-        setSchemeFactoryParams(dao, scheme, gpAddress, voteParams, daoFactory);
+        setSchemeFactoryParams(dao, scheme, gpAddress, voteParams, daoFactory, timestamp);
         isGPQue = true;
     }
   }
@@ -88,7 +91,7 @@ export function create(dao: Address,
      let voteRegisterParams = schemeRegistrar.voteRegisterParamsHash();
      let voteRemoveParams = schemeRegistrar.voteRemoveParamsHash();
      if (!equalStrings(gpAddress.toHex(), addressZero)) {
-         setSchemeRegistrarParams(dao, scheme, gpAddress, voteRegisterParams, voteRemoveParams);
+         setSchemeRegistrarParams(dao, scheme, gpAddress, voteRegisterParams, voteRemoveParams, timestamp);
          isGPQue = true;
      }
    }
@@ -99,7 +102,7 @@ export function create(dao: Address,
     let voteParams = genericScheme.voteParamsHash();
     let contractToCall = genericScheme.contractToCall();
     if (!equalStrings(gpAddress.toHex(), addressZero)) {
-        setGenericSchemeParams(dao, scheme, gpAddress, voteParams, contractToCall);
+        setGenericSchemeParams(dao, scheme, gpAddress, voteParams, contractToCall, timestamp);
         isGPQue = true;
     }
   }
@@ -110,7 +113,7 @@ export function create(dao: Address,
     let voteParams = upgradeScheme.voteParamsHash();
     let arcPackage = upgradeScheme.arcPackage();
     if (!equalStrings(gpAddress.toHex(), addressZero)) {
-        setUpgradeSchemeParams(dao, scheme, gpAddress, voteParams, arcPackage);
+        setUpgradeSchemeParams(dao, scheme, gpAddress, voteParams, arcPackage, timestamp);
         isGPQue = true;
     }
   }
@@ -138,6 +141,7 @@ export function create(dao: Address,
           fundingGoal,
           fundingGoalDeadline,
           rageQuitEnable,
+          timestamp,
         );
         isGPQue = true;
     }
@@ -156,6 +160,7 @@ export function create(dao: Address,
           gpAddress,
           voteParams,
           fundingToken,
+          timestamp,
         );
         isGPQue = true;
     }
@@ -174,6 +179,7 @@ export function create(dao: Address,
                       gpAddress,
                       BigInt.fromUnsignedBytes(bigOne as Bytes),
                       organizationId as Bytes,
-                      crypto.keccak256(concat(dao, scheme)).toHex());
+                      crypto.keccak256(concat(dao, scheme)).toHex(),
+                      timestamp);
    }
 }

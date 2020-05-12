@@ -2,6 +2,7 @@
 # so we use `debug(..)` which writes a `Debug` entity to the store so you can see them in graphiql.
 type Debug @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	message: String!
 }
 
@@ -12,6 +13,7 @@ enum Outcome {
 
 type DAO @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	name: String!
 	nativeToken: Token!
 	nativeReputation: Rep!
@@ -33,6 +35,7 @@ type DAO @entity {
 
 type GPQueue @entity {
  	id: ID!
+	lastUpdatedAt: BigInt!
  	threshold: BigInt!
 	scheme: ControllerScheme
  	dao: DAO!
@@ -42,12 +45,14 @@ type GPQueue @entity {
 
 type Rep @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	dao: DAO
 	totalSupply: BigInt!
 }
 
 type Token @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	dao: DAO
 	name: String!
 	symbol: String!
@@ -56,6 +61,7 @@ type Token @entity {
 
 type Proposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	dao: DAO!
 	proposer: Bytes!
 	stage: String!
@@ -130,6 +136,7 @@ type Proposal @entity {
 
 type Tag @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	proposals: [Proposal!]
 	numberOfProposals: BigInt!
 	competitionSuggestions: [CompetitionSuggestion!]
@@ -138,6 +145,7 @@ type Tag @entity {
 
 type ProposalStake @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	createdAt: BigInt!
 	staker: Bytes!
 	proposal: Proposal!
@@ -148,6 +156,7 @@ type ProposalStake @entity {
 
 type ProposalVote @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	createdAt: BigInt!
 	voter: Bytes!
 	proposal: Proposal!
@@ -173,16 +182,19 @@ enum RewardType {
 
 type GPRewardsHelper @entity {
    	id: ID!
+	lastUpdatedAt: BigInt!
 	gpRewards: [PreGPReward!]
 }
 
 type PreGPReward @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	beneficiary: Bytes!
 }
 
 type GPReward @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	createdAt: BigInt!
 	dao: DAO!
 	beneficiary: Bytes!
@@ -201,6 +213,7 @@ type GPReward @entity {
 
 type ContractInfo @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	name: String!
 	alias: String!
 	version: String!
@@ -209,11 +222,13 @@ type ContractInfo @entity {
 
 type TemplateInfo @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	templateName: String!
 }
 
 type Event @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	type: String!
 	data: String!
 	proposal: Proposal

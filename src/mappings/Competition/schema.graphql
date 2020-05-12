@@ -1,5 +1,6 @@
 type CompetitionProposal @entity {
     id: ID!
+	lastUpdatedAt: BigInt!
     proposal: Proposal!
     contract: Bytes!
     dao: DAO!
@@ -24,6 +25,7 @@ type CompetitionProposal @entity {
 
 type CompetitionSuggestion @entity {
     id: ID!
+	lastUpdatedAt: BigInt!
     suggestionId: BigInt!
     proposal: CompetitionProposal!
     descriptionHash: String!
@@ -44,6 +46,7 @@ type CompetitionSuggestion @entity {
 
 type CompetitionVote @entity {
     id: ID!
+	lastUpdatedAt: BigInt!
     proposal: CompetitionProposal!
     suggestion: CompetitionSuggestion!
     voter: Bytes!

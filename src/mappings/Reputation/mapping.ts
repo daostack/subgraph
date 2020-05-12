@@ -7,7 +7,7 @@ import {
   OwnershipTransferred,
   Reputation,
 } from '../../types/Reputation/Reputation';
-import { concat, eventId } from '../../utils';
+import { concat, eventId, save } from '../../utils';
 
 import * as domain from '../../domain';
 
@@ -41,28 +41,28 @@ function update(contract: Address, owner: Address, timestamp: BigInt): void {
     repHolder.balance = balance;
     repHolder.createdAt = timestamp;
     if (!balance.isZero()) {
-      repHolder.save();
+      save(repHolder as ReputationHolder, 'ReputationHolder', timestamp);
       reputationHolders.push(repHolder.id);
-      domain.addDaoMember(repHolder as ReputationHolder);
+      domain.addDaoMember(repHolder as ReputationHolder, timestamp);
       // create a new one
     }
   } else {
     repHolder.balance = balance;
     if (!balance.isZero()) {
       // update
-      repHolder.save();
+      save(repHolder as ReputationHolder, 'ReputationHolder', timestamp);
       reputationHolders.push(repHolder.id);
     } else {
       // remove
       store.remove('ReputationHolder', repHolder.id);
-      domain.removeDaoMember(repHolder as ReputationHolder);
+      domain.removeDaoMember(repHolder as ReputationHolder, timestamp);
     }
   }
 
   reputationContract.reputationHolders = reputationHolders;
   reputationContract.address = contract;
   reputationContract.totalSupply = rep.totalSupply();
-  reputationContract.save();
+  save(reputationContract as ReputationContract, 'ReputationContract', timestamp);
 }
 
 export function handleMint(event: Mint): void {
@@ -75,7 +75,7 @@ export function handleMint(event: Mint): void {
   ent.address = event.params._to;
   ent.amount = event.params._amount;
 
-  store.set('ReputationMint', ent.id, ent);
+  save(ent, 'ReputationMint', event.block.timestamp);
 }
 
 export function handleBurn(event: Burn): void {
@@ -88,7 +88,7 @@ export function handleBurn(event: Burn): void {
   ent.address = event.params._from;
   ent.amount = event.params._amount;
 
-  store.set('ReputationBurn', ent.id, ent);
+  save(ent, 'ReputationBurn', event.block.timestamp);
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {

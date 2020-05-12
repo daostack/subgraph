@@ -1,5 +1,6 @@
 type ControllerOrganization @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	avatarAddress: Bytes!
 	nativeToken: TokenContract!
 	nativeReputation: ReputationContract!
@@ -8,6 +9,7 @@ type ControllerOrganization @entity {
 
 type ControllerScheme @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	dao: DAO!
 	canRegisterSchemes: Boolean
 	canManageGlobalConstraints: Boolean
@@ -35,12 +37,14 @@ type ControllerScheme @entity {
 
 type ControllerGlobalConstraint @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	address: Bytes!
 	type: String!
 }
 
 type ControllerRegisterScheme @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	controller: Bytes!
 	contract: Bytes!
@@ -49,6 +53,7 @@ type ControllerRegisterScheme @entity {
 
 type ControllerUnregisterScheme @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	controller: Bytes!
 	contract: Bytes!
@@ -57,6 +62,7 @@ type ControllerUnregisterScheme @entity {
 
 type ControllerUpgradeController @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	controller: Bytes!
 	newController: Bytes!
@@ -64,6 +70,7 @@ type ControllerUpgradeController @entity {
 
 type ControllerAddGlobalConstraint @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	controller: Bytes!
 	globalConstraint: Bytes!
@@ -72,6 +79,7 @@ type ControllerAddGlobalConstraint @entity {
 
 type ControllerRemoveGlobalConstraint @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	controller: Bytes!
 	globalConstraint: Bytes!
@@ -81,12 +89,14 @@ type ControllerRemoveGlobalConstraint @entity {
 
 type ContributionRewardParam @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam
 }
 
 type ContributionRewardExtParam @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam
 	rewarder: Bytes!
@@ -94,6 +104,7 @@ type ContributionRewardExtParam @entity {
 
 type SchemeFactoryParam @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam
 	daoFactory: Bytes!
@@ -101,6 +112,7 @@ type SchemeFactoryParam @entity {
 
 type SchemeRegistrarParam @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	votingMachine: Bytes!
 	voteRegisterParams: GenesisProtocolParam
 	voteRemoveParams: GenesisProtocolParam
@@ -108,6 +120,7 @@ type SchemeRegistrarParam @entity {
 
 type GenericSchemeParam @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam
 	contractToCall: Bytes!
@@ -115,6 +128,7 @@ type GenericSchemeParam @entity {
 
 type UpgradeSchemeParam @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam
 	arcPackage: Bytes!
@@ -122,6 +136,7 @@ type UpgradeSchemeParam @entity {
 
 type JoinAndQuitParam @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam
 	fundingToken: Bytes!
@@ -134,6 +149,7 @@ type JoinAndQuitParam @entity {
 
 type FundingRequestParam @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam
 	fundingToken: Bytes!
@@ -141,6 +157,7 @@ type FundingRequestParam @entity {
 
 type GenesisProtocolParam @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	# Genesis Protocol params
 	queuedVoteRequiredPercentage: BigInt!
 	queuedVotePeriodLimit: BigInt!
@@ -159,4 +176,5 @@ type GenesisProtocolParam @entity {
 
 type FirstRegisterScheme @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 }

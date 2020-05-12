@@ -22,7 +22,7 @@ import {
   VoteProposal,
 } from '../../types/GenesisProtocol/GenesisProtocol';
 
-import { concat, eventId } from '../../utils';
+import { concat, eventId, save } from '../../utils';
 
 import {
   GenesisProtocolExecuteProposal,
@@ -45,7 +45,7 @@ export function handleNewProposal(event: NewProposal): void {
   ent.numOfChoices = event.params._numOfChoices;
   ent.address = event.address;
   ent.paramsHash = event.params._paramsHash;
-  store.set('GenesisProtocolProposal', ent.id, ent);
+  save(ent, 'GenesisProtocolProposal', event.block.timestamp);
 }
 
 export function handleVoteProposal(event: VoteProposal): void {
@@ -63,11 +63,11 @@ export function handleVoteProposal(event: VoteProposal): void {
   } else {
     // Is it possible someone will use 50% for one voteOption and rest for the other
     vote.reputation = vote.reputation.plus(event.params._reputation);
-    store.set('GenesisProtocolVote', uniqueId, vote);
+    save(vote, 'GenesisProtocolVote', event.block.timestamp);
     return;
   }
 
-  store.set('GenesisProtocolVote', uniqueId, ent);
+  save(ent, 'GenesisProtocolVote', event.block.timestamp);
 }
 
 export function handleStake(event: Stake): void {
@@ -90,7 +90,7 @@ export function handleStake(event: Stake): void {
   } else {
     // Is it possible someone will use 50% for one voteOption and rest for the other
     stake.stakeAmount = stake.stakeAmount.plus(event.params._amount);
-    store.set('GenesisProtocolStake', uniqueId, stake);
+    save(stake, 'GenesisProtocolStake', event.block.timestamp);
     return;
   }
 
@@ -101,13 +101,9 @@ export function handleStake(event: Stake): void {
 
   proposal.state = state(event.params._proposalId, event.address);
 
-  store.set(
-    'GenesisProtocolProposal',
-    event.params._proposalId.toHex(),
-    proposal,
-  );
+  save(proposal, 'GenesisProtocolProposal', event.block.timestamp);
 
-  store.set('GenesisProtocolStake', uniqueId, ent);
+  save(ent, 'GenesisProtocolStake', event.block.timestamp);
 }
 
 export function handleGPExecuteProposal(event: GPExecuteProposal): void {
@@ -120,11 +116,7 @@ export function handleGPExecuteProposal(event: GPExecuteProposal): void {
   // todo: figure out why reading uint8 event param does not work .
   // this is a workaround to by pass the auto generated getter.
   proposal.executionState = event.parameters[1].value.toBigInt().toI32();
-  store.set(
-    'GenesisProtocolProposal',
-    event.params._proposalId.toHex(),
-    proposal,
-  );
+  save(proposal, 'GenesisProtocolProposal', event.block.timestamp);
 
   let genesisProtocolGPExecuteProposal = new GenesisProtocolGPExecuteProposal(eventId(event));
   genesisProtocolGPExecuteProposal.executionState = event.parameters[1].value
@@ -133,11 +125,7 @@ export function handleGPExecuteProposal(event: GPExecuteProposal): void {
   genesisProtocolGPExecuteProposal.contract = event.address;
   genesisProtocolGPExecuteProposal.proposalId = event.params._proposalId;
   genesisProtocolGPExecuteProposal.txHash = event.transaction.hash;
-  store.set(
-    'GenesisProtocolGPExecuteProposal',
-    genesisProtocolGPExecuteProposal.id,
-    genesisProtocolGPExecuteProposal,
-  );
+  save(genesisProtocolGPExecuteProposal, 'GenesisProtocolGPExecuteProposal', event.block.timestamp);
 }
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
@@ -152,11 +140,7 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
   proposal.decision = event.params._decision;
   proposal.totalReputation = event.params._totalReputation;
   proposal.state = state(event.params._proposalId, event.address);
-  store.set(
-    'GenesisProtocolProposal',
-    event.params._proposalId.toHex(),
-    proposal,
-  );
+  save(proposal, 'GenesisProtocolProposal', event.block.timestamp);
 
   let genesisProtocolExecuteProposal = new GenesisProtocolExecuteProposal(eventId(event));
   genesisProtocolExecuteProposal.decision = event.params._decision;
@@ -166,11 +150,7 @@ export function handleExecuteProposal(event: ExecuteProposal): void {
   genesisProtocolExecuteProposal.totalReputation =
     event.params._totalReputation;
   genesisProtocolExecuteProposal.txHash = event.transaction.hash;
-  store.set(
-    'GenesisProtocolExecuteProposal',
-    genesisProtocolExecuteProposal.id,
-    genesisProtocolExecuteProposal,
-  );
+  save(genesisProtocolExecuteProposal, 'GenesisProtocolExecuteProposal', event.block.timestamp);
 }
 
 export function handleRedeem(event: Redeem): void {
@@ -184,6 +164,7 @@ export function handleRedeem(event: Redeem): void {
     event.params._proposalId,
     rewardType as ByteArray,
     'gpGen',
+    event.block.timestamp,
   );
 }
 
@@ -206,11 +187,12 @@ export function handleRedeemDaoBounty(event: RedeemDaoBounty): void {
     event.params._proposalId,
     rewardType as ByteArray,
     'gpBounty',
+    event.block.timestamp,
   );
 }
 
 export function handleConfidenceLevelChange(event: ConfidenceLevelChange): void {
-  domain.confidenceLevelUpdate(event.params._proposalId, event.params._confidenceThreshold);
+  domain.confidenceLevelUpdate(event.params._proposalId, event.params._confidenceThreshold, event.block.timestamp);
 }
 
 export function handleRedeemReputation(event: RedeemReputation): void {
@@ -224,6 +206,7 @@ export function handleRedeemReputation(event: RedeemReputation): void {
     event.params._proposalId,
     rewardType as ByteArray,
     'gpRep',
+    event.block.timestamp,
   );
 }
 
@@ -234,6 +217,7 @@ function updateRedemption(
   proposalId: Bytes,
   rewardType: ByteArray,
   rewardString: string,
+  timestamp: BigInt,
 ): void {
   let accountId = crypto.keccak256(concat(beneficiary, avatar));
 
@@ -252,7 +236,7 @@ function updateRedemption(
     redemption.redeemer = beneficiary;
     redemption.proposalId = proposalId.toHex();
     redemption.rewardId = rewardId.toHex();
-    store.set('GenesisProtocolRedemption', redemption.id, redemption);
+    save(redemption, 'GenesisProtocolRedemption', timestamp);
   }
 
   let reward = store.get(
@@ -264,7 +248,7 @@ function updateRedemption(
     reward.type = rewardString.toString();
     reward.amount = amount;
 
-    store.set('GenesisProtocolReward', reward.id, reward);
+    save(reward, 'GenesisProtocolReward', timestamp);
   }
 }
 

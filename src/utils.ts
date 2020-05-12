@@ -5,6 +5,7 @@ import {
   Bytes,
   crypto,
   DataSourceTemplate,
+  Entity,
   ethereum,
   store,
   Value,
@@ -48,7 +49,7 @@ export function debug(msg: string): void {
   let id = BigInt.fromI32(debugId).toHex();
   let ent = new Debug(id);
   ent.set('message', Value.fromString(msg));
-  store.set('Debug', id, ent);
+  save(ent, 'Debug', BigInt.fromI32(0));
   debugId++;
 }
 
@@ -84,7 +85,7 @@ export function setContractInfo(address: string, name: string, alias: string, ve
         contractInfo.name =  name;
         contractInfo.alias =  alias;
         contractInfo.version = version;
-        contractInfo.save();
+        save(contractInfo as ContractInfo, 'ContractInfo', BigInt.fromI32(0));
     }
 }
 
@@ -94,7 +95,7 @@ export function setTemplateInfo(name: string, version: string, templateName: str
   if (templateInfo == null) {
     templateInfo = new TemplateInfo(id);
     templateInfo.templateName = templateName;
-    templateInfo.save();
+    save(templateInfo as TemplateInfo, 'TemplateInfo', BigInt.fromI32(0));
   }
 }
 
@@ -123,4 +124,12 @@ export function fixJsonQuotes(target: string): string {
        }
      }
      return result;
+}
+
+export function save(ent: Entity | null, entName: string, timestamp: BigInt): void {
+  if (ent == null) {
+    return;
+  }
+  (ent as Entity).setBigInt('lastUpdatedAt', timestamp);
+  store.set(entName, ent.getString('id'), ent as Entity);
 }

@@ -10,6 +10,7 @@ import { BigInt, Bytes } from '@graphprotocol/graph-ts';
 import {
   ContractInfo, UpgradeSchemeProposal,
 } from '../../types/schema';
+import { save } from '../../utils';
 
 function insertNewProposal(event: NewUpgradeProposal): void {
   let proposal = new UpgradeSchemeProposal(event.params._proposalId.toHex());
@@ -20,7 +21,7 @@ function insertNewProposal(event: NewUpgradeProposal): void {
   proposal.descriptionHash = event.params._descriptionHash;
   proposal.executed = false;
 
-  proposal.save();
+  save(proposal, 'UpgradeSchemeProposal', event.block.timestamp);
 }
 
 export function handleNewUpgradeProposal(
@@ -71,10 +72,10 @@ export function handleProposalExecuted(
             // 0.1.1-rc.18
             contractInfo.version = v0 + '.' + v1 + '.' + v1 + '-rc.' + v2;
             contractInfo.name = (proposal.contractsNames as Bytes[])[i].toString();
-            contractInfo.save();
+            save(contractInfo, 'ContractInfo', event.block.timestamp);
           }
       }
     }
-    proposal.save();
+    save(proposal, 'UpgradeSchemeProposal', event.block.timestamp);
   }
 }

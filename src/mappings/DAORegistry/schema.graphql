@@ -1,5 +1,6 @@
 type DAORegistryContract @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	address: Bytes!
 	owner: Bytes!
 }

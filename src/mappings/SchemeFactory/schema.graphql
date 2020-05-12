@@ -1,5 +1,6 @@
 type SchemeFactoryNewSchemeProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	avatar: Bytes!
@@ -15,6 +16,7 @@ type SchemeFactoryNewSchemeProposal @entity {
 
 type SchemeFactoryProposalExecuted @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	avatar: Bytes!
@@ -24,6 +26,7 @@ type SchemeFactoryProposalExecuted @entity {
 
 type SchemeFactoryProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	dao: DAO!
 	schemeToRegisterName: String
 	schemeToRegisterData: Bytes

@@ -13,7 +13,7 @@ import {
    SchemeFactoryProposal,
    SchemeFactoryProposalExecuted,
 } from '../../types/schema';
-import { equalsBytes, equalStrings } from '../../utils';
+import { equalsBytes, equalStrings, save } from '../../utils';
 
 export function handleNewSchemeProposal(event: NewSchemeProposal): void {
   let ent = new SchemeFactoryNewSchemeProposal(event.params._proposalId.toHex());
@@ -28,7 +28,7 @@ export function handleNewSchemeProposal(event: NewSchemeProposal): void {
   ent.schemeToReplace = event.params._schemeToReplace;
   ent.descriptionHash = event.params._descriptionHash;
   ent.votingMachine = event.params._intVoteInterface;
-  ent.save();
+  save(ent, 'SchemeFactoryNewSchemeProposal', event.block.timestamp);
 
   domain.handleNewSchemeFactoryProposal(event.params._proposalId.toHex(),
                                          event.block.timestamp,
@@ -42,7 +42,8 @@ export function handleNewSchemeProposal(event: NewSchemeProposal): void {
                           ent.schemeData,
                           ent.packageVersion as BigInt[],
                           ent.permission,
-                          ent.schemeToReplace as Address);
+                          ent.schemeToReplace as Address,
+                          event.block.timestamp);
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
@@ -52,8 +53,8 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   ent.avatar = event.params._avatar;
   ent.proposalId = event.params._proposalId;
   ent.decision = event.params._param;
-  ent.save();
-  updateProposalExecution(ent.proposalId,  ent.decision);
+  save(ent, 'SchemeFactoryProposalExecuted', event.block.timestamp);
+  updateProposalExecution(ent.proposalId,  ent.decision, event.block.timestamp);
 }
 
 function insertNewProposal(avatar: Address,
@@ -62,7 +63,8 @@ function insertNewProposal(avatar: Address,
                            schemeData: Bytes,
                            schemePackageVersion: BigInt[],
                            permissions: Bytes,
-                           schemeToRemove: Address): void {
+                           schemeToRemove: Address,
+                           timestamp: BigInt): void {
   let ent = SchemeFactoryProposal.load(proposalId.toHex());
   if (ent == null) {
     ent = new SchemeFactoryProposal(proposalId.toHex());
@@ -74,10 +76,10 @@ function insertNewProposal(avatar: Address,
   ent.schemeToRegisterPermission = permissions;
   ent.schemeToRemove = schemeToRemove;
 
-  ent.save();
+  save(ent, 'SchemeFactoryProposal', timestamp);
 }
 
-function updateProposalExecution(proposalId: Bytes, decision: BigInt): void {
+function updateProposalExecution(proposalId: Bytes, decision: BigInt, timestamp: BigInt): void {
   let ent = SchemeFactoryProposal.load(proposalId.toHex());
   if (ent == null) {
     ent = new SchemeFactoryProposal(proposalId.toHex());
@@ -90,5 +92,5 @@ function updateProposalExecution(proposalId: Bytes, decision: BigInt): void {
   if (!equalsBytes(ent.schemeToRemove as Bytes, Address.fromString('0x0000000000000000000000000000000000000000'))) {
     ent.schemeRemoved = true;
   }
-  ent.save();
+  save(ent as SchemeFactoryProposal, 'SchemeFactoryProposal', timestamp);
 }

@@ -7,8 +7,8 @@ import { ContractInfo,
          GPRewardsHelper,
          PreGPReward,
          Proposal} from '../types/schema';
-import { concat , equalsBytes , equalStrings } from '../utils';
-import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner } from './proposal';
+import { concat , equalsBytes , equalStrings, save } from '../utils';
+import { addRedeemableRewardOwner, getProposal, removeRedeemableRewardOwner, saveProposal } from './proposal';
 
 function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
     let gpRewardsHelper = GPRewardsHelper.load(proposalId);
@@ -20,7 +20,7 @@ function getGPRewardsHelper(proposalId: string): GPRewardsHelper {
     return gpRewardsHelper as GPRewardsHelper;
 }
 
-export function insertGPRewardsToHelper(proposalId: Bytes, beneficiary: Address): void {
+export function insertGPRewardsToHelper(proposalId: Bytes, beneficiary: Address, timestamp: BigInt): void {
   let rewardId = crypto.keccak256(concat(proposalId, beneficiary)).toHex();
   let gpRewardsHelper = getGPRewardsHelper(proposalId.toHex());
   let gpRewards = gpRewardsHelper.gpRewards;
@@ -32,10 +32,10 @@ export function insertGPRewardsToHelper(proposalId: Bytes, beneficiary: Address)
        }
   }
   if (i == gpRewards.length) { // not exist
-      updatePreGPReward(rewardId, beneficiary);
+      updatePreGPReward(rewardId, beneficiary, timestamp);
       gpRewards.push(rewardId);
       gpRewardsHelper.gpRewards = gpRewards;
-      gpRewardsHelper.save();
+      save(gpRewardsHelper as GPRewardsHelper, 'GPRewardsHelper', timestamp);
    }
 }
 
@@ -46,9 +46,9 @@ export function daoBountyRedemption(proposalId: Bytes, beneficiary: Address , ti
      return;
    }
    reward.daoBountyForStakerRedeemedAt = timestamp;
-   reward.save();
+   save(reward as GPReward, 'GPReward', timestamp);
    if (shouldRemoveAccountFromUnclaimed(reward as GPReward)) {
-      removeRedeemableRewardOwner(proposalId, beneficiary);
+      removeRedeemableRewardOwner(proposalId, beneficiary, timestamp);
    }
 }
 
@@ -59,9 +59,9 @@ export function tokenRedemption(proposalId: Bytes, beneficiary: Address, timesta
      return;
    }
    reward.tokensForStakerRedeemedAt = timestamp;
-   reward.save();
+   save(reward as GPReward, 'GPReward', timestamp);
    if (shouldRemoveAccountFromUnclaimed(reward as GPReward)) {
-    removeRedeemableRewardOwner(proposalId, beneficiary);
+    removeRedeemableRewardOwner(proposalId, beneficiary, timestamp);
    }
 }
 
@@ -79,9 +79,9 @@ export function reputationRedemption(proposalId: Bytes, beneficiary: Address, ti
        reward.reputationForVoterRedeemedAt = timestamp;
    }
 
-   reward.save();
+   save(reward as GPReward, 'GPReward', timestamp);
    if (shouldRemoveAccountFromUnclaimed(reward as GPReward)) {
-      removeRedeemableRewardOwner(proposalId, beneficiary);
+      removeRedeemableRewardOwner(proposalId, beneficiary, timestamp);
    }
 }
 
@@ -207,7 +207,7 @@ export function insertGPRewards(
     }
   }
   store.remove('GPRewardsHelper' , proposalId.toHex());
-  proposal.save();
+  saveProposal(proposal, timestamp);
 }
 
 function updateGPReward(id: string,
@@ -247,14 +247,14 @@ function updateGPReward(id: string,
           let genesisProtocol = GenesisProtocol.bind(gpAddress as Address);
           reward.tokenAddress = genesisProtocol.stakingToken();
       }
-      reward.save();
+      save(reward, 'GPReward', createdAt);
       return reward;
 }
 
-function updatePreGPReward(id: string, beneficiary: Bytes): PreGPReward {
+function updatePreGPReward(id: string, beneficiary: Bytes, timestamp: BigInt): PreGPReward {
   let reward = new PreGPReward(id);
   reward.beneficiary = beneficiary;
 
-  reward.save();
+  save(reward, 'PreGPReward', timestamp);
   return reward;
 }

@@ -11,7 +11,7 @@ import * as domain from '../../domain';
 // Import entity types generated from the GraphQL schema
 import { BigInt } from '@graphprotocol/graph-ts';
 import { JoinAndQuitProposal, RageQuitted, Refunded } from '../../types/schema';
-import { eventId } from '../../utils';
+import { eventId, save } from '../../utils';
 
 function insertNewProposal(event: JoinInProposal): void {
   let proposal = new JoinAndQuitProposal(event.params._proposalId.toHex());
@@ -21,7 +21,7 @@ function insertNewProposal(event: JoinInProposal): void {
   proposal.executed = false;
   proposal.reputationMinted = BigInt.fromI32(0);
 
-  proposal.save();
+  save(proposal, 'JoinAndQuitProposal', event.block.timestamp);
 }
 
 export function handleNewJoinAndQuitProposal(
@@ -43,7 +43,7 @@ export function handleProposalExecuted(
   let proposal = JoinAndQuitProposal.load(event.params._proposalId.toHex());
   if (proposal != null) {
     proposal.executed = true;
-    proposal.save();
+    save(proposal, 'JoinAndQuitProposal', event.block.timestamp);
   }
 }
 
@@ -53,7 +53,7 @@ export function handleRedeemReputation(
   let proposal = JoinAndQuitProposal.load(event.params._proposalId.toHex());
   if (proposal != null) {
     proposal.reputationMinted = event.params._amount;
-    proposal.save();
+    save(proposal, 'JoinAndQuitProposal', event.block.timestamp);
   }
 }
 
@@ -65,7 +65,7 @@ export function handleRageQuit(
   rageQuitted.rageQuitter = event.params._rageQuitter;
   rageQuitted.refund = event.params._refund;
 
-  rageQuitted.save();
+  save(rageQuitted, 'RageQuitted', event.block.timestamp);
 }
 
 export function handleRefund(
@@ -76,5 +76,5 @@ export function handleRefund(
   refund.beneficiary = event.params._beneficiary;
   refund.refund = event.params._refund;
 
-  refund.save();
+  save(refund, 'Refunded', event.block.timestamp);
 }

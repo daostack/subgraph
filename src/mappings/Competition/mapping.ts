@@ -3,10 +3,10 @@ import {
   NewCompetitionProposal, NewSuggestion, NewVote, Redeem, SnapshotBlock,
 } from '../../types/Competition/Competition';
 
-import { getIPFSData } from '../../domain/proposal';
+import { getIPFSData, saveProposal } from '../../domain/proposal';
 import { ContributionRewardExt } from '../../types/ContributionRewardExt/ContributionRewardExt';
 import { CompetitionProposal, CompetitionSuggestion, CompetitionVote, Proposal, Tag } from '../../types/schema';
-import { concat, equalStrings, eventId } from '../../utils';
+import { concat, equalStrings, eventId, save } from '../../utils';
 
 export function handleNewCompetitionProposal(event: NewCompetitionProposal): void {
   let contributionRewardExt = ContributionRewardExt.bind(event.params._contributionRewardExt);
@@ -31,11 +31,11 @@ export function handleNewCompetitionProposal(event: NewCompetitionProposal): voi
   competitionProposal.totalVotes = BigInt.fromI32(0);
   competitionProposal.numberOfWinningSuggestions = BigInt.fromI32(0);
   competitionProposal.admin = event.params._admin;
-  competitionProposal.save();
+  save(competitionProposal as CompetitionProposal, 'CompetitionProposal', event.block.timestamp);
   let proposal = Proposal.load(competitionProposal.id);
   if (proposal != null) {
     proposal.competition = competitionProposal.id;
-    proposal.save();
+    saveProposal(proposal as Proposal, event.block.timestamp);
   }
 }
 
@@ -52,7 +52,7 @@ export function handleRedeem(event: Redeem): void {
     if (suggestion != null) {
       suggestion.redeemedAt = event.block.timestamp;
       suggestion.rewardPercentage = event.params._rewardPercentage;
-      suggestion.save();
+      save(suggestion as CompetitionSuggestion, 'CompetitionSuggestion', event.block.timestamp);
     }
   }
 }
@@ -78,13 +78,13 @@ export function handleNewSuggestion(event: NewSuggestion): void {
 
     getSuggestionIPFSData(competitionSuggestion);
 
-    competitionSuggestion.save();
+    save(competitionSuggestion as CompetitionSuggestion, 'CompetitionSuggestion', event.block.timestamp);
 
     let competitionSuggestions = competitionProposal.suggestions;
     competitionSuggestions.push(competitionSuggestion.id);
     competitionProposal.suggestions = competitionSuggestions;
     competitionProposal.totalSuggestions = competitionProposal.totalSuggestions.plus(BigInt.fromI32(1));
-    competitionProposal.save();
+    save(competitionProposal as CompetitionProposal, 'CompetitionProposal', event.block.timestamp);
   }
 }
 
@@ -115,7 +115,7 @@ export function getSuggestionIPFSData(suggestion: CompetitionSuggestion): Compet
           tagSuggestions.push(suggestion.id);
           tagEnt.competitionSuggestions = tagSuggestions;
           tagEnt.numberOfSuggestions = tagEnt.numberOfSuggestions.plus(BigInt.fromI32(1));
-          tagEnt.save();
+          save(tagEnt as Tag, 'Tag', suggestion.createdAt);
         }
       }
       suggestion.tags = tags;
@@ -142,9 +142,9 @@ export function handleNewVote(event: NewVote): void {
     let suggestion = CompetitionSuggestion.load(suggestionId);
     if (suggestion != null) {
       suggestion.totalVotes = suggestion.totalVotes.plus(event.params._reputation);
-      suggestion.save();
+      save(suggestion as CompetitionSuggestion, 'CompetitionSuggestion', event.block.timestamp);
     }
-    vote.save();
+    save(vote as CompetitionVote, 'CompetitionVote', event.block.timestamp);
 
     competitionProposal.winningSuggestions = [];
     let winningSuggestions = competitionProposal.winningSuggestions;
@@ -176,12 +176,12 @@ export function handleNewVote(event: NewVote): void {
         winningSuggestions.push(competitionSuggestion.id as string);
         lastTotalWinnerVotes = competitionSuggestion.totalVotes;
       }
-      competitionSuggestion.save();
+      save(competitionSuggestion as CompetitionSuggestion, 'CompetitionSuggestion', event.block.timestamp);
     }
     competitionProposal.winningSuggestions = winningSuggestions;
     competitionProposal.totalVotes = competitionProposal.totalVotes.plus(BigInt.fromI32(1));
     competitionProposal.numberOfWinningSuggestions = BigInt.fromI32(winningSuggestions.length);
-    competitionProposal.save();
+    save(competitionProposal as CompetitionProposal, 'CompetitionProposal', event.block.timestamp);
   }
 }
 
@@ -189,6 +189,6 @@ export function handleSnapshotBlock(event: SnapshotBlock): void {
   let competitionProposal = CompetitionProposal.load(event.params._proposalId.toHex());
   if (competitionProposal != null) {
     competitionProposal.snapshotBlock = event.params._snapshotBlock;
-    competitionProposal.save();
+    save(competitionProposal as CompetitionProposal, 'CompetitionProposal', event.block.timestamp);
   }
 }

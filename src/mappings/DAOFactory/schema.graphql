@@ -1,5 +1,6 @@
 type DAOFactoryContract @entity {
   id: ID!
+	lastUpdatedAt: BigInt!
   address: Bytes!
   packageName: String!
   app: Bytes!

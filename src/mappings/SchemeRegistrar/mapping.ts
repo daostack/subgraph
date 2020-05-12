@@ -15,7 +15,7 @@ import {
    SchemeRegistrarProposalExecuted,
    SchemeRegistrarRemoveSchemeProposal,
 } from '../../types/schema';
-import { eventId } from '../../utils';
+import { eventId, save } from '../../utils';
 
 export function handleNewSchemeProposal(event: NewSchemeProposal): void {
   let ent = SchemeRegistrarNewSchemeProposal.load(eventId(event));
@@ -31,7 +31,7 @@ export function handleNewSchemeProposal(event: NewSchemeProposal): void {
   ent.descriptionHash = event.params._descriptionHash;
   ent.votingMachine = event.params._intVoteInterface;
   // need to fill up other fileds.
-  ent.save();
+  save(ent, 'SchemeRegistrarNewSchemeProposal', event.block.timestamp);
 
   domain.handleNewSchemeRegistrarProposal(event.params._proposalId.toHex(),
                                          event.block.timestamp,
@@ -42,7 +42,8 @@ export function handleNewSchemeProposal(event: NewSchemeProposal): void {
   insertNewProposalRegister(ent.avatar as Address,
                           ent.proposalId,
                           ent.scheme,
-                          ent.permission);
+                          ent.permission,
+                          event.block.timestamp);
 }
 
 export function handleRemoveSchemeProposal(event: RemoveSchemeProposal): void {
@@ -58,11 +59,12 @@ export function handleRemoveSchemeProposal(event: RemoveSchemeProposal): void {
   ent.votingMachine = event.params._intVoteInterface;
   ent.scheme = event.params._scheme;
   // need to fill up other fileds.
-  ent.save();
+  save(ent, 'SchemeRegistrarRemoveSchemeProposal', event.block.timestamp);
 
   insertNewProposalUnRegister(ent.avatar as Address,
                               ent.proposalId,
-                              ent.scheme);
+                              ent.scheme,
+                              event.block.timestamp);
 
   domain.handleNewSchemeRegistrarProposal(event.params._proposalId.toHex(),
                                          event.block.timestamp,
@@ -82,14 +84,15 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   ent.avatar = event.params._avatar;
   ent.proposalId = event.params._proposalId;
   ent.decision = event.params._param;
-  ent.save();
-  updateProposalExecution(ent.proposalId,  ent.decision);
+  save(ent, 'SchemeRegistrarProposalExecuted', event.block.timestamp);
+  updateProposalExecution(ent.proposalId,  ent.decision, event.block.timestamp);
 }
 
 function insertNewProposalRegister(avatar: Address,
                                    proposalId: Bytes,
                                    scheme: Bytes,
-                                   permissions: Bytes): void {
+                                   permissions: Bytes,
+                                   timestamp: BigInt): void {
   let ent = SchemeRegistrarProposal.load(proposalId.toHex());
   if (ent == null) {
     ent = new SchemeRegistrarProposal(proposalId.toHex());
@@ -97,10 +100,10 @@ function insertNewProposalRegister(avatar: Address,
   ent.dao = avatar.toHex();
   ent.schemeToRegister = scheme;
   ent.schemeToRegisterPermission = permissions;
-  ent.save();
+  save(ent, 'SchemeRegistrarProposal', timestamp);
 }
 
-function insertNewProposalUnRegister(avatar: Address, proposalId: Bytes, scheme: Bytes): void {
+function insertNewProposalUnRegister(avatar: Address, proposalId: Bytes, scheme: Bytes, timestamp: BigInt): void {
   let ent = SchemeRegistrarProposal.load(proposalId.toHex());
   if (ent == null) {
     ent = new SchemeRegistrarProposal(proposalId.toHex());
@@ -108,10 +111,10 @@ function insertNewProposalUnRegister(avatar: Address, proposalId: Bytes, scheme:
 
   ent.dao = avatar.toHex();
   ent.schemeToRemove = scheme;
-  ent.save();
+  save(ent, 'SchemeRegistrarProposal', timestamp);
 }
 
-function updateProposalExecution(proposalId: Bytes, decision: BigInt): void {
+function updateProposalExecution(proposalId: Bytes, decision: BigInt, timestamp: BigInt): void {
   let ent = SchemeRegistrarProposal.load(proposalId.toHex());
   if (ent == null) {
     ent = new SchemeRegistrarProposal(proposalId.toHex());
@@ -122,5 +125,5 @@ function updateProposalExecution(proposalId: Bytes, decision: BigInt): void {
   } else {
     ent.schemeRemoved = true;
   }
-  ent.save();
+  save(ent, 'SchemeRegistrarProposal', timestamp);
 }

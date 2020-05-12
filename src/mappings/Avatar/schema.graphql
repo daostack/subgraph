@@ -1,5 +1,6 @@
 type AvatarContract @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	address: Bytes!
 	name: String!
 	nativeToken: Bytes!

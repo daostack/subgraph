@@ -1,5 +1,6 @@
 type ContributionRewardRedeemReputation @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	avatar: Bytes!
@@ -10,6 +11,7 @@ type ContributionRewardRedeemReputation @entity {
 
 type ContributionRewardRedeemNativeToken @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	avatar: Bytes!
@@ -20,6 +22,7 @@ type ContributionRewardRedeemNativeToken @entity {
 
 type ContributionRewardRedeemExternalToken @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	avatar: Bytes!
@@ -30,6 +33,7 @@ type ContributionRewardRedeemExternalToken @entity {
 
 type ContributionRewardRedeemEther @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	avatar: Bytes!
@@ -40,6 +44,7 @@ type ContributionRewardRedeemEther @entity {
 
 type ContributionRewardProposalResolved @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	avatar: Bytes!
@@ -49,6 +54,7 @@ type ContributionRewardProposalResolved @entity {
 
 type ContributionRewardNewContributionProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	avatar: Bytes!
@@ -67,6 +73,7 @@ type ContributionRewardNewContributionProposal @entity {
 
 type ContributionRewardProposal @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	proposalId: Bytes!
 	contract: Bytes!
 	avatar: Bytes!

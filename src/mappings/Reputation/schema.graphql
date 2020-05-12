@@ -1,5 +1,6 @@
 type ReputationContract @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	address: Bytes!
 	totalSupply: BigInt!
 	reputationHolders: [String!]!
@@ -7,6 +8,7 @@ type ReputationContract @entity {
 
 type ReputationHolder @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	contract: Bytes!
 	address: Bytes!
 	balance: BigInt!
@@ -16,6 +18,7 @@ type ReputationHolder @entity {
 
 type ReputationMint @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	address: Bytes!
@@ -24,6 +27,7 @@ type ReputationMint @entity {
 
 type ReputationBurn @entity {
 	id: ID!
+	lastUpdatedAt: BigInt!
 	txHash: Bytes!
 	contract: Bytes!
 	address: Bytes!

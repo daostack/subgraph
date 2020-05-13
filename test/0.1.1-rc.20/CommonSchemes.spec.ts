@@ -252,7 +252,7 @@ describe('JoinAndQuit Scheme', () => {
       }`;
 
       let dao = (await sendQuery(getDao)).dao;
-      expect(dao).toContainEqual({
+      expect(dao).toEqual({
         ethBalance: refund,
       });
 
@@ -276,7 +276,7 @@ describe('JoinAndQuit Scheme', () => {
       });
 
       dao = (await sendQuery(getDao)).dao;
-      expect(dao).toContainEqual({
+      expect(dao).toEqual({
         ethBalance: '0',
       });
     }, 100000);

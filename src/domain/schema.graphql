@@ -29,6 +29,7 @@ type DAO @entity {
 	error: String
 	metadata: String!
 	metadataHash: String!
+	ethBalance: BigInt!
 }
 
 type GPQueue @entity {

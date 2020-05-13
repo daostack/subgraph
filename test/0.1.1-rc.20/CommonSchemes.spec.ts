@@ -245,6 +245,17 @@ describe('JoinAndQuit Scheme', () => {
       let vault = await avatar.methods.vault().call();
       let refund = await web3.eth.getBalance((vault));
 
+      const getDao = `{
+        dao(id: "${addresses.Avatar.toLowerCase()}") {
+          ethBalance
+        }
+      }`;
+
+      let dao = (await sendQuery(getDao)).dao;
+      expect(dao).toContainEqual({
+        ethBalance: refund,
+      });
+
       const getRageQuits = `{
         rageQuitteds {
           dao {
@@ -262,6 +273,11 @@ describe('JoinAndQuit Scheme', () => {
         },
         rageQuitter: accounts[7].address.toLowerCase(),
         refund: refund.toString(),
+      });
+
+      dao = (await sendQuery(getDao)).dao;
+      expect(dao).toContainEqual({
+        ethBalance: '0',
       });
     }, 100000);
 

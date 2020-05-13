@@ -9,13 +9,14 @@ import { insertNewDAO } from '../../domain/dao';
 import { addNewDAOEvent } from '../../domain/event';
 import { insertReputation } from '../../domain/reputation';
 import { insertToken, updateTokenTotalSupply } from '../../domain/token';
+import { Avatar } from '../../types/Controller/Avatar';
 import { DAOToken } from '../../types/Controller/DAOToken';
 import { Reputation } from '../../types/Controller/Reputation';
 import { DAOFactory, NewOrg, ProxyCreated } from '../../types/DAOFactory/DAOFactory';
 import {
   ControllerOrganization, DAOFactoryContract, ReputationContract, ReputationHolder, TokenContract,
 } from '../../types/schema';
-import { createTemplate, fetchTemplateName, hexToAddress, setContractInfo } from '../../utils';
+import { createTemplate, equalStrings, fetchTemplateName, hexToAddress, setContractInfo } from '../../utils';
 
 function getDAOFactoryContract(address: Address): DAOFactoryContract {
   let daoFactory = DAOFactoryContract.load(address.toHex()) as DAOFactoryContract;
@@ -85,14 +86,23 @@ export function handleProxyCreated(event: ProxyCreated): void {
 
   let fullVersion = event.params._version;
   let version = '0.1.1-rc.' + fullVersion[2].toString();
+  addContract(event.params._proxy, event.params._contractName, version);
+
+  if (equalStrings(event.params._contractName, 'Avatar')) {
+    let avatar = Avatar.bind(event.params._proxy);
+    addContract(avatar.vault(), 'Vault', version);
+  }
+}
+
+function addContract(proxy: Address, contractName: string, version: string): void {
   setContractInfo(
-    event.params._proxy.toHex(),
-    event.params._contractName,
-    event.params._contractName + event.params._proxy.toHex(),
+    proxy.toHex(),
+    contractName,
+    contractName + proxy.toHex(),
     version.toString(),
   );
 
-  let schemeTemplate = fetchTemplateName(event.params._contractName, version);
+  let schemeTemplate = fetchTemplateName(contractName, version);
 
   if (schemeTemplate == null) {
     // We're missing a template version in the subgraph
@@ -101,5 +111,5 @@ export function handleProxyCreated(event: ProxyCreated): void {
 
   // Tell the subgraph to start indexing events from the:
   // Avatar, Controller, DAOToken, and Reputation contracts
-  createTemplate(schemeTemplate, event.params._proxy);
+  createTemplate(schemeTemplate, proxy);
 }

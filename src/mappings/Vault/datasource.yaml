@@ -1,0 +1,7 @@
+entities:
+  - AvatarContract
+eventHandlers:
+  - event: ReceiveEther(indexed address,uint256)
+    handler: handleReceiveEther
+  - event: SendEther(indexed address,uint256)
+    handler: handleSendEther

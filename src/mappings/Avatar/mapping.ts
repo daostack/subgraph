@@ -9,8 +9,9 @@ import { Avatar, MetaData, OwnershipTransferred } from '../../types/Avatar/Avata
 import { AvatarContract } from '../../types/schema';
 
 import * as domain from '../../domain';
+import { getDAO } from '../../domain/dao';
 
-function handleAvatarBalance(
+export function handleAvatarBalance(
   address: Address,
   value: BigInt,
   received: boolean,
@@ -26,16 +27,12 @@ function handleAvatarBalance(
     avatar.balance = avatar.balance.minus(value);
   }
 
-  store.set('AvatarContract', avatar.id, avatar);
+  avatar.save();
+
+  let dao = getDAO(address.toHex());
+  dao.ethBalance = avatar.balance;
+  dao.save();
 }
-
-// export function handleSendEth(event: SendEther): void {
-//   handleAvatarBalance(event.address, event.params._amountInWei, false);
-// }
-
-// export function handleReceiveEth(event: ReceiveEther): void {
-//   handleAvatarBalance(event.address, event.params._value, true);
-// }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   let avatar = AvatarContract.load(event.address.toHex());

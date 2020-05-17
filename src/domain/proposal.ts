@@ -74,7 +74,7 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
       let tags: string[] = [];
       let tagsLength = tagsObjects.length < 100 ? tagsObjects.length : 100;
       for (let i = 0; i < tagsLength; i++) {
-        if (tags.indexOf(tagsObjects[i].toString()) === -1) {
+        if (tagsObjects[i].kind === JSONValueKind.STRING && tags.indexOf(tagsObjects[i].toString()) === -1) {
           tags.push(tagsObjects[i].toString());
           let tagEnt = Tag.load(tagsObjects[i].toString());
           if (tagEnt == null) {
@@ -118,15 +118,19 @@ export function getIPFSData(descHash: string): IPFSData {
     if (descJson.kind !== JSONValueKind.OBJECT) {
       return result;
     }
-    if (descJson.toObject().get('title') != null) {
+    if (descJson.toObject().get('title') != null && descJson.toObject().get('title').kind === JSONValueKind.STRING) {
       result.title = descJson.toObject().get('title').toString();
       result.fulltext = result.title.split(' ');
     }
-    if (descJson.toObject().get('description') != null) {
+    if (
+      descJson.toObject().get('description') != null &&
+      descJson.toObject().get('description').kind === JSONValueKind.STRING
+    ) {
       result.description = descJson.toObject().get('description').toString();
       result.fulltext = result.fulltext.concat(result.description.split(' '));
     }
-    if (descJson.toObject().get('url') != null) {
+    if (descJson.toObject().get('url') != null &&
+    descJson.toObject().get('url').kind === JSONValueKind.STRING) {
       result.url = descJson.toObject().get('url').toString();
     }
     let tagsData = descJson.toObject().get('tags');

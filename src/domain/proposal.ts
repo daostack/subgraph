@@ -124,12 +124,13 @@ export function getIPFSData(descHash: string): IPFSData {
     }
     if (
       descJson.toObject().get('description') != null &&
-      descJson.toObject().get('title').kind === JSONValueKind.STRING
+      descJson.toObject().get('description').kind === JSONValueKind.STRING
     ) {
       result.description = descJson.toObject().get('description').toString();
       result.fulltext = result.fulltext.concat(result.description.split(' '));
     }
-    if (descJson.toObject().get('url') != null && descJson.toObject().get('title').kind === JSONValueKind.STRING) {
+    if (descJson.toObject().get('url') != null &&
+    descJson.toObject().get('url').kind === JSONValueKind.STRING) {
       result.url = descJson.toObject().get('url').toString();
     }
     let tagsData = descJson.toObject().get('tags');

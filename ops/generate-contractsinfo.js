@@ -1,5 +1,8 @@
 const fs = require("fs");
-const { migrationFileLocation: defaultMigrationFileLocation, network } = require("./settings");
+let { migrationFileLocation: defaultMigrationFileLocation, network } = require("./settings");
+if (network === "poa-sokol") {
+  network = "sokol"
+} 
 const { forEachTemplate } = require("./utils");
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`);

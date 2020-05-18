@@ -370,5 +370,128 @@
         "arcVersion": "0.1.1-rc.20"
       }
     ]
+  },
+  "sokol": {
+    "mappings": [
+      {
+        "name": "DAOToken",
+        "contractName": "DAOToken",
+        "dao": "package",
+        "mapping": "DAOToken",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "Reputation",
+        "contractName": "Reputation",
+        "dao": "package",
+        "mapping": "Reputation",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "Avatar",
+        "contractName": "Avatar",
+        "dao": "package",
+        "mapping": "Avatar",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "Vault",
+        "contractName": "Vault",
+        "dao": "package",
+        "mapping": "Vault",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "Controller",
+        "contractName": "Controller",
+        "dao": "package",
+        "mapping": "Controller",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "GenesisProtocol",
+        "contractName": "GenesisProtocol",
+        "dao": "package",
+        "mapping": "GenesisProtocol",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "DAORegistry",
+        "contractName": "DAORegistryInstance",
+        "dao": "package",
+        "mapping": "DAORegistry",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "DAOFactory",
+        "contractName": "DAOFactoryInstance",
+        "dao": "package",
+        "mapping": "DAOFactory",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "ContributionReward",
+        "contractName": "ContributionReward",
+        "dao": "package",
+        "mapping": "ContributionReward",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "ContributionRewardExt",
+        "contractName": "ContributionRewardExt",
+        "dao": "package",
+        "mapping": "ContributionRewardExt",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "Competition",
+        "contractName": "Competition",
+        "dao": "package",
+        "mapping": "Competition",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "SchemeFactory",
+        "contractName": "SchemeFactory",
+        "dao": "package",
+        "mapping": "SchemeFactory",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "SchemeRegistrar",
+        "contractName": "SchemeRegistrar",
+        "dao": "package",
+        "mapping": "SchemeRegistrar",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "GenericScheme",
+        "contractName": "GenericScheme",
+        "dao": "package",
+        "mapping": "GenericScheme",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "UpgradeScheme",
+        "contractName": "UpgradeScheme",
+        "dao": "package",
+        "mapping": "UpgradeScheme",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "JoinAndQuit",
+        "contractName": "JoinAndQuit",
+        "dao": "package",
+        "mapping": "JoinAndQuit",
+        "arcVersion": "0.1.1-rc.20"
+      },
+      {
+        "name": "FundingRequest",
+        "contractName": "FundingRequest",
+        "dao": "package",
+        "mapping": "FundingRequest",
+        "arcVersion": "0.1.1-rc.20"
+      }
+    ]
   }
 }

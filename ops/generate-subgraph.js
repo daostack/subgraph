@@ -1,8 +1,11 @@
 const fs = require("fs");
 const path = require("path")
 const yaml = require("js-yaml");
-const { migrationFileLocation: defaultMigrationFileLocation,
+let { migrationFileLocation: defaultMigrationFileLocation,
 network ,startBlock} = require("./settings");
+if (network === "poa-sokol") {
+  network = "sokol"
+} 
 const { forEachTemplate } = require("./utils");
 const mappings = require("./mappings.json")[network].mappings;
 const { subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
@@ -127,7 +130,7 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
     var result = {
       kind: 'ethereum/contract',
       name: `${name}`,
-      network: `${network}`,
+      network: `${network === "sokol" ? "poa-sokol" : network}`,
       source,
       mapping: {
         kind: "ethereum/events",

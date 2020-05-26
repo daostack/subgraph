@@ -228,18 +228,18 @@ describe('DAOFactory', () => {
       },
       schemes: [
         {
+          address: addresses.DAOFactoryInstance.toLowerCase(),
+          contributionRewardParams: null,
+          name: 'DAOFactoryInstance',
+          isRegistered: false,
+        },
+        {
           address: contributionRewardAddress.toLowerCase(),
           contributionRewardParams: {
               votingMachine: genesisProtocol.options.address.toLowerCase(),
           },
           name: 'ContributionReward',
           isRegistered: true,
-        },
-        {
-          address: addresses.DAOFactoryInstance.toLowerCase(),
-          contributionRewardParams: null,
-          name: 'DAOFactoryInstance',
-          isRegistered: false,
         },
       ],
       metadata,

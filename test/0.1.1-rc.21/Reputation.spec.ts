@@ -1,7 +1,7 @@
 import { getContractAddresses, getOptions, getWeb3, prepareReputation, sendQuery, waitUntilTrue } from './util';
 
-const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.20/Controller.json');
-const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.20/Reputation.json');
+const Controller = require('@daostack/migration-experimental/contracts/0.1.1-rc.21/Controller.json');
+const Reputation = require('@daostack/migration-experimental/contracts/0.1.1-rc.21/Reputation.json');
 
 describe('Reputation', () => {
   let web3;

@@ -34,5 +34,11 @@
     "alias": "GenericSchemeDXTokenRegistry",
     "address": "0xc072171da83cce311e37bc1d168f54e6a6536df4",
     "arcVersion": "0.0.1-rc.41"
+  },
+  {
+    "name": "GenericScheme",
+    "alias": "GenericSchemeENSPublicResolver",
+    "address": "0xb3ec6089556cca49549be01ff446cf40fa81c84d",
+    "arcVersion": "0.0.1-rc.41"
   }]
 }

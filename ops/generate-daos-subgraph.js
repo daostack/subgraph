@@ -61,7 +61,8 @@ function daoYaml(contract, contractAddress, arcVersion) {
         let _abiVersion = arcVersion;
         if (((contractAddress === "0x211b9Bd0bCCACa64fB1d43093C75269bb84B3Be6") ||
              (contractAddress === "0x9f828AC3baA9003e8a4e0b24bcaE7b027B6740b0") ||
-             (contractAddress === "0x1FEc243D5932c905Eb075819263aD9947B302D91")) &&
+             (contractAddress === "0x1FEc243D5932c905Eb075819263aD9947B302D91") ||
+             (contractAddress === "0x49C584c8dd918D15ea36252a4049454d3ed821B4")) &&
            (contractName === "GenericScheme")) {
             _abiVersion = "0.0.1-rc.33";
         }

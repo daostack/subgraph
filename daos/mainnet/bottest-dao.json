@@ -1,0 +1,17 @@
+{
+    "name": "TestBot DAO",
+    "Avatar": "0x606c92B7151A89F0584D823F16D90ebD2c38B1B5",
+    "DAOToken": "0x764969752711E837C556eF9cE3b8B9C38b432005",
+    "Reputation": "0xa6a8dADAB70EAD60A6c2b74d8CB920183f82190c",
+    "Controller": "0x49C584c8dd918D15ea36252a4049454d3ed821B4",
+    "Schemes": [
+        {
+        "name": "GenericScheme",
+        "alias": "GenericSchemeAlias",
+        "address": "0xBD9Ca6fE41cE092CE5FA5545dB7Ab09ec5587801",
+        "arcVersion": "0.0.1-rc.41"
+        }
+    ],
+    "StandAloneContracts": [],
+    "arcVersion": "0.0.1-rc.19"
+}

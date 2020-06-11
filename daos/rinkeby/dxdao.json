@@ -10,6 +10,12 @@
       "alias": "GenericSchemeDXTokenRegistry",
       "address": "0x4eace28ac61fe27d214d48b8064bdbd0f30c3169",
       "arcVersion": "0.0.1-rc.41"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeDXswapGovernance",
+      "address": "0xa1e4abe3cd8eaefebab8a3ce5e9f32830307db7c",
+      "arcVersion": "0.0.1-rc.41"
     }
   ],
   "arcVersion": "0.0.1-rc.19"

@@ -63,11 +63,12 @@ export function getContractAddresses() {
     NativeReputation: addresses.private.dao[arcVersion].Reputation,
     ContributionReward: addresses.private.dao[arcVersion].Schemes[0].address,
     SchemeRegistrar: addresses.private.dao[arcVersion].Schemes[1].address,
-    GenericScheme: addresses.private.dao[arcVersion].Schemes[2].address,
-    ContributionRewardExt: addresses.private.dao[arcVersion].Schemes[3].address,
-    SchemeFactory: addresses.private.dao[arcVersion].Schemes[4].address,
-    JoinAndQuit: addresses.private.dao[arcVersion].Schemes[5].address,
-    FundingRequest: addresses.private.dao[arcVersion].Schemes[6].address,
+    UpgradeScheme: addresses.private.dao[arcVersion].Schemes[2].address,
+    GenericScheme: addresses.private.dao[arcVersion].Schemes[3].address,
+    ContributionRewardExt: addresses.private.dao[arcVersion].Schemes[4].address,
+    SchemeFactory: addresses.private.dao[arcVersion].Schemes[5].address,
+    JoinAndQuit: addresses.private.dao[arcVersion].Schemes[6].address,
+    FundingRequest: addresses.private.dao[arcVersion].Schemes[7].address,
   };
 }
 

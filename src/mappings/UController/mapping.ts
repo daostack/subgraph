@@ -54,8 +54,9 @@ function insertScheme(
      controllerScheme.numberOfPreBoostedProposals = BigInt.fromI32(0);
      controllerScheme.numberOfBoostedProposals = BigInt.fromI32(0);
      controllerScheme.numberOfExpiredInQueueProposals = BigInt.fromI32(0);
-     controllerScheme.isRegistered = true;
   }
+
+  controllerScheme.isRegistered = true;
   controllerScheme.dao = avatarAddress.toHex();
   controllerScheme.paramsHash = paramsHash;
   /* tslint:disable:no-bitwise */

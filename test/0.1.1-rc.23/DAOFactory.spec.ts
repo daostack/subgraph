@@ -46,17 +46,66 @@ describe('DAOFactory', () => {
                                 .methods
                                 .initialize('TEST', 'TST', 0, daoFactory.options.address)
                                 .encodeABI();
+    let encodedForgeOrgParams = web3.eth.abi.encodeParameters(
+      ['string', 'bytes', 'address[]', 'uint256[]', 'uint256[]', 'uint64[3]'],
+      [
+        'Test DAO',
+        nativeTokenData,
+        [opts.from],
+        [0],
+        [0],
+        getPackageVersion(),
+      ],
+    );
+
+    // Add a scheme
+    let crData = await new web3.eth.Contract(ContributionReward.abi)
+    .methods
+    .initialize(
+      '0x0000000000000000000000000000000000000000',
+      addresses.GenesisProtocol,
+      [
+        gpParams.queuedVoteRequiredPercentage,
+        gpParams.queuedVotePeriodLimit,
+        gpParams.boostedVotePeriodLimit,
+        gpParams.preBoostedVotePeriodLimit,
+        gpParams.thresholdConst,
+        gpParams.quietEndingPeriod,
+        gpParams.proposingRepReward,
+        gpParams.votersReputationLossRatio,
+        gpParams.minimumDaoBounty,
+        gpParams.daoBountyConst,
+        gpParams.activationTime,
+      ],
+      gpParams.voteOnBehalf,
+      '0x0000000000000000000000000000000000000000000000000000000000000000',
+    )
+    .encodeABI();
+
+    const getBytesLength = function(bytes) {
+        return Number(bytes.slice(2).length) / 2;
+    };
+    let metadata = 'meta data';
+    let metadataHash = await writeToIPFS(metadata);
+
+    let encodedSetSchemesParams = web3.eth.abi.encodeParameters(
+      ['bytes32[]', 'bytes', 'uint256[]', 'bytes4[]', 'string'],
+      [
+        [web3.utils.fromAscii('ContributionReward')],
+        crData,
+        [getBytesLength(crData)],
+        ['0x0000000F'],
+        metadataHash,
+      ],
+    );
+
     let tx = daoFactory.methods.forgeOrg(
-      'Test DAO',
-      nativeTokenData,
-      [opts.from],
-      [0],
-      [0],
-      getPackageVersion(),
+      encodedForgeOrgParams,
+      encodedSetSchemesParams,
     );
 
     let avatarAddress = await tx.call();
-    await tx.send();
+    tx = await tx.send();
 
     const avatar = await new web3.eth.Contract(Avatar.abi, avatarAddress, opts);
     const nativeTokenAddress = await avatar.methods.nativeToken().call();
@@ -125,44 +174,6 @@ describe('DAOFactory', () => {
       owner: controllerAddress.toLowerCase(),
     });
 
-    // Add a scheme
-    let crData = await new web3.eth.Contract(ContributionReward.abi)
-    .methods
-    .initialize(
-      avatar.options.address,
-      addresses.GenesisProtocol,
-      [
-        gpParams.queuedVoteRequiredPercentage,
-        gpParams.queuedVotePeriodLimit,
-        gpParams.boostedVotePeriodLimit,
-        gpParams.preBoostedVotePeriodLimit,
-        gpParams.thresholdConst,
-        gpParams.quietEndingPeriod,
-        gpParams.proposingRepReward,
-        gpParams.votersReputationLossRatio,
-        gpParams.minimumDaoBounty,
-        gpParams.daoBountyConst,
-        gpParams.activationTime,
-      ],
-      gpParams.voteOnBehalf,
-      '0x0000000000000000000000000000000000000000000000000000000000000000',
-    )
-    .encodeABI();
-
-    const getBytesLength = function(bytes) {
-        return Number(bytes.slice(2).length) / 2;
-    };
-    let metadata = 'meta data';
-    let metadataHash = await writeToIPFS(metadata);
-
-    tx = await daoFactory.methods.setSchemes(
-        avatar.options.address,
-        [web3.utils.fromAscii('ContributionReward')],
-        crData,
-        [getBytesLength(crData)],
-        ['0x0000000F'],
-        metadataHash,
-    ).send();
     const contributionRewardAddress = tx.events.SchemeInstance.returnValues._scheme;
     // Ensure the scheme is in the subgraph
     const { controllerSchemes } = await sendQuery(`{

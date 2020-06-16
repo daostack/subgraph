@@ -3,72 +3,72 @@
     {
       "name": "Avatar",
       "mapping": "Avatar",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "Vault",
       "mapping": "Vault",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "Controller",
       "mapping": "Controller",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "DAOToken",
       "mapping": "DAOToken",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "Reputation",
       "mapping": "Reputation",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "ContributionReward",
       "mapping": "ContributionReward",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "ContributionRewardExt",
       "mapping": "ContributionRewardExt",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "Competition",
       "mapping": "Competition",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "GenericScheme",
       "mapping": "GenericScheme",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "UpgradeScheme",
       "mapping": "UpgradeScheme",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "JoinAndQuit",
       "mapping": "JoinAndQuit",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "FundingRequest",
       "mapping": "FundingRequest",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "SchemeFactory",
       "mapping": "SchemeFactory",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     },
     {
       "name": "SchemeRegistrar",
       "mapping": "SchemeRegistrar",
-      "start_arcVersion": "0.1.1-rc.21"
+      "start_arcVersion": "0.1.1-rc.23"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "@daostack/subgraph-experimental",
-  "version": "0.1.1-rc.8-v2",
+  "version": "0.1.1-rc.8-v3",
   "author": "DAOstack (https://www.daostack.io)",
   "license": "GPL-3.0",
   "description": "A caching layer for daostack using The Graph",
@@ -32,7 +32,7 @@
     "test:watch": "npm run test -- --watch"
   },
   "devDependencies": {
-    "@daostack/migration-experimental": "0.1.1-rc.21-v0",
+    "@daostack/migration-experimental": "0.1.1-rc.23-v1",
     "@types/jest": "^23.3.7",
     "@types/mocha": "^5.2.5",
     "babel-eslint": "^10.0.1",

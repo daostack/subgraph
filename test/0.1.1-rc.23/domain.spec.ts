@@ -317,15 +317,6 @@ describe('Domain Layer', () => {
 
     expect(dao.schemes).toContainEqual(
       {
-          address: addresses.GlobalConstraintRegistrar.toLowerCase(),
-          dao: {
-            id: addresses.Avatar.toLowerCase(),
-          },
-        },
-    );
-
-    expect(dao.schemes).toContainEqual(
-      {
           address: addresses.ContributionReward.toLowerCase(),
           dao: {
             id: addresses.Avatar.toLowerCase(),

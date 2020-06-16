@@ -105,7 +105,7 @@ describe('DAOFactory', () => {
     );
 
     let avatarAddress = await tx.call();
-    await tx.send();
+    tx = await tx.send();
 
     const avatar = await new web3.eth.Contract(Avatar.abi, avatarAddress, opts);
     const nativeTokenAddress = await avatar.methods.nativeToken().call();

@@ -8,6 +8,7 @@ import { updateThreshold } from './gpqueue';
 import { getReputation } from './reputation';
 
 export class IPFSData {
+  public ipfsData: string;
   public title: string;
   public description: string;
   public url: string;
@@ -65,6 +66,7 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
   // IPFS reading
   if (!equalStrings(proposal.descriptionHash, '') && equalStrings(proposal.title, '')) {
     let data = getIPFSData(proposal.descriptionHash);
+    proposal.ipfsData = data.ipfsData;
     proposal.title = data.title;
     proposal.description = data.description;
     proposal.url = data.url;
@@ -100,6 +102,7 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
 export function getIPFSData(descHash: string): IPFSData {
   // IPFS reading
   let result = new IPFSData();
+  result.ipfsData = '';
   result.title = '';
   result.description = '';
   result.url = '';
@@ -107,6 +110,10 @@ export function getIPFSData(descHash: string): IPFSData {
   result.tags = [];
 
   let ipfsData = ipfs.cat('/ipfs/' + descHash);
+  if (ipfsData != null) {
+    result.ipfsData = ipfsData.toString();
+  }
+
   if (ipfsData != null && ipfsData.toString() !== '{}') {
     let resultFromBytes = json.try_fromBytes(ipfsData as Bytes);
 

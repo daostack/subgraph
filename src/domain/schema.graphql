@@ -75,6 +75,7 @@ type Proposal @entity {
 	confidenceThreshold: BigInt!
 
 	descriptionHash: String!
+	ipfsData: String
 	title: String
 	description: String
 	url: String

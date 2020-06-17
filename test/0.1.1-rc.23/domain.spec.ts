@@ -437,6 +437,7 @@ describe('Domain Layer', () => {
         proposal(id: "${p1}") {
             id
             descriptionHash
+            ipfsData
             title
             description
             fulltext
@@ -553,6 +554,7 @@ describe('Domain Layer', () => {
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,
+      ipfsData: JSON.stringify(proposalIPFSData),
       title: proposalTitle,
       description: proposalDescription,
       fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),

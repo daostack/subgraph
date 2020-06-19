@@ -1,0 +1,34 @@
+{
+    "name": "TPV",
+    "Avatar": "0xF6aB1f353651f216D9A5028e4237470163ad3313",
+    "DAOToken": "0x287fd434f9126189b15637d307dC5299752daD89",
+    "Reputation": "0xDa685Ac48bEfe3FE1AD7fF167a320E1F170762A2",
+    "Controller": "0x8Bd8Ab360713163099e65C66eCf4f7642F0E589E",
+    "Schemes": [
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0xA093cb3b07bA22cae86e4770888Aa107E1F0da3C",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "ReputationAdmin",
+        "alias": "ReputationAdmin",
+        "address": "0x4b4E790705497fEC958e3c0d9dd2a07365dA4B58",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "ContributionRewardExt",
+        "address": "0xA093cb3b07bA22cae86e4770888Aa107E1F0da3C",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "Competition",
+        "address": "0x20e6334028f3521adb23b54CbE5e0e34060f0477",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.41"
+  }

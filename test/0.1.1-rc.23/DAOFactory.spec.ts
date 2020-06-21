@@ -3,14 +3,16 @@ import { getArcVersion,
          getOptions,
          getPackageVersion,
          getWeb3,
+         nullAddress,
          sendQuery,
-         writeToIPFS } from './util';
+         writeToIPFS} from './util';
 
 const DAOFactory = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOFactory.json');
 const DAOToken = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOToken.json');
 const Avatar = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Avatar.json');
 const ContributionReward = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/ContributionReward.json');
 const GenesisProtocol = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/GenesisProtocol.json');
+const Wallet = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Wallet.json');
 
 describe('DAOFactory', () => {
   let web3;
@@ -256,5 +258,41 @@ describe('DAOFactory', () => {
       metadata,
       metadataHash,
     });
+
+    let wallet = await new web3.eth.Contract(Wallet.abi, undefined, opts);
+    const walletInitParams = wallet.methods.initialize(web3.eth.defaultAccount).encodeABI();
+    tx = await daoFactory.methods.createInstance(
+      getPackageVersion(),
+      'Wallet',
+      nullAddress,
+      walletInitParams,
+    );
+
+    let walletAddress = tx.events.ProxyCreated.returnValues._proxy;
+
+    const { contractInfos } = await sendQuery(`{
+      contractInfos(where: {address: "${walletAddress.toLowerCase()}"}) {
+        name
+      }
+    }`);
+
+    expect(contractInfos).toEqual([{ name: 'Wallet' }]);
+
+    tx = await daoFactory.methods.createInstance(
+      getPackageVersion(),
+      'Wallet',
+      web3.eth.defaultAccount,
+      walletInitParams,
+    );
+
+    let newWalletAddress = tx.events.ProxyCreated.returnValues._proxy;
+
+    const emptyContractInfos = (await sendQuery(`{
+      contractInfos(where: {address: "${newWalletAddress.toLowerCase()}"}) {
+        name
+      }
+    }`)).contractInfos;
+
+    expect(emptyContractInfos).toEqual([{}]);
   }, 120000);
 });

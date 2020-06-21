@@ -88,7 +88,7 @@ export function handleProxyCreated(event: ProxyCreated): void {
   let proxy = AdminUpgradeabilityProxy.bind(event.params._proxy);
   let callResult = proxy.try_admin();
   if (!callResult.reverted) {
-      if (callResult.value == '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1') {
+      if (callResult.value.toHex() == '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1') {
         log.info('DAOFactory failed to create proxy, admin must not be default account', []);
         return;
       }

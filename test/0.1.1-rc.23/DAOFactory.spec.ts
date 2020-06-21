@@ -5,6 +5,7 @@ import { getArcVersion,
          getWeb3,
          nullAddress,
          sendQuery,
+         waitUntilTrue,
          writeToIPFS} from './util';
 
 const DAOFactory = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOFactory.json');
@@ -130,6 +131,17 @@ describe('DAOFactory', () => {
       app: addresses.App.toLowerCase(),
     });
 
+    const reputationContractIsIndexed = async () => {
+      return (await sendQuery(`{
+        reputationContract(id: "${reputationAddress.toLowerCase()}") {
+          id
+          address
+        }
+      }`)).reputationContract != null;
+    };
+
+    await waitUntilTrue(reputationContractIsIndexed);
+
     const { reputationContract } = await sendQuery(`{
       reputationContract(id: "${reputationAddress.toLowerCase()}") {
         id
@@ -241,18 +253,18 @@ describe('DAOFactory', () => {
       },
       schemes: [
         {
-          address: addresses.DAOFactoryInstance.toLowerCase(),
-          contributionRewardParams: null,
-          name: 'DAOFactoryInstance',
-          isRegistered: false,
-        },
-        {
           address: contributionRewardAddress.toLowerCase(),
           contributionRewardParams: {
               votingMachine: genesisProtocol.options.address.toLowerCase(),
           },
           name: 'ContributionReward',
           isRegistered: true,
+        },
+        {
+          address: addresses.DAOFactoryInstance.toLowerCase(),
+          contributionRewardParams: null,
+          name: 'DAOFactoryInstance',
+          isRegistered: false,
         },
       ],
       metadata,
@@ -261,31 +273,35 @@ describe('DAOFactory', () => {
 
     let wallet = await new web3.eth.Contract(Wallet.abi, undefined, opts);
     const walletInitParams = wallet.methods.initialize(web3.eth.defaultAccount).encodeABI();
-    tx = await daoFactory.methods.createInstance(
-      getPackageVersion(),
-      'Wallet',
-      nullAddress,
-      walletInitParams,
-    );
-
-    let walletAddress = tx.events.ProxyCreated.returnValues._proxy;
-
-    const { contractInfos } = await sendQuery(`{
-      contractInfos(where: {address: "${walletAddress.toLowerCase()}"}) {
-        name
-      }
-    }`);
-
-    expect(contractInfos).toEqual([{ name: 'Wallet' }]);
 
     tx = await daoFactory.methods.createInstance(
       getPackageVersion(),
       'Wallet',
       web3.eth.defaultAccount,
       walletInitParams,
-    );
+    ).send();
 
     let newWalletAddress = tx.events.ProxyCreated.returnValues._proxy;
+
+    tx = await daoFactory.methods.createInstance(
+      getPackageVersion(),
+      'Wallet',
+      nullAddress,
+      walletInitParams,
+    ).send();
+
+    let walletAddress = tx.events.ProxyCreated.returnValues._proxy;
+
+    const walletIsIndexed = async () => {
+      const contractInfos = (await sendQuery(`{
+        contractInfos(where: {address: "${walletAddress.toLowerCase()}"}) {
+          name
+        }
+      }`)).contractInfos;
+      return contractInfos.length == 1;
+    };
+
+    await waitUntilTrue(walletIsIndexed);
 
     const emptyContractInfos = (await sendQuery(`{
       contractInfos(where: {address: "${newWalletAddress.toLowerCase()}"}) {
@@ -293,6 +309,6 @@ describe('DAOFactory', () => {
       }
     }`)).contractInfos;
 
-    expect(emptyContractInfos).toEqual([{}]);
-  }, 120000);
+    expect(emptyContractInfos).toEqual([]);
+  }, 1000000);
 });

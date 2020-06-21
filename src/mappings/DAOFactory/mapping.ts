@@ -85,13 +85,12 @@ export function handleProxyCreated(event: ProxyCreated): void {
   // Ensure the FactoryContract has been added to the store
   getDAOFactoryContract(event.address);
 
+  // Don't create contract if the proxy admin is the default address
   let proxy = AdminUpgradeabilityProxy.bind(event.params._proxy);
   let callResult = proxy.try_admin();
   if (!callResult.reverted) {
-      if (callResult.value.toHex() == '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1') {
-        log.info('DAOFactory failed to create proxy, admin must not be default account', []);
-        return;
-      }
+      log.info('DAOFactory failed to create proxy, admin must not be default account', []);
+      return;
   }
 
   let fullVersion = event.params._version;

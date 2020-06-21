@@ -3,6 +3,7 @@ abis:
   - Avatar
   - Reputation
   - DAOToken
+  - AdminUpgradeabilityProxy
 entities:
   - DAOFactoryContract
 eventHandlers:

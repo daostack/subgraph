@@ -1,4 +1,4 @@
-import { Address, store } from '@graphprotocol/graph-ts';
+import { Address, log, store } from '@graphprotocol/graph-ts';
 import {
   setContractsInfo,
   setTemplatesInfo,
@@ -12,6 +12,7 @@ import { insertToken, updateTokenTotalSupply } from '../../domain/token';
 import { Avatar } from '../../types/Controller/Avatar';
 import { DAOToken } from '../../types/Controller/DAOToken';
 import { Reputation } from '../../types/Controller/Reputation';
+import { AdminUpgradeabilityProxy } from '../../types/DAOFactory/AdminUpgradeabilityProxy';
 import { DAOFactory, NewOrg, ProxyCreated } from '../../types/DAOFactory/DAOFactory';
 import {
   ControllerOrganization, DAOFactoryContract, ReputationContract, ReputationHolder, TokenContract,
@@ -83,6 +84,15 @@ export function handleNewOrg(event: NewOrg): void {
 export function handleProxyCreated(event: ProxyCreated): void {
   // Ensure the FactoryContract has been added to the store
   getDAOFactoryContract(event.address);
+
+  let proxy = AdminUpgradeabilityProxy.bind(event.params._proxy);
+  let callResult = proxy.try_admin();
+  if (!callResult.reverted) {
+      if (callResult.value == '0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1') {
+        log.info('DAOFactory failed to create proxy, admin must not be default account', []);
+        return;
+      }
+  }
 
   let fullVersion = event.params._version;
   let version = '0.1.1-rc.' + fullVersion[2].toString();

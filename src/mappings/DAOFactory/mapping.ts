@@ -94,7 +94,7 @@ export function handleProxyCreated(event: ProxyCreated): void {
   }
 
   let fullVersion = event.params._version;
-  let version = '0.1.1-rc.' + fullVersion[2].toString();
+  let version = '0.1.2-rc.' + fullVersion[2].toString();
   addContract(event.params._proxy, event.params._contractName, version);
 
   if (equalStrings(event.params._contractName, 'Avatar')) {

@@ -18,6 +18,10 @@ async function generateAbis () {
     const files = fs.readdirSync('./node_modules/@daostack/migration-experimental/contracts/' + arcVersion)
     files.forEach(file => {
       const { abi } = JSON.parse(fs.readFileSync(path.join('./node_modules/@daostack/migration-experimental/contracts/' + arcVersion, file), 'utf-8'))
+      // Temporary walk-around needed because of a GraphNode issue.
+      if (file === 'Avatar.json' || file === 'Vault.json') {
+        abi.pop()
+      }
       fs.writeFileSync(
         path.join(`${__dirname}/../abis/` + arcVersion, file),
         JSON.stringify(abi, undefined, 2),

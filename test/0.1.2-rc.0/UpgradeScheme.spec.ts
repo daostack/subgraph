@@ -12,7 +12,7 @@ import {
 const UpgradeScheme = require('@daostack/migration-experimental/contracts/0.1.2-rc.0/UpgradeScheme.json');
 const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.2-rc.0/GenesisProtocol.json');
 
-describe('Generic Scheme', () => {
+describe('Upgrade Scheme', () => {
     let web3;
     let addresses;
     let opts;
@@ -26,7 +26,7 @@ describe('Generic Scheme', () => {
       await prepareReputation(web3, addresses, opts, accounts);
     }, 100000);
 
-    it('generic scheme proposal', async () => {
+    it('upgrade scheme proposal', async () => {
 
       const upgradeScheme = new web3.eth.Contract(
         UpgradeScheme.abi,

@@ -51,7 +51,7 @@ describe('Competition', () => {
             to: addresses.Avatar,
             value: 10,
             gas: 2000000,
-            data: '0xABCD',
+            data: '0x',
         });
 
         let proposalIPFSData = {

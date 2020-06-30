@@ -68,8 +68,10 @@ export function handleProposalExecuted(
             let v0 = v0Int.toString();
             let v1 = v1Int.toString();
             let v2 = v2Int.toString();
-            // 0.1.1-rc.23
-            contractInfo.version = v0 + '.' + v1 + '.' + v1 + '-rc.' + v2;
+            // 0.1.2-rc.0
+            // TODO: Fix after RC is removed
+            // contractInfo.version = v0 + '.' + v1 + '.' + v1 + '-rc.' + v2;
+            contractInfo.version = '0.1.2' + '-rc.' + v2;
             contractInfo.name = (proposal.contractsNames as Bytes[])[i].toString();
             contractInfo.save();
           }

@@ -77,7 +77,7 @@ export function getArcVersion() {
 }
 
 export function getPackageVersion() {
-  return ['0', '2', getArcVersion().split('rc.')[1]];
+  return ['0', '1', getArcVersion().split('rc.')[1]];
 }
 
 export function getOrgName() {

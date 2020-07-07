@@ -19,8 +19,10 @@ async function generateAbis () {
     files.forEach(file => {
       const { abi } = JSON.parse(fs.readFileSync(path.join('./node_modules/@daostack/migration-experimental/contracts/' + arcVersion, file), 'utf-8'))
       // Temporary walk-around needed because of a GraphNode issue. https://github.com/graphprotocol/ethabi/pull/12
-      if (file === 'Avatar.json' || file === 'Vault.json') {
-        abi.pop()
+      for (let i in abi) {
+        if (abi[i].type === "receive") {
+          abi.splice(i, 1)
+        }
       }
       fs.writeFileSync(
         path.join(`${__dirname}/../abis/` + arcVersion, file),

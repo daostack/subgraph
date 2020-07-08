@@ -7,9 +7,9 @@ import {
     waitUntilTrue,
   } from './util';
 
-const ActionMock = require('@daostack/migration-experimental/contracts/0.1.2-rc.0/ActionMock.json');
-const GenericScheme = require('@daostack/migration-experimental/contracts/0.1.2-rc.0/GenericScheme.json');
-const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.2-rc.0/GenesisProtocol.json');
+const ActionMock = require('@daostack/migration-experimental/contracts/0.1.2-rc.2/ActionMock.json');
+const GenericScheme = require('@daostack/migration-experimental/contracts/0.1.2-rc.2/GenericScheme.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.2-rc.2/GenesisProtocol.json');
 
 describe('Generic Scheme', () => {
     let web3;

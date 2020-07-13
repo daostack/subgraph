@@ -13,6 +13,7 @@ import {
   ContractInfo,
   Debug,
   TemplateInfo,
+  UniversalContractInfo,
 } from './types/schema';
 
 export function concat(a: ByteArray, b: ByteArray): ByteArray {
@@ -81,10 +82,18 @@ export function setContractInfo(address: string, name: string, alias: string, ve
     if (contractInfo == null) {
         contractInfo = new ContractInfo(address);
         contractInfo.address = Address.fromString(address);
-        contractInfo.name =  name;
-        contractInfo.alias =  alias;
+        contractInfo.name = name;
+        contractInfo.alias = alias;
         contractInfo.version = version;
         contractInfo.save();
+    }
+    if (equalStrings(name, 'GenesisProtocol') || equalStrings(name, 'Redeemer')) {
+        let universalContractInfo = new UniversalContractInfo(address + version);
+        universalContractInfo.address = Address.fromString(address);
+        universalContractInfo.name = name;
+        universalContractInfo.alias = alias;
+        universalContractInfo.version = version;
+        universalContractInfo.save();
     }
 }
 

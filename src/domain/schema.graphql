@@ -208,6 +208,14 @@ type ContractInfo @entity {
 	address: Bytes!
 }
 
+type UniversalContractInfo @entity {
+	id: ID!
+	name: String!
+	alias: String!
+	version: String!
+	address: Bytes!
+}
+
 type TemplateInfo @entity {
 	id: ID!
 	templateName: String!

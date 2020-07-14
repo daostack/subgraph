@@ -29,7 +29,7 @@ async function generateContractInfo(opts={}) {
         let addresses = migration[network].package[version];
         for (var name in addresses) {
           if (addresses.hasOwnProperty(name)) {
-            if(!contractsAddresses[addresses[name]]) {
+            if(!contractsAddresses[addresses[name]] || name === 'GenesisProtocol' || name === 'Redeemer') {
               buffer += "    setContractInfo("+"'"+addresses[name].toLowerCase()+"'"+", " +"'"+name+"'"+", "+"'"+name+"', "+"'"+version+"'"+");\n";
             }
             contractsAddresses[addresses[name]] = true;

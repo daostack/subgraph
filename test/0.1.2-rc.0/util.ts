@@ -71,6 +71,10 @@ export function getContractAddresses() {
     FundingRequest: addresses.private.dao[arcVersion].Schemes[7].address,
     GenesisProtocolV0: addresses.private.package['0.1.2-rc.0'].GenesisProtocol,
     GenesisProtocolV1: addresses.private.package['0.1.2-rc.1'].GenesisProtocol,
+    DAORegistryInstanceV0: addresses.private.package['0.1.2-rc.0'].DAORegistryInstance,
+    DAORegistryInstanceV1: addresses.private.package['0.1.2-rc.1'].DAORegistryInstance,
+    DAOFactoryInstanceV0: addresses.private.package['0.1.2-rc.0'].DAOFactoryInstance,
+    DAOFactoryInstanceV1: addresses.private.package['0.1.2-rc.1'].DAOFactoryInstance,
   };
 }
 

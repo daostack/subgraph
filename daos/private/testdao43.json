@@ -1,0 +1,39 @@
+{
+  "name": "Histrionic Apples",
+  "Avatar": "0xB3d07721400d901b6c11fE79F6FCa83FE3cD365C",
+  "DAOToken": "0xefaAE06d1ba9dD004e36D1916565054ECaDdc04a",
+  "Reputation": "0x657d2DBA4060adE70993000849aa92da64CD0c0B",
+  "Controller": "0x42C04633FD38BD3932138FFf40432E6E33B4D47b",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0x791eea5b5121a98a9DBA63108f5953e234cf22F0",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x9F5005007d0938919ACb5d32FF9d99E0619c22a7",
+      "arcVersion": "0.0.1-rc.43"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0xbbB111bc94514b1aBAb11bC9ED879ed8e6cE067D",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x9F5005007d0938919ACb5d32FF9d99E0619c22a7",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "Competition",
+      "address": "0x01c4fe4D21Df572c3B7F4EE72BEcd4170D0393d3",
+      "arcVersion": "0.0.1-rc.43"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.43"
+}

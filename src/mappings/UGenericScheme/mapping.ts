@@ -1,4 +1,5 @@
-import { store } from '@graphprotocol/graph-ts';
+import { BigInt, store } from '@graphprotocol/graph-ts';
+import { handleAvatarBalance } from '../Avatar/mapping';
 
 // Import event types from the Reputation contract ABI
 import {
@@ -47,6 +48,9 @@ export function handleProposalExecuted(
   if (ent != null) {
     ent.executed = true;
     ent.returnValue = event.params._genericCallReturnValue;
+    if (BigInt.fromI32(0).lt(ent.value)) {
+      handleAvatarBalance(event.params._avatar, ent.value, false);
+    }
   }
 
   store.set('GenericSchemeProposal', event.params._proposalId.toHex(), ent);

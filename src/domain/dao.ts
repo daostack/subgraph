@@ -39,6 +39,7 @@ export function insertNewDAO(
   let avatar = Avatar.bind(avatarAddress);
   let dao = getDAO(avatarAddress.toHex());
   dao.name = avatar.orgName().toString();
+  dao.avatarContract = avatarAddress.toHex();
   dao.nativeToken = nativeTokenAddress.toHex();
   dao.nativeReputation = nativeReputationAddress.toHex();
   dao.reputationHoldersCount = BigInt.fromI32(0);

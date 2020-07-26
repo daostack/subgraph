@@ -13,6 +13,7 @@ enum Outcome {
 type DAO @entity {
 	id: ID!
 	name: String!
+	avatarContract: AvatarContract!
 	nativeToken: Token!
 	nativeReputation: Rep!
 	proposals: [Proposal!] @derivedFrom(field: "dao")

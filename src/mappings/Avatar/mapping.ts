@@ -8,7 +8,7 @@ import { Avatar, OwnershipTransferred, ReceiveEther, SendEther } from '../../typ
 // Import entity types generated from the GraphQL schema
 import { AvatarContract } from '../../types/schema';
 
-export function handleAvatarBalance(
+function handleAvatarBalance(
   address: Address,
   value: BigInt,
   received: boolean,

@@ -1,6 +1,8 @@
 entities:
   - AvatarContract
 eventHandlers:
+  - event: GenericCall(indexed address,bytes,uint,bool)
+    handler: handleGenericCall
   - event: SendEther(uint256,indexed address)
     handler: handleSendEth
   - event: ReceiveEther(indexed address,uint256)

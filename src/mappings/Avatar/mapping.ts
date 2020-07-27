@@ -6,6 +6,7 @@ import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import { Avatar, OwnershipTransferred, ReceiveEther, SendEther } from '../../types/Avatar/Avatar';
 
 // Import entity types generated from the GraphQL schema
+import { GenericCall } from '../../types/Controller/Avatar';
 import { AvatarContract } from '../../types/schema';
 
 function handleAvatarBalance(
@@ -25,6 +26,12 @@ function handleAvatarBalance(
   }
 
   store.set('AvatarContract', avatar.id, avatar);
+}
+
+export function handleGenericCall(event: GenericCall): void {
+  if (event.params._success) {
+    handleAvatarBalance(event.address, event.params._value, false);
+  }
 }
 
 export function handleSendEth(event: SendEther): void {

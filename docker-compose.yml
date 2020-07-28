@@ -16,7 +16,7 @@ services:
       postgres_pass: letmein
       postgres_db: postgres
       ipfs: 'ipfs:5001'
-      ethereum: 'private:http://ganache:8545'
+      ethereum: 'private:https://rinkeby.infura.io/v3/e0cdf3bfda9b468fa908aa6ab03d5ba2'
       GRAPH_IPFS_TIMEOUT: '2'
       GRAPH_MAX_IPFS_FILE_BYTES: '300000'
       GRAPH_GRAPHQL_MAX_FIRST: '1000'

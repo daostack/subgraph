@@ -218,6 +218,22 @@ export function handleNewFundingRequestProposal(
   handleGPProposalPrivate(proposalId.toHex());
 }
 
+export function handleNewTokenTradeProposal(
+  avatar: Address,
+  proposalId: Bytes,
+  descriptionHash: string,
+  beneficiary: Address,
+  sendToken: Bytes, // IERC20
+  sendTokenAmount: BigInt,
+  receiveToken: Bytes, // IERC20
+  receiveTokenAmount: BigInt
+): void {
+  if (!daoModule.exists(avatar)) {
+    return;
+  }
+  handleGPProposalPrivate(proposalId.toHex());
+}
+
 export function handleStake(event: Stake): void {
   let proposal = getProposal(event.params._proposalId.toHex());
   if (equalsBytes(proposal.paramsHash, new Bytes(32))) {

@@ -1,0 +1,13 @@
+type TokenTradeProposal @entity {
+  id: ID!
+  dao: DAO!
+
+  beneficiary: Bytes!
+  sendTokenAddress: Bytes!
+  sendTokenAmount: BigInt!
+  receiveTokenAddress: Bytes!
+  receiveTokenAmount: BigInt!
+
+  executed: Boolean!
+  redeemed: Boolean!
+}

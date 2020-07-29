@@ -29,7 +29,7 @@ function handleAvatarBalance(
 }
 
 export function handleGenericCall(event: GenericCall): void {
-  if (event.params._success) {
+  if (event.params._success && BigInt.fromI32(0).lt(event.params._value)) {
     handleAvatarBalance(event.address, event.params._value, false);
   }
 }

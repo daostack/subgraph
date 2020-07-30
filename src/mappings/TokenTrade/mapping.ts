@@ -11,9 +11,9 @@ function insertNewProposal(event: TokenTradeProposed): void {
   proposal.dao = event.params._avatar.toHex();
 
   proposal.beneficiary = event.params._beneficiary;
-  proposal.sendTokenAddress = event.params._sendTokenAddress;
+  proposal.sendTokenAddress = event.params._sendToken;
   proposal.sendTokenAmount = event.params._sendTokenAmount;
-  proposal.receiveTokenAddress = event.params._receiveTokenAddress;
+  proposal.receiveTokenAddress = event.params._receiveToken;
   proposal.receiveTokenAmount = event.params._receiveTokenAmount;
 
   proposal.executed = false;
@@ -28,12 +28,9 @@ export function handleProposalCreation(
   domain.handleNewTokenTradeProposal(
     event.params._avatar,
     event.params._proposalId,
+    event.block.timestamp,
     event.params._descriptionHash,
-    event.params._beneficiary,
-    event.params._sendToken,
-    event.params._sendTokenAmount,
-    event.params._receiveToken,
-    event.params._receiveTokenAmount  
+    event.address
   );
 
   insertNewProposal(event);

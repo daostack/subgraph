@@ -5,9 +5,9 @@ entities:
   - TokenTradeProposal
 
 eventHandlers:
-  - event: TokenTradeProposed(indexed address,indexed bytes32,string,indexed address,bytes,uint256,bytes,uint256)
+  - event: TokenTradeProposed(indexed address,indexed bytes32,string,indexed address,address,uint256,address,uint256)
     handler: handleProposalCreation
-  - event: TokenTradeProposalExecuted(indexed address,indexed bytes32,indexed address,bytes,uint256,bytes,uint256)
+  - event: TokenTradeProposalExecuted(indexed address,indexed bytes32,indexed address,address,uint256,address,uint256)
     handler: handleProposalRedemption
   - event: ProposalExecuted(indexed address,indexed bytes32,int256)
     handler: handleProposalExecution

@@ -114,6 +114,9 @@ type Proposal @entity {
 	# JoinAndQuit Scheme params
 	joinAndQuit: JoinAndQuitProposal
 
+  # TokenTrade Scheme params
+  tokenTrade: TokenTradeProposal
+
 	# FundingRequest Scheme params
 	fundingRequest: FundingRequestProposal
 

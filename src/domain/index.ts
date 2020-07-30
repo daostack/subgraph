@@ -31,6 +31,7 @@ import {
   updateSFProposal,
   updateSRProposal,
   updateUSProposal,
+  updateTTProposal
 } from './proposal';
 import {
   getReputation,
@@ -221,16 +222,20 @@ export function handleNewFundingRequestProposal(
 export function handleNewTokenTradeProposal(
   avatar: Address,
   proposalId: Bytes,
+  timestamp: BigInt,
   descriptionHash: string,
-  beneficiary: Address,
-  sendToken: Bytes, // IERC20
-  sendTokenAmount: BigInt,
-  receiveToken: Bytes, // IERC20
-  receiveTokenAmount: BigInt
+  eventAddress: Address
 ): void {
   if (!daoModule.exists(avatar)) {
     return;
   }
+  updateTTProposal(
+    proposalId,
+    timestamp,
+    avatar,
+    descriptionHash,
+    eventAddress,
+  );
   handleGPProposalPrivate(proposalId.toHex());
 }
 

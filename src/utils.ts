@@ -87,7 +87,10 @@ export function setContractInfo(address: string, name: string, alias: string, ve
         contractInfo.version = version;
         contractInfo.save();
     }
-    if (equalStrings(name, 'GenesisProtocol') || equalStrings(name, 'Redeemer')) {
+    if ((
+        (equalStrings(name, 'GenesisProtocol') || equalStrings(name, 'Redeemer')) ||
+        equalStrings(name, 'DAORegistryInstance') || equalStrings(name, 'DAOFactoryInstance')
+    )) {
         let universalContractInfo = new UniversalContractInfo(address + version);
         universalContractInfo.address = Address.fromString(address);
         universalContractInfo.name = name;

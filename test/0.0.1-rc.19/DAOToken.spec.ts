@@ -77,7 +77,7 @@ describe('DAOToken', () => {
     }`);
 
     const { allowances } = await sendQuery(`{
-      allowances {
+      allowances(where: {token: "${daotoken.options.address.toLowerCase()}", owner: "${accounts[0].address.toLowerCase()}", spender: "${accounts[3].address.toLowerCase()}" }) {
         token
         owner
         spender

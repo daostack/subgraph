@@ -16,7 +16,6 @@ function insertNewProposal(event: TokenTradeProposed): void {
   proposal.receiveTokenAddress = event.params._receiveToken;
   proposal.receiveTokenAmount = event.params._receiveTokenAmount;
 
-  proposal.executed = false;
   proposal.redeemed = false;
 
   proposal.save();

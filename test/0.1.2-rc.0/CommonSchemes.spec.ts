@@ -6,22 +6,25 @@ import {
     prepareReputation,
     sendQuery,
     waitUntilTrue,
+    getPackageVersion
   } from './util';
 
 const Avatar = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Avatar.json');
-const Reputation = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Reputation.json');
+const DAOFactory = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOFactory.json');
 const FundingRequest = require(
   '@daostack/migration-experimental/contracts/' + getArcVersion() + '/FundingRequest.json',
 );
 const JoinAndQuit = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/JoinAndQuit.json');
 const GenesisProtocol = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/GenesisProtocol.json');
 const TokenTrade = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/TokenTrade.json');
+const SchemeFactory = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/SchemeFactory.json');
 
 describe('JoinAndQuit Scheme', () => {
     let web3;
     let addresses;
     let opts;
     let accounts;
+    let schemeFactory;
 
     beforeAll(async () => {
       web3 = await getWeb3();
@@ -29,6 +32,7 @@ describe('JoinAndQuit Scheme', () => {
       opts = await getOptions(web3);
       accounts = web3.eth.accounts.wallet;
       await prepareReputation(web3, addresses, opts, accounts);
+      schemeFactory = new web3.eth.Contract(SchemeFactory.abi, addresses.SchemeFactory, opts);
     }, 100000);
 
     it('JoinAndQuit proposal', async () => {
@@ -466,19 +470,116 @@ describe('JoinAndQuit Scheme', () => {
 
 
     it("TokenTrade proposal", async () => {
-      const tokenTrade = new web3.eth.Contract(
-        TokenTrade.abi,
-        addresses.TokenTrade,
-        opts
-      );
       const genesisProtocol = new web3.eth.Contract(
         GenesisProtocol.abi,
         addresses.GenesisProtocol,
         opts,
       );
+      let daoFactory = new web3.eth.Contract(DAOFactory.abi, addresses.DAOFactoryInstance, opts);
 
       const descHash =
       '0x000000000000000000000000000000000000000000000000000000000000abcd';
+
+      const schemeFactoryNewSchemeProposalsQuery = `{
+        schemeFactoryNewSchemeProposals {
+          txHash
+          contract
+          avatar
+          descriptionHash
+          votingMachine
+          proposalId
+          schemeName
+          schemeData
+          packageVersion
+          permission
+          schemeToReplace
+        }
+      }`;
+
+      // Let's register first the token trade scheme on the DAO
+      const tokenTrade = new web3.eth.Contract(
+        TokenTrade.abi,
+        addresses.TokenTrade,
+        opts
+      );
+
+      let initData = tokenTrade
+        .methods
+        .initialize(
+          (await schemeFactory.methods.avatar().call()),
+          (await schemeFactory.methods.votingMachine().call()),
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          '0x0000000000000000000000000000000000000000',
+          "0x0000000000000000000000000000000000000003",
+          (await schemeFactory.methods.voteParamsHash().call()),
+        ).encodeABI();
+          
+        let proposeTokenTradeRegistration = schemeFactory.methods.proposeScheme(
+          getPackageVersion(),
+          'TokenTrade',
+          initData,
+          '0x0000001f',
+          "0x0000000000000000000000000000000000000000",
+          descHash,
+        );
+
+        const registryProposalId = await proposeTokenTradeRegistration.call();
+
+        let prevProposalsLength = (
+          await sendQuery(schemeFactoryNewSchemeProposalsQuery)
+        ).schemeFactoryNewSchemeProposals.length;
+
+        const proposalIsIndexed = async () => {
+          return (await sendQuery(schemeFactoryNewSchemeProposalsQuery)).schemeFactoryNewSchemeProposals.length
+           > prevProposalsLength;
+        };
+
+        await waitUntilTrue(proposalIsIndexed);
+
+        let i = 0;
+        while ((await genesisProtocol.methods.proposals(registryProposalId).call()).state !== '2') {
+          i++;
+          let tx = (await genesisProtocol.methods.vote(
+            registryProposalId,
+            1,
+            0,
+            accounts[i].address)
+            .send({ from: accounts[i].address }));
+
+            if ((await genesisProtocol.methods.proposals(registryProposalId).call()).state === '2') {
+              let proxyEvents = await daoFactory.getPastEvents(
+                'ProxyCreated',
+                {
+                  fromBlock: tx.blockNumber,
+                  toBlock: tx.blockNumber,
+                },
+              );
+            }
+        }
+
+        const getSchemeFactoryProposalExecuteds = `{
+          schemeFactoryProposalExecuteds {
+            txHash,
+            contract,
+            avatar,
+            proposalId,
+            decision
+          }
+        }`;
+
+        let prevExecutedsLength = (
+          await sendQuery(getSchemeFactoryProposalExecuteds)
+        ).schemeFactoryProposalExecuteds.length;
+
+        const registerExecutedIsIndexed = async () => {
+          return (await sendQuery(getSchemeFactoryProposalExecuteds)).schemeFactoryProposalExecuteds.length
+           > prevExecutedsLength;
+        };
+
+        await waitUntilTrue(registerExecutedIsIndexed);
+
+  
+      // Now we create proposals on our scheme 
       const receiveTokenAddress = "0x0000000000000000000000000000000000000001";
       const sendTokenAddress = "0x0000000000000000000000000000000000000002";
       const sendTokenAmount = 100;

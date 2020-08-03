@@ -1,0 +1,39 @@
+{
+  "name": "Adroit Miller",
+  "Avatar": "0x66D4c65A59C775476C2cC401f43aa6F057516901",
+  "DAOToken": "0xb49AF00901a1A0aCDd19B92a3731088C9B53ee44",
+  "Reputation": "0x6310bb08D60468A3779ed309BFA840B5b6D4292F",
+  "Controller": "0xF135a59fC1cbC4D893bcC924f3806E7d1c7B4339",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0xC929Be61278f558b4c24AF601016d16E2E02b31e",
+      "arcVersion": "0.0.1-rc.44"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xeF29bCDC1f0f4A98B9FDDD1A4717Ca3279A44c13",
+      "arcVersion": "0.0.1-rc.43"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0xC2090Fa107F4f0665A9Cb529B174c287D379Ae7c",
+      "arcVersion": "0.0.1-rc.44"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xeF29bCDC1f0f4A98B9FDDD1A4717Ca3279A44c13",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "Competition",
+      "address": "0x9283124318C61630f481F264795B4D5d8A033b2f",
+      "arcVersion": "0.0.1-rc.43"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.44"
+}

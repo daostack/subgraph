@@ -517,18 +517,18 @@ describe('JoinAndQuit Scheme', () => {
       const externalToken1 =
         await new web3.eth.Contract(DAOToken.abi, undefined, opts)
           .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
-        await externalToken1.methods.initialize('Test Token One', 'TSTF', '10000000000', accounts[1].address).send();
-        await externalToken1.methods.mint(addresses.Avatar, '1000000').send({ from: accounts[1].address });
-        await externalToken1.methods.mint(accounts[0].address, '1000000').send({ from: accounts[1].address });
-        
+      await externalToken1.methods.initialize('Test Token One', 'TSTF', '900000000000000', accounts[1].address).send();
+      await externalToken1.methods.mint(addresses.Avatar, '100000000000').send({ from: accounts[1].address });
+      await externalToken1.methods.mint(accounts[0].address, '100000000000').send({ from: accounts[1].address });
+
       const externalToken2 =
         await new web3.eth.Contract(DAOToken.abi, undefined, opts)
           .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
-        await externalToken2.methods.initialize('Test Token Second', 'TSTS', '10000000000', accounts[1].address).send();
-        await externalToken2.methods.mint(accounts[0].address, '1000000').send({ from: accounts[1].address });
-        await externalToken2.methods.mint(addresses.Avatar, '1000000').send({ from: accounts[1].address });
-        
-        await web3.eth.sendTransaction({
+      await externalToken2.methods.initialize('Test Token Second', 'TSTS', '900000000000000', accounts[1].address).send();
+      await externalToken2.methods.mint(accounts[0].address, '100000000000').send({ from: accounts[1].address });
+      await externalToken2.methods.mint(addresses.Avatar, '100000000000').send({ from: accounts[1].address });
+
+      await web3.eth.sendTransaction({
             from: accounts[0].address,
             to: addresses.Avatar,
             value: 10,

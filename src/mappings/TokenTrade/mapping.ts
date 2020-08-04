@@ -1,10 +1,10 @@
+import * as domain from '../../domain';
+import { TokenTradeProposal } from '../../types/schema';
 import {
-  TokenTradeProposed,
   ProposalExecuted,
   TokenTradeProposalExecuted,
-} from "../../types/TokenTrade/TokenTrade";
-import * as domain from "../../domain";
-import { TokenTradeProposal } from '../../types/schema';
+  TokenTradeProposed,
+} from '../../types/TokenTrade/TokenTrade';
 
 function insertNewProposal(event: TokenTradeProposed): void {
   let proposal = new TokenTradeProposal(event.params._proposalId.toHex());
@@ -22,21 +22,21 @@ function insertNewProposal(event: TokenTradeProposed): void {
 }
 
 export function handleProposalCreation(
-  event: TokenTradeProposed
+  event: TokenTradeProposed,
 ): void {
   domain.handleNewTokenTradeProposal(
     event.params._avatar,
     event.params._proposalId,
     event.block.timestamp,
     event.params._descriptionHash,
-    event.address
+    event.address,
   );
 
   insertNewProposal(event);
 }
 
 export function handleProposalRedemption(
-  event: TokenTradeProposalExecuted
+  event: TokenTradeProposalExecuted,
 ): void {
   let proposal = TokenTradeProposal.load(event.params._proposalId.toHex());
   if (proposal != null && proposal.executed) {
@@ -46,7 +46,7 @@ export function handleProposalRedemption(
 }
 
 export function handleProposalExecution(
-  event: ProposalExecuted
+  event: ProposalExecuted,
 ): void {
   let proposal = TokenTradeProposal.load(event.params._proposalId.toHex());
   if (proposal != null) {

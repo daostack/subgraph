@@ -30,8 +30,8 @@ import {
   updateProposalState,
   updateSFProposal,
   updateSRProposal,
+  updateTTProposal,
   updateUSProposal,
-  updateTTProposal
 } from './proposal';
 import {
   getReputation,
@@ -224,7 +224,7 @@ export function handleNewTokenTradeProposal(
   proposalId: Bytes,
   timestamp: BigInt,
   descriptionHash: string,
-  eventAddress: Address
+  eventAddress: Address,
 ): void {
   if (!daoModule.exists(avatar)) {
     return;

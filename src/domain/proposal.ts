@@ -386,7 +386,7 @@ export function updateTTProposal(
   createdAt: BigInt,
   avatarAddress: Address,
   descriptionHash: string,
-  schemeAddress: Address
+  schemeAddress: Address,
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.dao = avatarAddress.toHex();
@@ -434,8 +434,6 @@ export function updateJQProposal(
 
   saveProposal(proposal);
 }
-
-
 
 export function updateFRProposal(
   proposalId: Bytes,

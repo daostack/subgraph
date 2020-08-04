@@ -2,11 +2,11 @@ import {
     getArcVersion,
     getContractAddresses,
     getOptions,
+    getPackageVersion,
     getWeb3,
     prepareReputation,
     sendQuery,
     waitUntilTrue,
-    getPackageVersion
   } from './util';
 
 const Avatar = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Avatar.json');
@@ -468,17 +468,14 @@ describe('JoinAndQuit Scheme', () => {
       });
     }, 100000);
 
-
-    it("TokenTrade proposal", async () => {
+    it('TokenTrade proposal', async () => {
       const genesisProtocol = new web3.eth.Contract(
         GenesisProtocol.abi,
         addresses.GenesisProtocol,
         opts,
       );
-      let daoFactory = new web3.eth.Contract(DAOFactory.abi, addresses.DAOFactoryInstance, opts);
 
-      const descHash =
-      '0x000000000000000000000000000000000000000000000000000000000000abcd';
+      const descHash = '0x0000000000000000000000000000000000000000000000000000000000000123';
 
       const schemeFactoryNewSchemeProposalsQuery = `{
         schemeFactoryNewSchemeProposals {
@@ -496,13 +493,32 @@ describe('JoinAndQuit Scheme', () => {
         }
       }`;
 
+      let prevProposalsLength;
+      let prevExecutedsLength;
+      let proposalIsIndexed;
+      let executedIsIndexed;
+
+      prevProposalsLength = (
+        await sendQuery(schemeFactoryNewSchemeProposalsQuery)
+      ).schemeFactoryNewSchemeProposals.length;
+
+      const getSchemeFactoryProposalExecuteds = `{
+        schemeFactoryProposalExecuteds {
+          txHash,
+          contract,
+          avatar,
+          proposalId,
+          decision
+        }
+      }`;
+
+
       // Let's register first the token trade scheme on the DAO
       const tokenTrade = new web3.eth.Contract(
         TokenTrade.abi,
         addresses.TokenTrade,
-        opts
+        opts,
       );
-
       let initData = tokenTrade
         .methods
         .initialize(
@@ -510,78 +526,53 @@ describe('JoinAndQuit Scheme', () => {
           (await schemeFactory.methods.votingMachine().call()),
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           '0x0000000000000000000000000000000000000000',
-          "0x0000000000000000000000000000000000000003",
           (await schemeFactory.methods.voteParamsHash().call()),
         ).encodeABI();
-          
-        let proposeTokenTradeRegistration = schemeFactory.methods.proposeScheme(
+
+      let proposeTokenTradeRegistration = schemeFactory.methods.proposeScheme(
           getPackageVersion(),
           'TokenTrade',
           initData,
           '0x0000001f',
-          "0x0000000000000000000000000000000000000000",
+          '0x0000000000000000000000000000000000000000',
           descHash,
         );
 
-        const registryProposalId = await proposeTokenTradeRegistration.call();
+      const registryProposalId = await proposeTokenTradeRegistration.call();
+      await proposeTokenTradeRegistration.send();
 
-        let prevProposalsLength = (
-          await sendQuery(schemeFactoryNewSchemeProposalsQuery)
-        ).schemeFactoryNewSchemeProposals.length;
-
-        const proposalIsIndexed = async () => {
+      proposalIsIndexed = async () => {
           return (await sendQuery(schemeFactoryNewSchemeProposalsQuery)).schemeFactoryNewSchemeProposals.length
            > prevProposalsLength;
         };
 
-        await waitUntilTrue(proposalIsIndexed);
+      await waitUntilTrue(proposalIsIndexed);
 
-        let i = 0;
-        while ((await genesisProtocol.methods.proposals(registryProposalId).call()).state !== '2') {
-          i++;
-          let tx = (await genesisProtocol.methods.vote(
-            registryProposalId,
-            1,
-            0,
-            accounts[i].address)
-            .send({ from: accounts[i].address }));
-
-            if ((await genesisProtocol.methods.proposals(registryProposalId).call()).state === '2') {
-              let proxyEvents = await daoFactory.getPastEvents(
-                'ProxyCreated',
-                {
-                  fromBlock: tx.blockNumber,
-                  toBlock: tx.blockNumber,
-                },
-              );
-            }
-        }
-
-        const getSchemeFactoryProposalExecuteds = `{
-          schemeFactoryProposalExecuteds {
-            txHash,
-            contract,
-            avatar,
-            proposalId,
-            decision
-          }
-        }`;
-
-        let prevExecutedsLength = (
+      prevExecutedsLength = (
           await sendQuery(getSchemeFactoryProposalExecuteds)
         ).schemeFactoryProposalExecuteds.length;
 
-        const registerExecutedIsIndexed = async () => {
+      let k = 0;
+      while ((await genesisProtocol.methods.proposals(registryProposalId).call()).state !== '2') {
+          await genesisProtocol.methods.vote(
+            registryProposalId,
+            1,
+            0,
+            accounts[k].address,
+          ).send({ from: accounts[k].address });
+          k++;
+        }
+
+      executedIsIndexed = async () => {
           return (await sendQuery(getSchemeFactoryProposalExecuteds)).schemeFactoryProposalExecuteds.length
            > prevExecutedsLength;
         };
 
-        await waitUntilTrue(registerExecutedIsIndexed);
+      await waitUntilTrue(executedIsIndexed);
 
-  
-      // Now we create proposals on our scheme 
-      const receiveTokenAddress = "0x0000000000000000000000000000000000000001";
-      const sendTokenAddress = "0x0000000000000000000000000000000000000002";
+      // Now we create proposals on our scheme
+      const receiveTokenAddress = '0x0000000000000000000000000000000000000001';
+      const sendTokenAddress = '0x0000000000000000000000000000000000000002';
       const sendTokenAmount = 100;
       const receiveTokenAmount = 200;
       async function propose({ from }) {
@@ -590,8 +581,8 @@ describe('JoinAndQuit Scheme', () => {
           sendTokenAmount,
           receiveTokenAddress,
           receiveTokenAmount,
-          descHash
-        )
+          descHash,
+        );
         const proposalId = await prop.call({ from });
         const { blockNumber } = await prop.send({ from });
         const { timestamp } = await web3.eth.getBlock(blockNumber);
@@ -638,7 +629,7 @@ describe('JoinAndQuit Scheme', () => {
             redeemed
           }
         }
-      }`
+      }`;
 
       let proposal = (await sendQuery(getProposal)).proposal;
 
@@ -662,7 +653,7 @@ describe('JoinAndQuit Scheme', () => {
           receiveTokenAddress,
           receiveTokenAmount,
           executed: false,
-          redeemed: false
+          redeemed: false,
         },
       });
 
@@ -690,7 +681,7 @@ describe('JoinAndQuit Scheme', () => {
         voter: accounts[3].address,
       });
 
-      const executedIsIndexed = async () => {
+      executedIsIndexed = async () => {
         return (await sendQuery(getProposal)).proposal.executedAt != false;
       };
 
@@ -718,7 +709,7 @@ describe('JoinAndQuit Scheme', () => {
           receiveTokenAddress,
           receiveTokenAmount,
           executed: true,
-          redeemed: false
+          redeemed: false,
         },
       });
 
@@ -751,9 +742,9 @@ describe('JoinAndQuit Scheme', () => {
           receiveTokenAddress,
           receiveTokenAmount,
           executed: true,
-          redeemed: true
+          redeemed: true,
         },
       });
 
-    }, 100000);
+    }, 200000);
   });

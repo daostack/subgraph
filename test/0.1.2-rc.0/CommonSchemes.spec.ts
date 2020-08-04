@@ -10,7 +10,7 @@ import {
   } from './util';
 
 const Avatar = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Avatar.json');
-const DAOFactory = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOFactory.json');
+const DAOToken = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOToken.json');
 const FundingRequest = require(
   '@daostack/migration-experimental/contracts/' + getArcVersion() + '/FundingRequest.json',
 );
@@ -512,8 +512,31 @@ describe('JoinAndQuit Scheme', () => {
         }
       }`;
 
+      // Create the ERC20 to receive and send
 
-      // Let's register first the token trade scheme on the DAO
+      const externalToken1 =
+        await new web3.eth.Contract(DAOToken.abi, undefined, opts)
+          .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
+        await externalToken1.methods.initialize('Test Token One', 'TSTF', '10000000000', accounts[1].address).send();
+        await externalToken1.methods.mint(addresses.Avatar, '1000000').send({ from: accounts[1].address });
+        await externalToken1.methods.mint(accounts[0].address, '1000000').send({ from: accounts[1].address });
+        
+      const externalToken2 =
+        await new web3.eth.Contract(DAOToken.abi, undefined, opts)
+          .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
+        await externalToken2.methods.initialize('Test Token Second', 'TSTS', '10000000000', accounts[1].address).send();
+        await externalToken2.methods.mint(accounts[0].address, '1000000').send({ from: accounts[1].address });
+        await externalToken2.methods.mint(addresses.Avatar, '1000000').send({ from: accounts[1].address });
+        
+        await web3.eth.sendTransaction({
+            from: accounts[0].address,
+            to: addresses.Avatar,
+            value: 10,
+            gas: 2000000,
+            data: '0x',
+        });
+
+      // Let's register the token trade scheme on the DAO
       const tokenTrade = new web3.eth.Contract(
         TokenTrade.abi,
         addresses.TokenTrade,
@@ -571,8 +594,8 @@ describe('JoinAndQuit Scheme', () => {
       await waitUntilTrue(executedIsIndexed);
 
       // Now we create proposals on our scheme
-      const receiveTokenAddress = '0x0000000000000000000000000000000000000001';
-      const sendTokenAddress = '0x0000000000000000000000000000000000000002';
+      const receiveTokenAddress = externalToken1.options.address;
+      const sendTokenAddress = externalToken2.options.address;
       const sendTokenAmount = 100;
       const receiveTokenAmount = 200;
       async function propose({ from }) {

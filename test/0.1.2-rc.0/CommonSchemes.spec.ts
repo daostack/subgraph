@@ -514,18 +514,17 @@ describe('JoinAndQuit Scheme', () => {
 
       // Create the ERC20 to receive and send
 
-      const externalToken1 =
+      const receivedToken =
         await new web3.eth.Contract(DAOToken.abi, undefined, opts)
           .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
-      await externalToken1.methods.initialize('Test Token One', 'TSTF', '10000000000', accounts[1].address).send();
-      await externalToken1.methods.mint(accounts[0].address, '1000000').send({ from: accounts[1].address });
-
-
-      const externalToken2 =
+      await receivedToken.methods.initialize('Test Token One', 'TSTF', '10000000000', accounts[1].address).send();
+      await receivedToken.methods.mint(accounts[0].address, '1000000000').send({ from: accounts[1].address });
+      await receivedToken.methods.approve(addresses.TokenTrade, '1000000000').send({ from: accounts[0].address });
+      const sendedToken =
         await new web3.eth.Contract(DAOToken.abi, undefined, opts)
           .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
-      await externalToken2.methods.initialize('Test Token Second', 'TSTS', '10000000000', accounts[1].address).send();
-      await externalToken2.methods.mint(addresses.Avatar, '1000000').send({ from: accounts[1].address });
+      await sendedToken.methods.initialize('Test Token Second', 'TSTS', '10000000000', accounts[1].address).send();
+      await sendedToken.methods.mint(addresses.Avatar, '1000000000').send({ from: accounts[1].address });
 
       await web3.eth.sendTransaction({
             from: accounts[0].address,
@@ -593,8 +592,8 @@ describe('JoinAndQuit Scheme', () => {
       await waitUntilTrue(executedIsIndexed);
 
       // Now we create proposals on our scheme
-      const receiveTokenAddress = externalToken1.options.address;
-      const sendTokenAddress = externalToken2.options.address;
+      const receiveTokenAddress = receivedToken.options.address;
+      const sendTokenAddress = sendedToken.options.address;
       const sendTokenAmount = 1;
       const receiveTokenAmount = 1;
       async function propose({ from }) {

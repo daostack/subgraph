@@ -9,8 +9,8 @@ import {
     waitUntilTrue,
   } from './util';
 
-const UpgradeScheme = require('@daostack/migration-experimental/contracts/0.1.2-rc.2/UpgradeScheme.json');
-const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.2-rc.2/GenesisProtocol.json');
+const UpgradeScheme = require('@daostack/migration-experimental/contracts/0.1.2-rc.4/UpgradeScheme.json');
+const GenesisProtocol = require('@daostack/migration-experimental/contracts/0.1.2-rc.4/GenesisProtocol.json');
 
 describe('Upgrade Scheme', () => {
     let web3;

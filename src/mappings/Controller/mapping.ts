@@ -32,6 +32,7 @@ import {
   SchemeFactoryParam,
   SchemeRegistrarParam,
   UpgradeSchemeParam,
+  TokenTradeParam,
 } from '../../types/schema';
 
 import {
@@ -413,4 +414,18 @@ export function setFundingRequestParams(
     controllerScheme.fundingRequestParams = fundingRequestParams.id;
     controllerScheme.save();
   }
+}
+
+export function setTokenTradeParams(avatar: Address,
+  scheme: Address,
+  vmAddress: Address,
+  vmParamsHash: Bytes): void {
+  setGPParams(vmAddress, vmParamsHash, avatar);
+  let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
+  let tokenTradeParams = new TokenTradeParam(scheme.toHex());
+  tokenTradeParams.votingMachine = vmAddress;
+  tokenTradeParams.voteParams = vmParamsHash.toHex();
+  tokenTradeParams.save();
+  controllerScheme.tokenTradeParams = tokenTradeParams.id;
+  controllerScheme.save();
 }

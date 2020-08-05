@@ -7,6 +7,7 @@ import { setContributionRewardExtParams,
          setSchemeFactoryParams,
          setSchemeRegistrarParams,
          setUpgradeSchemeParams,
+         setTokenTradeParams,
         } from '../mappings/Controller/mapping';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
 import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
@@ -18,6 +19,7 @@ import {SchemeFactory} from '../types/SchemeFactory/SchemeFactory';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
 import { UpgradeScheme } from '../types/UpgradeScheme/UpgradeScheme';
 import { concat, equalStrings} from '../utils';
+import { TokenTrade } from '../types/TokenTrade/TokenTrade';
 
 export function getGPQueue(id: string): GPQueue {
   let gpQueue = GPQueue.load(id) ;
@@ -158,6 +160,16 @@ export function create(dao: Address,
           fundingToken,
         );
         isGPQue = true;
+    }
+  }
+
+  if (equalStrings(contractInfo.name, 'TokenTrade')) {
+    let tokenTrade =  TokenTrade.bind(scheme);
+    gpAddress = tokenTrade.votingMachine();
+    let voteParams = tokenTrade.voteParamsHash();
+    if (!equalStrings(voteParams.toHex(), addressZero)) {
+      setTokenTradeParams(dao, scheme, gpAddress, voteParams);
+      isGPQue = true;
     }
   }
 

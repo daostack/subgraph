@@ -144,26 +144,26 @@ describe('TokenTrade Plugin', () => {
         await sendQuery(getSchemeFactoryProposalExecuteds)
       ).schemeFactoryProposalExecuteds.length;
 
-    let k = 0;
-    console.log("Let's vode")
-    while ((await genesisProtocol.methods.proposals(registryProposalId).call()).state !== '2') {
-      console.log("Vote number: " + k)
+      let k = 0;
+      console.log("Let's vode")
+      while ((await genesisProtocol.methods.proposals(registryProposalId).call()).state !== '2') {
+        console.log("Vote number: " + k)
         await genesisProtocol.methods.vote(
           registryProposalId,
           1,
           0,
           accounts[k].address,
-        ).send({ from: accounts[k].address });
-        k++;
-      }
-
-    executedIsIndexed = async () => {
-        return (await sendQuery(getSchemeFactoryProposalExecuteds)).schemeFactoryProposalExecuteds.length
-         > prevExecutedsLength;
-      };
-
-      console.log("Waiting to be executed")
-      await waitUntilTrue(executedIsIndexed);
+          ).send({ from: accounts[k].address });
+          k++;
+        }
+        
+        
+    // executedIsIndexed = async () => {
+    //     return (await sendQuery(getSchemeFactoryProposalExecuteds)).schemeFactoryProposalExecuteds.length
+    //       > prevExecutedsLength;
+    //   };
+    //   console.log("Waiting to be executed")
+    //   await waitUntilTrue(executedIsIndexed);
       console.log("Executed!")
 
     // Now we create proposals on our scheme

@@ -6,8 +6,8 @@ import { setContributionRewardExtParams,
          setJoinAndQuitParams,
          setSchemeFactoryParams,
          setSchemeRegistrarParams,
-         setUpgradeSchemeParams,
          setTokenTradeParams,
+         setUpgradeSchemeParams,
         } from '../mappings/Controller/mapping';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
 import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
@@ -17,9 +17,9 @@ import { JoinAndQuit } from '../types/JoinAndQuit/JoinAndQuit';
 import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeFactory} from '../types/SchemeFactory/SchemeFactory';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
+import { TokenTrade } from '../types/TokenTrade/TokenTrade';
 import { UpgradeScheme } from '../types/UpgradeScheme/UpgradeScheme';
 import { concat, equalStrings} from '../utils';
-import { TokenTrade } from '../types/TokenTrade/TokenTrade';
 
 export function getGPQueue(id: string): GPQueue {
   let gpQueue = GPQueue.load(id) ;
@@ -163,7 +163,7 @@ export function create(dao: Address,
     }
   }
 
-  if (equalStrings(contractInfo.name, 'TokenTrade')) {
+   if (equalStrings(contractInfo.name, 'TokenTrade')) {
     let tokenTrade =  TokenTrade.bind(scheme);
     gpAddress = tokenTrade.votingMachine();
     let voteParams = tokenTrade.voteParamsHash();

@@ -13,6 +13,7 @@ const DAOToken = require('@daostack/migration-experimental/contracts/' + getArcV
 const GenesisProtocol = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/GenesisProtocol.json');
 const TokenTrade = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/TokenTrade.json');
 const SchemeFactory = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/SchemeFactory.json');
+const DAOFactory = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOFactory.json');
 
 describe('TokenTrade Plugin', () => {
   let web3;
@@ -56,30 +57,17 @@ describe('TokenTrade Plugin', () => {
       }
     }`;
 
-    let prevProposalsLength;
-    let prevExecutedsLength;
-    let proposalIsIndexed;
-    let executedIsIndexed;
 
-    prevProposalsLength = (
+
+    let prevProposalsLength = (
       await sendQuery(schemeFactoryNewSchemeProposalsQuery)
     ).schemeFactoryNewSchemeProposals.length;
-
-    const getSchemeFactoryProposalExecuteds = `{
-      schemeFactoryProposalExecuteds {
-        txHash,
-        contract,
-        avatar,
-        proposalId,
-        decision
-      }
-    }`;
 
     // Create the ERC20 to receive and send
     console.log("Deploying send token")
     const sendedToken =
     await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-    .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
+      .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
     await sendedToken.methods.initialize('Test Token One', 'TSTF', '10000000000', accounts[1].address).send();
     await sendedToken.methods.mint(accounts[0].address, '1000000000').send({ from: accounts[1].address });
     await sendedToken.methods.approve(addresses.TokenTrade, '1000000000').send({ from: accounts[0].address });
@@ -87,18 +75,9 @@ describe('TokenTrade Plugin', () => {
     console.log("Deploying receive token")
     const receivedToken =
     await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-    .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
+      .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
     await receivedToken.methods.initialize('Test Token Second', 'TSTS', '10000000000', accounts[1].address).send();
     await receivedToken.methods.mint(addresses.Avatar, '1000000000').send({ from: accounts[1].address });
-    
-    // console.log("Sending ETH to the DAO")
-    // await web3.eth.sendTransaction({
-    //       from: accounts[1].address,
-    //       to: addresses.Avatar,
-    //       value: 10,
-    //       gas: 2000000,
-    //       data: '0x',
-    //   });
 
     // Let's register the token trade scheme on the DAO
     const tokenTrade = new web3.eth.Contract(
@@ -107,69 +86,89 @@ describe('TokenTrade Plugin', () => {
       opts,
     );
 
+
+
     console.log("Initializing token trade contract")
     let initData = tokenTrade
       .methods
       .initialize(
         (await schemeFactory.methods.avatar().call()),
         (await schemeFactory.methods.votingMachine().call()),
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ["50", "1800", "600", "600", "2199023255552", "172", "300", "5000000000000000000", "1", "100000000000000000000", "0"],
         '0x0000000000000000000000000000000000000000',
         (await schemeFactory.methods.voteParamsHash().call()),
       ).encodeABI();
 
     let proposeTokenTradeRegistration = schemeFactory.methods.proposeScheme(
-        getPackageVersion(),
-        'TokenTrade',
-        initData,
-        '0x0000001f',
-        '0x0000000000000000000000000000000000000000',
-        descHash,
-      );
+      getPackageVersion(),
+      'TokenTrade',
+      initData,
+      '0x0000001f',
+      addresses.TokenTrade,
+      descHash,
+    );
 
     const registryProposalId = await proposeTokenTradeRegistration.call();
     console.log("Registry proposal ID: " + registryProposalId)
     await proposeTokenTradeRegistration.send();
     console.log("Registry proposal created!")
     console.log("Waiting for it to index")
-    proposalIsIndexed = async () => {
-        return (await sendQuery(schemeFactoryNewSchemeProposalsQuery)).schemeFactoryNewSchemeProposals.length
-         > prevProposalsLength;
-      };
+    let proposalIsIndexed = async () => {
+      return (await sendQuery(schemeFactoryNewSchemeProposalsQuery)).schemeFactoryNewSchemeProposals.length
+        > prevProposalsLength;
+    };
 
     await waitUntilTrue(proposalIsIndexed);
     console.log("Indeexed!")
-
-    prevExecutedsLength = (
-        await sendQuery(getSchemeFactoryProposalExecuteds)
-      ).schemeFactoryProposalExecuteds.length;
-
-      let k = 0;
-      console.log("Let's vode")
+  
+    let i = 0
       while ((await genesisProtocol.methods.proposals(registryProposalId).call()).state !== '2') {
-        console.log("Vote number: " + k)
         await genesisProtocol.methods.vote(
           registryProposalId,
           1,
           0,
-          accounts[k].address,
-          ).send({ from: accounts[k].address });
-          k++;
+          accounts[i].address)
+          .send({ from: accounts[i].address });
+        i++;
+    }
+
+      const getRegistryProposal = `{
+        proposal(id: "${registryProposalId}") {
+            id
+            descriptionHash
+            stage
+            createdAt
+            executedAt
+            proposer
+            votingMachine
         }
-        
-        
-    // executedIsIndexed = async () => {
-    //     return (await sendQuery(getSchemeFactoryProposalExecuteds)).schemeFactoryProposalExecuteds.length
-    //       > prevExecutedsLength;
-    //   };
-    //   console.log("Waiting to be executed")
-    //   await waitUntilTrue(executedIsIndexed);
+      }`;
+
+      let executedIsIndexed = async () => {
+        return (await sendQuery(getRegistryProposal)).proposal.executedAt != false
+      };
+      console.log("Waiting to be executed")
+      await waitUntilTrue(executedIsIndexed);
       console.log("Executed!")
+
+
+      const getControllerSchemes = `{
+        controllerSchemes {
+          dao {
+            id
+          }
+          name
+          address
+          isRegistered
+        }
+      }`;
+
+      console.log(await sendQuery(getControllerSchemes))
 
     // Now we create proposals on our scheme
     const receiveTokenAddress = receivedToken.options.address;
     const sendTokenAddress = sendedToken.options.address;
-    const sendTokenAmount = 1;
+    const sendTokenAmount = 10;
     const receiveTokenAmount = 1;
     async function propose({ from }) {
       const prop = tokenTrade.methods.proposeTokenTrade(
@@ -179,8 +178,11 @@ describe('TokenTrade Plugin', () => {
         receiveTokenAmount,
         descHash,
       );
+      console.log("Previous to get ID");
       const proposalId = await prop.call({ from });
+      console.log("Proposal ID " + proposalId);
       const { blockNumber } = await prop.send({ from });
+      console.log("Proposal created");
       const { timestamp } = await web3.eth.getBlock(blockNumber);
       return { proposalId, timestamp };
     }
@@ -201,7 +203,7 @@ describe('TokenTrade Plugin', () => {
     }
 
     console.log("Creating proposal in token trade scheme")
-    const { proposalId: p1, timestamp: p1Creation } = await propose({ from : accounts[1].address.toLowerCase() });
+    const { proposalId: p1, timestamp: p1Creation } = await propose({ from : accounts[0].address.toLowerCase() });
     console.log("Proposal created")
     const getProposal = `{
       proposal(id: "${p1}") {

@@ -69,6 +69,11 @@
       "name": "SchemeRegistrar",
       "mapping": "SchemeRegistrar",
       "start_arcVersion": "0.1.2-rc.0"
+    }, 
+    {
+      "name": "TokenTrade",
+      "mapping": "TokenTrade",
+      "start_arcVersion": "0.1.2-rc.4"
     }
   ]
 }

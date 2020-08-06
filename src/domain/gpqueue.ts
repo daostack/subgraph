@@ -167,10 +167,12 @@ export function create(dao: Address,
     let tokenTrade =  TokenTrade.bind(scheme);
     gpAddress = tokenTrade.votingMachine();
     let voteParams = tokenTrade.voteParamsHash();
+
     if (!equalStrings(voteParams.toHex(), addressZero)) {
       setTokenTradeParams(dao, scheme, gpAddress, voteParams);
       isGPQue = true;
     }
+    
   }
 
    if (isGPQue) {

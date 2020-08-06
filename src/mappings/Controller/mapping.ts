@@ -416,16 +416,22 @@ export function setFundingRequestParams(
   }
 }
 
-export function setTokenTradeParams(avatar: Address,
-                                    scheme: Address,
-                                    vmAddress: Address,
-                                    vmParamsHash: Bytes): void {
+export function setTokenTradeParams(
+  avatar: Address,
+  scheme: Address,
+  vmAddress: Address,
+  vmParamsHash: Bytes
+): void {
   setGPParams(vmAddress, vmParamsHash, avatar);
-  let controllerScheme =  ControllerScheme.load(crypto.keccak256(concat(avatar, scheme)).toHex());
+  let controllerScheme =  ControllerScheme.load(
+    crypto.keccak256(concat(avatar, scheme)).toHex()
+  );
   let tokenTradeParams = new TokenTradeParam(scheme.toHex());
   tokenTradeParams.votingMachine = vmAddress;
   tokenTradeParams.voteParams = vmParamsHash.toHex();
   tokenTradeParams.save();
-  controllerScheme.tokenTradeParams = tokenTradeParams.id;
-  controllerScheme.save();
+  if (controllerScheme != null) {
+    controllerScheme.tokenTradeParams = tokenTradeParams.id;
+    controllerScheme.save();
+  }
 }

@@ -31,6 +31,7 @@ describe('TokenTrade Plugin', () => {
   }, 100000);
 
   it('TokenTrade proposal', async () => {
+    console.log("Starting token trade test")
     const genesisProtocol = new web3.eth.Contract(
       GenesisProtocol.abi,
       addresses.GenesisProtocol,
@@ -75,27 +76,29 @@ describe('TokenTrade Plugin', () => {
     }`;
 
     // Create the ERC20 to receive and send
-
+    console.log("Deploying send token")
     const sendedToken =
-      await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-        .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
+    await new web3.eth.Contract(DAOToken.abi, undefined, opts)
+    .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
     await sendedToken.methods.initialize('Test Token One', 'TSTF', '10000000000', accounts[1].address).send();
     await sendedToken.methods.mint(accounts[0].address, '1000000000').send({ from: accounts[1].address });
     await sendedToken.methods.approve(addresses.TokenTrade, '1000000000').send({ from: accounts[0].address });
-
+    
+    console.log("Deploying receive token")
     const receivedToken =
-      await new web3.eth.Contract(DAOToken.abi, undefined, opts)
-        .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
+    await new web3.eth.Contract(DAOToken.abi, undefined, opts)
+    .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
     await receivedToken.methods.initialize('Test Token Second', 'TSTS', '10000000000', accounts[1].address).send();
     await receivedToken.methods.mint(addresses.Avatar, '1000000000').send({ from: accounts[1].address });
-
-    await web3.eth.sendTransaction({
-          from: accounts[0].address,
-          to: addresses.Avatar,
-          value: 10,
-          gas: 2000000,
-          data: '0x',
-      });
+    
+    // console.log("Sending ETH to the DAO")
+    // await web3.eth.sendTransaction({
+    //       from: accounts[1].address,
+    //       to: addresses.Avatar,
+    //       value: 10,
+    //       gas: 2000000,
+    //       data: '0x',
+    //   });
 
     // Let's register the token trade scheme on the DAO
     const tokenTrade = new web3.eth.Contract(
@@ -103,6 +106,8 @@ describe('TokenTrade Plugin', () => {
       addresses.TokenTrade,
       opts,
     );
+
+    console.log("Initializing token trade contract")
     let initData = tokenTrade
       .methods
       .initialize(
@@ -123,21 +128,26 @@ describe('TokenTrade Plugin', () => {
       );
 
     const registryProposalId = await proposeTokenTradeRegistration.call();
+    console.log("Registry proposal ID: " + registryProposalId)
     await proposeTokenTradeRegistration.send();
-
+    console.log("Registry proposal created!")
+    console.log("Waiting for it to index")
     proposalIsIndexed = async () => {
         return (await sendQuery(schemeFactoryNewSchemeProposalsQuery)).schemeFactoryNewSchemeProposals.length
          > prevProposalsLength;
       };
 
     await waitUntilTrue(proposalIsIndexed);
+    console.log("Indeexed!")
 
     prevExecutedsLength = (
         await sendQuery(getSchemeFactoryProposalExecuteds)
       ).schemeFactoryProposalExecuteds.length;
 
     let k = 0;
+    console.log("Let's vode")
     while ((await genesisProtocol.methods.proposals(registryProposalId).call()).state !== '2') {
+      console.log("Vote number: " + k)
         await genesisProtocol.methods.vote(
           registryProposalId,
           1,
@@ -152,7 +162,9 @@ describe('TokenTrade Plugin', () => {
          > prevExecutedsLength;
       };
 
-    await waitUntilTrue(executedIsIndexed);
+      console.log("Waiting to be executed")
+      await waitUntilTrue(executedIsIndexed);
+      console.log("Executed!")
 
     // Now we create proposals on our scheme
     const receiveTokenAddress = receivedToken.options.address;
@@ -188,8 +200,9 @@ describe('TokenTrade Plugin', () => {
       return timestamp;
     }
 
+    console.log("Creating proposal in token trade scheme")
     const { proposalId: p1, timestamp: p1Creation } = await propose({ from : accounts[1].address.toLowerCase() });
-
+    console.log("Proposal created")
     const getProposal = `{
       proposal(id: "${p1}") {
         id
@@ -215,7 +228,9 @@ describe('TokenTrade Plugin', () => {
       }
     }`;
 
+    console.log("Let's get the proposal")
     let proposal = (await sendQuery(getProposal)).proposal;
+    console.log("We have the proposal!")
 
     expect(proposal).toMatchObject({
       id: p1,
@@ -241,38 +256,44 @@ describe('TokenTrade Plugin', () => {
       },
     });
 
+    console.log("First vote")
     await vote({
       proposalId: p1,
       outcome: PASS,
       voter: accounts[0].address,
     });
-
+    
+    console.log("Second vote")
     await vote({
       proposalId: p1,
       outcome: PASS,
       voter: accounts[1].address,
     });
-
+    
+    console.log("Third vote")
     await vote({
       proposalId: p1,
       outcome: PASS,
       voter: accounts[2].address,
     });
-
+    
+    console.log("Fourth vote")
     let executedAt = await vote({
       proposalId: p1,
       outcome: PASS,
       voter: accounts[3].address,
     });
 
+    console.log("Wait until the execute is indexed")
     executedIsIndexed = async () => {
       return (await sendQuery(getProposal)).proposal.executedAt != false;
     };
-
+    
     await waitUntilTrue(executedIsIndexed);
+    console.log("Executeis indexed!")
 
     proposal = (await sendQuery(getProposal)).proposal;
-
+    console.log("Let's ge tproposal executed")
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,
@@ -297,15 +318,20 @@ describe('TokenTrade Plugin', () => {
       },
     });
 
+    console.log("Let's redeem")
     await redeem({ proposalId: p1 });
+    console.log("redeemed")
+    console.log("Wait for indexation of redeem")
     const redeemIsIndexed = async () => {
       return (await sendQuery(getProposal)).proposal.reputationMinted != '0';
     };
-
+    
     await waitUntilTrue(redeemIsIndexed);
-
+    console.log("Redeem indexed")
+    console.log("Let's check the proposal to make sure it updated")
     proposal = (await sendQuery(getProposal)).proposal;
-
+    
+    console.log("Proposal queried")
     expect(proposal).toMatchObject({
       id: p1,
       descriptionHash: descHash,
@@ -329,6 +355,6 @@ describe('TokenTrade Plugin', () => {
         redeemed: true,
       },
     });
-
-  }, 200000);
+    console.log("we are done!!")
+  }, 100000);
 });

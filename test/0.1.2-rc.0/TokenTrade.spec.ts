@@ -101,7 +101,7 @@ describe('TokenTrade Plugin', () => {
       initData,
       '0x0000001f',
       "0x0000000000000000000000000000000000000000",
-      descHash,
+      "",
     );
 
     const registryProposalId = await proposeTokenTradeRegistration.call();
@@ -211,7 +211,7 @@ describe('TokenTrade Plugin', () => {
         sendTokenAmount,
         receiveTokenAddress,
         receiveTokenAmount,
-        descHash,
+        "",
       );
       console.log("Previous to get ID");
       const proposalId = await prop.call({ from: accounts[0].address });
@@ -263,7 +263,7 @@ describe('TokenTrade Plugin', () => {
 
     expect(proposal).toMatchObject({
       id: proposalId,
-      descriptionHash: descHash,
+      descriptionHash: "",
       stage: 'Queued',
       createdAt: timestamp.toString(),
       executedAt: null,
@@ -325,7 +325,7 @@ describe('TokenTrade Plugin', () => {
     console.log("Let's ge tproposal executed")
     expect(proposal).toMatchObject({
       id: proposalId,
-      descriptionHash: descHash,
+      descriptionHash: "",
       stage: 'Executed',
       createdAt: timestamp.toString(),
       executedAt: executedAt + '',
@@ -363,7 +363,7 @@ describe('TokenTrade Plugin', () => {
     console.log("Proposal queried")
     expect(proposal).toMatchObject({
       id: proposalId,
-      descriptionHash: descHash,
+      descriptionHash: "",
       stage: 'Executed',
       createdAt: timestamp.toString(),
       executedAt: executedAt + '',

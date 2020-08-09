@@ -168,7 +168,7 @@ export function create(dao: Address,
     gpAddress = tokenTrade.votingMachine();
     let voteParams = tokenTrade.voteParamsHash();
 
-    if (!equalStrings(voteParams.toHex(), addressZero)) {
+    if (!equalStrings(gpAddress.toHex(), addressZero)) {
       setTokenTradeParams(dao, scheme, gpAddress, voteParams);
       isGPQue = true;
     }

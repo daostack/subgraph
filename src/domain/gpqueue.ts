@@ -172,7 +172,7 @@ export function create(dao: Address,
       setTokenTradeParams(dao, scheme, gpAddress, voteParams);
       isGPQue = true;
     }
-    
+
   }
 
    if (isGPQue) {

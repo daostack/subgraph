@@ -67,7 +67,7 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       entities = yamlLoad.entities;
       abis = (yamlLoad.abis || [contract]).map(contractName => {
         let correctedVersion = version;
-        if(contractName == 'TokenTrade' && parseInt(version.slice(-1)[0]) < 3) {
+        if(contractName == 'TokenTrade' && parseInt(version.slice(-1)[0]) <= 3) {
           correctedVersion = correctedVersion.substring(0, correctedVersion.length -1) + 4
         }
         return {

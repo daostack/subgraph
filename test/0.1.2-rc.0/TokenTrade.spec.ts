@@ -110,7 +110,6 @@ describe('TokenTrade Plugin', () => {
     console.log("Registry proposal created!")
     console.log("Waiting for it to index")
     let proposalIsIndexed = async () => {
-      console.log(await sendQuery(schemeFactoryNewSchemeProposalsQuery))
       return (await sendQuery(schemeFactoryNewSchemeProposalsQuery)).schemeFactoryNewSchemeProposals.length
         > prevProposalsLength;
     };
@@ -164,10 +163,6 @@ describe('TokenTrade Plugin', () => {
     const tokenTradeProposals = `{
       tokenTradeProposals {
         id
-        dao
-        beneficiary
-        executed
-        redeemed
       }
     }`
 
@@ -195,13 +190,10 @@ describe('TokenTrade Plugin', () => {
       return timestamp;
     }
 
+    console.log(await sendQuery(tokenTradeProposals))
     prevProposalsLength = (
       await sendQuery(tokenTradeProposals)
     ).tokenTradeProposals.length
-
-    console.log("query of token trade proposals")
-    console.log(await sendQuery(tokenTradeProposals))
-    console.log(prevProposalsLength)
 
     console.log("Creating proposal in token trade scheme")
 
@@ -225,15 +217,17 @@ describe('TokenTrade Plugin', () => {
 
     proposalIsIndexed = async () => {
       return (await sendQuery(tokenTradeProposals)).tokenTradeProposals.length
-       > prevProposalsLength;
+      > prevProposalsLength;
     };
     console.log("wait until proposal is indexed")
+    
     await waitUntilTrue(proposalIsIndexed);
     console.log("proposal indexed!!")
 
     const getProposal = `{
       proposal(id: "${proposalId}") {
         id
+        descriptionHash
         stage
         createdAt
         executedAt
@@ -276,10 +270,10 @@ describe('TokenTrade Plugin', () => {
           id: addresses.Avatar.toLowerCase(),
         },
         beneficiary: accounts[0].address.toLowerCase(),
-        sendTokenAddress,
-        sendTokenAmount,
-        receiveTokenAddress,
-        receiveTokenAmount,
+        sendTokenAddress: sendTokenAddress.toLowerCase(),
+        sendTokenAmount: sendTokenAmount.toString(),
+        receiveTokenAddress: receiveTokenAddress.toLowerCase(),
+        receiveTokenAmount: receiveTokenAmount.toString(),
         executed: false,
         redeemed: false,
       },
@@ -338,10 +332,10 @@ describe('TokenTrade Plugin', () => {
           id: addresses.Avatar.toLowerCase(),
         },
         beneficiary: accounts[0].address.toLowerCase(),
-        sendTokenAddress,
-        sendTokenAmount,
-        receiveTokenAddress,
-        receiveTokenAmount,
+        sendTokenAddress: sendTokenAddress.toLowerCase(),
+        sendTokenAmount: sendTokenAmount.toString(),
+        receiveTokenAddress: receiveTokenAddress.toLowerCase(),
+        receiveTokenAmount: receiveTokenAmount.toString(),
         executed: true,
         redeemed: false,
       },
@@ -376,10 +370,10 @@ describe('TokenTrade Plugin', () => {
           id: addresses.Avatar.toLowerCase(),
         },
         beneficiary: accounts[0].address.toLowerCase(),
-        sendTokenAddress,
-        sendTokenAmount,
-        receiveTokenAddress,
-        receiveTokenAmount,
+        sendTokenAddress: sendTokenAddress.toLowerCase(),
+        sendTokenAmount: sendTokenAmount.toString(),
+        receiveTokenAddress: receiveTokenAddress.toLowerCase(),
+        receiveTokenAmount: receiveTokenAmount.toString(),
         executed: true,
         redeemed: true,
       },

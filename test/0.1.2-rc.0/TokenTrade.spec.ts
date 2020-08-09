@@ -40,6 +40,7 @@ describe('TokenTrade Plugin', () => {
     );
 
     const descHash = '0x0000000000000000000000000000000000000000000000000000000000000123';
+    let daoFactory = new web3.eth.Contract(DAOFactory.abi, addresses.DAOFactoryInstance, opts);
 
     const schemeFactoryNewSchemeProposalsQuery = `{
       schemeFactoryNewSchemeProposals {
@@ -80,18 +81,14 @@ describe('TokenTrade Plugin', () => {
     await receivedToken.methods.mint(addresses.Avatar, '1000000000').send({ from: accounts[1].address });
 
     // Let's register the token trade scheme on the DAO
+    console.log("Initializing token trade contract")
+    
     const tokenTrade = new web3.eth.Contract(
       TokenTrade.abi,
-      addresses.TokenTrade,
+      undefined,
       opts,
     );
-
-
-
-    console.log("Initializing token trade contract")
-    let initData = tokenTrade
-      .methods
-      .initialize(
+    let initData = tokenTrade.methods.initialize(
         (await schemeFactory.methods.avatar().call()),
         (await schemeFactory.methods.votingMachine().call()),
         ["50", "1800", "600", "600", "2199023255552", "172", "300", "5000000000000000000", "1", "100000000000000000000", "0"],
@@ -104,7 +101,7 @@ describe('TokenTrade Plugin', () => {
       'TokenTrade',
       initData,
       '0x0000001f',
-      addresses.TokenTrade,
+      "0x0000000000000000000000000000000000000000",
       descHash,
     );
 
@@ -121,15 +118,28 @@ describe('TokenTrade Plugin', () => {
     await waitUntilTrue(proposalIsIndexed);
     console.log("Indeexed!")
   
-    let i = 0
-      while ((await genesisProtocol.methods.proposals(registryProposalId).call()).state !== '2') {
-        await genesisProtocol.methods.vote(
-          registryProposalId,
-          1,
-          0,
-          accounts[i].address)
-          .send({ from: accounts[i].address });
-        i++;
+    let i = 0;
+    let tx;
+    let tokenTradeAddress;
+    while ((await genesisProtocol.methods.proposals(registryProposalId).call()).state !== '2') {
+      tx = (await genesisProtocol.methods.vote(
+        registryProposalId,
+        1,
+        0,
+        accounts[i].address)
+        .send({ from: accounts[i].address }));
+      i++;
+
+      if ((await genesisProtocol.methods.proposals(registryProposalId).call()).state === '2') {
+        let proxyEvents = await daoFactory.getPastEvents(
+          'ProxyCreated',
+          {
+            fromBlock: tx.blockNumber,
+            toBlock: tx.blockNumber,
+          },
+        );
+        tokenTradeAddress = proxyEvents[0].returnValues._proxy;
+      }
     }
 
       const getRegistryProposal = `{
@@ -163,13 +173,15 @@ describe('TokenTrade Plugin', () => {
         }
       }`;
 
-      console.log(await sendQuery(getControllerSchemes))
+
+    tokenTrade.options.address = tokenTradeAddress
 
     // Now we create proposals on our scheme
     const receiveTokenAddress = receivedToken.options.address;
     const sendTokenAddress = sendedToken.options.address;
     const sendTokenAmount = 10;
     const receiveTokenAmount = 1;
+
     async function propose({ from }) {
       const prop = tokenTrade.methods.proposeTokenTrade(
         sendTokenAddress,

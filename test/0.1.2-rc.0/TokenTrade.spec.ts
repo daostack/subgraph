@@ -71,7 +71,6 @@ describe('TokenTrade Plugin', () => {
       .deploy({ data: DAOToken.bytecode,  arguments: []}).send();
     await sendedToken.methods.initialize('Test Token One', 'TSTF', '10000000000', accounts[1].address).send();
     await sendedToken.methods.mint(accounts[0].address, '1000000000').send({ from: accounts[1].address });
-    await sendedToken.methods.approve(addresses.TokenTrade, '1000000000').send({ from: accounts[0].address });
     
     console.log("Deploying receive token")
     const receivedToken =
@@ -142,39 +141,37 @@ describe('TokenTrade Plugin', () => {
       }
     }
 
-      const getRegistryProposal = `{
-        proposal(id: "${registryProposalId}") {
-            id
-            descriptionHash
-            stage
-            createdAt
-            executedAt
-            proposer
-            votingMachine
-        }
-      }`;
+    const getRegistryProposal = `{
+      proposal(id: "${registryProposalId}") {
+          id
+          descriptionHash
+          stage
+          createdAt
+          executedAt
+          proposer
+          votingMachine
+      }
+    }`;
 
-      let executedIsIndexed = async () => {
-        return (await sendQuery(getRegistryProposal)).proposal.executedAt != false
-      };
-      console.log("Waiting to be executed")
-      await waitUntilTrue(executedIsIndexed);
-      console.log("Executed!")
+    let executedIsIndexed = async () => {
+      return (await sendQuery(getRegistryProposal)).proposal.executedAt != false
+    };
+    console.log("Waiting to be executed")
+    await waitUntilTrue(executedIsIndexed);
+    console.log("Executed!")
 
-
-      const getControllerSchemes = `{
-        controllerSchemes {
-          dao {
-            id
-          }
-          name
-          address
-          isRegistered
-        }
-      }`;
-
+    const tokenTradeProposals = `{
+      tokenTradeProposals {
+        id
+        dao
+        beneficiary
+        executed
+        redeemed
+      }
+    }`
 
     tokenTrade.options.address = tokenTradeAddress
+    await sendedToken.methods.approve(tokenTradeAddress, '1000000000').send({ from: accounts[0].address });
 
     // Now we create proposals on our scheme
     const receiveTokenAddress = receivedToken.options.address;
@@ -214,9 +211,27 @@ describe('TokenTrade Plugin', () => {
       return timestamp;
     }
 
+    prevProposalsLength = (
+      await sendQuery(tokenTradeProposals)
+    ).tokenTradeProposals.length
+
+    console.log("query of token trade proposals")
+    console.log(await sendQuery(tokenTradeProposals))
+    console.log(prevProposalsLength)
+
     console.log("Creating proposal in token trade scheme")
-    const { proposalId: p1, timestamp: p1Creation } = await propose({ from : accounts[0].address.toLowerCase() });
+    const { proposalId: p1, timestamp: p1Creation } = await propose({ from: accounts[0].address });
     console.log("Proposal created")
+
+
+    proposalIsIndexed = async () => {
+      return (await sendQuery(tokenTradeProposals)).tokenTradeProposals.length
+       > prevProposalsLength;
+    };
+    console.log("wait until proposal is indexed")
+    await waitUntilTrue(proposalIsIndexed);
+    console.log("proposal indexed!!")
+    
     const getProposal = `{
       proposal(id: "${p1}") {
         id
@@ -242,6 +257,7 @@ describe('TokenTrade Plugin', () => {
       }
     }`;
 
+
     console.log("Let's get the proposal")
     let proposal = (await sendQuery(getProposal)).proposal;
     console.log("We have the proposal!")
@@ -252,7 +268,7 @@ describe('TokenTrade Plugin', () => {
       stage: 'Queued',
       createdAt: p1Creation.toString(),
       executedAt: null,
-      proposer: accounts[1].address.toLowerCase(),
+      proposer: accounts[0].address.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
 
       tokenTrade: {
@@ -260,7 +276,7 @@ describe('TokenTrade Plugin', () => {
         dao: {
           id: addresses.Avatar.toLowerCase(),
         },
-        beneficiary: accounts[1].address.toLowerCase(),
+        beneficiary: accounts[0].address.toLowerCase(),
         sendTokenAddress,
         sendTokenAmount,
         receiveTokenAddress,
@@ -322,7 +338,7 @@ describe('TokenTrade Plugin', () => {
         dao: {
           id: addresses.Avatar.toLowerCase(),
         },
-        beneficiary: accounts[1].address.toLowerCase(),
+        beneficiary: accounts[0].address.toLowerCase(),
         sendTokenAddress,
         sendTokenAmount,
         receiveTokenAddress,
@@ -360,7 +376,7 @@ describe('TokenTrade Plugin', () => {
         dao: {
           id: addresses.Avatar.toLowerCase(),
         },
-        beneficiary: accounts[1].address.toLowerCase(),
+        beneficiary: accounts[0].address.toLowerCase(),
         sendTokenAddress,
         sendTokenAmount,
         receiveTokenAddress,

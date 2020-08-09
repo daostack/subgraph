@@ -179,23 +179,6 @@ describe('TokenTrade Plugin', () => {
     const sendTokenAmount = 10;
     const receiveTokenAmount = 1;
 
-    async function propose({ from }) {
-      const prop = tokenTrade.methods.proposeTokenTrade(
-        sendTokenAddress,
-        sendTokenAmount,
-        receiveTokenAddress,
-        receiveTokenAmount,
-        descHash,
-      );
-      console.log("Previous to get ID");
-      const proposalId = await prop.call({ from });
-      console.log("Proposal ID " + proposalId);
-      const { blockNumber } = await prop.send({ from });
-      console.log("Proposal created");
-      const { timestamp } = await web3.eth.getBlock(blockNumber);
-      return { proposalId, timestamp };
-    }
-
     const [PASS, FAIL] = [1, 2];
     async function vote({ proposalId, outcome, voter, amount = 0 }) {
       const { blockNumber } = await genesisProtocol.methods
@@ -220,9 +203,24 @@ describe('TokenTrade Plugin', () => {
     console.log(prevProposalsLength)
 
     console.log("Creating proposal in token trade scheme")
-    const { proposalId: p1, timestamp: p1Creation } = await propose({ from: accounts[0].address });
-    console.log("Proposal created")
 
+
+      const prop = tokenTrade.methods.proposeTokenTrade(
+        sendTokenAddress,
+        sendTokenAmount,
+        receiveTokenAddress,
+        receiveTokenAmount,
+        descHash,
+      );
+      console.log("Previous to get ID");
+      const proposalId = await prop.call({ from: accounts[0].address });
+      console.log("Proposal ID " + proposalId);
+      const tokenTradeProposalTx = await prop.send({ from: accounts[0].address });
+      console.log("Proposal created");
+      const { timestamp } = await web3.eth.getBlock(tokenTradeProposalTx.blockNumber);
+
+    console.log("Proposal created")
+    console.log("tx: ", tokenTradeProposalTx)
 
     proposalIsIndexed = async () => {
       return (await sendQuery(tokenTradeProposals)).tokenTradeProposals.length

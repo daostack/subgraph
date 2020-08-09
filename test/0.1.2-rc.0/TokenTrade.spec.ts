@@ -110,6 +110,7 @@ describe('TokenTrade Plugin', () => {
     console.log("Registry proposal created!")
     console.log("Waiting for it to index")
     let proposalIsIndexed = async () => {
+      console.log(await sendQuery(schemeFactoryNewSchemeProposalsQuery))
       return (await sendQuery(schemeFactoryNewSchemeProposalsQuery)).schemeFactoryNewSchemeProposals.length
         > prevProposalsLength;
     };
@@ -229,9 +230,9 @@ describe('TokenTrade Plugin', () => {
     console.log("wait until proposal is indexed")
     await waitUntilTrue(proposalIsIndexed);
     console.log("proposal indexed!!")
-    
+
     const getProposal = `{
-      proposal(id: "${p1}") {
+      proposal(id: "${proposalId}") {
         id
         stage
         createdAt
@@ -261,16 +262,16 @@ describe('TokenTrade Plugin', () => {
     console.log("We have the proposal!")
 
     expect(proposal).toMatchObject({
-      id: p1,
+      id: proposalId,
       descriptionHash: descHash,
       stage: 'Queued',
-      createdAt: p1Creation.toString(),
+      createdAt: timestamp.toString(),
       executedAt: null,
       proposer: accounts[0].address.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
 
       tokenTrade: {
-        id: p1,
+        id: proposalId,
         dao: {
           id: addresses.Avatar.toLowerCase(),
         },
@@ -286,28 +287,28 @@ describe('TokenTrade Plugin', () => {
 
     console.log("First vote")
     await vote({
-      proposalId: p1,
+      proposalId: proposalId,
       outcome: PASS,
       voter: accounts[0].address,
     });
     
     console.log("Second vote")
     await vote({
-      proposalId: p1,
+      proposalId: proposalId,
       outcome: PASS,
       voter: accounts[1].address,
     });
     
     console.log("Third vote")
     await vote({
-      proposalId: p1,
+      proposalId: proposalId,
       outcome: PASS,
       voter: accounts[2].address,
     });
     
     console.log("Fourth vote")
     let executedAt = await vote({
-      proposalId: p1,
+      proposalId: proposalId,
       outcome: PASS,
       voter: accounts[3].address,
     });
@@ -323,16 +324,16 @@ describe('TokenTrade Plugin', () => {
     proposal = (await sendQuery(getProposal)).proposal;
     console.log("Let's ge tproposal executed")
     expect(proposal).toMatchObject({
-      id: p1,
+      id: proposalId,
       descriptionHash: descHash,
       stage: 'Executed',
-      createdAt: p1Creation.toString(),
+      createdAt: timestamp.toString(),
       executedAt: executedAt + '',
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
 
       tokenTrade: {
-        id: p1,
+        id: proposalId,
         dao: {
           id: addresses.Avatar.toLowerCase(),
         },
@@ -347,7 +348,7 @@ describe('TokenTrade Plugin', () => {
     });
 
     console.log("Let's redeem")
-    await redeem({ proposalId: p1 });
+    await redeem({ proposalId: proposalId });
     console.log("redeemed")
     console.log("Wait for indexation of redeem")
     const redeemIsIndexed = async () => {
@@ -361,16 +362,16 @@ describe('TokenTrade Plugin', () => {
     
     console.log("Proposal queried")
     expect(proposal).toMatchObject({
-      id: p1,
+      id: proposalId,
       descriptionHash: descHash,
       stage: 'Executed',
-      createdAt: p1Creation.toString(),
+      createdAt: timestamp.toString(),
       executedAt: executedAt + '',
       proposer: web3.eth.defaultAccount.toLowerCase(),
       votingMachine: genesisProtocol.options.address.toLowerCase(),
 
       tokenTrade: {
-        id: p1,
+        id: proposalId,
         dao: {
           id: addresses.Avatar.toLowerCase(),
         },
@@ -384,5 +385,5 @@ describe('TokenTrade Plugin', () => {
       },
     });
     console.log("we are done!!")
-  }, 100000);
+  }, 300000);
 });

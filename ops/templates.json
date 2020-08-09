@@ -73,7 +73,7 @@
     {
       "name": "TokenTrade",
       "mapping": "TokenTrade",
-      "start_arcVersion": "0.1.2-rc.4"
+      "start_arcVersion": "0.1.2-rc.3"
     }
   ]
 }

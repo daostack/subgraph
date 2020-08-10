@@ -107,11 +107,11 @@
           "arcVersion": "0.1.2-rc.0"
         },
         {
-          "name": "JoinAndQuit",
-          "contractName": "JoinAndQuit",
+          "name": "Join",
+          "contractName": "Join",
           "dao": "package",
-          "mapping": "JoinAndQuit",
-          "arcVersion": "0.1.2-rc.0"
+          "mapping": "Join",
+          "arcVersion": "0.1.2-rc.6"
         },
         {
           "name": "FundingRequest",
@@ -139,21 +139,21 @@
           "contractName": "DAORegistryInstance",
           "dao": "package",
           "mapping": "DAORegistry",
-          "arcVersion": "0.1.2-rc.4"
+          "arcVersion": "0.1.2-rc.6"
         },
         {
           "name": "DAOFactory",
           "contractName": "DAOFactoryInstance",
           "dao": "package",
           "mapping": "DAOFactory",
-          "arcVersion": "0.1.2-rc.4"
+          "arcVersion": "0.1.2-rc.6"
         },
         {
           "name": "GenesisProtocol",
           "contractName": "GenesisProtocol",
           "dao": "package",
           "mapping": "GenesisProtocol",
-          "arcVersion": "0.1.2-rc.4"
+          "arcVersion": "0.1.2-rc.6"
         }
       ]
   },
@@ -265,11 +265,11 @@
         "arcVersion": "0.1.2-rc.0"
       },
       {
-        "name": "JoinAndQuit",
-        "contractName": "JoinAndQuit",
+        "name": "Join",
+        "contractName": "Join",
         "dao": "package",
-        "mapping": "JoinAndQuit",
-        "arcVersion": "0.1.2-rc.0"
+        "mapping": "Join",
+        "arcVersion": "0.1.2-rc.6"
       },
       {
         "name": "FundingRequest",
@@ -297,21 +297,21 @@
         "contractName": "DAORegistryInstance",
         "dao": "package",
         "mapping": "DAORegistry",
-        "arcVersion": "0.1.2-rc.4"
+        "arcVersion": "0.1.2-rc.6"
       },
       {
         "name": "DAOFactory",
         "contractName": "DAOFactoryInstance",
         "dao": "package",
         "mapping": "DAOFactory",
-        "arcVersion": "0.1.2-rc.4"
+        "arcVersion": "0.1.2-rc.6"
       },
       {
         "name": "GenesisProtocol",
         "contractName": "GenesisProtocol",
         "dao": "package",
         "mapping": "GenesisProtocol",
-        "arcVersion": "0.1.2-rc.4"
+        "arcVersion": "0.1.2-rc.6"
       }
     ]
   },
@@ -423,11 +423,11 @@
         "arcVersion": "0.1.2-rc.0"
       },
       {
-        "name": "JoinAndQuit",
-        "contractName": "JoinAndQuit",
+        "name": "Join",
+        "contractName": "Join",
         "dao": "package",
-        "mapping": "JoinAndQuit",
-        "arcVersion": "0.1.2-rc.0"
+        "mapping": "Join",
+        "arcVersion": "0.1.2-rc.6"
       },
       {
         "name": "FundingRequest",
@@ -455,21 +455,21 @@
         "contractName": "DAORegistryInstance",
         "dao": "package",
         "mapping": "DAORegistry",
-        "arcVersion": "0.1.2-rc.4"
+        "arcVersion": "0.1.2-rc.6"
       },
       {
         "name": "DAOFactory",
         "contractName": "DAOFactoryInstance",
         "dao": "package",
         "mapping": "DAOFactory",
-        "arcVersion": "0.1.2-rc.4"
+        "arcVersion": "0.1.2-rc.6"
       },
       {
         "name": "GenesisProtocol",
         "contractName": "GenesisProtocol",
         "dao": "package",
         "mapping": "GenesisProtocol",
-        "arcVersion": "0.1.2-rc.4"
+        "arcVersion": "0.1.2-rc.6"
       }
     ]
   },
@@ -582,11 +582,11 @@
         "arcVersion": "0.1.2-rc.0"
       },
       {
-        "name": "JoinAndQuit",
-        "contractName": "JoinAndQuit",
+        "name": "Join",
+        "contractName": "Join",
         "dao": "package",
-        "mapping": "JoinAndQuit",
-        "arcVersion": "0.1.2-rc.0"
+        "mapping": "Join",
+        "arcVersion": "0.1.2-rc.6"
       },
       {
         "name": "FundingRequest",
@@ -614,21 +614,21 @@
         "contractName": "DAORegistryInstance",
         "dao": "package",
         "mapping": "DAORegistry",
-        "arcVersion": "0.1.2-rc.4"
+        "arcVersion": "0.1.2-rc.6"
       },
       {
         "name": "DAOFactory",
         "contractName": "DAOFactoryInstance",
         "dao": "package",
         "mapping": "DAOFactory",
-        "arcVersion": "0.1.2-rc.4"
+        "arcVersion": "0.1.2-rc.6"
       },
       {
         "name": "GenesisProtocol",
         "contractName": "GenesisProtocol",
         "dao": "package",
         "mapping": "GenesisProtocol",
-        "arcVersion": "0.1.2-rc.4"
+        "arcVersion": "0.1.2-rc.6"
       }
     ]
   },
@@ -740,11 +740,11 @@
         "arcVersion": "0.1.2-rc.0"
       },
       {
-        "name": "JoinAndQuit",
-        "contractName": "JoinAndQuit",
+        "name": "Join",
+        "contractName": "Join",
         "dao": "package",
-        "mapping": "JoinAndQuit",
-        "arcVersion": "0.1.2-rc.0"
+        "mapping": "Join",
+        "arcVersion": "0.1.2-rc.6"
       },
       {
         "name": "FundingRequest",

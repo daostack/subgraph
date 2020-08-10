@@ -13,10 +13,10 @@ const Reputation = require('@daostack/migration-experimental/contracts/' + getAr
 const FundingRequest = require(
   '@daostack/migration-experimental/contracts/' + getArcVersion() + '/FundingRequest.json',
 );
-const JoinAndQuit = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/JoinAndQuit.json');
+const Join = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Join.json');
 const GenesisProtocol = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/GenesisProtocol.json');
 
-describe('JoinAndQuit Scheme', () => {
+describe('Join Scheme', () => {
     let web3;
     let addresses;
     let opts;
@@ -30,11 +30,11 @@ describe('JoinAndQuit Scheme', () => {
       await prepareReputation(web3, addresses, opts, accounts);
     }, 100000);
 
-    it('JoinAndQuit proposal', async () => {
+    it('Join proposal', async () => {
       const avatar = new web3.eth.Contract(Avatar.abi, addresses.Avatar, opts);
-      const joinAndQuit = new web3.eth.Contract(
-        JoinAndQuit.abi,
-        addresses.JoinAndQuit,
+      const join = new web3.eth.Contract(
+        Join.abi,
+        addresses.Join,
         opts,
       );
       const genesisProtocol = new web3.eth.Contract(
@@ -48,7 +48,7 @@ describe('JoinAndQuit Scheme', () => {
       const minFee = 100;
       const goal = 1000;
       async function propose({ from }) {
-        const prop = joinAndQuit.methods.proposeToJoin(
+        const prop = join.methods.proposeToJoin(
           descHash,
           minFee * 5,
         );
@@ -68,13 +68,7 @@ describe('JoinAndQuit Scheme', () => {
       }
 
       async function redeem({ proposalId }) {
-        const { blockNumber } = await joinAndQuit.methods.redeemReputation(proposalId).send();
-        const { timestamp } = await web3.eth.getBlock(blockNumber);
-        return timestamp;
-      }
-
-      async function rageQuit({ quitter }) {
-        const { blockNumber } = await joinAndQuit.methods.rageQuit().send({from: quitter});
+        const { blockNumber } = await join.methods.redeemReputation(proposalId).send();
         const { timestamp } = await web3.eth.getBlock(blockNumber);
         return timestamp;
       }
@@ -92,7 +86,7 @@ describe('JoinAndQuit Scheme', () => {
             proposer
             votingMachine
 
-            joinAndQuit {
+            join {
               id
               dao {
                  id
@@ -103,13 +97,12 @@ describe('JoinAndQuit Scheme', () => {
               reputationMinted
             }
             scheme {
-              joinAndQuitParams {
+              joinParams {
                 fundingToken
                 minFeeToJoin
                 memberReputation
                 fundingGoal
                 fundingGoalDeadline
-                rageQuitEnable
               }
             }
         }
@@ -125,7 +118,7 @@ describe('JoinAndQuit Scheme', () => {
         proposer: accounts[6].address.toLowerCase(),
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
-        joinAndQuit: {
+        join: {
           id: p1,
           dao: {
             id: addresses.Avatar.toLowerCase(),
@@ -136,13 +129,12 @@ describe('JoinAndQuit Scheme', () => {
           reputationMinted: '0',
         },
         scheme: {
-          joinAndQuitParams: {
+          joinParams: {
             fundingToken: '0x0000000000000000000000000000000000000000',
             minFeeToJoin: (goal / 10).toString(),
             memberReputation: '100',
             fundingGoal: goal.toString(),
             fundingGoalDeadline: '10000000000',
-            rageQuitEnable: true,
           },
         },
       });
@@ -181,7 +173,7 @@ describe('JoinAndQuit Scheme', () => {
         proposer: accounts[6].address.toLowerCase(),
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
-        joinAndQuit: {
+        join: {
           id: p1,
           dao: {
             id: addresses.Avatar.toLowerCase(),
@@ -210,7 +202,7 @@ describe('JoinAndQuit Scheme', () => {
         proposer: accounts[6].address.toLowerCase(),
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
-        joinAndQuit: {
+        join: {
           id: p1,
           dao: {
             id: addresses.Avatar.toLowerCase(),
@@ -250,34 +242,6 @@ describe('JoinAndQuit Scheme', () => {
       let dao = (await sendQuery(getDao)).dao;
       expect(dao).toEqual({
         ethBalance: await web3.eth.getBalance((vault)),
-      });
-
-      await rageQuit({ quitter: accounts[7].address });
-
-      let refund = await web3.eth.getBalance((vault));
-
-      const getRageQuits = `{
-        rageQuitteds {
-          dao {
-            id
-         }
-          rageQuitter
-          refund
-        }
-      }`;
-
-      let rageQuits = (await sendQuery(getRageQuits)).rageQuitteds;
-      expect(rageQuits).toContainEqual({
-        dao: {
-          id: addresses.Avatar.toLowerCase(),
-        },
-        rageQuitter: accounts[7].address.toLowerCase(),
-        refund: refund.toString(),
-      });
-
-      dao = (await sendQuery(getDao)).dao;
-      expect(dao).toEqual({
-        ethBalance: refund,
       });
     }, 100000);
 

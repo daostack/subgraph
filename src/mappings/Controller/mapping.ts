@@ -28,7 +28,7 @@ import {
   FundingRequestParam,
   GenericSchemeParam,
   GenesisProtocolParam,
-  JoinAndQuitParam,
+  JoinParam,
   SchemeFactoryParam,
   SchemeRegistrarParam,
   UpgradeSchemeParam,
@@ -361,7 +361,7 @@ export function setUpgradeSchemeParams(
   }
 }
 
-export function setJoinAndQuitParams(
+export function setJoinParams(
   avatar: Address,
   scheme: Address,
   vmAddress: Address,
@@ -371,24 +371,22 @@ export function setJoinAndQuitParams(
   memberReputation: BigInt,
   fundingGoal: BigInt,
   fundingGoalDeadline: BigInt,
-  rageQuitEnable: boolean,
 ): void {
   setGPParams(vmAddress, vmParamsHash, avatar);
   let controllerScheme = ControllerScheme.load(
     crypto.keccak256(concat(avatar, scheme)).toHex(),
   );
-  let joinAndQuitParams = new JoinAndQuitParam(scheme.toHex());
-  joinAndQuitParams.votingMachine = vmAddress;
-  joinAndQuitParams.voteParams = vmParamsHash.toHex();
-  joinAndQuitParams.fundingToken = fundingToken;
-  joinAndQuitParams.minFeeToJoin = minFeeToJoin;
-  joinAndQuitParams.memberReputation = memberReputation;
-  joinAndQuitParams.fundingGoal = fundingGoal;
-  joinAndQuitParams.fundingGoalDeadline = fundingGoalDeadline;
-  joinAndQuitParams.rageQuitEnable = rageQuitEnable;
-  joinAndQuitParams.save();
+  let joinParams = new JoinParam(scheme.toHex());
+  joinParams.votingMachine = vmAddress;
+  joinParams.voteParams = vmParamsHash.toHex();
+  joinParams.fundingToken = fundingToken;
+  joinParams.minFeeToJoin = minFeeToJoin;
+  joinParams.memberReputation = memberReputation;
+  joinParams.fundingGoal = fundingGoal;
+  joinParams.fundingGoalDeadline = fundingGoalDeadline;
+  joinParams.save();
   if (controllerScheme != null) {
-    controllerScheme.joinAndQuitParams = joinAndQuitParams.id;
+    controllerScheme.joinParams = joinParams.id;
     controllerScheme.save();
   }
 }

@@ -51,9 +51,9 @@
       "start_arcVersion": "0.1.2-rc.0"
     },
     {
-      "name": "JoinAndQuit",
-      "mapping": "JoinAndQuit",
-      "start_arcVersion": "0.1.2-rc.0"
+      "name": "Join",
+      "mapping": "Join",
+      "start_arcVersion": "0.1.2-rc.6"
     },
     {
       "name": "FundingRequest",

@@ -30,6 +30,7 @@ import {
   updateProposalState,
   updateSFProposal,
   updateSRProposal,
+  updateTTProposal,
   updateUSProposal,
 } from './proposal';
 import {
@@ -209,6 +210,26 @@ export function handleNewFundingRequestProposal(
     return;
   }
   updateFRProposal(
+    proposalId,
+    timestamp,
+    avatar,
+    descriptionHash,
+    eventAddress,
+  );
+  handleGPProposalPrivate(proposalId.toHex());
+}
+
+export function handleNewTokenTradeProposal(
+  avatar: Address,
+  proposalId: Bytes,
+  timestamp: BigInt,
+  descriptionHash: string,
+  eventAddress: Address,
+): void {
+  if (!daoModule.exists(avatar)) {
+    return;
+  }
+  updateTTProposal(
     proposalId,
     timestamp,
     avatar,

@@ -66,9 +66,13 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       eventHandlers = yamlLoad.eventHandlers;
       entities = yamlLoad.entities;
       abis = (yamlLoad.abis || [contract]).map(contractName => {
+        let correctedVersion = version;
+        if(contractName == 'TokenTrade' && parseInt(version.slice(-1)[0]) <= 3) {
+          correctedVersion = correctedVersion.substring(0, correctedVersion.length -1) + 4
+        }
         return {
           name: contractName,
-          file: `${__dirname}/../abis/${version}/${contractName}.json`
+          file: `${__dirname}/../abis/${correctedVersion}/${contractName}.json`
         };
       });
       abi = yamlLoad.abis && yamlLoad.abis.length ? yamlLoad.abis[0] : contract;

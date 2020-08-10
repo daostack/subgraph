@@ -26,6 +26,7 @@ type ControllerScheme @entity {
 	upgradeSchemeParams: UpgradeSchemeParam
 	joinAndQuitParams: JoinAndQuitParam
 	fundingRequestParams: FundingRequestParam
+  tokenTradeParams: TokenTradeParam
 	numberOfQueuedProposals: BigInt!
 	numberOfPreBoostedProposals: BigInt!
 	numberOfBoostedProposals: BigInt!
@@ -137,6 +138,12 @@ type FundingRequestParam @entity {
 	votingMachine: Bytes!
 	voteParams: GenesisProtocolParam
 	fundingToken: Bytes!
+}
+
+type TokenTradeParam @entity {
+	id: ID!
+	votingMachine: Bytes!
+	voteParams: GenesisProtocolParam
 }
 
 type GenesisProtocolParam @entity {

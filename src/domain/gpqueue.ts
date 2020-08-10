@@ -6,6 +6,7 @@ import { setContributionRewardExtParams,
          setJoinAndQuitParams,
          setSchemeFactoryParams,
          setSchemeRegistrarParams,
+         setTokenTradeParams,
          setUpgradeSchemeParams,
         } from '../mappings/Controller/mapping';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
@@ -16,6 +17,7 @@ import { JoinAndQuit } from '../types/JoinAndQuit/JoinAndQuit';
 import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeFactory} from '../types/SchemeFactory/SchemeFactory';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
+import { TokenTrade } from '../types/TokenTrade/TokenTrade';
 import { UpgradeScheme } from '../types/UpgradeScheme/UpgradeScheme';
 import { concat, equalStrings} from '../utils';
 
@@ -159,6 +161,18 @@ export function create(dao: Address,
         );
         isGPQue = true;
     }
+  }
+
+   if (equalStrings(contractInfo.name, 'TokenTrade')) {
+    let tokenTrade =  TokenTrade.bind(scheme);
+    gpAddress = tokenTrade.votingMachine();
+    let voteParams = tokenTrade.voteParamsHash();
+
+    if (!equalStrings(gpAddress.toHex(), addressZero)) {
+      setTokenTradeParams(dao, scheme, gpAddress, voteParams);
+      isGPQue = true;
+    }
+
   }
 
    if (isGPQue) {

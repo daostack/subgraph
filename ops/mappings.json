@@ -154,6 +154,13 @@
           "dao": "package",
           "mapping": "GenesisProtocol",
           "arcVersion": "0.1.2-rc.4"
+        },
+        {          
+          "name": "TokenTrade",
+          "contractName": "TokenTrade",
+          "dao": "package",
+          "mapping": "TokenTrade",
+          "arcVersion": "0.1.2-rc.4"
         }
       ]
   },
@@ -312,6 +319,13 @@
         "dao": "package",
         "mapping": "GenesisProtocol",
         "arcVersion": "0.1.2-rc.4"
+      },
+      {          
+        "name": "TokenTrade",
+        "contractName": "TokenTrade",
+        "dao": "package",
+        "mapping": "TokenTrade",
+        "arcVersion": "0.1.2-rc.4"
       }
     ]
   },
@@ -469,6 +483,13 @@
         "contractName": "GenesisProtocol",
         "dao": "package",
         "mapping": "GenesisProtocol",
+        "arcVersion": "0.1.2-rc.4"
+      },
+      {          
+        "name": "TokenTrade",
+        "contractName": "TokenTrade",
+        "dao": "package",
+        "mapping": "TokenTrade",
         "arcVersion": "0.1.2-rc.4"
       }
     ]
@@ -629,6 +650,13 @@
         "dao": "package",
         "mapping": "GenesisProtocol",
         "arcVersion": "0.1.2-rc.4"
+      },
+      {          
+        "name": "TokenTrade",
+        "contractName": "TokenTrade",
+        "dao": "package",
+        "mapping": "TokenTrade",
+        "arcVersion": "0.1.2-rc.4"
       }
     ]
   },
@@ -752,6 +780,13 @@
         "dao": "package",
         "mapping": "FundingRequest",
         "arcVersion": "0.1.2-rc.0"
+      },
+      {          
+        "name": "TokenTrade",
+        "contractName": "TokenTrade",
+        "dao": "package",
+        "mapping": "TokenTrade",
+        "arcVersion": "0.1.2-rc.4"
       }
     ]
   }

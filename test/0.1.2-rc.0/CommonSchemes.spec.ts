@@ -2,6 +2,7 @@ import {
     getArcVersion,
     getContractAddresses,
     getOptions,
+    getPackageVersion,
     getWeb3,
     prepareReputation,
     sendQuery,
@@ -9,7 +10,6 @@ import {
   } from './util';
 
 const Avatar = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Avatar.json');
-const Reputation = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Reputation.json');
 const FundingRequest = require(
   '@daostack/migration-experimental/contracts/' + getArcVersion() + '/FundingRequest.json',
 );

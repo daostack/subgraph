@@ -214,7 +214,7 @@ describe('Join Scheme', () => {
 
       let proposal = (await sendQuery(getProposal)).proposal;
       expect(proposal).toMatchObject({
-        id: p1,
+        id: p1 as any,
         descriptionHash: descHash,
         stage: 'Queued',
         createdAt: p1Creation.toString(),
@@ -223,7 +223,7 @@ describe('Join Scheme', () => {
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
         join: {
-          id: p1,
+          id: p1 as any,
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
@@ -269,7 +269,7 @@ describe('Join Scheme', () => {
 
       proposal = (await sendQuery(getProposal)).proposal;
       expect(proposal).toMatchObject({
-        id: p1,
+        id: p1 as any,
         descriptionHash: descHash,
         stage: 'Executed',
         createdAt: p1Creation.toString(),
@@ -278,7 +278,7 @@ describe('Join Scheme', () => {
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
         join: {
-          id: p1,
+          id: p1 as any,
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
@@ -298,7 +298,7 @@ describe('Join Scheme', () => {
 
       proposal = (await sendQuery(getProposal)).proposal;
       expect(proposal).toMatchObject({
-        id: p1,
+        id: p1 as any,
         descriptionHash: descHash,
         stage: 'Executed',
         createdAt: p1Creation.toString(),
@@ -307,7 +307,7 @@ describe('Join Scheme', () => {
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
         join: {
-          id: p1,
+          id: p1 as any,
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },

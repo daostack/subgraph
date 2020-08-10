@@ -2,6 +2,7 @@ import {
     getArcVersion,
     getContractAddresses,
     getOptions,
+    getPackageVersion,
     getWeb3,
     prepareReputation,
     sendQuery,
@@ -9,7 +10,8 @@ import {
   } from './util';
 
 const Avatar = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Avatar.json');
-const Reputation = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/Reputation.json');
+const SchemeFactory = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/SchemeFactory.json');
+const DAOFactory = require('@daostack/migration-experimental/contracts/' + getArcVersion() + '/DAOFactory.json');
 const FundingRequest = require(
   '@daostack/migration-experimental/contracts/' + getArcVersion() + '/FundingRequest.json',
 );
@@ -21,6 +23,7 @@ describe('Join Scheme', () => {
     let addresses;
     let opts;
     let accounts;
+    let schemeFactory;
 
     beforeAll(async () => {
       web3 = await getWeb3();
@@ -28,18 +31,119 @@ describe('Join Scheme', () => {
       opts = await getOptions(web3);
       accounts = web3.eth.accounts.wallet;
       await prepareReputation(web3, addresses, opts, accounts);
+      schemeFactory = new web3.eth.Contract(SchemeFactory.abi, addresses.SchemeFactory, opts);
     }, 100000);
 
     it('Join proposal', async () => {
-      const avatar = new web3.eth.Contract(Avatar.abi, addresses.Avatar, opts);
-      const join = new web3.eth.Contract(
-        Join.abi,
-        addresses.Join,
-        opts,
-      );
       const genesisProtocol = new web3.eth.Contract(
         GenesisProtocol.abi,
         addresses.GenesisProtocol,
+        opts,
+      );
+      let daoFactory = new web3.eth.Contract(DAOFactory.abi, addresses.DAOFactoryInstance, opts);
+
+      const schemeFactoryNewSchemeProposalsQuery = `{
+        schemeFactoryNewSchemeProposals {
+          txHash
+          contract
+          avatar
+          descriptionHash
+          votingMachine
+          proposalId
+          schemeName
+          schemeData
+          packageVersion
+          permission
+          schemeToReplace
+        }
+      }`;
+
+      let prevProposalsLength = (
+        await sendQuery(schemeFactoryNewSchemeProposalsQuery)
+      ).schemeFactoryNewSchemeProposals.length;
+
+      // Let's register the token trade scheme on the DAO
+
+      let join = new web3.eth.Contract(
+        Join.abi,
+        undefined,
+        opts,
+      );
+      let initData = join.methods.initialize(
+          (await schemeFactory.methods.avatar().call()),
+          (await schemeFactory.methods.votingMachine().call()),
+          ['50', '1800', '600', '600', '2199023255552', '172', '300', '5000000000000000000', '1', '100000000000000000000', '0'],
+          '0x0000000000000000000000000000000000000000',
+          '100',
+          '100',
+          '1000',
+          '10000000000',
+          (await schemeFactory.methods.voteParamsHash().call()),
+        ).encodeABI();
+
+      let proposeJoinRegistration = schemeFactory.methods.proposeScheme(
+        getPackageVersion(),
+        'Join',
+        initData,
+        '0x0000001f',
+        '0x0000000000000000000000000000000000000000',
+        '',
+      );
+
+      const registryProposalId = await proposeJoinRegistration.call();
+      await proposeJoinRegistration.send();
+      let proposalIsIndexed = async () => {
+        return (await sendQuery(schemeFactoryNewSchemeProposalsQuery)).schemeFactoryNewSchemeProposals.length
+          > prevProposalsLength;
+      };
+
+      await waitUntilTrue(proposalIsIndexed);
+
+      let i = 0;
+      let tx;
+      let joinAddress;
+      while ((await genesisProtocol.methods.proposals(registryProposalId).call()).state !== '2') {
+        tx = (await genesisProtocol.methods.vote(
+          registryProposalId,
+          1,
+          0,
+          accounts[i].address)
+          .send({ from: accounts[i].address }));
+        i++;
+
+        if ((await genesisProtocol.methods.proposals(registryProposalId).call()).state === '2') {
+          let proxyEvents = await daoFactory.getPastEvents(
+            'ProxyCreated',
+            {
+              fromBlock: tx.blockNumber,
+              toBlock: tx.blockNumber,
+            },
+          );
+          joinAddress = proxyEvents[0].returnValues._proxy;
+        }
+      }
+
+      const getRegistryProposal = `{
+        proposal(id: "${registryProposalId}") {
+            id
+            descriptionHash
+            stage
+            createdAt
+            executedAt
+            proposer
+            votingMachine
+        }
+      }`;
+
+      let executedIsIndexed = async () => {
+        return (await sendQuery(getRegistryProposal)).proposal.executedAt != false;
+      };
+      await waitUntilTrue(executedIsIndexed);
+
+      const avatar = new web3.eth.Contract(Avatar.abi, addresses.Avatar, opts);
+      join = new web3.eth.Contract(
+        Join.abi,
+        joinAddress,
         opts,
       );
 
@@ -157,7 +261,7 @@ describe('Join Scheme', () => {
         voter: accounts[2].address,
       });
 
-      const executedIsIndexed = async () => {
+      executedIsIndexed = async () => {
         return (await sendQuery(getProposal)).proposal.executedAt != false;
       };
 
@@ -369,7 +473,7 @@ describe('Join Scheme', () => {
         voter: accounts[3].address,
       });
 
-      const executedIsIndexed = async () => {
+      let executedIsIndexed = async () => {
         return (await sendQuery(getProposal)).proposal.executedAt != false;
       };
 

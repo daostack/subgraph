@@ -70,6 +70,9 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
         if(contractName === 'Join' && parseInt(version.slice(-1)[0]) <= 5) {
           correctedVersion = correctedVersion.substring(0, correctedVersion.length -1) + 6
         }
+        if(contractName === 'TokenTrade' && parseInt(version.slice(-1)[0]) <= 3) {
+          correctedVersion = correctedVersion.substring(0, correctedVersion.length -1) + 4
+        }
         return {
           name: contractName,
           file: `${__dirname}/../abis/${correctedVersion}/${contractName}.json`

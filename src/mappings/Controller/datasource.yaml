@@ -11,6 +11,7 @@ abis:
   - UpgradeScheme
   - Join
   - FundingRequest
+  - TokenTrade
   - GenesisProtocol
 entities:
   - ControllerOrganization

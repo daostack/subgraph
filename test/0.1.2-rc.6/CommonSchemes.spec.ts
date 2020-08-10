@@ -155,10 +155,10 @@ describe('Join Scheme', () => {
       async function propose({ from }) {
         const prop = joinScheme.methods.proposeToJoin(
           descHash,
-          minFee * 5,
+          goal,
         );
-        const proposalId = await prop.call({ value: minFee * 5, from });
-        const { blockNumber } = await prop.send({ value: minFee * 5, from });
+        const proposalId = await prop.call({ value: goal, from });
+        const { blockNumber } = await prop.send({ value: goal, from });
         const { timestamp } = await web3.eth.getBlock(blockNumber);
         return { proposalId, timestamp };
       }
@@ -241,7 +241,7 @@ describe('Join Scheme', () => {
           id: addresses.Avatar.toLowerCase(),
         },
         proposedMember: accounts[6].address.toLowerCase(),
-        funding: (minFee * 5).toString(),
+        funding: (goal).toString(),
         executed: false,
         reputationMinted: '0',
       };
@@ -297,7 +297,7 @@ describe('Join Scheme', () => {
           id: addresses.Avatar.toLowerCase(),
         },
         proposedMember: accounts[6].address.toLowerCase(),
-        funding: (minFee * 5).toString(),
+        funding: (goal).toString(),
         executed: true,
         reputationMinted: '0',
       };
@@ -330,7 +330,7 @@ describe('Join Scheme', () => {
           id: addresses.Avatar.toLowerCase(),
         },
         proposedMember: accounts[6].address.toLowerCase(),
-        funding: (minFee * 5).toString(),
+        funding: (goal).toString(),
         executed: true,
         reputationMinted: '100',
       };

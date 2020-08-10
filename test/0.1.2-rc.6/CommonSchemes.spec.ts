@@ -64,21 +64,22 @@ describe('Join Scheme', () => {
 
       // Let's register the token trade scheme on the DAO
 
-      let join = new web3.eth.Contract(
+      let joinScheme = new web3.eth.Contract(
         Join.abi,
         undefined,
         opts,
       );
-      let initData = join.methods.initialize(
+      let initData = joinScheme.methods.initialize(
           (await schemeFactory.methods.avatar().call()),
           (await schemeFactory.methods.votingMachine().call()),
           ['50', '1800', '600', '600', '2199023255552', '172', '300', '5000000000000000000', '1', '100000000000000000000', '0'],
+          '0x0000000000000000000000000000000000000000',
+          (await schemeFactory.methods.voteParamsHash().call()),
           '0x0000000000000000000000000000000000000000',
           '100',
           '100',
           '1000',
           '10000000000',
-          (await schemeFactory.methods.voteParamsHash().call()),
         ).encodeABI();
 
       let proposeJoinRegistration = schemeFactory.methods.proposeScheme(
@@ -141,7 +142,7 @@ describe('Join Scheme', () => {
       await waitUntilTrue(executedIsIndexed);
 
       const avatar = new web3.eth.Contract(Avatar.abi, addresses.Avatar, opts);
-      join = new web3.eth.Contract(
+      joinScheme = new web3.eth.Contract(
         Join.abi,
         joinAddress,
         opts,
@@ -152,7 +153,7 @@ describe('Join Scheme', () => {
       const minFee = 100;
       const goal = 1000;
       async function propose({ from }) {
-        const prop = join.methods.proposeToJoin(
+        const prop = joinScheme.methods.proposeToJoin(
           descHash,
           minFee * 5,
         );
@@ -172,7 +173,7 @@ describe('Join Scheme', () => {
       }
 
       async function redeem({ proposalId }) {
-        const { blockNumber } = await join.methods.redeemReputation(proposalId).send();
+        const { blockNumber } = await joinScheme.methods.redeemReputation(proposalId).send();
         const { timestamp } = await web3.eth.getBlock(blockNumber);
         return timestamp;
       }
@@ -213,8 +214,8 @@ describe('Join Scheme', () => {
     }`;
 
       let proposal = (await sendQuery(getProposal)).proposal;
-      expect(proposal).toMatchObject({
-        id: p1 as any,
+      let expected = {
+        id: p1,
         descriptionHash: descHash,
         stage: 'Queued',
         createdAt: p1Creation.toString(),
@@ -222,16 +223,6 @@ describe('Join Scheme', () => {
         proposer: accounts[6].address.toLowerCase(),
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
-        join: {
-          id: p1 as any,
-          dao: {
-            id: addresses.Avatar.toLowerCase(),
-          },
-          proposedMember: accounts[6].address.toLowerCase(),
-          funding: (minFee * 5).toString(),
-          executed: false,
-          reputationMinted: '0',
-        },
         scheme: {
           joinParams: {
             fundingToken: '0x0000000000000000000000000000000000000000',
@@ -241,7 +232,21 @@ describe('Join Scheme', () => {
             fundingGoalDeadline: '10000000000',
           },
         },
-      });
+        join: null,
+      };
+
+      expected.join = {
+        id: p1,
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
+        },
+        proposedMember: accounts[6].address.toLowerCase(),
+        funding: (minFee * 5).toString(),
+        executed: false,
+        reputationMinted: '0',
+      };
+
+      expect(proposal).toMatchObject(expected);
 
       await vote({
         proposalId: p1,
@@ -255,10 +260,16 @@ describe('Join Scheme', () => {
         voter: accounts[1].address,
       });
 
-      let executedAt = await vote({
+      await vote({
         proposalId: p1,
         outcome: PASS,
         voter: accounts[2].address,
+      });
+
+      let executedAt = await vote({
+        proposalId: p1,
+        outcome: PASS,
+        voter: accounts[3].address,
       });
 
       executedIsIndexed = async () => {
@@ -268,7 +279,7 @@ describe('Join Scheme', () => {
       await waitUntilTrue(executedIsIndexed);
 
       proposal = (await sendQuery(getProposal)).proposal;
-      expect(proposal).toMatchObject({
+      let expected2 = {
         id: p1 as any,
         descriptionHash: descHash,
         stage: 'Executed',
@@ -277,17 +288,21 @@ describe('Join Scheme', () => {
         proposer: accounts[6].address.toLowerCase(),
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
-        join: {
-          id: p1 as any,
-          dao: {
-            id: addresses.Avatar.toLowerCase(),
-          },
-          proposedMember: accounts[6].address.toLowerCase(),
-          funding: (minFee * 5).toString(),
-          executed: true,
-          reputationMinted: '0',
+        join: null,
+      };
+
+      expected2.join = {
+        id: p1 as any,
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
         },
-      });
+        proposedMember: accounts[6].address.toLowerCase(),
+        funding: (minFee * 5).toString(),
+        executed: true,
+        reputationMinted: '0',
+      };
+
+      expect(proposal).toMatchObject(expected2);
 
       await redeem({ proposalId: p1 });
       const redeemIsIndexed = async () => {
@@ -297,7 +312,7 @@ describe('Join Scheme', () => {
       await waitUntilTrue(redeemIsIndexed);
 
       proposal = (await sendQuery(getProposal)).proposal;
-      expect(proposal).toMatchObject({
+      let expected3 = {
         id: p1 as any,
         descriptionHash: descHash,
         stage: 'Executed',
@@ -306,17 +321,21 @@ describe('Join Scheme', () => {
         proposer: accounts[6].address.toLowerCase(),
         votingMachine: genesisProtocol.options.address.toLowerCase(),
 
-        join: {
-          id: p1 as any,
-          dao: {
-            id: addresses.Avatar.toLowerCase(),
-          },
-          proposedMember: accounts[6].address.toLowerCase(),
-          funding: (minFee * 5).toString(),
-          executed: true,
-          reputationMinted: '100',
+        join: null,
+      };
+
+      expected3.join = {
+        id: p1 as any,
+        dao: {
+          id: addresses.Avatar.toLowerCase(),
         },
-      });
+        proposedMember: accounts[6].address.toLowerCase(),
+        funding: (minFee * 5).toString(),
+        executed: true,
+        reputationMinted: '100',
+      };
+
+      expect(proposal).toMatchObject(expected3);
 
       await vote({
         proposalId: p2,

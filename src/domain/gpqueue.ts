@@ -116,7 +116,7 @@ export function create(dao: Address,
   }
 
    if (equalStrings(contractInfo.name, 'Join')) {
-    let join =  Join.bind(scheme);
+    let join = Join.bind(scheme);
     gpAddress = join.votingMachine();
     let voteParams = join.voteParamsHash();
     let fundingToken = join.fundingToken();

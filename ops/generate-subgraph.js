@@ -66,9 +66,13 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
       eventHandlers = yamlLoad.eventHandlers;
       entities = yamlLoad.entities;
       abis = (yamlLoad.abis || [contract]).map(contractName => {
+        let correctedVersion = version;
+        if(contractName === 'Join' && parseInt(version.slice(-1)[0]) <= 5) {
+          correctedVersion = correctedVersion.substring(0, correctedVersion.length -1) + 6
+        }
         return {
           name: contractName,
-          file: `${__dirname}/../abis/${version}/${contractName}.json`
+          file: `${__dirname}/../abis/${correctedVersion}/${contractName}.json`
         };
       });
       abi = yamlLoad.abis && yamlLoad.abis.length ? yamlLoad.abis[0] : contract;
@@ -151,18 +155,20 @@ function buildTemplates() {
   let results = [];
 
   forEachTemplate((name, mapping, arcVersion) => {
-    results.push(
-      ...combineFragments(
-        [{
-          name,
-          mapping,
-          arcVersion
-        }],
-        true,
-        undefined,
-        undefined
-      )
-    );
+    if (arcVersion !== '0.1.2-rc.5') {
+      results.push(
+        ...combineFragments(
+          [{
+            name,
+            mapping,
+            arcVersion
+          }],
+          true,
+          undefined,
+          undefined
+        )
+      );
+    }
   });
 
   return results;

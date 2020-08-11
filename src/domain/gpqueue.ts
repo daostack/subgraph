@@ -3,7 +3,7 @@ import { setContributionRewardExtParams,
          setContributionRewardParams,
          setFundingRequestParams,
          setGenericSchemeParams,
-         setJoinAndQuitParams,
+         setJoinParams,
          setSchemeFactoryParams,
          setSchemeRegistrarParams,
          setTokenTradeParams,
@@ -13,7 +13,7 @@ import {ContributionReward} from '../types/ContributionReward/ContributionReward
 import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
 import { FundingRequest } from '../types/FundingRequest/FundingRequest';
 import { GenericScheme } from '../types/GenericScheme/GenericScheme';
-import { JoinAndQuit } from '../types/JoinAndQuit/JoinAndQuit';
+import { Join } from '../types/Join/Join';
 import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeFactory} from '../types/SchemeFactory/SchemeFactory';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
@@ -117,19 +117,18 @@ export function create(dao: Address,
     }
   }
 
-   if (equalStrings(contractInfo.name, 'JoinAndQuit')) {
-    let joinAndQuit =  JoinAndQuit.bind(scheme);
-    gpAddress = joinAndQuit.votingMachine();
-    let voteParams = joinAndQuit.voteParamsHash();
-    let fundingToken = joinAndQuit.fundingToken();
-    let minFeeToJoin = joinAndQuit.minFeeToJoin();
-    let memberReputation = joinAndQuit.memberReputation();
-    let fundingGoal = joinAndQuit.fundingGoal();
-    let fundingGoalDeadline = joinAndQuit.fundingGoalDeadline();
-    let rageQuitEnable = joinAndQuit.rageQuitEnable();
+   if (equalStrings(contractInfo.name, 'Join')) {
+    let join = Join.bind(scheme);
+    gpAddress = join.votingMachine();
+    let voteParams = join.voteParamsHash();
+    let fundingToken = join.fundingToken();
+    let minFeeToJoin = join.minFeeToJoin();
+    let memberReputation = join.memberReputation();
+    let fundingGoal = join.fundingGoal();
+    let fundingGoalDeadline = join.fundingGoalDeadline();
 
     if (!equalStrings(gpAddress.toHex(), addressZero)) {
-        setJoinAndQuitParams(
+        setJoinParams(
           dao,
           scheme,
           gpAddress,
@@ -139,7 +138,6 @@ export function create(dao: Address,
           memberReputation,
           fundingGoal,
           fundingGoalDeadline,
-          rageQuitEnable,
         );
         isGPQue = true;
     }

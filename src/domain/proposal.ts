@@ -426,7 +426,7 @@ export function updateJQProposal(
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.dao = avatarAddress.toHex();
-  proposal.joinAndQuit = proposalId.toHex();
+  proposal.join = proposalId.toHex();
   proposal.createdAt = createdAt;
   proposal.descriptionHash = descriptionHash;
   proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();

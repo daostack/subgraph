@@ -1,17 +1,12 @@
 abis:
-  - JoinAndQuit
+  - Join
   - GenesisProtocol
 entities:
-  - JoinAndQuitProposal
-  - RageQuitted
+  - JoinProposal
 eventHandlers:
   - event: ProposalExecuted(indexed address,indexed bytes32,int256)
     handler: handleProposalExecuted
   - event: JoinInProposal(indexed address,indexed bytes32,string,address,uint256)
-    handler: handleNewJoinAndQuitProposal
+    handler: handleNewJoinProposal
   - event: RedeemReputation(indexed address,indexed bytes32,indexed address,uint256)
     handler: handleRedeemReputation
-  - event: RageQuit(indexed address,indexed address,indexed uint256)
-    handler: handleRageQuit
-  - event: Refund(indexed address,indexed address,indexed uint256)
-    handler: handleRefund

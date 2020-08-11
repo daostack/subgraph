@@ -179,7 +179,7 @@ export function handleNewUpgradeProposal(
   handleGPProposalPrivate(proposalId.toHex());
 }
 
-export function handleNewJoinAndQuitProposal(
+export function handleNewJoinProposal(
   avatar: Address,
   proposalId: Bytes,
   timestamp: BigInt,

@@ -1,0 +1,8 @@
+type JoinProposal @entity {
+	id: ID!
+	dao: DAO!
+	proposedMember: Bytes!
+	funding: BigInt!
+	executed: Boolean!
+	reputationMinted: BigInt!
+}

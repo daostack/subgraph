@@ -9,7 +9,7 @@ abis:
   - ContributionRewardExt
   - GenericScheme
   - UpgradeScheme
-  - JoinAndQuit
+  - Join
   - FundingRequest
   - TokenTrade
   - GenesisProtocol

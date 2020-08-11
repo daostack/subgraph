@@ -158,20 +158,18 @@ function buildTemplates() {
   let results = [];
 
   forEachTemplate((name, mapping, arcVersion) => {
-    if (arcVersion !== '0.1.2-rc.5') {
-      results.push(
-        ...combineFragments(
-          [{
-            name,
-            mapping,
-            arcVersion
-          }],
-          true,
-          undefined,
-          undefined
-        )
-      );
-    }
+    results.push(
+      ...combineFragments(
+        [{
+          name,
+          mapping,
+          arcVersion
+        }],
+        true,
+        undefined,
+        undefined
+      )
+    );
   });
 
   return results;

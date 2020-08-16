@@ -290,20 +290,6 @@
         "contractName": "DAORegistryInstance",
         "dao": "package",
         "mapping": "DAORegistry",
-        "arcVersion": "0.1.2-rc.1"
-      },
-      {
-        "name": "DAOFactory",
-        "contractName": "DAOFactoryInstance",
-        "dao": "package",
-        "mapping": "DAOFactory",
-        "arcVersion": "0.1.2-rc.1"
-      },
-      {
-        "name": "DAORegistry",
-        "contractName": "DAORegistryInstance",
-        "dao": "package",
-        "mapping": "DAORegistry",
         "arcVersion": "0.1.2-rc.6"
       },
       {
@@ -449,20 +435,6 @@
         "dao": "package",
         "mapping": "FundingRequest",
         "arcVersion": "0.1.2-rc.0"
-      },
-      {
-        "name": "DAORegistry",
-        "contractName": "DAORegistryInstance",
-        "dao": "package",
-        "mapping": "DAORegistry",
-        "arcVersion": "0.1.2-rc.1"
-      },
-      {
-        "name": "DAOFactory",
-        "contractName": "DAOFactoryInstance",
-        "dao": "package",
-        "mapping": "DAOFactory",
-        "arcVersion": "0.1.2-rc.1"
       },
       {
         "name": "DAORegistry",
@@ -615,20 +587,6 @@
         "dao": "package",
         "mapping": "FundingRequest",
         "arcVersion": "0.1.2-rc.0"
-      },
-      {
-        "name": "DAORegistry",
-        "contractName": "DAORegistryInstance",
-        "dao": "package",
-        "mapping": "DAORegistry",
-        "arcVersion": "0.1.2-rc.1"
-      },
-      {
-        "name": "DAOFactory",
-        "contractName": "DAOFactoryInstance",
-        "dao": "package",
-        "mapping": "DAOFactory",
-        "arcVersion": "0.1.2-rc.1"
       },
       {
         "name": "DAORegistry",

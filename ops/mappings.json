@@ -139,6 +139,48 @@
           "contractName": "DAORegistryInstance",
           "dao": "package",
           "mapping": "DAORegistry",
+          "arcVersion": "0.1.2-rc.2"
+        },
+        {
+          "name": "DAOFactory",
+          "contractName": "DAOFactoryInstance",
+          "dao": "package",
+          "mapping": "DAOFactory",
+          "arcVersion": "0.1.2-rc.2"
+        },
+        {
+          "name": "GenesisProtocol",
+          "contractName": "GenesisProtocol",
+          "dao": "package",
+          "mapping": "GenesisProtocol",
+          "arcVersion": "0.1.2-rc.2"
+        },
+        {
+          "name": "DAORegistry",
+          "contractName": "DAORegistryInstance",
+          "dao": "package",
+          "mapping": "DAORegistry",
+          "arcVersion": "0.1.2-rc.4"
+        },
+        {
+          "name": "DAOFactory",
+          "contractName": "DAOFactoryInstance",
+          "dao": "package",
+          "mapping": "DAOFactory",
+          "arcVersion": "0.1.2-rc.4"
+        },
+        {
+          "name": "GenesisProtocol",
+          "contractName": "GenesisProtocol",
+          "dao": "package",
+          "mapping": "GenesisProtocol",
+          "arcVersion": "0.1.2-rc.4"
+        },
+        {
+          "name": "DAORegistry",
+          "contractName": "DAORegistryInstance",
+          "dao": "package",
+          "mapping": "DAORegistry",
           "arcVersion": "0.1.2-rc.6"
         },
         {
@@ -284,6 +326,48 @@
         "dao": "package",
         "mapping": "FundingRequest",
         "arcVersion": "0.1.2-rc.0"
+      },
+      {
+        "name": "DAORegistry",
+        "contractName": "DAORegistryInstance",
+        "dao": "package",
+        "mapping": "DAORegistry",
+        "arcVersion": "0.1.2-rc.2"
+      },
+      {
+        "name": "DAOFactory",
+        "contractName": "DAOFactoryInstance",
+        "dao": "package",
+        "mapping": "DAOFactory",
+        "arcVersion": "0.1.2-rc.2"
+      },
+      {
+        "name": "GenesisProtocol",
+        "contractName": "GenesisProtocol",
+        "dao": "package",
+        "mapping": "GenesisProtocol",
+        "arcVersion": "0.1.2-rc.2"
+      },
+      {
+        "name": "DAORegistry",
+        "contractName": "DAORegistryInstance",
+        "dao": "package",
+        "mapping": "DAORegistry",
+        "arcVersion": "0.1.2-rc.4"
+      },
+      {
+        "name": "DAOFactory",
+        "contractName": "DAOFactoryInstance",
+        "dao": "package",
+        "mapping": "DAOFactory",
+        "arcVersion": "0.1.2-rc.4"
+      },
+      {
+        "name": "GenesisProtocol",
+        "contractName": "GenesisProtocol",
+        "dao": "package",
+        "mapping": "GenesisProtocol",
+        "arcVersion": "0.1.2-rc.4"
       },
       {
         "name": "DAORegistry",
@@ -441,6 +525,48 @@
         "contractName": "DAORegistryInstance",
         "dao": "package",
         "mapping": "DAORegistry",
+        "arcVersion": "0.1.2-rc.2"
+      },
+      {
+        "name": "DAOFactory",
+        "contractName": "DAOFactoryInstance",
+        "dao": "package",
+        "mapping": "DAOFactory",
+        "arcVersion": "0.1.2-rc.2"
+      },
+      {
+        "name": "GenesisProtocol",
+        "contractName": "GenesisProtocol",
+        "dao": "package",
+        "mapping": "GenesisProtocol",
+        "arcVersion": "0.1.2-rc.2"
+      },
+      {
+        "name": "DAORegistry",
+        "contractName": "DAORegistryInstance",
+        "dao": "package",
+        "mapping": "DAORegistry",
+        "arcVersion": "0.1.2-rc.4"
+      },
+      {
+        "name": "DAOFactory",
+        "contractName": "DAOFactoryInstance",
+        "dao": "package",
+        "mapping": "DAOFactory",
+        "arcVersion": "0.1.2-rc.4"
+      },
+      {
+        "name": "GenesisProtocol",
+        "contractName": "GenesisProtocol",
+        "dao": "package",
+        "mapping": "GenesisProtocol",
+        "arcVersion": "0.1.2-rc.4"
+      },
+      {
+        "name": "DAORegistry",
+        "contractName": "DAORegistryInstance",
+        "dao": "package",
+        "mapping": "DAORegistry",
         "arcVersion": "0.1.2-rc.6"
       },
       {
@@ -587,6 +713,48 @@
         "dao": "package",
         "mapping": "FundingRequest",
         "arcVersion": "0.1.2-rc.0"
+      },
+      {
+        "name": "DAORegistry",
+        "contractName": "DAORegistryInstance",
+        "dao": "package",
+        "mapping": "DAORegistry",
+        "arcVersion": "0.1.2-rc.2"
+      },
+      {
+        "name": "DAOFactory",
+        "contractName": "DAOFactoryInstance",
+        "dao": "package",
+        "mapping": "DAOFactory",
+        "arcVersion": "0.1.2-rc.2"
+      },
+      {
+        "name": "GenesisProtocol",
+        "contractName": "GenesisProtocol",
+        "dao": "package",
+        "mapping": "GenesisProtocol",
+        "arcVersion": "0.1.2-rc.2"
+      },
+      {
+        "name": "DAORegistry",
+        "contractName": "DAORegistryInstance",
+        "dao": "package",
+        "mapping": "DAORegistry",
+        "arcVersion": "0.1.2-rc.4"
+      },
+      {
+        "name": "DAOFactory",
+        "contractName": "DAOFactoryInstance",
+        "dao": "package",
+        "mapping": "DAOFactory",
+        "arcVersion": "0.1.2-rc.4"
+      },
+      {
+        "name": "GenesisProtocol",
+        "contractName": "GenesisProtocol",
+        "dao": "package",
+        "mapping": "GenesisProtocol",
+        "arcVersion": "0.1.2-rc.4"
       },
       {
         "name": "DAORegistry",

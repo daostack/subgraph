@@ -928,7 +928,14 @@
         "dao": "base",
         "mapping": "Redeemer",
         "arcVersion": "0.0.1-rc.44"
-      }
+      },
+      {
+        "name": "GenericSchemeMultiCall",
+        "contractName": "GenericSchemeMultiCall",
+        "dao": "base",
+        "mapping": "GenericSchemeMultiCall",
+        "arcVersion": "0.0.1-rc.44"
+     }
     ]
   },
   "rinkeby": {

@@ -21,6 +21,7 @@ import {
   updateCRProposal,
   updateGPProposal,
   updateGSProposal,
+  updateGSMCProposal,
   updateProposalAfterVote,
   updateProposalconfidence,
   updateProposalExecution,
@@ -124,6 +125,26 @@ export function handleNewCallProposal(
     return;
   }
   updateGSProposal(
+    proposalId,
+    timestamp,
+    avatar,
+    descriptionHash,
+    eventAddress,
+  );
+  handleGPProposalPrivate(proposalId.toHex());
+}
+
+export function handleNewMultiCallProposal(
+  avatar: Address,
+  proposalId: Bytes,
+  timestamp: BigInt,
+  descriptionHash: string,
+  eventAddress: Address,
+): void {
+  if (!daoModule.exists(avatar)) {
+    return;
+  }
+  updateGSMCProposal(
     proposalId,
     timestamp,
     avatar,

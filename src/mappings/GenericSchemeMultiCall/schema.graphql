@@ -1,0 +1,11 @@
+type GenericSchemeMultiCallProposal @entity {
+  id: ID!
+ 	dao: DAO!
+  contractsToCall: [Bytes!]
+  contractToCall: Bytes!
+  callData: [Bytes!]
+  value: [BigInt!]
+  executed: Boolean!
+  success: Boolean!
+  returnValue: Bytes!
+}

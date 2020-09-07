@@ -19,6 +19,7 @@ function insertNewProposal(event: NewMultiCallProposal): void {
   let ent = new GenericSchemeMultiCallProposal(event.params._proposalId.toHex());
   ent.dao = event.params._avatar.toHex();
   ent.callData = event.params._callData;
+  ent.contractsToCall = event.params._contractsToCall;
   ent.value = event.params._value;
   ent.executed = false;
 

@@ -1,23 +1,11 @@
 {
   "name": "dxDAO",
-  "Avatar": "0x8406A4d6a7c3B9e0c754549A901824F9a8F41dB1",
-  "DAOToken": "0x12ADb5D25B2d6f543E1D32DeB54Fbb1379cC4c72",
-  "Reputation": "0x61EC941999d8509C0f4c69a6eEA7737DeE504A24",
-  "Controller": "0x5bF70F260eBc93e71584e1141e207e57D62A6c3F",
+  "Avatar": "0xc93289f478ac588A1B69c06871f76c448d3AB5B1",
+  "DAOToken": "0x59EE6f68d4faCDf14092F1Dabe628f99c73fEC76",
+  "Reputation": "0x5AF289A4d240896151BC34F52eFBE1AFEb57B2F8",
+  "Controller": "0xa1D29322B1199Ed58FC538A0150891FbD874f3B5",
   "arcVersion": "0.0.1-rc.19",
   "Schemes": [{
-    "name": "GenericScheme",
-    "alias": "masterWalletScheme",
-    "address": "0x7957B423fA3C45683e4A775B92D3b85c18A8e3bc",
-    "arcVersion": "0.0.1-rc.41"
-  },
-  {
-    "name": "GenericScheme",
-    "alias": "quickWalletScheme",
-    "address": "0x2C5A9AfE9C4FEc35FAE34BC445e66Dc30FC7fA36",
-    "arcVersion": "0.0.1-rc.41"
-  },
-  {
     "name": "GenericScheme",
     "alias": "GenericSchemeMultiCall",
     "address": "0xd42df579006cf895449Acc99174dF552abc693C2",

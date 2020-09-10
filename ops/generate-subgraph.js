@@ -7,6 +7,8 @@ const { versionToNum, forEachTemplate } = require("./utils");
 var mappings = require("./mappings.json")[network].mappings;
 const { subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 
+let existingAddresses = []
+
 /**
  * Generate a `subgraph.yaml` file from `datasource.yaml` fragments in
  * `mappings` directory `mappings.json` and `migration.json`
@@ -134,6 +136,11 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
         }
         return null;
       }
+
+      if (existingAddresses.indexOf(contractAddress) !== -1) {
+        return null;
+      }
+      existingAddresses.push(contractAddress);
     }
 
     const source = isTemplate ? {

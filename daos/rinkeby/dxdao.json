@@ -5,12 +5,13 @@
   "Reputation": "0x11885c5e02f4A064d85c7e5c049518f837879a0F",
   "Controller": "0x1FEc243D5932c905Eb075819263aD9947B302D91",
   "Schemes": [
-  {
-  "name": "GenericScheme",
-  "alias": "GenericSchemeDXTokenRegistry",
-  "address": "0x4eace28ac61fe27d214d48b8064bdbd0f30c3169",
-  "arcVersion": "0.0.1-rc.41"
-  }
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeDXTokenRegistry",
+      "address": "0x4eace28ac61fe27d214d48b8064bdbd0f30c3169",
+      "arcVersion": "0.0.1-rc.41"
+    }
   ],
   "arcVersion": "0.0.1-rc.19"
   }
+  

@@ -22,7 +22,6 @@ import {
   updateGPProposal,
   updateGSProposal,
   updateGSMCProposal,
-  updateWSProposal,
   updateProposalAfterVote,
   updateProposalconfidence,
   updateProposalExecution,
@@ -126,26 +125,6 @@ export function handleNewCallProposal(
     return;
   }
   updateGSProposal(
-    proposalId,
-    timestamp,
-    avatar,
-    descriptionHash,
-    eventAddress,
-  );
-  handleGPProposalPrivate(proposalId.toHex());
-}
-
-export function handleNewWalletSchemeProposal(
-  avatar: Address,
-  proposalId: Bytes,
-  timestamp: BigInt,
-  descriptionHash: string,
-  eventAddress: Address,
-): void {
-  if (!daoModule.exists(avatar)) {
-    return;
-  }
-  updateWSProposal(
     proposalId,
     timestamp,
     avatar,

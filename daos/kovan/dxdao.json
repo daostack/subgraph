@@ -1,14 +1,8 @@
 {
   "name": "dxDAO",
-  "Avatar": "0xc93289f478ac588A1B69c06871f76c448d3AB5B1",
-  "DAOToken": "0x59EE6f68d4faCDf14092F1Dabe628f99c73fEC76",
-  "Reputation": "0x5AF289A4d240896151BC34F52eFBE1AFEb57B2F8",
-  "Controller": "0xa1D29322B1199Ed58FC538A0150891FbD874f3B5",
-  "arcVersion": "0.0.1-rc.19",
-  "Schemes": [{
-    "name": "GenericScheme",
-    "alias": "GenericSchemeMultiCall",
-    "address": "0xd42df579006cf895449Acc99174dF552abc693C2",
-    "arcVersion": "0.0.1-rc.41"
-  }]
+  "Avatar": "0x1843aFb1D357af33E2e46850B074c2f06B87f1E4",
+  "DAOToken": "0x98484B5aa830876694a90AB3212B7697BD7b64d7",
+  "Reputation": "0xDf6f289686CeC5F0eE89f22893Bdef59EA0eAe89",
+  "Controller": "0x629a521c70AEec90c2d2A5A9D54BEd91b3e03DAE",
+  "arcVersion": "0.0.1-rc.44"
 }

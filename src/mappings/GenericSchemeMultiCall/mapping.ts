@@ -1,4 +1,4 @@
-import { store } from '@graphprotocol/graph-ts';
+import { Bytes,store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Reputation contract ABI
 import {
@@ -18,9 +18,9 @@ import {
 function insertNewProposal(event: NewMultiCallProposal): void {
   let ent = new GenericSchemeMultiCallProposal(event.params._proposalId.toHex());
   ent.dao = event.params._avatar.toHex();
-  ent.callData = event.params._callData;
-  ent.contractsToCall = event.params._contractsToCall;
-  ent.value = event.params._value;
+  ent.callsData = event.params._callsData;
+  ent.contractsToCall = event.params._contractsToCall as Bytes[];
+  ent.values = event.params._values;
   ent.executed = false;
 
   store.set('GenericSchemeMultiCallProposal', event.params._proposalId.toHex(), ent);

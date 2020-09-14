@@ -6,7 +6,7 @@ entities:
 eventHandlers:
   - event: ProposalExecuted(indexed address,indexed bytes32)
     handler: handleProposalExecuted
-  - event: NewMultiCallProposal(indexed address,indexed bytes32,bytes[],uint256[],string,address[])
+  - event: NewMultiCallProposal(indexed address,indexed bytes32,bytes,uint256[],string,address[])
     handler: handleNewMultiCallProposal
   - event: ProposalCallExecuted(indexed address,indexed bytes32,address,bool,bytes)
-    handler: handleProposalCallExecuted
+    handler: handleProposalCallExecuted 

@@ -1,8 +1,16 @@
 {
   "name": "dxDAO",
-  "Avatar": "0xcC6F0a6BBA758ebaf3EFF2A7Acb3c27Fd4A06b46",
-  "DAOToken": "0x0d29B667dd43D283671e754c8fcFb147B164c28e",
-  "Reputation": "0xCE23F9aABF15ED900BB1416b706d6738C9596BC4",
-  "Controller": "0xde46A9039F19746ac87f4DfA580f53048B12D61d",
-  "arcVersion": "0.0.1-rc.44"
-}
+  "Avatar": "0x1eb3BCaE24d42FdE2f90e91D26313ac3946C4764",
+  "DAOToken": "0xabC5784f7577F17085c85175A4ef185D8Db191d2",
+  "Reputation": "0x11885c5e02f4A064d85c7e5c049518f837879a0F",
+  "Controller": "0x1FEc243D5932c905Eb075819263aD9947B302D91",
+  "Schemes": [
+  {
+  "name": "GenericScheme",
+  "alias": "GenericSchemeDXTokenRegistry",
+  "address": "0x4eace28ac61fe27d214d48b8064bdbd0f30c3169",
+  "arcVersion": "0.0.1-rc.41"
+  }
+  ],
+  "arcVersion": "0.0.1-rc.19"
+  }

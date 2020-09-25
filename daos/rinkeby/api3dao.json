@@ -1,0 +1,23 @@
+{
+  "name": "API3",
+  "Avatar": "0x16d3A59A3096F2e0C3bcB605392cb54ce886Cc24",
+  "DAOToken": "0xA13701dC272a3898D8F64EB6A06b4426562fBD8B",
+  "Reputation": "0x66D517f383741762b49e596Addb31A28862169F1",
+  "Controller": "0x9bBBbc3cd8E213144D4403dc542D0b4B900b4F8D",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeApi3Token",
+      "address": "0xA82aEF6C92C421D70923E91300631A39932c5E44",
+      "arcVersion": "0.0.1-rc.45"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeTimelock",
+      "address": "0xBEAFB0FB210D6A60550991632db7B88a2B2dece8",
+      "arcVersion": "0.0.1-rc.45"
+    }
+  ],
+  "StandAloneContracts": [],
+  "arcVersion": "0.0.1-rc.45"
+}

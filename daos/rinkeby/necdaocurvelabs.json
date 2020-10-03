@@ -20,7 +20,8 @@
     {
       "name": "GenericScheme",
       "alias": "necBurn",
-      "address": "0xD6B749609341921caef213250b497A867Ca049f7"
+      "address": "0xD6B749609341921caef213250b497A867Ca049f7",
+      "arcVersion": "0.0.1-rc.44"
     }
   ],
   "StandAloneContracts": [],

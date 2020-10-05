@@ -16,6 +16,12 @@
       "alias": "Uniswap",
       "address": "0xc3524072aa711f84d1Db93B1cdad68be176162bd",
       "arcVersion": "0.0.1-rc.44"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "necBurn",
+      "address": "0xD6B749609341921caef213250b497A867Ca049f7",
+      "arcVersion": "0.0.1-rc.44"
     }
   ],
   "StandAloneContracts": [],

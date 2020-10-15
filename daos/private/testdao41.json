@@ -1,38 +1,49 @@
 {
-  "name": "Luminous Mermaid eggs",
-  "Avatar": "0x1EaddB8b4095320cf44cEE3448ac73eeCD9A2D6D",
-  "DAOToken": "0x375f4ecc738EE3175FA00F5bC13a47DC15AbeBd7",
-  "Reputation": "0xcBDFAB17efb4F1b5cd3B05615D7e32415fa80d10",
-  "Controller": "0x923F16917b0929CC08F5Fa35113F3e207aEE4fB3",
+  "name": "Gustatory Flatter",
+  "Avatar": "0xf77ABFdA81c930C6316688bb5a2673556CE4C501",
+  "DAOToken": "0x2d232367b86021fDAB2cF5DB985424beC4b8cC79",
+  "Reputation": "0xd6D88C1A38f956aEc43fb10fD2f3587153DCC8C5",
+  "Controller": "0x8ba78623418EcC10cc9CB4f359458e15ed3D4667",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0x158CBa029dE5D141f0e6e264de7b4F22C1c6A700",
+      "address": "0x83b72B5C89Dbf53C7560A258aa0Babb77e207A92",
       "arcVersion": "0.0.1-rc.41"
     },
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0x3f63362ef1a187dcec09C5C951DB47be3FddBF11",
+      "address": "0x258ffE4fFcAfC08B0fEeB058eE855dc6adb5AF6A",
       "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0xDAaEC6D0Ae71b1A2E6e7743a65e03995B86B0E94",
+      "arcVersion": "0.0.1-rc.46"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "Wallet",
-      "address": "0x12eb8682598481A2AEb01F86B3d9DBF00291Ef7D",
+      "address": "0xC61a5fB01E37D3d93329Edfe03166Dd64be77371",
       "arcVersion": "0.0.1-rc.41"
     },
     {
       "name": "ContributionRewardExt",
-      "address": "0x3f63362ef1a187dcec09C5C951DB47be3FddBF11",
+      "address": "0x258ffE4fFcAfC08B0fEeB058eE855dc6adb5AF6A",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "Competition",
-      "address": "0xd5484bb1F891023ABC512902d6F5949E3AC063e4",
+      "address": "0x58C3D2b67f9F8c41855C5060A94a593885843674",
       "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0x0665417be6D5638AF01776593b4d2474Cb944aa9",
+      "arcVersion": "0.0.1-rc.46"
     }
   ],
   "arcVersion": "0.0.1-rc.41"

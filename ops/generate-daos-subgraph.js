@@ -4,7 +4,7 @@ const { migrationFileLocation: defaultMigrationFileLocation, network, startBlock
 const {   subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
-const supportedSchemes = ['ContributionRewardExt', 'GenericScheme']
+const supportedSchemes = ['ContributionRewardExt', 'GenericScheme', 'GenericSchemeMultiCall']
 const supportedStandAloneContracts = ['Competition']
 let ids = [];
 
@@ -56,6 +56,19 @@ function daoYaml(contract, contractAddress, arcVersion) {
             file: `${__dirname}/../abis/0.0.1-rc.36/ContributionRewardExt.json`
           };
         }
+        if ((_arcVersion < 46) && (contractName === "GenericSchemeMultiCall")) {
+          return {
+            name: contractName,
+            file: `${__dirname}/../abis/0.0.1-rc.46/GenericSchemeMultiCall.json`
+          };
+        }
+        if ((_arcVersion < 46) && (contractName === "SchemeConstraints")) {
+          return {
+            name: contractName,
+            file: `${__dirname}/../abis/0.0.1-rc.46/SchemeConstraints.json`
+          };
+        }
+        
         //this is temporary workaround (not nice) patch to solve an issue with multiple contract versions
         //in genesis alpha dao and dxdao +dxdao rinkeby
         let _abiVersion = arcVersion;

@@ -1,32 +1,43 @@
 {
-  "name": "Mannered Artist",
-  "Avatar": "0xf88E4C158298323a85dD7678eD60DBfF6DA71007",
-  "DAOToken": "0xa09Cd74C747bf9DDB9154B1C75e271Dd12E45224",
-  "Reputation": "0x5E06A0d7BA9728E3B3140857B26fFD6626D66793",
-  "Controller": "0x3d6cF0d60B392e781d0cB8dcA333A2B197548198",
+  "name": "Redolent Limner",
+  "Avatar": "0xb42feaeF1f5Fc95dAE13Eb0D21933cF3D722C8eF",
+  "DAOToken": "0x0CF058E905EE2B55b76Ad77174DF0Ffa65B16fa9",
+  "Reputation": "0x4518062D170b481050570C973B9b7589bE2f16fA",
+  "Controller": "0x0250A982692207f9479ef5B17BCA1Fdc70f40B64",
   "Schemes": [
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0x405fC0EE23C7fcd0a41A864505Fe8c969ca3eF6A",
+      "address": "0xAffD1e5D27968889E25Ba045c53Ed608cE5Ee223",
       "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0xf1486cC376555A5035cFa85A761279c9876Daddc",
+      "arcVersion": "0.0.1-rc.46"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "Wallet",
-      "address": "0xfd30B6e495CC375Bd98d01BD959F741Dd2772d64",
+      "address": "0x46Ec5F3b5d965072023E98f98A02ce46AEe473c6",
       "arcVersion": "0.0.1-rc.19"
     },
     {
       "name": "ContributionRewardExt",
-      "address": "0x405fC0EE23C7fcd0a41A864505Fe8c969ca3eF6A",
+      "address": "0xAffD1e5D27968889E25Ba045c53Ed608cE5Ee223",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "Competition",
-      "address": "0x4A1D2A5060C782049Ef966d9412f1239E95183b7",
+      "address": "0x4d46f75Be6E98dBA8E8384802a68d550DeB69770",
       "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0xb3212b66C337F83D277172D891Daf31776FF9D79",
+      "arcVersion": "0.0.1-rc.46"
     }
   ],
   "arcVersion": "0.0.1-rc.19"

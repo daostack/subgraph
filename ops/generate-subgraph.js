@@ -101,6 +101,20 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
           };
         }
 
+        if ((versionNum < 46) && (contractName === "GenericSchemeMultiCall")) {
+          return {
+            name: contractName,
+            file: `${__dirname}/../abis/0.0.1-rc.46/GenericSchemeMultiCall.json`
+          };
+        }
+
+        if ((versionNum < 46) && (contractName === "SchemeConstraints")) {
+          return {
+            name: contractName,
+            file: `${__dirname}/../abis/0.0.1-rc.46/SchemeConstraints.json`
+          };
+        }
+
         return {
           name: contractName,
           file: `${__dirname}/../abis/${version}/${contractName}.json`

@@ -7,8 +7,10 @@ abis:
   - ContributionReward
   - ContributionRewardExt
   - GenericScheme
+  - GenericSchemeMultiCall
   - UGenericScheme
   - GenesisProtocol
+  - SchemeConstraints
 entities:
   - ControllerOrganization
   - ControllerScheme

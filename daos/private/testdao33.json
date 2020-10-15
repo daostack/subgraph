@@ -1,38 +1,49 @@
 {
-  "name": "Feckless Cookies",
-  "Avatar": "0x2268317B403ADEc49Fde9241a977335aba406A55",
-  "DAOToken": "0x78B7beA9fB68616E4520DC2F522833616f6413d5",
-  "Reputation": "0x0819C56Db86FbC6Cb3e0ef63F7DF0c4d5e60d915",
-  "Controller": "0x26bc7F1d9642BB480B01dE689deA64b97Fdd332B",
+  "name": "Jocular Toilet",
+  "Avatar": "0xedd1d1Cc060c12aB54dAcE9750d36f7374a4b0BE",
+  "DAOToken": "0xB6CA79ceE3d00F7C841a84c08C0B1660060E2f2A",
+  "Reputation": "0xb9cd4849812BAc1b0a40951169F30eB7e317B2a0",
+  "Controller": "0xD36bB07D711787F79CED4A900F0d7cdA8F04F828",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0x6884D17Fac0FBd05382cF562E86DE82c79e26117",
+      "address": "0x49a7da6e47679c88563D718B2B42d199DA30b86f",
       "arcVersion": "0.0.1-rc.33"
     },
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0xFa117aD3aEC87df869C456d91f6731950Cfef6ee",
+      "address": "0x2A88e232235E40f54D05B765EE03E86171439B16",
       "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0xbC84993e855325AAF055A96582C366bD320165C2",
+      "arcVersion": "0.0.1-rc.46"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "Wallet",
-      "address": "0x44b2C55F5CAe26D328F047a547d766E6BE836eb9",
+      "address": "0x422e8DE05878Ab7Acd10D3d50A76532DE7A8B39E",
       "arcVersion": "0.0.1-rc.33"
     },
     {
       "name": "ContributionRewardExt",
-      "address": "0xFa117aD3aEC87df869C456d91f6731950Cfef6ee",
+      "address": "0x2A88e232235E40f54D05B765EE03E86171439B16",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "Competition",
-      "address": "0x017383Ddb609fdbf85B80910A34936a733DA0913",
+      "address": "0xba1B19248020B0dfcDc9C53eAE31722B478334aE",
       "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0x30ac1D5546Af7382986f8357919f6BDeDa09442F",
+      "arcVersion": "0.0.1-rc.46"
     }
   ],
   "arcVersion": "0.0.1-rc.33"

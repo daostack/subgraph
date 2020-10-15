@@ -1,0 +1,50 @@
+{
+  "name": "Spasmodic Inker",
+  "Avatar": "0x4A937d69ae4ca75786d37c7215E95C9d9B9a3F9d",
+  "DAOToken": "0xdEC860DeD289058f0a03d2b1fC1eDDb84eECfcC2",
+  "Reputation": "0xE6B774fab4E001Ddbb02460dB2d7DbecB0727fA5",
+  "Controller": "0x8a12735818e3acb953962a00638463860469d4A7",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0x50A8c1f5845B76545c7774D02f6068B959cf575a",
+      "arcVersion": "0.0.1-rc.46"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x2B1c73040c18C751CfeB9D96443ABA8Ad867A1F1",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0xFa8D3046Dac0329AB739a757E6597769Df22adcf",
+      "arcVersion": "0.0.1-rc.46"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0xCB053824e25595B753d8ee202B821b406472B6c1",
+      "arcVersion": "0.0.1-rc.46"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x2B1c73040c18C751CfeB9D96443ABA8Ad867A1F1",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "Competition",
+      "address": "0x12eC291A7087f04A8e1b5cF0aD372aB1215540e6",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0x670A091d09f5dFb4B46e9fA3F3a416aaCd65b404",
+      "arcVersion": "0.0.1-rc.46"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.46"
+}

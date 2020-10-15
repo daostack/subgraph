@@ -106,6 +106,9 @@ type Proposal @entity {
 	# Generic Scheme params
 	genericScheme: GenericSchemeProposal
 
+	# Generic Scheme params
+	genericSchemeMultiCall: GenericSchemeMultiCallProposal
+
 	# SchemeRegistrar proposal
   	schemeRegistrar: SchemeRegistrarProposal
 

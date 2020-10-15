@@ -5,14 +5,13 @@ import {
   BigInt,
   Bytes,
   crypto,
-  Entity,
   log,
   store,
 } from '@graphprotocol/graph-ts';
 
-import { Avatar } from '../../types/Controller/Avatar';
 import { DAOToken } from '../../types/Controller/DAOToken';
 import { Reputation } from '../../types/Controller/Reputation';
+import { SchemeConstraints } from '../../types/Controller/SchemeConstraints';
 import { GenesisProtocol } from '../../types/GenesisProtocol/GenesisProtocol';
 
 import * as domain from '../../domain';
@@ -32,6 +31,7 @@ import {
   ControllerUpgradeController,
   DAO,
   FirstRegisterScheme,
+  GenericSchemeMultiCallParam,
   GenericSchemeParam,
   GenesisProtocolParam,
   ReputationContract,
@@ -409,6 +409,30 @@ export function setGenericSchemeParams(
   genericSchemeParams.save();
   if (controllerScheme != null) {
     controllerScheme.genericSchemeParams = genericSchemeParams.id;
+    controllerScheme.save();
+  }
+}
+
+export function setGenericSchemeMultiCallParams(
+  avatar: Address,
+  scheme: Address,
+  vmAddress: Address,
+  vmParamsHash: Bytes,
+  schemeConstraints: Address,
+): void {
+  setGPParams(vmAddress, vmParamsHash, avatar);
+  let controllerScheme = ControllerScheme.load(
+    crypto.keccak256(concat(avatar, scheme)).toHex(),
+  );
+  let genericSchemeMultiCallParams = new GenericSchemeMultiCallParam(scheme.toHex());
+  genericSchemeMultiCallParams.votingMachine = vmAddress;
+  genericSchemeMultiCallParams.voteParams = vmParamsHash.toHex();
+  let schemeConstraintsContract = SchemeConstraints.bind(schemeConstraints);
+  genericSchemeMultiCallParams.schemeConstraints = schemeConstraints;
+  genericSchemeMultiCallParams.contractsWhiteList = schemeConstraintsContract.getContractsWhiteList() as Bytes[];
+  genericSchemeMultiCallParams.save();
+  if (controllerScheme != null) {
+    controllerScheme.genericSchemeMultiCallParams = genericSchemeMultiCallParams.id;
     controllerScheme.save();
   }
 }

@@ -29,7 +29,7 @@ function insertNewProposal(event: NewMultiCallProposal): void {
 export function handleNewMultiCallProposal(
   event: NewMultiCallProposal,
 ): void {
-  domain.handleNewCallProposal(
+  domain.handleNewMultiCallProposal(
     event.params._avatar,
     event.params._proposalId,
     event.block.timestamp,

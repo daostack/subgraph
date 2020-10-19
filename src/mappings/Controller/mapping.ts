@@ -49,7 +49,7 @@ import {
   UpgradeController,
 } from '../../types/Controller/Controller';
 
-import { concat, equalsBytes, eventId } from '../../utils';
+import { concat, equalsBytes, equalStrings, eventId } from '../../utils';
 
 function insertScheme(
   controllerAddress: Address,
@@ -427,9 +427,12 @@ export function setGenericSchemeMultiCallParams(
   let genericSchemeMultiCallParams = new GenericSchemeMultiCallParam(scheme.toHex());
   genericSchemeMultiCallParams.votingMachine = vmAddress;
   genericSchemeMultiCallParams.voteParams = vmParamsHash.toHex();
-  let schemeConstraintsContract = SchemeConstraints.bind(schemeConstraints);
   genericSchemeMultiCallParams.schemeConstraints = schemeConstraints;
-  genericSchemeMultiCallParams.contractsWhiteList = schemeConstraintsContract.getContractsWhiteList() as Bytes[];
+  let addressZero = '0x0000000000000000000000000000000000000000';
+  if (!equalStrings(schemeConstraints.toHex(), addressZero)) {
+    let schemeConstraintsContract = SchemeConstraints.bind(schemeConstraints);
+    genericSchemeMultiCallParams.contractsWhiteList = schemeConstraintsContract.getContractsWhiteList() as Bytes[];
+  }
   genericSchemeMultiCallParams.save();
   if (controllerScheme != null) {
     controllerScheme.genericSchemeMultiCallParams = genericSchemeMultiCallParams.id;

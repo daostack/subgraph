@@ -46,7 +46,12 @@ export function handleProposalCallExecuted(
     'GenericSchemeMultiCallProposal', event.params._proposalId.toHex(),
   ) as GenericSchemeMultiCallProposal;
   if (ent != null) {
-    ent.returnValues.push(event.params._callDataReturnValue);
+    let returnValues = ent.returnValues;
+    if (returnValues == null) {
+      returnValues = [];
+    }
+    returnValues.push(event.params._callDataReturnValue);
+    ent.returnValues = returnValues;
   }
 
   store.set('GenericSchemeMultiCallProposal', event.params._proposalId.toHex(), ent);

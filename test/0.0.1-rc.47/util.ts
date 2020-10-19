@@ -54,7 +54,7 @@ export async function getWeb3() {
 
 export function getContractAddresses() {
   const addresses = require(`@daostack/migration/migration.json`);
-  let arcVersion = '0.0.1-rc.46';
+  let arcVersion = '0.0.1-rc.47';
   return {
     ...addresses.private.test[arcVersion],
     ...addresses.private.dao[arcVersion],
@@ -65,17 +65,17 @@ export function getContractAddresses() {
     NativeReputation: addresses.private.dao[arcVersion].Reputation,
     GenericSchemeMultiCall: addresses.private.dao[arcVersion].Schemes[2].address,
     DxDaoSchemeConstraints:
-      addresses.private.dao[arcVersion].StandAloneContracts[3].address,
+      addresses.private.dao[arcVersion].StandAloneContracts[5].address,
   };
 }
 
 export function getArcVersion() {
-  return '0.0.1-rc.46';
+  return '0.0.1-rc.47';
 }
 
 export function getOrgName() {
   return require(`@daostack/migration/migration.json`).private.dao[
-    '0.0.1-rc.46'
+    '0.0.1-rc.47'
   ].name;
 }
 

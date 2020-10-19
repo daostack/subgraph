@@ -101,17 +101,17 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
           };
         }
 
-        if ((versionNum < 46) && (contractName === "GenericSchemeMultiCall")) {
+        if ((versionNum < 47) && (contractName === "GenericSchemeMultiCall")) {
           return {
             name: contractName,
-            file: `${__dirname}/../abis/0.0.1-rc.46/GenericSchemeMultiCall.json`
+            file: `${__dirname}/../abis/0.0.1-rc.47/GenericSchemeMultiCall.json`
           };
         }
 
-        if ((versionNum < 46) && (contractName === "SchemeConstraints")) {
+        if ((versionNum < 47) && (contractName === "SchemeConstraints")) {
           return {
             name: contractName,
-            file: `${__dirname}/../abis/0.0.1-rc.46/SchemeConstraints.json`
+            file: `${__dirname}/../abis/0.0.1-rc.47/SchemeConstraints.json`
           };
         }
 

@@ -56,16 +56,16 @@ function daoYaml(contract, contractAddress, arcVersion) {
             file: `${__dirname}/../abis/0.0.1-rc.36/ContributionRewardExt.json`
           };
         }
-        if ((_arcVersion < 46) && (contractName === "GenericSchemeMultiCall")) {
+        if ((_arcVersion < 47) && (contractName === "GenericSchemeMultiCall")) {
           return {
             name: contractName,
-            file: `${__dirname}/../abis/0.0.1-rc.46/GenericSchemeMultiCall.json`
+            file: `${__dirname}/../abis/0.0.1-rc.47/GenericSchemeMultiCall.json`
           };
         }
-        if ((_arcVersion < 46) && (contractName === "SchemeConstraints")) {
+        if ((_arcVersion < 47) && (contractName === "SchemeConstraints")) {
           return {
             name: contractName,
-            file: `${__dirname}/../abis/0.0.1-rc.46/SchemeConstraints.json`
+            file: `${__dirname}/../abis/0.0.1-rc.47/SchemeConstraints.json`
           };
         }
         

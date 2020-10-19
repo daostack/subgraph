@@ -1,5 +1,5 @@
 {
-  "name": "Judicious Engineering",
+  "name": "Bilious Snakes",
   "Avatar": "0xE7A2C59e134ee81D4035Ae6DB2254f79308e334f",
   "DAOToken": "0xcDbe8b52A6c60A5f101d4A0F1f049f19a9e1D35F",
   "Reputation": "0x93cdbf39fB9e13BD253CA5819247D52fbabf0F2f",
@@ -14,8 +14,8 @@
     {
       "name": "GenericSchemeMultiCall",
       "alias": "GenericSchemeMultiCall",
-      "address": "0xFcCeD5E997E7fb1D0594518D3eD57245bB8ed17E",
-      "arcVersion": "0.0.1-rc.46"
+      "address": "0x22d5C8BdD4346b390014a07109a8F830094d4abf",
+      "arcVersion": "0.0.1-rc.47"
     }
   ],
   "StandAloneContracts": [
@@ -35,9 +35,19 @@
       "arcVersion": "0.0.1-rc.43"
     },
     {
-      "name": "DxDaoSchemeConstraints",
+      "name": "GenericSchemeMultiCall",
       "address": "0x22d5C8BdD4346b390014a07109a8F830094d4abf",
-      "arcVersion": "0.0.1-rc.46"
+      "arcVersion": "0.0.1-rc.47"
+    },
+    {
+      "name": "ActionMock",
+      "address": "0x7414e38377D6DAf6045626EC8a8ABB8a1BC4B97a",
+      "arcVersion": "0.0.1-rc.16"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0xB9bdBAEc07751F6d54d19A6B9995708873F3DE18",
+      "arcVersion": "0.0.1-rc.47"
     }
   ],
   "arcVersion": "0.0.1-rc.16"

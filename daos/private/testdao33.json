@@ -1,49 +1,59 @@
 {
-  "name": "Jocular Toilet",
-  "Avatar": "0xedd1d1Cc060c12aB54dAcE9750d36f7374a4b0BE",
-  "DAOToken": "0xB6CA79ceE3d00F7C841a84c08C0B1660060E2f2A",
-  "Reputation": "0xb9cd4849812BAc1b0a40951169F30eB7e317B2a0",
-  "Controller": "0xD36bB07D711787F79CED4A900F0d7cdA8F04F828",
+  "name": "Munificent Director",
+  "Avatar": "0x57F909211c361AE0A11E269b74Dca470078c6e67",
+  "DAOToken": "0xE9A11C4C015D142D090CFF82dEd1Deea5B824185",
+  "Reputation": "0xCf9dB88B2bef5f498de16327b051C10A17bC6132",
+  "Controller": "0x63ad03B017A26782A53B1c4cD1DDF4b3273c8d03",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0x49a7da6e47679c88563D718B2B42d199DA30b86f",
+      "address": "0x9dcf3D406e850BB65240107e5FA02d6116EF9393",
       "arcVersion": "0.0.1-rc.33"
     },
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0x2A88e232235E40f54D05B765EE03E86171439B16",
+      "address": "0xf56Ca75Ac4EB296978Cf3773caA5d52FC57a9FE8",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "GenericSchemeMultiCall",
       "alias": "GenericSchemeMultiCall",
-      "address": "0xbC84993e855325AAF055A96582C366bD320165C2",
-      "arcVersion": "0.0.1-rc.46"
+      "address": "0xBbA961069d46ae92006b7985fAA1e90e33c09D98",
+      "arcVersion": "0.0.1-rc.47"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "Wallet",
-      "address": "0x422e8DE05878Ab7Acd10D3d50A76532DE7A8B39E",
+      "address": "0x3DEe4593fBc3DC789DF5828E5E10f7b4E3cb5C01",
       "arcVersion": "0.0.1-rc.33"
     },
     {
       "name": "ContributionRewardExt",
-      "address": "0x2A88e232235E40f54D05B765EE03E86171439B16",
+      "address": "0xf56Ca75Ac4EB296978Cf3773caA5d52FC57a9FE8",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "Competition",
-      "address": "0xba1B19248020B0dfcDc9C53eAE31722B478334aE",
+      "address": "0x2a45Bac91F4f06cE3A1a2a5b7138540b33E02883",
       "arcVersion": "0.0.1-rc.43"
     },
     {
+      "name": "GenericSchemeMultiCall",
+      "address": "0xBbA961069d46ae92006b7985fAA1e90e33c09D98",
+      "arcVersion": "0.0.1-rc.47"
+    },
+    {
+      "name": "ActionMock",
+      "address": "0xFF5bA3B4efA9175BC3F096d615A34E69c6C479AC",
+      "arcVersion": "0.0.1-rc.33"
+    },
+    {
       "name": "DxDaoSchemeConstraints",
-      "address": "0x30ac1D5546Af7382986f8357919f6BDeDa09442F",
-      "arcVersion": "0.0.1-rc.46"
+      "address": "0xe011485b54301995924F87Dd56dA2f0f1f289065",
+      "arcVersion": "0.0.1-rc.47"
     }
   ],
   "arcVersion": "0.0.1-rc.33"

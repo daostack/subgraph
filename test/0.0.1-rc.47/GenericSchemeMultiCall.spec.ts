@@ -12,6 +12,7 @@ import {
 const GenericSchemeMultiCall = require(
     '@daostack/migration/contracts/' + getArcVersion() + '/GenericSchemeMultiCall.json',
 );
+const ActionMock = require('@daostack/migration/contracts/' + getArcVersion() + '/ActionMock.json');
 const DxDaoSchemeConstraints = require('@daostack/migration/contracts/' + getArcVersion() + '/DxDaoSchemeConstraints.json');
 const DAOToken = require('@daostack/migration/contracts/' + getArcVersion() + '/DAOToken.json');
 const GenesisProtocol = require('@daostack/migration/contracts/' + getArcVersion() + '/GenesisProtocol.json');
@@ -25,6 +26,7 @@ describe('GenericSchemeMultiCall', () => {
     let dxDaoSchemeConstraints;
     let genesisProtocol;
     let reputation;
+    let actionMock;
     beforeAll(async () => {
         web3 = await getWeb3();
         addresses = getContractAddresses();
@@ -35,13 +37,31 @@ describe('GenericSchemeMultiCall', () => {
             DxDaoSchemeConstraints.abi, addresses.DxDaoSchemeConstraints, opts);
         genesisProtocol = new web3.eth.Contract(GenesisProtocol.abi, addresses.GenesisProtocol, opts);
         reputation = await new web3.eth.Contract(Reputation.abi, addresses.NativeReputation, opts);
+        actionMock = new web3.eth.Contract(
+            ActionMock.abi,
+            addresses.ActionMock,
+            opts,
+        );
     });
 
     it('Sanity', async () => {
         const accounts = web3.eth.accounts.wallet;
-        let contractsToCall = [];
-        let callsData = [];
-        let values = [];
+
+        await web3.eth.sendTransaction({
+            from: accounts[0].address,
+            to: addresses.Avatar,
+            value: 10,
+            gas: 2000000,
+            data: '0xABCD',
+        });
+
+        await dxDaoSchemeConstraints.methods.updateContractsWhitelist([actionMock.options.address], [true]).send(
+            { from: accounts[0].address },
+        );
+
+        let contractsToCall = [actionMock.options.address.toLowerCase()];
+        let callsData = [actionMock.methods.test2(addresses.Avatar).encodeABI()];
+        let values = ['10'];
         let descriptionHash = '0x000000000000000000000000000000000000000000000000000000000000abcd';
         async function propose() {
             const prop = genericSchemeMultiCall.methods.proposeCalls(
@@ -65,7 +85,6 @@ describe('GenericSchemeMultiCall', () => {
           const { timestamp } = await web3.eth.getBlock(blockNumber);
           return timestamp;
         }
-
         const { proposalId: p1, timestamp: p1Creation } = await propose();
 
         const getProposal = `{
@@ -178,7 +197,7 @@ describe('GenericSchemeMultiCall', () => {
                 callsData,
                 values,
                 executed: true,
-                returnValues: null,
+                returnValues: ['0x0000000000000000000000000000000000000000000000000000000000000001'],
             },
         });
     }, 100000);

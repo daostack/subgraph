@@ -5,7 +5,7 @@ const {   subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
 const supportedSchemes = ['ContributionRewardExt', 'GenericScheme', 'GenericSchemeMultiCall']
-const supportedStandAloneContracts = ['Competition']
+const supportedStandAloneContracts = ['Competition', 'DxDaoSchemeConstraints']
 let ids = [];
 
 function daoYaml(contract, contractAddress, arcVersion) {
@@ -60,6 +60,12 @@ function daoYaml(contract, contractAddress, arcVersion) {
           return {
             name: contractName,
             file: `${__dirname}/../abis/0.0.1-rc.47/GenericSchemeMultiCall.json`
+          };
+        }
+        if ((_arcVersion < 47) && (contractName === "DxDaoSchemeConstraints")) {
+          return {
+            name: contractName,
+            file: `${__dirname}/../abis/0.0.1-rc.47/DxDaoSchemeConstraints.json`
           };
         }
         if ((_arcVersion < 47) && (contractName === "SchemeConstraints")) {

@@ -108,6 +108,13 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
           };
         }
 
+        if ((versionNum < 47) && (contractName === "DxDaoSchemeConstraints")) {
+          return {
+            name: contractName,
+            file: `${__dirname}/../abis/0.0.1-rc.47/DxDaoSchemeConstraints.json`
+          };
+        }
+
         if ((versionNum < 47) && (contractName === "SchemeConstraints")) {
           return {
             name: contractName,

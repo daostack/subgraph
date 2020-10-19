@@ -1,0 +1,8 @@
+abis:
+  - DxDaoSchemeConstraints
+  - GenericSchemeMultiCall
+entities:
+  - GenericSchemeMultiCallParam
+eventHandlers:
+  - event: UpdatedContractsWhitelist(address[],bool[])
+    handler: handleUpdatedContractsWhitelist

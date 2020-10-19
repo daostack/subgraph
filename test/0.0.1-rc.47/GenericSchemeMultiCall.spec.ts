@@ -1,3 +1,4 @@
+import { nullAddress } from '../0.0.1-rc.16/util';
 import {
     getArcVersion,
     getContractAddresses,
@@ -55,7 +56,8 @@ describe('GenericSchemeMultiCall', () => {
             data: '0xABCD',
         });
 
-        await dxDaoSchemeConstraints.methods.updateContractsWhitelist([actionMock.options.address], [true]).send(
+        await dxDaoSchemeConstraints.methods.updateContractsWhitelist(
+            [actionMock.options.address, nullAddress], [true, false]).send(
             { from: accounts[0].address },
         );
 
@@ -140,7 +142,7 @@ describe('GenericSchemeMultiCall', () => {
             },
             scheme: {
                 genericSchemeMultiCallParams: {
-                    contractsWhiteList: (await dxDaoSchemeConstraints.methods.getContractsWhiteList().call()),
+                    contractsWhiteList: [addresses.ActionMock.toLowerCase()],
                     schemeConstraints: addresses.DxDaoSchemeConstraints.toLowerCase(),
                 },
             },

@@ -1,0 +1,12 @@
+abis:
+  - GenericSchemeMultiCall
+  - GenesisProtocol
+entities:
+  - GenericSchemeMultiCallProposal
+eventHandlers:
+  - event: ProposalExecuted(indexed address,indexed bytes32)
+    handler: handleProposalExecuted
+  - event: ProposalCallExecuted(indexed address,indexed bytes32,address,bytes,bytes)
+    handler: handleProposalCallExecuted
+  - event: NewMultiCallProposal(indexed address,indexed bytes32,bytes[],uint256[],string,address[])
+    handler: handleNewMultiCallProposal

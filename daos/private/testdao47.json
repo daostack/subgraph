@@ -1,0 +1,60 @@
+{
+  "name": "Gustatory Scenographer",
+  "Avatar": "0x3d9E3F230E8ad18fBE7A8f9131e30579Be01fCD1",
+  "DAOToken": "0x9ac1CE3fF16241B40F1B04AFFbede8dBAA3E3A57",
+  "Reputation": "0xF135846012087e68DaC55A4C11550A1306875478",
+  "Controller": "0x9363150ea59a9d317755973a201F14B9e6d1eC27",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0xB614b1720e23936fFF2Be5588E1fb935F91161CC",
+      "arcVersion": "0.0.1-rc.47"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x248b2B6DDDc29D88fEC5a8C18153F4cCCe3CA2Fb",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0xa0514D0987b539498d07DBB8D6C75d4cA33Adc5f",
+      "arcVersion": "0.0.1-rc.47"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0x2b67199e1A34Db6892da2dA63628Be635F398eEb",
+      "arcVersion": "0.0.1-rc.47"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x248b2B6DDDc29D88fEC5a8C18153F4cCCe3CA2Fb",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "Competition",
+      "address": "0xcE05e60546203Ab3ac82B42387C156103dc0E372",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "address": "0xa0514D0987b539498d07DBB8D6C75d4cA33Adc5f",
+      "arcVersion": "0.0.1-rc.47"
+    },
+    {
+      "name": "ActionMock",
+      "address": "0x265ba47672C50e03c2C3DC756d625C3fde6D912c",
+      "arcVersion": "0.0.1-rc.47"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0x9a56B2Fa2d204Ffe1419EC62BeAC31dddD760351",
+      "arcVersion": "0.0.1-rc.47"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.47"
+}

@@ -1,32 +1,53 @@
 {
-  "name": "Mannered Artist",
-  "Avatar": "0xf88E4C158298323a85dD7678eD60DBfF6DA71007",
-  "DAOToken": "0xa09Cd74C747bf9DDB9154B1C75e271Dd12E45224",
-  "Reputation": "0x5E06A0d7BA9728E3B3140857B26fFD6626D66793",
-  "Controller": "0x3d6cF0d60B392e781d0cB8dcA333A2B197548198",
+  "name": "Taciturn Potato",
+  "Avatar": "0xAf6F348C0af707B0D9C23fb4e07ceDA5d9AaC465",
+  "DAOToken": "0x6258F90A25c4fB7B8ee6331903767edD49De44e0",
+  "Reputation": "0x76016A8076aA1CD967b946708C01A8274b75Fe4C",
+  "Controller": "0x34dF74e75eA20E9fC3E066bA39Ad54f23BB05E12",
   "Schemes": [
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0x405fC0EE23C7fcd0a41A864505Fe8c969ca3eF6A",
+      "address": "0xb3212b66C337F83D277172D891Daf31776FF9D79",
       "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0x7322258910EeA3A9918b6bB64472fC15969e9d79",
+      "arcVersion": "0.0.1-rc.47"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "Wallet",
-      "address": "0xfd30B6e495CC375Bd98d01BD959F741Dd2772d64",
+      "address": "0x4d46f75Be6E98dBA8E8384802a68d550DeB69770",
       "arcVersion": "0.0.1-rc.19"
     },
     {
       "name": "ContributionRewardExt",
-      "address": "0x405fC0EE23C7fcd0a41A864505Fe8c969ca3eF6A",
+      "address": "0xb3212b66C337F83D277172D891Daf31776FF9D79",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "Competition",
-      "address": "0x4A1D2A5060C782049Ef966d9412f1239E95183b7",
+      "address": "0xf454f24A62E5Be73aA877Aa824b78F8F2a31d236",
       "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "address": "0x7322258910EeA3A9918b6bB64472fC15969e9d79",
+      "arcVersion": "0.0.1-rc.47"
+    },
+    {
+      "name": "ActionMock",
+      "address": "0xf1486cC376555A5035cFa85A761279c9876Daddc",
+      "arcVersion": "0.0.1-rc.19"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0xF3Ecf410c2f4EF71691F63E409300f85c16c4f33",
+      "arcVersion": "0.0.1-rc.47"
     }
   ],
   "arcVersion": "0.0.1-rc.19"

@@ -1,38 +1,59 @@
 {
-  "name": "Feckless Cookies",
-  "Avatar": "0x2268317B403ADEc49Fde9241a977335aba406A55",
-  "DAOToken": "0x78B7beA9fB68616E4520DC2F522833616f6413d5",
-  "Reputation": "0x0819C56Db86FbC6Cb3e0ef63F7DF0c4d5e60d915",
-  "Controller": "0x26bc7F1d9642BB480B01dE689deA64b97Fdd332B",
+  "name": "Munificent Director",
+  "Avatar": "0x57F909211c361AE0A11E269b74Dca470078c6e67",
+  "DAOToken": "0xE9A11C4C015D142D090CFF82dEd1Deea5B824185",
+  "Reputation": "0xCf9dB88B2bef5f498de16327b051C10A17bC6132",
+  "Controller": "0x63ad03B017A26782A53B1c4cD1DDF4b3273c8d03",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0x6884D17Fac0FBd05382cF562E86DE82c79e26117",
+      "address": "0x9dcf3D406e850BB65240107e5FA02d6116EF9393",
       "arcVersion": "0.0.1-rc.33"
     },
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0xFa117aD3aEC87df869C456d91f6731950Cfef6ee",
+      "address": "0xf56Ca75Ac4EB296978Cf3773caA5d52FC57a9FE8",
       "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0xBbA961069d46ae92006b7985fAA1e90e33c09D98",
+      "arcVersion": "0.0.1-rc.47"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "Wallet",
-      "address": "0x44b2C55F5CAe26D328F047a547d766E6BE836eb9",
+      "address": "0x3DEe4593fBc3DC789DF5828E5E10f7b4E3cb5C01",
       "arcVersion": "0.0.1-rc.33"
     },
     {
       "name": "ContributionRewardExt",
-      "address": "0xFa117aD3aEC87df869C456d91f6731950Cfef6ee",
+      "address": "0xf56Ca75Ac4EB296978Cf3773caA5d52FC57a9FE8",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "Competition",
-      "address": "0x017383Ddb609fdbf85B80910A34936a733DA0913",
+      "address": "0x2a45Bac91F4f06cE3A1a2a5b7138540b33E02883",
       "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "address": "0xBbA961069d46ae92006b7985fAA1e90e33c09D98",
+      "arcVersion": "0.0.1-rc.47"
+    },
+    {
+      "name": "ActionMock",
+      "address": "0xFF5bA3B4efA9175BC3F096d615A34E69c6C479AC",
+      "arcVersion": "0.0.1-rc.33"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0xe011485b54301995924F87Dd56dA2f0f1f289065",
+      "arcVersion": "0.0.1-rc.47"
     }
   ],
   "arcVersion": "0.0.1-rc.33"

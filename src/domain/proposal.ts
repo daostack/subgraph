@@ -392,6 +392,24 @@ export function updateGSProposal(
   saveProposal(proposal);
 }
 
+export function updateGSMCProposal(
+  proposalId: Bytes,
+  createdAt: BigInt,
+  avatarAddress: Address,
+  descriptionHash: string,
+  schemeAddress: Address,
+): void {
+  let proposal = getProposal(proposalId.toHex());
+  proposal.dao = avatarAddress.toHex();
+  proposal.genericSchemeMultiCall = proposalId.toHex();
+  proposal.createdAt = createdAt;
+  proposal.descriptionHash = descriptionHash;
+  proposal.scheme = crypto.keccak256(concat(avatarAddress, schemeAddress)).toHex();
+  getProposalIPFSData(proposal);
+
+  saveProposal(proposal);
+}
+
 export function updateSRProposal(
   proposalId: string,
   createdAt: BigInt,

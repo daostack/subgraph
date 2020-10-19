@@ -1,6 +1,7 @@
 import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
 import { setContributionRewardExtParams,
          setContributionRewardParams,
+         setGenericSchemeMultiCallParams,
          setGenericSchemeParams,
          setSchemeRegistrarParams,
          setUGenericSchemeParams,
@@ -8,7 +9,7 @@ import { setContributionRewardExtParams,
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
 import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
 import {GenericScheme} from '../types/GenericScheme/GenericScheme';
-import { GenesisProtocol } from '../types/GenesisProtocol/GenesisProtocol';
+import { GenericSchemeMultiCall } from '../types/GenericSchemeMultiCall/GenericSchemeMultiCall';
 import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
 import {UGenericScheme} from '../types/UGenericScheme/UGenericScheme';
@@ -96,7 +97,16 @@ export function create(dao: Address,
                      genericScheme.voteParams(),
                      genericScheme.contractToCall());
      isGPQue = true;
-   }
+   } else if (equalStrings(contractInfo.name, 'GenericSchemeMultiCall')) {
+    let genericSchemeMultiCall = GenericSchemeMultiCall.bind(scheme);
+    setGenericSchemeMultiCallParams(
+                    dao,
+                    scheme,
+                    genericSchemeMultiCall.votingMachine(),
+                    genericSchemeMultiCall.voteParams(),
+                    genericSchemeMultiCall.schemeConstraints());
+    isGPQue = true;
+  }
 
    if (isGPQue) {
       let bigOne = new ByteArray(6);

@@ -24,6 +24,7 @@ type ControllerScheme @entity {
 	schemeRegistrarParams: SchemeRegistrarParam
 	uGenericSchemeParams: UGenericSchemeParam
 	genericSchemeParams: GenericSchemeParam
+	genericSchemeMultiCallParams: GenericSchemeMultiCallParam
 	numberOfQueuedProposals: BigInt!
 	numberOfPreBoostedProposals: BigInt!
 	numberOfBoostedProposals: BigInt!
@@ -111,6 +112,14 @@ type GenericSchemeParam @entity {
 	votingMachine : Bytes!
 	voteParams: GenesisProtocolParam!
 	contractToCall: Bytes!
+}
+
+type GenericSchemeMultiCallParam @entity {
+	id: ID!
+	votingMachine : Bytes!
+	voteParams: GenesisProtocolParam!
+	schemeConstraints: Bytes!
+	contractsWhiteList: [Bytes!]
 }
 
 type GenesisProtocolParam @entity {

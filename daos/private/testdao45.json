@@ -1,0 +1,50 @@
+{
+  "name": "Querulous Stick figures",
+  "Avatar": "0xf1124a684B3f087f2E951d0B9c5bF8015de532d1",
+  "DAOToken": "0x3932D64B07199aC13Eb5B2A5a19E0C32fd760C3d",
+  "Reputation": "0x541dc9116b17bD2dB1B67D0D36A2565f45026b51",
+  "Controller": "0x12f90A95Dd3923bf69344fa30B9927ac9Dd79C84",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0xbB890Efc11F5e5A1C8537b3Fa7DD5792659eB9e1",
+      "arcVersion": "0.0.1-rc.45"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xf04CcE283D79025e621753DfDF25aec03EAeB108",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0xd1B5002Da809021b0830624fe9C1d87392301AE4",
+      "arcVersion": "0.0.1-rc.46"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0xe014640DD824Ce61F9532B6ebaac5B91E9891eeD",
+      "arcVersion": "0.0.1-rc.45"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xf04CcE283D79025e621753DfDF25aec03EAeB108",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "Competition",
+      "address": "0x5Abd8fa661B2e6C494Ea4Af9760F2d5B9D0Dd78E",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0xBBC181f0e156aA31475327bFbAE76a02aD959c97",
+      "arcVersion": "0.0.1-rc.46"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.45"
+}

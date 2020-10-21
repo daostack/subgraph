@@ -6,6 +6,13 @@ export function getDAO(id: string): DAO {
   let dao = store.get('DAO', id) as DAO;
   if (dao == null) {
     dao = new DAO(id);
+    dao.name = '';
+    dao.nativeToken = '';
+    dao.nativeReputation = '';
+    dao.reputationHoldersCount = BigInt.fromI32(0);
+    dao.register = 'na';
+    dao.metadata = '';
+    dao.metadataHash = '';
     dao.numberOfQueuedProposals = BigInt.fromI32(0);
     dao.numberOfPreBoostedProposals = BigInt.fromI32(0);
     dao.numberOfBoostedProposals = BigInt.fromI32(0);

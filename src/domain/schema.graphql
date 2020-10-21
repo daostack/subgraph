@@ -30,6 +30,7 @@ type DAO @entity {
 	metadata: String!
 	metadataHash: String!
 	ethBalance: BigInt!
+	vault: Bytes
 }
 
 type GPQueue @entity {

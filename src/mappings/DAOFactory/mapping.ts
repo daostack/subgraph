@@ -5,7 +5,7 @@ import {
 } from '../../contractsInfo';
 
 import { addDaoMember } from '../../domain';
-import { insertNewDAO } from '../../domain/dao';
+import { getDAO, insertNewDAO, saveDAO } from '../../domain/dao';
 import { addNewDAOEvent } from '../../domain/event';
 import { insertReputation } from '../../domain/reputation';
 import { insertToken, updateTokenTotalSupply } from '../../domain/token';
@@ -99,7 +99,11 @@ export function handleProxyCreated(event: ProxyCreated): void {
 
   if (equalStrings(event.params._contractName, 'Avatar')) {
     let avatar = Avatar.bind(event.params._proxy);
-    addContract(avatar.vault(), 'Vault', version);
+    let vault = avatar.vault();
+    addContract(vault, 'Vault', version);
+    let dao = getDAO(event.params._proxy.toHex());
+    dao.vault = vault;
+    saveDAO(dao);
   }
 }
 

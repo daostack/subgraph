@@ -17,6 +17,14 @@ async function generateContractInfo(opts={}) {
   } else {
     daodir = path.resolve(`./daos/${network}/`)
   }
+
+  let othersFile
+  if (opts.othersFile) {
+    othersFile = path.resolve(`./${opts.othersFile}`)
+  } else {
+    othersFile = path.resolve(`./ops/contract-info-others.json`)
+  }
+
   const migration = JSON.parse(fs.readFileSync(require.resolve(opts.migrationFile), "utf-8"));
 
   let versions = migration[network].base
@@ -39,6 +47,16 @@ async function generateContractInfo(opts={}) {
         }
     }
   }
+
+  const others = JSON.parse(fs.readFileSync(othersFile, "utf-8"))[network];
+  if (others) {
+    for (let contract of others) {
+      if (!contractsAddresses[contract.address.toLowerCase()]) {
+        buffer += "    setContractInfo("+"'"+contract.address.toLowerCase()+"'"+", " +"'"+contract.name+"'"+", "+"'"+ (contract.alias ? contract.alias : contract.name) +"', "+"'"+contract.arcVersion+"'"+");\n";
+      }
+      contractsAddresses[contract.address.toLowerCase()] = true;
+    }
+ }
 
   fs.readdir(daodir, function(err, files) {
     if (err) {

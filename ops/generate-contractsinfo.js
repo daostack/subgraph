@@ -22,7 +22,7 @@ async function generateContractInfo(opts={}) {
   if (opts.othersFile) {
     othersFile = path.resolve(`./${opts.othersFile}`)
   } else {
-    othersFile = path.resolve(`./contract-info-others.json`)
+    othersFile = path.resolve(`./ops/contract-info-others.json`)
   }
 
   const migration = JSON.parse(fs.readFileSync(require.resolve(opts.migrationFile), "utf-8"));

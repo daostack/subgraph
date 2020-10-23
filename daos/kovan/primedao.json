@@ -1,0 +1,29 @@
+{
+  "name": "primeDAO",
+  "Avatar": "0x15A5f49bDC49Ff5214b0eE717AD6068c9191F589",
+  "DAOToken": "0x27f3aF46Ac768a52234DaA4bC3f2d65F70F7c51C",
+  "Reputation": "0x2dCFE6af55158FCa43cEBD26ede4D516471e9Bb5",
+  "Controller": "0x5208b1654f368D2Dd578781Cf7326EcD2600D5dD",
+  "Schemes": [
+    {
+      "name": "BalancerProxy",
+      "alias": "BalancerProxy",
+      "address": "0x5086D91858A5AAC4A770212720B297F38e0DD403",
+      "arcVersion": "0.0.1-rc.44"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "BalancerPoolManager",
+      "address": "0x6cb30414B2B860b9f3b1aF679DF7e51d9b2c7744",
+      "arcVersion": "0.0.1-rc.44"
+    },
+    {
+      "name": "LockingToken4Reputation",
+      "alias": "LockingToken4Reputation",
+      "address": "0x04Dd416D9E6B543cDb5dC2e687AEBb5D57721882",
+      "arcVersion": "0.0.1-rc.44"
+    }
+  ],
+  "StandAloneContracts": [],
+  "arcVersion": "0.0.1-rc.44"
+}

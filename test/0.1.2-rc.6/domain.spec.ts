@@ -58,9 +58,11 @@ describe('Domain Layer', () => {
           }
         }
         reputationHoldersCount
+        vault
       }
     }`;
     let dao = (await sendQuery(getMigrationDao, 5000)).dao;
+    const avatar = new web3.eth.Contract(Avatar.abi, addresses.Avatar, opts);
     expect(dao).toMatchObject({
       id: addresses.Avatar.toLowerCase(),
       name: orgName,
@@ -77,6 +79,7 @@ describe('Domain Layer', () => {
         },
       },
       reputationHoldersCount: '6',
+      vault: (await avatar.methods.vault().call()).toLowerCase(),
     });
 
     // Can't test timestap for NewReputationHolder event

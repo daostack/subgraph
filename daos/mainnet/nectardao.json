@@ -6,6 +6,21 @@
   "Controller": "0x9f80898cC3Bc625b6A05B1500Adc7c4357eFb647",
   "Schemes": [
     {
+      "name": "UniswapProxy",
+      "alias": "UniswapProxy",
+      "address": "0x33ff117b155dc6cfa4168bab4ab492487ac767bd"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "Uniswap",
+      "address": "0x6d2c046f6d31374888a805ef041e62509efca367"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "necBurn",
+      "address": "0x8d8705016c8144cbd40c9302fdb3af88364f452c"
+    },
+    {
       "name": "GenericScheme",
       "alias": "GenericSchemeENSPublicProvider",
       "address": "0xD7aCd0a6985345810A0f87b58f4f90287cEa15Cc"

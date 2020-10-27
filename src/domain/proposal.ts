@@ -207,11 +207,28 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
   }
   if (dao != null) {
     if (equalStrings(proposal.stage, 'Queued')) {
-      dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.minus(BigInt.fromI32(1));
+      if (controllerScheme.isRegistered) {
+        dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.minus(BigInt.fromI32(1));
+      } else {
+        dao.numberOfQueuedProposalsUnregistered = dao.numberOfQueuedProposalsUnregistered.minus(BigInt.fromI32(1));
+      }
     } else if (equalStrings(proposal.stage, 'PreBoosted')) {
-      dao.numberOfPreBoostedProposals = dao.numberOfPreBoostedProposals.minus(BigInt.fromI32(1));
+      if (controllerScheme.isRegistered) {
+        dao.numberOfPreBoostedProposals = dao.numberOfPreBoostedProposals.minus(BigInt.fromI32(1));
+      } else {
+        dao.numberOfPreBoostedProposalsUnregistered = dao.numberOfPreBoostedProposalsUnregistered.minus(
+          BigInt.fromI32(1),
+        );
+      }
     } else if ((equalStrings(proposal.stage, 'Boosted') ||
                 equalStrings(proposal.stage, 'QuietEndingPeriod')) && (state !== 6)) {
+      if (controllerScheme.isRegistered) {
+        dao.numberOfBoostedProposals = dao.numberOfBoostedProposals.minus(BigInt.fromI32(1));
+      } else {
+        dao.numberOfBoostedProposalsUnregistered = dao.numberOfBoostedProposalsUnregistered.minus(
+          BigInt.fromI32(1),
+        );
+      }
       dao.numberOfBoostedProposals = dao.numberOfBoostedProposals.minus(BigInt.fromI32(1));
     }
   }
@@ -223,7 +240,13 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
       .numberOfExpiredInQueueProposals.plus(BigInt.fromI32(1));
     }
     if (dao != null) {
-      dao.numberOfExpiredInQueueProposals = dao.numberOfExpiredInQueueProposals.plus(BigInt.fromI32(1));
+      if (controllerScheme.isRegistered) {
+        dao.numberOfExpiredInQueueProposals = dao.numberOfExpiredInQueueProposals.plus(BigInt.fromI32(1));
+      } else {
+        dao.numberOfExpiredInQueueProposalsUnregistered = dao.numberOfExpiredInQueueProposalsUnregistered.plus(
+          BigInt.fromI32(1),
+        );
+      }
     }
     proposal.accountsWithUnclaimedRewards = new Array<Bytes>();
   } else if (state == 2) {
@@ -239,7 +262,11 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
       .numberOfQueuedProposals.plus(BigInt.fromI32(1));
     }
     if (dao != null) {
-      dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.plus(BigInt.fromI32(1));
+      if (controllerScheme.isRegistered) {
+        dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.plus(BigInt.fromI32(1));
+      } else {
+        dao.numberOfQueuedProposalsUnregistered = dao.numberOfQueuedProposalsUnregistered.plus(BigInt.fromI32(1));
+      }
     }
   } else if (state == 4) {
     // PreBoosted
@@ -253,7 +280,13 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
       .numberOfPreBoostedProposals.plus(BigInt.fromI32(1));
     }
     if (dao != null) {
-      dao.numberOfPreBoostedProposals = dao.numberOfPreBoostedProposals.plus(BigInt.fromI32(1));
+      if (controllerScheme.isRegistered) {
+        dao.numberOfPreBoostedProposals = dao.numberOfPreBoostedProposals.plus(BigInt.fromI32(1));
+      } else {
+        dao.numberOfPreBoostedProposalsUnregistered = dao.numberOfPreBoostedProposalsUnregistered.plus(
+          BigInt.fromI32(1),
+        );
+      }
     }
   } else if (state == 5) {
     // Boosted
@@ -266,7 +299,13 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
       .numberOfBoostedProposals.plus(BigInt.fromI32(1));
     }
     if (dao != null) {
-      dao.numberOfBoostedProposals = dao.numberOfBoostedProposals.plus(BigInt.fromI32(1));
+      if (controllerScheme.isRegistered) {
+        dao.numberOfBoostedProposals = dao.numberOfBoostedProposals.plus(BigInt.fromI32(1));
+      } else {
+        dao.numberOfBoostedProposalsUnregistered = dao.numberOfBoostedProposalsUnregistered.plus(
+          BigInt.fromI32(1),
+        );
+      }
     }
   } else if (state == 6) {
     // QuietEndingPeriod
@@ -327,7 +366,11 @@ export function updateGPProposal(
   }
 
   let dao = getDAO(avatarAddress.toHex());
-  dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.plus(BigInt.fromI32(1));
+  if (scheme.isRegistered) {
+    dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.plus(BigInt.fromI32(1));
+  } else {
+    dao.numberOfQueuedProposalsUnregistered = dao.numberOfQueuedProposalsUnregistered.plus(BigInt.fromI32(1));
+  }
   saveDAO(dao);
   let reputation = getReputation(dao.nativeReputation);
   proposal.totalRepWhenCreated = reputation.totalSupply;

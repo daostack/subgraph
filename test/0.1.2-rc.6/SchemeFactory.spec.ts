@@ -82,6 +82,16 @@ describe('SchemeFactory', () => {
         const proposalId = await propose.call();
         let { transactionHash: proposaTxHash } = await propose.send();
 
+        // Have a proposal on unregistered scheme
+        await schemeFactory.methods.proposeScheme(
+          getPackageVersion(),
+          'SchemeFactory',
+          initData,
+          '0x0000001f',
+          schemeFactory.options.address,
+          descHash,
+        ).send();
+
         const proposalIsIndexed = async () => {
           return (await sendQuery(schemeFactoryNewSchemeProposalsQuery)).schemeFactoryNewSchemeProposals.length
            > prevProposalsLength;
@@ -224,6 +234,14 @@ describe('SchemeFactory', () => {
             schemeFactoryProposals {
               dao {
                 id
+                numberOfQueuedProposals
+                numberOfPreBoostedProposals
+                numberOfBoostedProposals
+                numberOfExpiredInQueueProposals
+                numberOfQueuedProposalsUnregistered
+                numberOfPreBoostedProposalsUnregistered
+                numberOfBoostedProposalsUnregistered
+                numberOfExpiredInQueueProposalsUnregistered
               }
               id
               schemeToRegisterName
@@ -238,7 +256,9 @@ describe('SchemeFactory', () => {
         }`);
 
         expect(schemeFactoryProposals).toContainEqual({
-          dao: { id : addresses.Avatar.toLowerCase() },
+          dao: {
+            id : addresses.Avatar.toLowerCase(),
+          },
           id: proposalId,
           schemeToRegisterName: 'SchemeFactory',
           schemeToRegisterData: initData,
@@ -248,6 +268,15 @@ describe('SchemeFactory', () => {
           decision: '1',
           schemeRegistered: true,
           schemeRemoved: true,
+          numberOfQueuedProposals: '0',
+          numberOfPreBoostedProposals: '0',
+          numberOfBoostedProposals: '0',
+          numberOfExpiredInQueueProposals: '0',
+          numberOfQueuedProposalsUnregistered: '1',
+          numberOfPreBoostedProposalsUnregistered: '0',
+          numberOfBoostedProposalsUnregistered: '0',
+          numberOfExpiredInQueueProposalsUnregistered: '0',
         });
+
     }, 100000);
 });

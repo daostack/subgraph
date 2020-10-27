@@ -88,6 +88,34 @@ function unregisterScheme(avatarAddress: Address, scheme: Address): void {
   let controllerScheme = ControllerScheme.load(crypto.keccak256(concat(avatarAddress, scheme)).toHex());
   if (controllerScheme != null) {
     controllerScheme.isRegistered = false;
+    let dao = DAO.load(avatarAddress.toHex());
+    if (dao != null) {
+      dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.minus(
+        controllerScheme.numberOfQueuedProposals,
+      );
+      dao.numberOfPreBoostedProposals = dao.numberOfPreBoostedProposals.minus(
+        controllerScheme.numberOfPreBoostedProposals,
+      );
+      dao.numberOfBoostedProposals = dao.numberOfBoostedProposals.minus(
+        controllerScheme.numberOfBoostedProposals,
+      );
+      dao.numberOfExpiredInQueueProposals = dao.numberOfExpiredInQueueProposals.minus(
+        controllerScheme.numberOfExpiredInQueueProposals,
+      );
+      dao.numberOfQueuedProposalsUnregistered = dao.numberOfQueuedProposalsUnregistered.plus(
+        controllerScheme.numberOfQueuedProposals,
+      );
+      dao.numberOfPreBoostedProposalsUnregistered = dao.numberOfPreBoostedProposalsUnregistered.plus(
+        controllerScheme.numberOfPreBoostedProposals,
+      );
+      dao.numberOfBoostedProposalsUnregistered = dao.numberOfBoostedProposalsUnregistered.plus(
+        controllerScheme.numberOfBoostedProposals,
+      );
+      dao.numberOfExpiredInQueueProposalsUnregistered = dao.numberOfExpiredInQueueProposalsUnregistered.plus(
+        controllerScheme.numberOfExpiredInQueueProposals,
+      );
+      dao.save();
+    }
     controllerScheme.save();
   }
 }
@@ -134,6 +162,36 @@ export function handleRegisterScheme(event: RegisterScheme): void {
 
   if (AvatarContract.load(avatar.toHex()) == null) {
     return;
+  }
+
+  let dao = DAO.load(avatar.toHex());
+  let controllerScheme = ControllerScheme.load(crypto.keccak256(concat(avatar, event.params._scheme)).toHex());
+  if (dao != null && controllerScheme != null) {
+    dao.numberOfQueuedProposalsUnregistered = dao.numberOfQueuedProposalsUnregistered.minus(
+      controllerScheme.numberOfQueuedProposals,
+    );
+    dao.numberOfPreBoostedProposalsUnregistered = dao.numberOfPreBoostedProposalsUnregistered.minus(
+      controllerScheme.numberOfPreBoostedProposals,
+    );
+    dao.numberOfBoostedProposalsUnregistered = dao.numberOfBoostedProposalsUnregistered.minus(
+      controllerScheme.numberOfBoostedProposals,
+    );
+    dao.numberOfExpiredInQueueProposalsUnregistered = dao.numberOfExpiredInQueueProposalsUnregistered.minus(
+      controllerScheme.numberOfExpiredInQueueProposals,
+    );
+    dao.numberOfQueuedProposals = dao.numberOfQueuedProposals.plus(
+      controllerScheme.numberOfQueuedProposals,
+    );
+    dao.numberOfPreBoostedProposals = dao.numberOfPreBoostedProposals.plus(
+      controllerScheme.numberOfPreBoostedProposals,
+    );
+    dao.numberOfBoostedProposals = dao.numberOfBoostedProposals.plus(
+      controllerScheme.numberOfBoostedProposals,
+    );
+    dao.numberOfExpiredInQueueProposals = dao.numberOfExpiredInQueueProposals.plus(
+      controllerScheme.numberOfExpiredInQueueProposals,
+    );
+    dao.save();
   }
 
   insertScheme(event.address, avatar, event.params._scheme);

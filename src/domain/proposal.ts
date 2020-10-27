@@ -229,7 +229,6 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
           BigInt.fromI32(1),
         );
       }
-      dao.numberOfBoostedProposals = dao.numberOfBoostedProposals.minus(BigInt.fromI32(1));
     }
   }
   if (state == 1) {

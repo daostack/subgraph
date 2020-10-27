@@ -237,7 +237,7 @@ describe('SchemeFactory', () => {
             schemeRemoved
           }
       }`;
-        let initState = (await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals;
+        let initState = (await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals[0];
         const executedIsIndexed = async () => {
           return (await sendQuery(getSchemeFactoryProposalExecuteds)).schemeFactoryProposalExecuteds.length
            > prevExecutedsLength;
@@ -260,7 +260,7 @@ describe('SchemeFactory', () => {
             id : addresses.Avatar.toLowerCase(),
             numberOfQueuedProposals: initState.dao.numberOfQueuedProposals,
             numberOfPreBoostedProposals: initState.dao.numberOfPreBoostedProposals,
-            numberOfBoostedProposals: initState.dao.numberOfBoostedProposals,
+            numberOfBoostedProposals: initState.dao.numberOfBoostedProposals - 1,
             numberOfExpiredInQueueProposals: initState.dao.numberOfExpiredInQueueProposals,
             numberOfQueuedProposalsUnregistered: initState.dao.numberOfQueuedProposalsUnregistered + 1,
             numberOfPreBoostedProposalsUnregistered: initState.dao.numberOfPreBoostedProposalsUnregistered,

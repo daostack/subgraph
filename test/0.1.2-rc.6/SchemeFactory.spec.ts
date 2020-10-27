@@ -213,6 +213,31 @@ describe('SchemeFactory', () => {
           }
         }
 
+        const schemeFactoryProposalsQuery = `{
+          schemeFactoryProposals {
+            dao {
+              id
+              numberOfQueuedProposals
+              numberOfPreBoostedProposals
+              numberOfBoostedProposals
+              numberOfExpiredInQueueProposals
+              numberOfQueuedProposalsUnregistered
+              numberOfPreBoostedProposalsUnregistered
+              numberOfBoostedProposalsUnregistered
+              numberOfExpiredInQueueProposalsUnregistered
+            }
+            id
+            schemeToRegisterName
+            schemeToRegisterData
+            schemeToRegisterPackageVersion
+            schemeToRegisterPermission
+            schemeToRemove
+            decision
+            schemeRegistered
+            schemeRemoved
+          }
+      }`;
+        let initState = (await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals;
         const executedIsIndexed = async () => {
           return (await sendQuery(getSchemeFactoryProposalExecuteds)).schemeFactoryProposalExecuteds.length
            > prevExecutedsLength;
@@ -230,34 +255,17 @@ describe('SchemeFactory', () => {
           decision: '1',
         });
 
-        const { schemeFactoryProposals } = await sendQuery(`{
-            schemeFactoryProposals {
-              dao {
-                id
-                numberOfQueuedProposals
-                numberOfPreBoostedProposals
-                numberOfBoostedProposals
-                numberOfExpiredInQueueProposals
-                numberOfQueuedProposalsUnregistered
-                numberOfPreBoostedProposalsUnregistered
-                numberOfBoostedProposalsUnregistered
-                numberOfExpiredInQueueProposalsUnregistered
-              }
-              id
-              schemeToRegisterName
-              schemeToRegisterData
-              schemeToRegisterPackageVersion
-              schemeToRegisterPermission
-              schemeToRemove
-              decision
-              schemeRegistered
-              schemeRemoved
-            }
-        }`);
-
-        expect(schemeFactoryProposals).toContainEqual({
+        expect((await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals).toContainEqual({
           dao: {
             id : addresses.Avatar.toLowerCase(),
+            numberOfQueuedProposals: initState.dao.numberOfQueuedProposals,
+            numberOfPreBoostedProposals: initState.dao.numberOfPreBoostedProposals,
+            numberOfBoostedProposals: initState.dao.numberOfBoostedProposals,
+            numberOfExpiredInQueueProposals: initState.dao.numberOfExpiredInQueueProposals,
+            numberOfQueuedProposalsUnregistered: initState.dao.numberOfQueuedProposalsUnregistered + 1,
+            numberOfPreBoostedProposalsUnregistered: initState.dao.numberOfPreBoostedProposalsUnregistered,
+            numberOfBoostedProposalsUnregistered: initState.dao.numberOfBoostedProposalsUnregistered,
+            numberOfExpiredInQueueProposalsUnregistered: initState.dao.numberOfExpiredInQueueProposalsUnregistered,
           },
           id: proposalId,
           schemeToRegisterName: 'SchemeFactory',
@@ -268,14 +276,6 @@ describe('SchemeFactory', () => {
           decision: '1',
           schemeRegistered: true,
           schemeRemoved: true,
-          numberOfQueuedProposals: '0',
-          numberOfPreBoostedProposals: '0',
-          numberOfBoostedProposals: '0',
-          numberOfExpiredInQueueProposals: '0',
-          numberOfQueuedProposalsUnregistered: '1',
-          numberOfPreBoostedProposalsUnregistered: '0',
-          numberOfBoostedProposalsUnregistered: '0',
-          numberOfExpiredInQueueProposalsUnregistered: '0',
         });
 
     }, 100000);

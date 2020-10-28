@@ -190,7 +190,7 @@ describe('SchemeFactory', () => {
           }
       }`;
 
-        let initState;
+        let initState = (await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals[0];
         while ((await genesisProtocol.methods.proposals(proposalId).call()).state !== '2') {
           initState = (await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals[0];
           i++;
@@ -259,9 +259,9 @@ describe('SchemeFactory', () => {
         expect((await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals).toContainEqual({
           dao: {
             id : addresses.Avatar.toLowerCase(),
-            numberOfQueuedProposals: initState.dao.numberOfQueuedProposals,
+            numberOfQueuedProposals: (initState.dao.numberOfQueuedProposals - 2).toString(),
             numberOfPreBoostedProposals: initState.dao.numberOfPreBoostedProposals,
-            numberOfBoostedProposals: initState.dao.numberOfBoostedProposals - 1,
+            numberOfBoostedProposals: initState.dao.numberOfBoostedProposals,
             numberOfExpiredInQueueProposals: initState.dao.numberOfExpiredInQueueProposals,
             numberOfQueuedProposalsUnregistered: (
               // tslint:disable-next-line: radix

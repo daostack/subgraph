@@ -239,6 +239,11 @@ describe('SchemeFactory', () => {
           }
         }
 
+        const executedIsIndexed = async () => {
+          return (await sendQuery(getSchemeFactoryProposalExecuteds)).schemeFactoryProposalExecuteds.length
+           > prevExecutedsLength;
+        };
+
         await waitUntilTrue(executedIsIndexed);
 
         const { schemeFactoryProposalExecuteds } = await sendQuery(getSchemeFactoryProposalExecuteds);

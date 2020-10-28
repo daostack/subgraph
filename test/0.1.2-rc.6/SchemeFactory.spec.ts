@@ -165,8 +165,34 @@ describe('SchemeFactory', () => {
             }
           }
         }`;
+        const schemeFactoryProposalsQuery = `{
+          schemeFactoryProposals {
+            dao {
+              id
+              numberOfQueuedProposals
+              numberOfPreBoostedProposals
+              numberOfBoostedProposals
+              numberOfExpiredInQueueProposals
+              numberOfQueuedProposalsUnregistered
+              numberOfPreBoostedProposalsUnregistered
+              numberOfBoostedProposalsUnregistered
+              numberOfExpiredInQueueProposalsUnregistered
+            }
+            id
+            schemeToRegisterName
+            schemeToRegisterData
+            schemeToRegisterPackageVersion
+            schemeToRegisterPermission
+            schemeToRemove
+            decision
+            schemeRegistered
+            schemeRemoved
+          }
+      }`;
 
+        let initState;
         while ((await genesisProtocol.methods.proposals(proposalId).call()).state !== '2') {
+          initState = (await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals[0];
           i++;
           tx = (await genesisProtocol.methods.vote(
             proposalId,
@@ -212,36 +238,6 @@ describe('SchemeFactory', () => {
             );
           }
         }
-
-        const schemeFactoryProposalsQuery = `{
-          schemeFactoryProposals {
-            dao {
-              id
-              numberOfQueuedProposals
-              numberOfPreBoostedProposals
-              numberOfBoostedProposals
-              numberOfExpiredInQueueProposals
-              numberOfQueuedProposalsUnregistered
-              numberOfPreBoostedProposalsUnregistered
-              numberOfBoostedProposalsUnregistered
-              numberOfExpiredInQueueProposalsUnregistered
-            }
-            id
-            schemeToRegisterName
-            schemeToRegisterData
-            schemeToRegisterPackageVersion
-            schemeToRegisterPermission
-            schemeToRemove
-            decision
-            schemeRegistered
-            schemeRemoved
-          }
-      }`;
-        let initState = (await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals[0];
-        const executedIsIndexed = async () => {
-          return (await sendQuery(getSchemeFactoryProposalExecuteds)).schemeFactoryProposalExecuteds.length
-           > prevExecutedsLength;
-        };
 
         await waitUntilTrue(executedIsIndexed);
 

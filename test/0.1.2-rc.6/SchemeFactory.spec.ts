@@ -192,7 +192,6 @@ describe('SchemeFactory', () => {
 
         let initState = (await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals[0];
         while ((await genesisProtocol.methods.proposals(proposalId).call()).state !== '2') {
-          initState = (await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals[0];
           i++;
           tx = (await genesisProtocol.methods.vote(
             proposalId,

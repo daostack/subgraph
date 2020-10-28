@@ -262,7 +262,10 @@ describe('SchemeFactory', () => {
             numberOfPreBoostedProposals: initState.dao.numberOfPreBoostedProposals,
             numberOfBoostedProposals: initState.dao.numberOfBoostedProposals - 1,
             numberOfExpiredInQueueProposals: initState.dao.numberOfExpiredInQueueProposals,
-            numberOfQueuedProposalsUnregistered: initState.dao.numberOfQueuedProposalsUnregistered + 1,
+            numberOfQueuedProposalsUnregistered: (
+              // tslint:disable-next-line: radix
+              parseInt(initState.dao.numberOfQueuedProposalsUnregistered) + 1
+            ).toString(),
             numberOfPreBoostedProposalsUnregistered: initState.dao.numberOfPreBoostedProposalsUnregistered,
             numberOfBoostedProposalsUnregistered: initState.dao.numberOfBoostedProposalsUnregistered,
             numberOfExpiredInQueueProposalsUnregistered: initState.dao.numberOfExpiredInQueueProposalsUnregistered,

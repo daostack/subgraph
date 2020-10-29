@@ -1325,7 +1325,7 @@ describe('Domain Layer', () => {
            .toEqual(quietEndingPeriodBeganAt.toString());
 
     const getGPQueues = `{
-            gpqueues {
+            gpqueues(where: { dao: "${addresses.Avatar.toLowerCase()}" }) {
                 threshold
                 scheme {
                   name

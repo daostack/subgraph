@@ -82,6 +82,16 @@ describe('SchemeFactory', () => {
         const proposalId = await propose.call();
         let { transactionHash: proposaTxHash } = await propose.send();
 
+        // Have a proposal on unregistered scheme
+        await schemeFactory.methods.proposeScheme(
+          getPackageVersion(),
+          'SchemeFactory',
+          initData,
+          '0x0000001f',
+          schemeFactory.options.address,
+          descHash,
+        ).send();
+
         const proposalIsIndexed = async () => {
           return (await sendQuery(schemeFactoryNewSchemeProposalsQuery)).schemeFactoryNewSchemeProposals.length
            > prevProposalsLength;
@@ -129,6 +139,33 @@ describe('SchemeFactory', () => {
             await sendQuery(getSchemeFactoryProposalExecuteds)
           ).schemeFactoryProposalExecuteds.length;
 
+        const schemeFactoryProposalsQuery = `{
+            schemeFactoryProposals {
+              dao {
+                id
+                numberOfQueuedProposals
+                numberOfPreBoostedProposals
+                numberOfBoostedProposals
+                numberOfExpiredInQueueProposals
+                numberOfQueuedProposalsUnregistered
+                numberOfPreBoostedProposalsUnregistered
+                numberOfBoostedProposalsUnregistered
+                numberOfExpiredInQueueProposalsUnregistered
+              }
+              id
+              schemeToRegisterName
+              schemeToRegisterData
+              schemeToRegisterPackageVersion
+              schemeToRegisterPermission
+              schemeToRemove
+              decision
+              schemeRegistered
+              schemeRemoved
+            }
+        }`;
+
+        let initState = (await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals[0];
+
         // pass the proposals
         let tx = await genesisProtocol.methods.vote(
                                                                 proposalId,
@@ -157,6 +194,7 @@ describe('SchemeFactory', () => {
         }`;
 
         while ((await genesisProtocol.methods.proposals(proposalId).call()).state !== '2') {
+          initState = (await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals[0];
           i++;
           tx = (await genesisProtocol.methods.vote(
             proposalId,
@@ -220,25 +258,21 @@ describe('SchemeFactory', () => {
           decision: '1',
         });
 
-        const { schemeFactoryProposals } = await sendQuery(`{
-            schemeFactoryProposals {
-              dao {
-                id
-              }
-              id
-              schemeToRegisterName
-              schemeToRegisterData
-              schemeToRegisterPackageVersion
-              schemeToRegisterPermission
-              schemeToRemove
-              decision
-              schemeRegistered
-              schemeRemoved
-            }
-        }`);
-
-        expect(schemeFactoryProposals).toContainEqual({
-          dao: { id : addresses.Avatar.toLowerCase() },
+        expect((await sendQuery(schemeFactoryProposalsQuery)).schemeFactoryProposals).toContainEqual({
+          dao: {
+            id : addresses.Avatar.toLowerCase(),
+            numberOfQueuedProposals: (initState.dao.numberOfQueuedProposals - 2).toString(),
+            numberOfPreBoostedProposals: initState.dao.numberOfPreBoostedProposals,
+            numberOfBoostedProposals: initState.dao.numberOfBoostedProposals,
+            numberOfExpiredInQueueProposals: initState.dao.numberOfExpiredInQueueProposals,
+            numberOfQueuedProposalsUnregistered: (
+              // tslint:disable-next-line: radix
+              parseInt(initState.dao.numberOfQueuedProposalsUnregistered) + 1
+            ).toString(),
+            numberOfPreBoostedProposalsUnregistered: initState.dao.numberOfPreBoostedProposalsUnregistered,
+            numberOfBoostedProposalsUnregistered: initState.dao.numberOfBoostedProposalsUnregistered,
+            numberOfExpiredInQueueProposalsUnregistered: initState.dao.numberOfExpiredInQueueProposalsUnregistered,
+          },
           id: proposalId,
           schemeToRegisterName: 'SchemeFactory',
           schemeToRegisterData: initData,
@@ -249,5 +283,6 @@ describe('SchemeFactory', () => {
           schemeRegistered: true,
           schemeRemoved: true,
         });
+
     }, 100000);
 });

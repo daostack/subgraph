@@ -17,6 +17,10 @@ export function getDAO(id: string): DAO {
     dao.numberOfPreBoostedProposals = BigInt.fromI32(0);
     dao.numberOfBoostedProposals = BigInt.fromI32(0);
     dao.numberOfExpiredInQueueProposals = BigInt.fromI32(0);
+    dao.numberOfQueuedProposalsUnregistered = BigInt.fromI32(0);
+    dao.numberOfPreBoostedProposalsUnregistered = BigInt.fromI32(0);
+    dao.numberOfBoostedProposalsUnregistered = BigInt.fromI32(0);
+    dao.numberOfExpiredInQueueProposalsUnregistered = BigInt.fromI32(0);
     dao.ethBalance = BigInt.fromI32(0);
   }
 

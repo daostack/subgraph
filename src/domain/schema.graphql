@@ -26,6 +26,10 @@ type DAO @entity {
 	numberOfPreBoostedProposals: BigInt!
 	numberOfBoostedProposals: BigInt!
 	numberOfExpiredInQueueProposals: BigInt!
+	numberOfQueuedProposalsUnregistered: BigInt!
+	numberOfPreBoostedProposalsUnregistered: BigInt!
+	numberOfBoostedProposalsUnregistered: BigInt!
+	numberOfExpiredInQueueProposalsUnregistered: BigInt!
 	error: String
 	metadata: String!
 	metadataHash: String!

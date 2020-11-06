@@ -53,6 +53,7 @@ export function insertNewDAO(
   dao.name = avatar.orgName().toString();
   dao.nativeToken = nativeTokenAddress.toHex();
   dao.nativeReputation = nativeReputationAddress.toHex();
+  dao.vault = avatar.vault();
   dao.reputationHoldersCount = BigInt.fromI32(0);
   dao.register = 'na';
   dao.metadata = '';

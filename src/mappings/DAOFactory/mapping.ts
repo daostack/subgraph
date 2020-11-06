@@ -99,11 +99,7 @@ export function handleProxyCreated(event: ProxyCreated): void {
 
   if (equalStrings(event.params._contractName, 'Avatar')) {
     let avatar = Avatar.bind(event.params._proxy);
-    let vault = avatar.vault();
-    addContract(vault, 'Vault', version);
-    let dao = getDAO(event.params._proxy.toHex());
-    dao.vault = vault;
-    saveDAO(dao);
+    addContract(avatar.vault(), 'Vault', version);
   }
 }
 

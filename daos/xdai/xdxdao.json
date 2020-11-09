@@ -1,19 +1,26 @@
 {
     "name": "xDXdao",
-    "Avatar": "0x72d1ccD74a2857bE805420CBF5cb5Cf6734a147E",
-    "DAOToken": "0xC12Fce029811Df298E953eE1abe6a6e359c4c3e0",
-    "Reputation": "0xccF435fFCDc33BE5815b92aa2070AEef0D438270",
-    "Controller": "0x85772AFFb657642ACEC58c48Bd04e496E7534c11",
-    "Schemes": [],
+    "Avatar": "0xb6E27AA7cC5A09D52Ba5213227ac1012C4E492f1",
+    "DAOToken": "0x6AB2B94ffF76F71453E5E54E00970d7596665650",
+    "Reputation": "0xD1612d4b86Be1A653deD8f09e06a309A7b850B60",
+    "Controller": "0x8C7fD2dFca85FefAB84B5E6Ce984d0Bb40488f2F",
+    "Schemes": [
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0xb4029FF04150CeB6BB585b6a7de2f8f01517d36f",
+        "arcVersion": "0.0.1-rc.47"
+      }
+    ],
     "StandAloneContracts": [
       {
         "name": "ContributionRewardExt",
-        "address": "0x082Ea4D85055dE18297be0F112240F8c6a6ae319",
+        "address": "0xb4029FF04150CeB6BB585b6a7de2f8f01517d36f",
         "arcVersion": "0.0.1-rc.47"
       },
       {
         "name": "Competition",
-        "address": "0xc61AD8Cbe39D13617ca70d8D0c8271d179705994",
+        "address": "0x0b8560095271c5D5264440dEAFF2c4eEd18ba180",
         "arcVersion": "0.0.1-rc.47"
       }
     ],

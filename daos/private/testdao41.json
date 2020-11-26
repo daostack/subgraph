@@ -1,5 +1,5 @@
 {
-  "name": "Effulgent Wheelwright",
+  "name": "Incendiary Kazoo",
   "Avatar": "0xde1837963BCa0cBDE1214c6ca83Ac8dCde7Cfe63",
   "DAOToken": "0x66688d72B4d3834Ed24b448D2894dA0D83e18f28",
   "Reputation": "0xa26d9ccFA2978Bb87F9De3705Ed0c1a126046E45",
@@ -21,7 +21,7 @@
       "name": "GenericSchemeMultiCall",
       "alias": "GenericSchemeMultiCall",
       "address": "0x6A5d6554EC6a0bbDe9671488db2620B877B77FB3",
-      "arcVersion": "0.0.1-rc.47"
+      "arcVersion": "0.0.1-rc.51"
     }
   ],
   "StandAloneContracts": [
@@ -43,7 +43,7 @@
     {
       "name": "GenericSchemeMultiCall",
       "address": "0x6A5d6554EC6a0bbDe9671488db2620B877B77FB3",
-      "arcVersion": "0.0.1-rc.47"
+      "arcVersion": "0.0.1-rc.51"
     },
     {
       "name": "ActionMock",
@@ -53,7 +53,7 @@
     {
       "name": "DxDaoSchemeConstraints",
       "address": "0x7331E275619166F9abAfE6a78D6923Ce29b2B64A",
-      "arcVersion": "0.0.1-rc.47"
+      "arcVersion": "0.0.1-rc.51"
     }
   ],
   "arcVersion": "0.0.1-rc.41"

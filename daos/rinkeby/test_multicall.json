@@ -1,0 +1,39 @@
+{
+    "name": "MultiCallTest",
+    "Avatar": "0x31A3A58B3429F624Ecf96CAC32457e40B196BD76",
+    "DAOToken": "0x7A1Ed293846745494e4ed2eaf9810675C27f2F4b",
+    "Reputation": "0x7E5D54C4B3697bf4fb6d649be9eB5cb37423Fcb7",
+    "Controller": "0x463634179ec5F5dBd4aa932439BF5373dbfe805f",
+    "Schemes": [
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0xc7831dBCC83d2dE860F4D0f033499b5Fd0f20d25",
+        "arcVersion": "0.0.1-rc.43"
+      },
+      {
+        "name": "GenericSchemeMultiCall",
+        "alias": "GenericSchemeMultiCall",
+        "address": "0x6094EB57fC153Ee4A15Ef2042e0E62Ed46DF3897",
+        "arcVersion": "0.0.1-rc.47"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "Wallet",
+        "address": "0xE468c90fc0913DDBABAb3c257ED383cb1e47D242",
+        "arcVersion": "0.0.1-rc.47"
+      },
+      {
+        "name": "ContributionRewardExt",
+        "address": "0xc7831dBCC83d2dE860F4D0f033499b5Fd0f20d25",
+        "arcVersion": "0.0.1-rc.43"
+      },
+      {
+        "name": "Competition",
+        "address": "0x5e463d96441c490f939488a2d97Ac27bE1b03752",
+        "arcVersion": "0.0.1-rc.43"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.47"
+  }

@@ -1,0 +1,76 @@
+{
+    "name": "Limpid Bunny",
+    "Avatar": "0x95F74bcE31C67865D75C9038D6B23671ad5A0BDA",
+    "DAOToken": "0x765537FF07241b7b925D6E3542612c2e12850645",
+    "Reputation": "0x8BBb19aB2933368a56faa432B8Ac91C3a663B77A",
+    "Controller": "0x3334FB463c1e0DEf620c2D743953441d631539aB",
+    "Schemes": [
+      {
+        "name": "GenericScheme",
+        "alias": "GenericSchemeAlias",
+        "address": "0x24F7F38E90ac78157F5daf46Aee5Ce3EdcfD5164",
+        "arcVersion": "0.0.1-rc.47"
+      },
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0x5131010c96fC89Be27914a4F689b9A698d97e5a5",
+        "arcVersion": "0.0.1-rc.43"
+      },
+      {
+        "name": "GenericSchemeMultiCall",
+        "alias": "GenericSchemeMultiCall",
+        "address": "0x908a2881434c46Fb1bdf06B80f67e464e30235be",
+        "arcVersion": "0.0.1-rc.47"
+      },
+      {
+        "name": "GenericSchemeMultiCall",
+        "alias": "GenericSchemeMultiCall",
+        "address": "0x47bFCF3F7087EAca60858Bd218168F3539897c70",
+        "arcVersion": "0.0.1-rc.47"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "Wallet",
+        "address": "0x435b36F8871021840Ec1ed5Bde9203Ece65C63e8",
+        "arcVersion": "0.0.1-rc.47"
+      },
+      {
+        "name": "ContributionRewardExt",
+        "address": "0x5131010c96fC89Be27914a4F689b9A698d97e5a5",
+        "arcVersion": "0.0.1-rc.43"
+      },
+      {
+        "name": "Competition",
+        "address": "0xB8Cb66C9F650a8F819c76Eb94eeCa121c1EdF626",
+        "arcVersion": "0.0.1-rc.43"
+      },
+      {
+        "name": "GenericSchemeMultiCall",
+        "address": "0x908a2881434c46Fb1bdf06B80f67e464e30235be",
+        "arcVersion": "0.0.1-rc.47"
+      },
+      {
+        "name": "ActionMock",
+        "address": "0xd0083E5B75EEf6b61A2D81C87D84953DAa7B0BA8",
+        "arcVersion": "0.0.1-rc.47"
+      },
+      {
+        "name": "DxDaoSchemeConstraints",
+        "address": "0xBfDE6d74707602105b894cA4Bb614C826abb5E78",
+        "arcVersion": "0.0.1-rc.47"
+      },
+      {
+        "name": "GenericSchemeMultiCall",
+        "address": "0x47bFCF3F7087EAca60858Bd218168F3539897c70",
+        "arcVersion": "0.0.1-rc.47"
+      },
+      {
+        "name": "DxDaoSchemeConstraints",
+        "address": "0xc7Abb23dEa2ea5894525D1fD2bFD72be25CA9Ed6",
+        "arcVersion": "0.0.1-rc.47"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.47"
+  }

@@ -1,0 +1,8 @@
+abis:
+  - GenericSchemeMultiCallFactory
+  - GenericSchemeMultiCall
+entities:
+  - Dummy
+eventHandlers:
+  - event: NewGenericSchemeMultiCall(address)
+    handler: handleNewGenericSchemeMultiCall

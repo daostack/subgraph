@@ -1,5 +1,5 @@
 {
-  "name": "Efficacious Stick figures",
+  "name": "Pernicious Leadman",
   "Avatar": "0x6621372fFA1B23808886b1fb1BbB6F235603eEB0",
   "DAOToken": "0x8ffD5653a0a4d6FEcF912d8aF214C0a3063306c2",
   "Reputation": "0x587C9DF9Fd5252D223DA0F455Bc7858AADc4678d",
@@ -21,7 +21,7 @@
       "name": "GenericSchemeMultiCall",
       "alias": "GenericSchemeMultiCall",
       "address": "0xE1Fa62693b945288ddEe43eDf714c497d3D7c5fe",
-      "arcVersion": "0.0.1-rc.47"
+      "arcVersion": "0.0.1-rc.51"
     }
   ],
   "StandAloneContracts": [
@@ -43,7 +43,7 @@
     {
       "name": "GenericSchemeMultiCall",
       "address": "0xE1Fa62693b945288ddEe43eDf714c497d3D7c5fe",
-      "arcVersion": "0.0.1-rc.47"
+      "arcVersion": "0.0.1-rc.51"
     },
     {
       "name": "ActionMock",
@@ -53,7 +53,7 @@
     {
       "name": "DxDaoSchemeConstraints",
       "address": "0xe39613CE5124f16E5904B51390d17F384F8515ec",
-      "arcVersion": "0.0.1-rc.47"
+      "arcVersion": "0.0.1-rc.51"
     }
   ],
   "arcVersion": "0.0.1-rc.32"

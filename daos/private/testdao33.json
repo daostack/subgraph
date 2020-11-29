@@ -1,5 +1,5 @@
 {
-  "name": "Munificent Director",
+  "name": "Garrulous Sawfiler",
   "Avatar": "0x57F909211c361AE0A11E269b74Dca470078c6e67",
   "DAOToken": "0xE9A11C4C015D142D090CFF82dEd1Deea5B824185",
   "Reputation": "0xCf9dB88B2bef5f498de16327b051C10A17bC6132",
@@ -21,7 +21,7 @@
       "name": "GenericSchemeMultiCall",
       "alias": "GenericSchemeMultiCall",
       "address": "0xBbA961069d46ae92006b7985fAA1e90e33c09D98",
-      "arcVersion": "0.0.1-rc.47"
+      "arcVersion": "0.0.1-rc.51"
     }
   ],
   "StandAloneContracts": [
@@ -43,7 +43,7 @@
     {
       "name": "GenericSchemeMultiCall",
       "address": "0xBbA961069d46ae92006b7985fAA1e90e33c09D98",
-      "arcVersion": "0.0.1-rc.47"
+      "arcVersion": "0.0.1-rc.51"
     },
     {
       "name": "ActionMock",
@@ -53,7 +53,7 @@
     {
       "name": "DxDaoSchemeConstraints",
       "address": "0xe011485b54301995924F87Dd56dA2f0f1f289065",
-      "arcVersion": "0.0.1-rc.47"
+      "arcVersion": "0.0.1-rc.51"
     }
   ],
   "arcVersion": "0.0.1-rc.33"

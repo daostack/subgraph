@@ -1,0 +1,60 @@
+{
+  "name": "Salubrious Bunny",
+  "Avatar": "0x8fFef3D3fFfA65d0DCf72a9459142a2bF082Fd04",
+  "DAOToken": "0xbA631df769cdE2cDb0B429c3Fe050f14785F6806",
+  "Reputation": "0x78D6Cc7960fbE46026e6160a665D8c8d336008b2",
+  "Controller": "0x5619fC11E5144f28cf1FfaBF6c899d5853769c4D",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0x0DaAF2B020d0bE53Ed9d9D0A7BE603080F1453Dc",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xAEcE73961795B39401ad81b16a1EcB52D069F2Ae",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0x8973A2ADC106Ab9564DC70a768a7E3E35Eef4fD5",
+      "arcVersion": "0.0.1-rc.51"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0x059d6321245762201A518967BCF826ebF050338D",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xAEcE73961795B39401ad81b16a1EcB52D069F2Ae",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "Competition",
+      "address": "0xb85ED195e9Baed9e4f65dAB5bC40Cc1D0F8C5CB8",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "address": "0x8973A2ADC106Ab9564DC70a768a7E3E35Eef4fD5",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ActionMock",
+      "address": "0x6fBE2106C33cD2763C27E45B5B99662fA8C7643f",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0xBb91084D0Ce02b480E91Baf5966eDd080f7262af",
+      "arcVersion": "0.0.1-rc.51"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.51"
+}

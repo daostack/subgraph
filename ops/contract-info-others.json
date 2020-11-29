@@ -1,6 +1,17 @@
 {
     "mainnet": [],
-    "rinkeby": [],
+    "rinkeby": [
+        {
+            "name": "EIP20",
+            "address": "0x730810a566c564C7BbF9005111Ec976CAA80C437",
+            "arcVersion": "none"
+        },
+        {
+            "name": "Exchange",
+            "address": "0x61Ebb92F3e19552d9f520bC54d285DFDCc82B029",
+            "arcVersion": "none"
+        }
+    ],
     "kovan": [],
     "xdai": [],
     "sokol": []

@@ -19,6 +19,11 @@
       "name": "Reputation",
       "mapping": "Reputation",
       "start_arcVersion": "0.0.1-rc.16"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "mapping": "GenericSchemeMultiCall",
+      "start_arcVersion": "0.0.1-rc.49"
     }
   ]
 }

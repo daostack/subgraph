@@ -1,0 +1,35 @@
+{
+  "name": "PrimeDAO",
+  "Avatar": "0x273d0F686A53a49a0fBa2A801566b19f9AaF8FcD",
+  "DAOToken": "0x40Cb13628f087dfcFa6d6C717E9fbF5d5B8BD964",
+  "Reputation": "0x4352a94CcB3Ea07E16734f66a94E94E474A50B5f",
+  "Controller": "0x97d4BC21D95b0A1AE8024C153eF74514ac14fa84",
+  "Schemes": [
+    {
+      "name": "BalancerProxy",
+      "alias": "BalancerProxy",
+      "address": "0x34441fA51bd02AC54A02FB7cE0172690C6d49913",
+      "arcVersion": "0.0.1-rc.44"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "LiquidityPoolManager",
+      "address": "0x200C2BD039E70A79F240Ee6f7C78d4838327C40A",
+      "arcVersion": "0.0.1-rc.44"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "EnsPublicResolver",
+      "address": "0x9Ce279c278a6a3e8596d2e47dBBd97FA5041409F",
+      "arcVersion": "0.0.1-rc.44"
+    },
+    {
+      "name": "GenericScheme",
+      "alias": "EnsRegistry",
+      "address": "0xCbc03dc710737DE8C6CBb61d59203B69ea08aCde",
+      "arcVersion": "0.0.1-rc.44"
+    }
+  ],
+  "StandAloneContracts": [],
+  "arcVersion": "0.0.1-rc.44"
+}

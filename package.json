@@ -1,6 +1,6 @@
 {
   "name": "@daostack/subgraph",
-  "version": "0.0.41-0",
+  "version": "0.0.41-1",
   "author": "DAOstack (https://www.daostack.io)",
   "license": "GPL-3.0",
   "description": "A caching layer for daostack using The Graph",
@@ -29,11 +29,12 @@
     "lint-fix": "tslint --fix -c tslint.json 'src//**/*.ts' -e 'src//types/**/*.ts' && tslint --fix -c tslint.json 'test/**/*.ts'",
     "migrate": "node ops/migrate.js",
     "test": "npm run deploy && jest --runInBand --forceExit",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "preinstall": "npm i @daostack/arc@0.0.1-rc.51 && node ops/extract-abis.js"
   },
   "devDependencies": {
     "@daostack/arc": "0.0.1-rc.51",
-    "@daostack/migration": "0.0.1-rc.51-v0",
+    "@daostack/migration": "0.0.1-rc.51-v1",
     "@types/jest": "^23.3.7",
     "@types/mocha": "^5.2.5",
     "babel-eslint": "^10.0.1",
@@ -48,7 +49,6 @@
     "watch": "^1.0.2"
   },
   "dependencies": {
-    "@daostack/arc": "0.0.1-rc.51",
     "@graphprotocol/graph-cli": "0.18.0",
     "@graphprotocol/graph-ts": "0.18.0",
     "@types/node": "^10.14.4",

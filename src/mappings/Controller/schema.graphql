@@ -30,6 +30,7 @@ type ControllerScheme @entity {
 	numberOfBoostedProposals: BigInt!
 	numberOfExpiredInQueueProposals: BigInt!
 	isRegistered: Boolean!
+	error: String
 }
 
 type ControllerGlobalConstraint @entity {

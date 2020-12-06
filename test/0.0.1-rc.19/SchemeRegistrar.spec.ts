@@ -272,5 +272,42 @@ describe('SchemeRegistrar', () => {
           schemeRemoved: true,
           decision: '1',
         });
+
+        let proposeSchemeInvalid = schemeRegistrar.methods.proposeScheme(
+            addresses.Avatar,
+            addresses.ContributionReward,
+            '0x0000000000000000000000000000000000000000',
+            '0x0000001f',
+            '0x000000000000000000000000000000000000000000000000000000000000abcd',
+        );
+
+        const proposeSchemeProposalId = await proposeSchemeInvalid.call();
+        await proposeSchemeInvalid.send();
+
+        for (let j = 0; j < 4; j++) {
+            await genesisProtocol.methods.vote(
+            proposeSchemeProposalId,
+            1,
+            0,
+            accounts[0].address /* unused by the contract */)
+            .send({ from: accounts[j].address });
+        }
+
+        const queryError = `{
+          controllerSchemes(where: {dao: "${addresses.Avatar.toLowerCase()}", address: "${addresses.ContributionReward.toLowerCase()}"}) {
+            error
+          }
+        }`;
+
+        const invalidProposalIsIndexed = async () => {
+          return (await sendQuery(queryError)).controllerSchemes[0].error != null;
+        };
+        waitUntilTrue(invalidProposalIsIndexed);
+
+        const { controllerSchemes } = await sendQuery(queryError);
+
+        expect(controllerSchemes).toContainEqual({
+          error: 'Scheme parameters could not be found.',
+        });
     }, 100000);
 });

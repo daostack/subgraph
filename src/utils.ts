@@ -6,12 +6,14 @@ import {
   crypto,
   DataSourceTemplate,
   ethereum,
+  log,
   store,
   Value,
 } from '@graphprotocol/graph-ts';
 import {
   BlacklistedDAO,
   ContractInfo,
+  ControllerScheme,
   Debug,
   TemplateInfo,
 } from './types/schema';
@@ -132,4 +134,15 @@ export function fixJsonQuotes(target: string): string {
        }
      }
      return result;
+}
+
+export function setSchemeParamsError(dao: Address, scheme: Address): void {
+  let controllerScheme = ControllerScheme.load(
+    crypto.keccak256(concat(dao, scheme)).toHex(),
+  );
+  if (controllerScheme != null) {
+    controllerScheme.error = 'Scheme parameters could not be found.';
+    controllerScheme.save();
+  }
+  log.info('Scheme parameters could not be found.', []);
 }

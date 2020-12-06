@@ -186,8 +186,8 @@ describe('SchemeRegistrar', () => {
             .send({ from: accounts[i].address })).transactionHash;
           if ((await genesisProtocol.methods.proposals(proposalId).call()).state === '2') {
             // query for scheme entity
-            let controllerSchemes = (await sendQuery(getControllerSchemes, 2000)).controllerSchemes;
-            expect(controllerSchemes).toContainEqual({
+            let controllerSchemesList = (await sendQuery(getControllerSchemes, 2000)).controllerSchemes;
+            expect(controllerSchemesList).toContainEqual({
               dao: {
                 id: addresses.Avatar.toLowerCase(),
               },

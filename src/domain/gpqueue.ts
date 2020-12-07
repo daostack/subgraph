@@ -13,7 +13,7 @@ import { GenericSchemeMultiCall } from '../types/GenericSchemeMultiCall/GenericS
 import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
 import {UGenericScheme} from '../types/UGenericScheme/UGenericScheme';
-import { concat, equalStrings, setSchemeParamsError} from '../utils';
+import { concat, equalStrings, setSchemeError} from '../utils';
 
 export function getGPQueue(id: string): GPQueue {
   let gpQueue = GPQueue.load(id) ;
@@ -57,7 +57,7 @@ export function create(dao: Address,
        setContributionRewardParams(dao, scheme, gpAddress, parameters.value0);
        isGPQue = true;
      } else {
-       setSchemeParamsError(schemeId);
+      setSchemeError(schemeId, 1, 'Scheme parameters could not be found.');
      }
    }
    if (equalStrings(contractInfo.name, 'ContributionRewardExt')) {
@@ -78,7 +78,7 @@ export function create(dao: Address,
          setSchemeRegistrarParams(dao, scheme, gpAddress, parameters.value0, parameters.value1);
          isGPQue = true;
      } else {
-         setSchemeParamsError(schemeId);
+         setSchemeError(schemeId, 1, 'Scheme parameters could not be found.');
      }
    }
    let arcVersion = BigDecimal.fromString(
@@ -93,7 +93,7 @@ export function create(dao: Address,
          setUGenericSchemeParams(dao, scheme, gpAddress, parameters.value1, parameters.value2);
          isGPQue = true;
      } else {
-         setSchemeParamsError(schemeId);
+         setSchemeError(schemeId, 1, 'Scheme parameters could not be found.');
      }
    } else if (equalStrings(contractInfo.name, 'GenericScheme')) {
      let genericScheme =  GenericScheme.bind(scheme);

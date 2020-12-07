@@ -307,7 +307,7 @@ describe('SchemeRegistrar', () => {
         const { controllerSchemes } = await sendQuery(queryError);
 
         expect(controllerSchemes).toContainEqual({
-          error: 'Scheme parameters could not be found.',
+          error: '1',
         });
     }, 100000);
 });

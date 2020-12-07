@@ -136,10 +136,10 @@ export function fixJsonQuotes(target: string): string {
      return result;
 }
 
-export function setSchemeError(schemeId: string, errorCode: number, errorMsg: string): void {
+export function setSchemeError(schemeId: string, errorCode: BigInt, errorMsg: string): void {
   let controllerScheme = ControllerScheme.load(schemeId);
   if (controllerScheme != null) {
-    controllerScheme.error = BigInt.fromI32(errorCode);
+    controllerScheme.error = errorCode;
     controllerScheme.save();
   }
   log.info(errorMsg, []);

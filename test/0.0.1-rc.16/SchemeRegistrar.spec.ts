@@ -302,7 +302,7 @@ describe('SchemeRegistrar', () => {
         const invalidProposalIsIndexed = async () => {
           return (await sendQuery(queryError)).controllerSchemes[0].error != null;
         };
-        waitUntilTrue(invalidProposalIsIndexed);
+        await waitUntilTrue(invalidProposalIsIndexed);
 
         const { controllerSchemes } = await sendQuery(queryError);
 

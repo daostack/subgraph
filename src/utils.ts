@@ -136,11 +136,11 @@ export function fixJsonQuotes(target: string): string {
      return result;
 }
 
-export function setSchemeParamsError(schemeId: string, errorCode: number): void {
+export function setSchemeError(schemeId: string, errorCode: number, errorMsg: string): void {
   let controllerScheme = ControllerScheme.load(schemeId);
   if (controllerScheme != null) {
     controllerScheme.error = BigInt.fromI32(errorCode);
     controllerScheme.save();
   }
-  log.info('Scheme parameters could not be found.', []);
+  log.info(errorMsg, []);
 }

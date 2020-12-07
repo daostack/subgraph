@@ -136,10 +136,8 @@ export function fixJsonQuotes(target: string): string {
      return result;
 }
 
-export function setSchemeParamsError(dao: Address, scheme: Address): void {
-  let controllerScheme = ControllerScheme.load(
-    crypto.keccak256(concat(dao, scheme)).toHex(),
-  );
+export function setSchemeParamsError(schemeId: string): void {
+  let controllerScheme = ControllerScheme.load(schemeId);
   if (controllerScheme != null) {
     controllerScheme.error = 'Scheme parameters could not be found.';
     controllerScheme.save();

@@ -128,6 +128,6 @@ export function create(dao: Address,
                       gpAddress,
                       BigInt.fromUnsignedBytes(bigOne as Bytes),
                       organizationId as Bytes,
-                      crypto.keccak256(concat(dao, scheme)).toHex());
+                      schemeId);
    }
 }

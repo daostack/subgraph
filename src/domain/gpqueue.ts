@@ -45,6 +45,7 @@ export function create(dao: Address,
    if (contractInfo ==  null) {
      return;
    }
+   let schemeId = crypto.keccak256(concat(dao, scheme)).toHex();
    let gpAddress: Address;
    let isGPQue = false;
    let addressZero = '0x0000000000000000000000000000000000000000';
@@ -56,7 +57,7 @@ export function create(dao: Address,
        setContributionRewardParams(dao, scheme, gpAddress, parameters.value0);
        isGPQue = true;
      } else {
-       setSchemeParamsError(crypto.keccak256(concat(dao, scheme)).toHex());
+       setSchemeParamsError(schemeId);
      }
    }
    if (equalStrings(contractInfo.name, 'ContributionRewardExt')) {
@@ -77,7 +78,7 @@ export function create(dao: Address,
          setSchemeRegistrarParams(dao, scheme, gpAddress, parameters.value0, parameters.value1);
          isGPQue = true;
      } else {
-         setSchemeParamsError(crypto.keccak256(concat(dao, scheme)).toHex());
+         setSchemeParamsError(schemeId);
      }
    }
    let arcVersion = BigDecimal.fromString(
@@ -92,7 +93,7 @@ export function create(dao: Address,
          setUGenericSchemeParams(dao, scheme, gpAddress, parameters.value1, parameters.value2);
          isGPQue = true;
      } else {
-         setSchemeParamsError(crypto.keccak256(concat(dao, scheme)).toHex());
+         setSchemeParamsError(schemeId);
      }
    } else if (equalStrings(contractInfo.name, 'GenericScheme')) {
      let genericScheme =  GenericScheme.bind(scheme);

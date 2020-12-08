@@ -6,12 +6,14 @@ import {
   crypto,
   DataSourceTemplate,
   ethereum,
+  log,
   store,
   Value,
 } from '@graphprotocol/graph-ts';
 import {
   BlacklistedDAO,
   ContractInfo,
+  ControllerScheme,
   Debug,
   TemplateInfo,
 } from './types/schema';
@@ -132,4 +134,13 @@ export function fixJsonQuotes(target: string): string {
        }
      }
      return result;
+}
+
+export function setSchemeError(schemeId: string, errorCode: BigInt, errorMsg: string): void {
+  let controllerScheme = ControllerScheme.load(schemeId);
+  if (controllerScheme != null) {
+    controllerScheme.error = errorCode;
+    controllerScheme.save();
+  }
+  log.info(errorMsg, []);
 }

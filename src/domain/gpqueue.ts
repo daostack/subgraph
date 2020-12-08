@@ -13,7 +13,7 @@ import { GenericSchemeMultiCall } from '../types/GenericSchemeMultiCall/GenericS
 import { ContractInfo, GPQueue } from '../types/schema';
 import {SchemeRegistrar} from '../types/SchemeRegistrar/SchemeRegistrar';
 import {UGenericScheme} from '../types/UGenericScheme/UGenericScheme';
-import { concat, equalStrings} from '../utils';
+import { concat, equalStrings, setSchemeError} from '../utils';
 
 export function getGPQueue(id: string): GPQueue {
   let gpQueue = GPQueue.load(id) ;
@@ -45,6 +45,7 @@ export function create(dao: Address,
    if (contractInfo ==  null) {
      return;
    }
+   let schemeId = crypto.keccak256(concat(dao, scheme)).toHex();
    let gpAddress: Address;
    let isGPQue = false;
    let addressZero = '0x0000000000000000000000000000000000000000';
@@ -55,6 +56,8 @@ export function create(dao: Address,
        gpAddress = parameters.value1;
        setContributionRewardParams(dao, scheme, gpAddress, parameters.value0);
        isGPQue = true;
+     } else {
+      setSchemeError(schemeId, BigInt.fromI32(1), 'Scheme parameters could not be found.');
      }
    }
    if (equalStrings(contractInfo.name, 'ContributionRewardExt')) {
@@ -74,6 +77,8 @@ export function create(dao: Address,
          gpAddress = parameters.value2;
          setSchemeRegistrarParams(dao, scheme, gpAddress, parameters.value0, parameters.value1);
          isGPQue = true;
+     } else {
+         setSchemeError(schemeId, BigInt.fromI32(1), 'Scheme parameters could not be found.');
      }
    }
    let arcVersion = BigDecimal.fromString(
@@ -87,6 +92,8 @@ export function create(dao: Address,
          gpAddress = parameters.value0;
          setUGenericSchemeParams(dao, scheme, gpAddress, parameters.value1, parameters.value2);
          isGPQue = true;
+     } else {
+         setSchemeError(schemeId, BigInt.fromI32(1), 'Scheme parameters could not be found.');
      }
    } else if (equalStrings(contractInfo.name, 'GenericScheme')) {
      let genericScheme =  GenericScheme.bind(scheme);
@@ -121,6 +128,6 @@ export function create(dao: Address,
                       gpAddress,
                       BigInt.fromUnsignedBytes(bigOne as Bytes),
                       organizationId as Bytes,
-                      crypto.keccak256(concat(dao, scheme)).toHex());
+                      schemeId);
    }
 }

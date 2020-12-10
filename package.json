@@ -16,6 +16,7 @@
     "codegen": "node ops/generate-abis.js && node ops/generate-schema.js && node ops/generate-subgraph.js && node ops/generate-daos-subgraph.js && node ops/generate-contractsinfo.js && node ops/graph-codegen.js",
     "codegen:watch": "watch 'npm run codegen' src/mappings src/domain",
     "deploy": "rm -rf src/types && rm -rf abis && node ops/setup-env.js",
+    "deployarb": "node ops/setup-env.js",
     "deploy:watch": "npm run deploy -- --watch",
     "docker:stop": "docker-compose down -v",
     "docker:run": "node ops/set-docker-network.js private && docker-compose up -d",
@@ -34,7 +35,7 @@
   },
   "devDependencies": {
     "@daostack/arc": "0.0.1-rc.51",
-    "@daostack/migration": "0.0.1-rc.51-v1",
+    "@daostack/migration": "0.0.1-rc.51-varb1",
     "@types/jest": "^23.3.7",
     "@types/mocha": "^5.2.5",
     "babel-eslint": "^10.0.1",

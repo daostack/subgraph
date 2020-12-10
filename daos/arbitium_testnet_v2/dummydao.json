@@ -1,0 +1,60 @@
+{
+  "name": "Pendulous Salad",
+  "Avatar": "0x47A2Fa69722DDD2e7617167ce7e572139A29E3E5",
+  "DAOToken": "0x01ce0C8F708be2441E4e7b5e80B08E77084b2dEa",
+  "Reputation": "0xaFa8e818c13465863a6596eeE08E6928DC9c5E72",
+  "Controller": "0x9CF30ddAc33408d9DB6Ac23a77da7299B6F3105b",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0xA73E74bBc384B237E7B7fEA4D76D18c8a37ED608",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x2Ea0BE07DFC0357F40884365F2C9cFD2A36D4a6E",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0x8e8a12588d14E17D710F323999Cc8C2F15257c0B",
+      "arcVersion": "0.0.1-rc.51"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0x9d592E592c0C44A8075215b94b986F617a8A6229",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x2Ea0BE07DFC0357F40884365F2C9cFD2A36D4a6E",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "Competition",
+      "address": "0xe46a36BF47864F8cc8eA8A668653bcc43FA7E601",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "address": "0x8e8a12588d14E17D710F323999Cc8C2F15257c0B",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ActionMock",
+      "address": "0xc72e85debf6e663B3Ae8EDB631AA7d982D892f6b",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0x9b1780385602Ab43Dd60aA6f568253809cB63eF3",
+      "arcVersion": "0.0.1-rc.51"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.51"
+}

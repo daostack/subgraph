@@ -437,7 +437,10 @@ export function updateProposalExecution(
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.executedAt = timestamp;
-  proposal.closingAt = timestamp.plus(BigInt.fromI32(1500000000));
+  // Setting the closingAt field to a far away point in the future so it will be easy to 
+  // sort all proposal(open and executed) in ascending order by the closingAt field
+  const CLOSING_AT_TIME_INCREASE = 1500000000
+  proposal.closingAt = timestamp.plus(BigInt.fromI32(CLOSING_AT_TIME_INCREASE));
   if (totalReputation != null) {
     proposal.totalRepWhenExecuted = totalReputation;
   }

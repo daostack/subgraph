@@ -1,10 +1,10 @@
-import { nullAddress } from '../0.0.1-rc.16/util';
 import {
     getArcVersion,
     getContractAddresses,
     getOptions,
     getWeb3,
     increaseTime,
+    nullAddress,
     sendQuery,
     waitUntilTrue,
     writeProposalIPFS,

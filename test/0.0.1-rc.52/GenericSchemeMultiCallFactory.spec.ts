@@ -1,4 +1,3 @@
-import { nullAddress } from '../0.0.1-rc.16/util';
 import {
     getArcVersion,
     getContractAddresses,

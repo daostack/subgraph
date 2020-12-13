@@ -791,6 +791,13 @@
         "dao": "base",
         "mapping": "GenericSchemeMultiCallFactory",
         "arcVersion": "0.0.1-rc.51"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.52"
       }
     ]
   },
@@ -984,6 +991,13 @@
         "dao": "base",
         "mapping": "GenericSchemeMultiCallFactory",
         "arcVersion": "0.0.1-rc.51"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.52"
       }
     ]
   },
@@ -1910,6 +1924,13 @@
         "dao": "base",
         "mapping": "GenericSchemeMultiCallFactory",
         "arcVersion": "0.0.1-rc.51"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.52"
       }
     ]
   },
@@ -2048,6 +2069,13 @@
         "dao": "base",
         "mapping": "GenericSchemeMultiCallFactory",
         "arcVersion": "0.0.1-rc.51"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.52"
       }
     ]
   },

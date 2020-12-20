@@ -440,7 +440,7 @@ export function updateProposalExecution(
   // Setting the closingAt field to a far away point in the future so it will be easy to
   // sort all proposal(open and executed) in ascending order by the closingAt field
   const CLOSING_AT_TIME_INCREASE = 3153600000;
-  proposal.closingAt = BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(timestamp);
+  proposal.closingAt = BigInt.fromI32(CLOSING_AT_TIME_INCREASE).times(BigInt.fromI32(1000)).minus(timestamp);
   if (totalReputation != null) {
     proposal.totalRepWhenExecuted = totalReputation;
   }

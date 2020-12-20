@@ -7,25 +7,25 @@
   "Schemes": [
     {
       "name": "BalancerProxy",
-      "alias": "BalancerProxy",
+      "alias": "Balancer Proxy",
       "address": "0x34441fA51bd02AC54A02FB7cE0172690C6d49913",
       "arcVersion": "0.0.1-rc.44"
     },
     {
       "name": "GenericScheme",
-      "alias": "LiquidityPoolManager",
+      "alias": "Liquidity Pool Manager",
       "address": "0x200C2BD039E70A79F240Ee6f7C78d4838327C40A",
       "arcVersion": "0.0.1-rc.44"
     },
     {
       "name": "GenericScheme",
-      "alias": "EnsPublicResolver",
+      "alias": "Ens Public Resolver",
       "address": "0x9Ce279c278a6a3e8596d2e47dBBd97FA5041409F",
       "arcVersion": "0.0.1-rc.44"
     },
     {
       "name": "GenericScheme",
-      "alias": "EnsRegistry",
+      "alias": "Ens Registry",
       "address": "0xCbc03dc710737DE8C6CBb61d59203B69ea08aCde",
       "arcVersion": "0.0.1-rc.44"
     }

@@ -894,7 +894,8 @@ describe('Domain Layer', () => {
     expect(proposal.stage).toEqual('PreBoosted');
     expect(proposal.preBoostedAt).toEqual(s3Timestamp.toString());
     expect(proposal.confidenceThreshold).toEqual(Math.pow(2, REAL_FBITS).toString());
-    expect(proposal.closingAt).toEqual((Number(gpParams.preBoostedVotePeriodLimit) + Number(s3Timestamp)).toString());
+    expect(proposal.closingAtPreBoosted).toEqual((Number(gpParams.preBoostedVotePeriodLimit) + Number(s3Timestamp)).toString());
+    expect(proposal.closingAt).toEqual((Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString());
 
     // boost it
     await increaseTime(300000, web3);

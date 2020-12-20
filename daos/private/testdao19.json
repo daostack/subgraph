@@ -1,52 +1,58 @@
 {
-  "name": "Lachrymose Plant operator",
-  "Avatar": "0xAf6F348C0af707B0D9C23fb4e07ceDA5d9AaC465",
-  "DAOToken": "0x6258F90A25c4fB7B8ee6331903767edD49De44e0",
-  "Reputation": "0x76016A8076aA1CD967b946708C01A8274b75Fe4C",
-  "Controller": "0x34dF74e75eA20E9fC3E066bA39Ad54f23BB05E12",
+  "name": "Ubiquitous Animator",
+  "Avatar": "0xb504490A5017413D014DD97916C3FFf889D555b5",
+  "DAOToken": "0xAAEd128A9572E981A405543aFFEf60E2BC3AF07A",
+  "Reputation": "0xb000e6d46e178c6784586E6e1aB440A7d1c1d9da",
+  "Controller": "0xEF40E2080c08ee325cEb1dce00b62d5713b5563C",
   "Schemes": [
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0xb3212b66C337F83D277172D891Daf31776FF9D79",
+      "address": "0xc56a7B89639738382abF20E1829d1ff1a4e21e33",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "GenericSchemeMultiCall",
       "alias": "GenericSchemeMultiCall",
-      "address": "0x7322258910EeA3A9918b6bB64472fC15969e9d79",
+      "address": "0x97681569c1007380DEc7075E5aCb6020Be36eC83",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ContinuousLocking4Reputation",
+      "alias": "ContinuousLocking4Reputation",
+      "address": "0x352ebD84619597F4ec3d18Bea793143eAa2f4c46",
       "arcVersion": "0.0.1-rc.51"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "Wallet",
-      "address": "0x4d46f75Be6E98dBA8E8384802a68d550DeB69770",
-      "arcVersion": "0.0.1-rc.19"
-    },
-    {
-      "name": "ContributionRewardExt",
-      "address": "0xb3212b66C337F83D277172D891Daf31776FF9D79",
-      "arcVersion": "0.0.1-rc.43"
-    },
-    {
-      "name": "Competition",
-      "address": "0xf454f24A62E5Be73aA877Aa824b78F8F2a31d236",
-      "arcVersion": "0.0.1-rc.43"
-    },
-    {
-      "name": "GenericSchemeMultiCall",
-      "address": "0x7322258910EeA3A9918b6bB64472fC15969e9d79",
-      "arcVersion": "0.0.1-rc.51"
-    },
-    {
-      "name": "ActionMock",
       "address": "0xf1486cC376555A5035cFa85A761279c9876Daddc",
       "arcVersion": "0.0.1-rc.19"
     },
     {
+      "name": "ContributionRewardExt",
+      "address": "0xc56a7B89639738382abF20E1829d1ff1a4e21e33",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "Competition",
+      "address": "0x18c07E395Df250003f439F6e8ea1Ea8Aa51752c6",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "address": "0x97681569c1007380DEc7075E5aCb6020Be36eC83",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ActionMock",
+      "address": "0x06ef7018Af25ec846aDe8f8B5cB591A914a46347",
+      "arcVersion": "0.0.1-rc.19"
+    },
+    {
       "name": "DxDaoSchemeConstraints",
-      "address": "0xF3Ecf410c2f4EF71691F63E409300f85c16c4f33",
+      "address": "0x0DB24A927FFC3622884B7A3B6f1C694ED8092A01",
       "arcVersion": "0.0.1-rc.51"
     }
   ],

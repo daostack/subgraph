@@ -988,7 +988,7 @@ describe('Domain Layer', () => {
       createdAt: p1Creation.toString(),
       boostedAt: v2Timestamp.toString(),
       quietEndingPeriodBeganAt: null,
-      closingAt: (31536000000 - parseInt(v5Timestamp, 10)).toString(),
+      closingAt: (3153600000 - parseInt(v5Timestamp, 10)).toString(),
       executedAt: v5Timestamp.toString(),
       totalRepWhenExecuted: totalRep,
       totalRepWhenCreated: totalRep,

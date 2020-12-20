@@ -1,58 +1,64 @@
 {
-  "name": "Trenchant Gnomes",
-  "Avatar": "0xde1837963BCa0cBDE1214c6ca83Ac8dCde7Cfe63",
-  "DAOToken": "0x66688d72B4d3834Ed24b448D2894dA0D83e18f28",
-  "Reputation": "0xa26d9ccFA2978Bb87F9De3705Ed0c1a126046E45",
-  "Controller": "0x22061A7615a05C2867fF0B54FC5696D877Df62EA",
+  "name": "Arcadian Flatter",
+  "Avatar": "0x79587259c3141bDc79f5AEfFDFE219fcBA2c5740",
+  "DAOToken": "0xbFE4cE5729a4E9e193EFABB538F95556A3fC5f5d",
+  "Reputation": "0xFffCE877f57272F13f0Dc606B9525c0dF72AA78d",
+  "Controller": "0x7FD71ac36939150Fd7cabbf22B6E1333fC736D0f",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0x877720eBA2E76941066C50469111A248c51e5bF6",
+      "address": "0x8933Ef44518714033a357753BE9A4f90a1c58a28",
       "arcVersion": "0.0.1-rc.41"
     },
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0xd9218bb2a7Ff0131555A9b6F179fF5103a27a286",
+      "address": "0x1c0c66C9298cf0FFF3EC94Af7C487fA28dE31afC",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "GenericSchemeMultiCall",
       "alias": "GenericSchemeMultiCall",
-      "address": "0x6A5d6554EC6a0bbDe9671488db2620B877B77FB3",
+      "address": "0xa58Acd9F7513762D70c84baE883464A0466E3367",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ContinuousLocking4Reputation",
+      "alias": "ContinuousLocking4Reputation",
+      "address": "0x03f40E33bdc51750B24bab0DB5B38E50227261D1",
       "arcVersion": "0.0.1-rc.51"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "Wallet",
-      "address": "0x66b97486811e4d8275387404dCe9cc2057630109",
+      "address": "0xFfd967913f3691CBecCB85FF11ef3De6eC84e092",
       "arcVersion": "0.0.1-rc.41"
     },
     {
       "name": "ContributionRewardExt",
-      "address": "0xd9218bb2a7Ff0131555A9b6F179fF5103a27a286",
+      "address": "0x1c0c66C9298cf0FFF3EC94Af7C487fA28dE31afC",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "Competition",
-      "address": "0xFe0bcF750d4042480943CC8bA818CA3482DDf691",
+      "address": "0xB1Eb7eF857cE5CE05bC014293c671b6B2f8BF872",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "GenericSchemeMultiCall",
-      "address": "0x6A5d6554EC6a0bbDe9671488db2620B877B77FB3",
+      "address": "0xa58Acd9F7513762D70c84baE883464A0466E3367",
       "arcVersion": "0.0.1-rc.51"
     },
     {
       "name": "ActionMock",
-      "address": "0xf897334C5084bC212ac2c29d8762F2DD1b96cd0D",
+      "address": "0x3E3b213A690f070B36251f9c1c55fb9006c671f9",
       "arcVersion": "0.0.1-rc.41"
     },
     {
       "name": "DxDaoSchemeConstraints",
-      "address": "0x7331E275619166F9abAfE6a78D6923Ce29b2B64A",
+      "address": "0x6216151F14944b809D6A70541a2b4B5450553CCb",
       "arcVersion": "0.0.1-rc.51"
     }
   ],

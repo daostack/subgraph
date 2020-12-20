@@ -259,7 +259,7 @@ export function setProposalState(proposal: Proposal, state: number, gpTimes: Big
     // PreBoosted
     proposal.stage = 'PreBoosted';
     proposal.preBoostedAt = gpTimes[2];
-    proposal.closingAt =  proposal.preBoostedAt +
+    proposal.preBoostedClosingAt =  proposal.preBoostedAt +
                           GenesisProtocolParam.load(proposal.genesisProtocolParams).preBoostedVotePeriodLimit;
     if (controllerScheme != null) {
       controllerScheme.numberOfPreBoostedProposals = controllerScheme
@@ -439,8 +439,8 @@ export function updateProposalExecution(
   proposal.executedAt = timestamp;
   // Setting the closingAt field to a far away point in the future so it will be easy to
   // sort all proposal(open and executed) in ascending order by the closingAt field
-  const CLOSING_AT_TIME_INCREASE = 1500000000;
-  proposal.closingAt = timestamp.plus(BigInt.fromI32(CLOSING_AT_TIME_INCREASE));
+  const CLOSING_AT_TIME_INCREASE = 2147483647;
+  proposal.closingAt = (BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(timestamp)).times(BigInt.fromI32(100));
   if (totalReputation != null) {
     proposal.totalRepWhenExecuted = totalReputation;
   }

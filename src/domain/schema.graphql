@@ -63,6 +63,7 @@ type Proposal @entity {
 	boostedAt: BigInt
 	quietEndingPeriodBeganAt: BigInt
 	closingAt: BigInt
+	preBoostedClosingAt: BigInt
 	executedAt: BigInt
 	totalRepWhenExecuted: BigInt
 	totalRepWhenCreated: BigInt

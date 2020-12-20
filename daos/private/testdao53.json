@@ -1,0 +1,66 @@
+{
+  "name": "Sagacious Artist",
+  "Avatar": "0x786E7BA19b24c470461B3632730884ECD09eD4F7",
+  "DAOToken": "0x57b50Ff749Bf410c45DafF03F68f7Fea6101A7f5",
+  "Reputation": "0x2B3B505DBdF400aB0D3A982e137d759f4C368c3a",
+  "Controller": "0x3C58F5455ec29A0CfAcF87Bd11ACf901aF22A029",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0x4F66D0973E4cA6DB14ac5797D30C253CA1caCABe",
+      "arcVersion": "0.0.1-rc.53"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xDAa07300351665a33b746153c000Ac8522987FDb",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0x9D2d0841d83EC12741EAbb17daC51FBC7c49a150",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ContinuousLocking4Reputation",
+      "alias": "ContinuousLocking4Reputation",
+      "address": "0x69C8Cac1353aBFBB2089f826F565200bCB3B5c32",
+      "arcVersion": "0.0.1-rc.51"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0x1c112B9c1B23F066f3F0048B5938547448381dec",
+      "arcVersion": "0.0.1-rc.53"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xDAa07300351665a33b746153c000Ac8522987FDb",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "Competition",
+      "address": "0xc5db9dB3CabE6CC3A313F634656Dbed2867D6EFD",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "address": "0x9D2d0841d83EC12741EAbb17daC51FBC7c49a150",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ActionMock",
+      "address": "0x1279Ebc99aDCa8336c387dfcF76d41595b3C3a5A",
+      "arcVersion": "0.0.1-rc.53"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0x2e20944BC58B0641ce77c5a6F5288c0baacAB291",
+      "arcVersion": "0.0.1-rc.51"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.53"
+}

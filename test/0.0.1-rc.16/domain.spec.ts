@@ -452,6 +452,7 @@ describe('Domain Layer', () => {
             totalRepWhenExecuted
             totalRepWhenCreated
             closingAt
+            preBoostedClosingAt
             proposer
             votingMachine
             votes {
@@ -894,7 +895,10 @@ describe('Domain Layer', () => {
     expect(proposal.stage).toEqual('PreBoosted');
     expect(proposal.preBoostedAt).toEqual(s3Timestamp.toString());
     expect(proposal.confidenceThreshold).toEqual(Math.pow(2, REAL_FBITS).toString());
-    expect(proposal.closingAt).toEqual((Number(gpParams.preBoostedVotePeriodLimit) + Number(s3Timestamp)).toString());
+    expect(proposal.preBoostedClosingAt).toEqual(
+      (Number(gpParams.preBoostedVotePeriodLimit) + Number(s3Timestamp)).toString(),
+    );
+    expect(proposal.closingAt).toEqual((Number(gpParams.queuedVotePeriodLimit) + Number(p1Creation)).toString());
 
     // boost it
     await increaseTime(300000, web3);
@@ -980,7 +984,7 @@ describe('Domain Layer', () => {
       createdAt: p1Creation.toString(),
       boostedAt: v2Timestamp.toString(),
       quietEndingPeriodBeganAt: null,
-      closingAt: (parseInt(v5Timestamp, 10) + 1500000000).toString(),
+      closingAt: ((2147483647 - parseInt(v5Timestamp, 10)) * 100).toString(),
       executedAt: v5Timestamp.toString(),
       totalRepWhenExecuted: totalRep,
       totalRepWhenCreated: totalRep,

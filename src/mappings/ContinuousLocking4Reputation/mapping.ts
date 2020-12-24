@@ -17,6 +17,7 @@ export function handleRedeem(event: Redeem): void {
   lock.redeemed = true;
   lock.redeemedAt = event.block.timestamp;
   lock.batchIndexRedeemed = event.params._batchIndex;
+  lock.save();
 }
 
 export function handleRelease(event: Release): void {
@@ -30,6 +31,7 @@ export function handleRelease(event: Release): void {
 
   lock.released = true;
   lock.releasedAt = event.block.timestamp;
+  lock.save();
 }
 
 export function handleLockToken(event: LockToken): void {
@@ -43,7 +45,9 @@ export function handleLockToken(event: LockToken): void {
   lock.period = event.params._period;
   lock.redeemed = false;
   lock.released = false;
+  lock.save();
 }
+
 export function handleExtendLocking(event: ExtendLocking): void {
   let lock = CL4RLock.load(
     event.address.toHex() + event.params._lockingId.toString()
@@ -54,4 +58,5 @@ export function handleExtendLocking(event: ExtendLocking): void {
   }
 
   lock.period = lock.period.plus(event.params._extendPeriod);
+  lock.save();
 }

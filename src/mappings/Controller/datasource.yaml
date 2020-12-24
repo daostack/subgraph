@@ -4,6 +4,7 @@ abis:
   - Reputation
   - DAOToken
   - SchemeRegistrar
+  - ContinuousLocking4Reputation
   - ContributionReward
   - ContributionRewardExt
   - GenericScheme

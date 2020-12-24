@@ -93,6 +93,12 @@ function combineFragments(fragments, isTemplate, addresses, missingAddresses) {
             file: `${__dirname}/../abis/${version}/GenericScheme.json`
           };
         }
+        if ((versionNum < 24) && (contractName === "ContinuousLocking4Reputation")) {
+          return {
+            name: contractName,
+            file: `${__dirname}/../abis/0.0.1-rc.24/ContinuousLocking4Reputation.json`
+          };
+        }
 
         if ((versionNum < 36) && (contractName === "ContributionRewardExt")) {
           return {

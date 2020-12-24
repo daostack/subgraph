@@ -19,6 +19,7 @@ import * as domain from '../../domain';
 import {
   AvatarContract,
   ContractInfo,
+  ContinuousLocking4ReputationParams,
   ContributionRewardExtParam,
   ContributionRewardParam,
   ControllerAddGlobalConstraint,
@@ -338,6 +339,31 @@ export function setContributionRewardParams(
     contributionRewardParams.voteParams = vmParamsHash.toHex();
     contributionRewardParams.save();
     controllerScheme.contributionRewardParams = contributionRewardParams.id;
+    controllerScheme.save();
+  }
+}
+
+export function setContinuousLocking4ReputationParams(
+  avatar: Address,
+  scheme: Address,
+  startTime: BigInt,
+  redeemEnableTime: BigInt,
+  batchTime: BigInt,
+  token: Address,
+): void {
+  let controllerScheme = ControllerScheme.load(
+    crypto.keccak256(concat(avatar, scheme)).toHex(),
+  );
+  let continuousLocking4ReputationParams = new ContinuousLocking4ReputationParams(
+    scheme.toHex(),
+  );
+  continuousLocking4ReputationParams.startTime = startTime;
+  continuousLocking4ReputationParams.redeemEnableTime = redeemEnableTime;
+  continuousLocking4ReputationParams.batchTime = batchTime;
+  continuousLocking4ReputationParams.token = token;
+  continuousLocking4ReputationParams.save();
+  if (controllerScheme != null) {
+    controllerScheme.continuousLocking4ReputationParams = continuousLocking4ReputationParams.id;
     controllerScheme.save();
   }
 }

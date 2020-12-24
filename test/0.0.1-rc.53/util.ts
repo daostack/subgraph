@@ -64,6 +64,7 @@ export function getContractAddresses() {
     NativeToken: addresses.private.dao[arcVersion].DAOToken,
     NativeReputation: addresses.private.dao[arcVersion].Reputation,
     GenericSchemeMultiCall: addresses.private.dao[arcVersion].Schemes[2].address,
+    ContinuousLocking4Reputation: addresses.private.dao[arcVersion].Schemes[3].address,
     DxDaoSchemeConstraints:
       addresses.private.dao[arcVersion].StandAloneContracts[5].address,
   };

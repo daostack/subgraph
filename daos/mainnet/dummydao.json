@@ -22,6 +22,12 @@
       "alias": "GenericSchemeMultiCall",
       "address": "0xa0514D0987b539498d07DBB8D6C75d4cA33Adc5f",
       "arcVersion": "0.0.1-rc.47"
+    },
+    {
+      "name": "ContinuousLocking4Reputation",
+      "alias": "ContinuousLocking4Reputation",
+      "address": "0xa0514D0987b539498d07DBB8D6C75d4cA33Adc5f",
+      "arcVersion": "0.0.1-rc.47"
     }
   ],
   "StandAloneContracts": [

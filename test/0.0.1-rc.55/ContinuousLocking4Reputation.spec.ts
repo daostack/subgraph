@@ -28,8 +28,16 @@ describe('ContinuousLocking4Reputation', () => {
         web3 = await getWeb3();
         addresses = getContractAddresses();
         opts = await getOptions(web3);
-        continuousLocking4Reputation = new web3.eth.Contract(ContinuousLocking4Reputation.abi, addresses.ContinuousLocking4Reputation, opts);
-        continuousLocking4ReputationFactory = new web3.eth.Contract(ContinuousLocking4ReputationFactory.abi, addresses.ContinuousLocking4ReputationFactory, opts);
+        continuousLocking4Reputation = new web3.eth.Contract(
+          ContinuousLocking4Reputation.abi,
+          addresses.ContinuousLocking4Reputation,
+          opts,
+        );
+        continuousLocking4ReputationFactory = new web3.eth.Contract(
+          ContinuousLocking4ReputationFactory.abi,
+          addresses.ContinuousLocking4ReputationFactory,
+          opts,
+        );
         schemeRegistrar = new web3.eth.Contract(SchemeRegistrar.abi, addresses.SchemeRegistrar, opts);
         genesisProtocol = new web3.eth.Contract(
             GenesisProtocol.abi,
@@ -41,9 +49,9 @@ describe('ContinuousLocking4Reputation', () => {
     it('Sanity', async () => {
       const accounts = web3.eth.accounts.wallet;
       let reputationReward = 850000;
-      let startTime = (await web3.eth.getBlock("latest")).timestamp;
-      let periodsUnit = (30*60*60);
-      let redeemEnableTime = startTime + (30*60*60);
+      let startTime = (await web3.eth.getBlock('latest')).timestamp;
+      let periodsUnit = (30 * 60 * 60);
+      let redeemEnableTime = startTime + (30 * 60 * 60);
       let maxLockingPeriod = 12;
       let repRewardConstA = 85000;
       let repRewardConstB = 900;
@@ -60,7 +68,7 @@ describe('ContinuousLocking4Reputation', () => {
         repRewardConstB,
         periodsCap,
         addresses.NativeToken,
-        "0x0000000000000000000000000000000000000001"
+        '0x0000000000000000000000000000000000000001',
       );
 
       const continuousLocking4ReputationAddress = await continuousLocking4ReputationCreateTx.call();
@@ -108,13 +116,13 @@ describe('ContinuousLocking4Reputation', () => {
           .send({ from: accounts[i].address });
       }
 
-      let continuousLocking4Reputation = new web3.eth.Contract(
+      continuousLocking4Reputation = new web3.eth.Contract(
           ContinuousLocking4Reputation.abi,
           continuousLocking4ReputationAddress,
-          opts
+          opts,
         );
 
-        const schemeRegisteredIsIndexed = async () => {
+      const schemeRegisteredIsIndexed = async () => {
           return (await sendQuery(
             `
               {
@@ -122,13 +130,13 @@ describe('ContinuousLocking4Reputation', () => {
                   id
                 }
               }
-            `
+            `,
           )).controllerSchemes.length > 0;
         };
 
-        await waitUntilTrue(schemeRegisteredIsIndexed);
+      await waitUntilTrue(schemeRegisteredIsIndexed);
 
-        const { controllerSchemes } = await sendQuery(`{
+      const { controllerSchemes } = await sendQuery(`{
             controllerSchemes(where: { address: "${continuousLocking4ReputationAddress.toLowerCase()}" }) {
                 name
                 dao {
@@ -148,13 +156,13 @@ describe('ContinuousLocking4Reputation', () => {
                   startTime
                   batchTime
                   redeemEnableTime
-                  token 
+                  token
                 }
             }
           }`);
 
-          expect(controllerSchemes).toContainEqual({
-            name: "ContinuousLocking4Reputation",
+      expect(controllerSchemes).toContainEqual({
+            name: 'ContinuousLocking4Reputation',
             dao: {
               id: addresses.Avatar.toLowerCase(),
             },
@@ -171,16 +179,16 @@ describe('ContinuousLocking4Reputation', () => {
                 redeemEnableTime: redeemEnableTime.toString(),
                 startTime: startTime.toString(),
                 token: addresses.NativeToken.toLowerCase(),
-            }
+            },
           });
 
-        const daoToken = await new web3.eth.Contract(DAOToken.abi, addresses.NativeToken.toLowerCase(), opts);
+      const daoToken = await new web3.eth.Contract(DAOToken.abi, addresses.NativeToken.toLowerCase(), opts);
         // // console.log(await continuousLocking4Reputation.methods.agreementHash().call());
-        await daoToken.methods.approve(continuousLocking4Reputation.options.address, 1).send();
+      await daoToken.methods.approve(continuousLocking4Reputation.options.address, 1).send();
 
-        const { blockNumber } = await continuousLocking4Reputation.methods.lock(1, 12, 0, "0x0000000000000000000000000000000000000001").send();
-        const { timestamp } = await web3.eth.getBlock(blockNumber);
-        const locksQuery = `{
+      const { blockNumber } = await continuousLocking4Reputation.methods.lock(1, 12, 0, '0x0000000000000000000000000000000000000001').send();
+      const { timestamp } = await web3.eth.getBlock(blockNumber);
+      const locksQuery = `{
           cl4Rlocks {
             lockingId
             lockingTime
@@ -200,72 +208,76 @@ describe('ContinuousLocking4Reputation', () => {
           }
         }`;
 
-        let cl4Rlocks = (await sendQuery(locksQuery)).cl4Rlocks;
+      let cl4Rlocks = (await sendQuery(locksQuery)).cl4Rlocks;
 
-        expect(cl4Rlocks).toContainEqual({
-          "amount": "1",
-          "batchIndexRedeemed": null,
-          "dao": {
-            "id": addresses.Avatar.toLowerCase(),
+      expect(cl4Rlocks).toContainEqual({
+          amount: '1',
+          batchIndexRedeemed: null,
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
           },
-          "lockingId": "1",
-          "lockingTime": timestamp.toString(),
-          "period": "12",
-          "redeemed": false,
-          "redeemedAt": null,
-          "released": false,
-          "releasedAt": null,
-          "scheme": {
-            "address": continuousLocking4ReputationAddress.toLowerCase(),
-          }
+          lockingId: '1',
+          lockingTime: timestamp.toString(),
+          period: '12',
+          redeemed: false,
+          redeemedAt: null,
+          released: false,
+          releasedAt: null,
+          scheme: {
+            address: continuousLocking4ReputationAddress.toLowerCase(),
+          },
       });
 
       await increaseTime(periodsUnit + 1, web3);
-      let redeemBlock = (await continuousLocking4Reputation.methods.redeem(accounts[0].address, "1").send()).blockNumber;
+      let redeemBlock = (
+        await continuousLocking4Reputation.methods.redeem(accounts[0].address, '1').send()
+      ).blockNumber;
       const redeemTimestamp = (await web3.eth.getBlock(redeemBlock)).timestamp;
 
       cl4Rlocks = (await sendQuery(locksQuery)).cl4Rlocks;
 
       expect(cl4Rlocks).toContainEqual({
-          "amount": "1",
-          "batchIndexRedeemed": "0",
-          "dao": {
-            "id": addresses.Avatar.toLowerCase(),
+          amount: '1',
+          batchIndexRedeemed: '0',
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
           },
-          "lockingId": "1",
-          "lockingTime": timestamp.toString(),
-          "period": "12",
-          "redeemed": true,
-          "redeemedAt": redeemTimestamp.toString(),
-          "released": false,
-          "releasedAt": null,
-          "scheme": {
-            "address": continuousLocking4ReputationAddress.toLowerCase(),
-          }
+          lockingId: '1',
+          lockingTime: timestamp.toString(),
+          period: '12',
+          redeemed: true,
+          redeemedAt: redeemTimestamp.toString(),
+          released: false,
+          releasedAt: null,
+          scheme: {
+            address: continuousLocking4ReputationAddress.toLowerCase(),
+          },
       });
 
       await increaseTime(periodsUnit * 11 + 1, web3);
-      let releaseBlock = (await continuousLocking4Reputation.methods.release(accounts[0].address, "1").send()).blockNumber;
+      let releaseBlock = (
+        await continuousLocking4Reputation.methods.release(accounts[0].address, '1').send()
+      ).blockNumber;
       const releaseTimestamp = (await web3.eth.getBlock(releaseBlock)).timestamp;
 
       cl4Rlocks = (await sendQuery(locksQuery)).cl4Rlocks;
 
       expect(cl4Rlocks).toContainEqual({
-          "amount": "1",
-          "batchIndexRedeemed": "0",
-          "dao": {
-            "id": addresses.Avatar.toLowerCase(),
+          amount: '1',
+          batchIndexRedeemed: '0',
+          dao: {
+            id: addresses.Avatar.toLowerCase(),
           },
-          "lockingId": "1",
-          "lockingTime": timestamp.toString(),
-          "period": "12",
-          "redeemed": true,
-          "redeemedAt": redeemTimestamp.toString(),
-          "released": true,
-          "releasedAt": releaseTimestamp.toString(),
-          "scheme": {
-            "address": continuousLocking4ReputationAddress.toLowerCase(),
-          }
+          lockingId: '1',
+          lockingTime: timestamp.toString(),
+          period: '12',
+          redeemed: true,
+          redeemedAt: redeemTimestamp.toString(),
+          released: true,
+          releasedAt: releaseTimestamp.toString(),
+          scheme: {
+            address: continuousLocking4ReputationAddress.toLowerCase(),
+          },
       });
 
     }, 100000);

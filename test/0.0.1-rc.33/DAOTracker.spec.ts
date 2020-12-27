@@ -156,7 +156,7 @@ describe('DAOTracker', () => {
 
     // Ensure the scheme is in the subgraph
     const { controllerSchemes } = await sendQuery(`{
-      controllerSchemes {
+      controllerSchemes(where: {address: "${contributionReward.options.address.toLowerCase()}"}) {
         dao {
           id
         }

@@ -18,8 +18,8 @@ import * as domain from '../../domain';
 
 import {
   AvatarContract,
-  ContractInfo,
   ContinuousLocking4ReputationParams,
+  ContractInfo,
   ContributionRewardExtParam,
   ContributionRewardParam,
   ControllerAddGlobalConstraint,

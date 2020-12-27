@@ -1,15 +1,14 @@
 // Import entity types generated from the GraphQL schema
-import {
-  CL4RLock
-} from '../../types/schema';
-import { ContinuousLocking4Reputation, ExtendLocking, LockToken, Redeem, Release } from '../../types/ContinuousLocking4Reputation/ContinuousLocking4Reputation';
-import { concat } from '../../utils';
 import { crypto } from '@graphprotocol/graph-ts';
-
+import { ContinuousLocking4Reputation, ExtendLocking, LockToken, Redeem, Release } from '../../types/ContinuousLocking4Reputation/ContinuousLocking4Reputation';
+import {
+  CL4RLock,
+} from '../../types/schema';
+import { concat } from '../../utils';
 
 export function handleRedeem(event: Redeem): void {
   let lock = CL4RLock.load(
-    event.address.toHex() + event.params._lockingId.toString()
+    event.address.toHex() + event.params._lockingId.toString(),
   );
 
   if (lock ==  null) {
@@ -24,7 +23,7 @@ export function handleRedeem(event: Redeem): void {
 
 export function handleRelease(event: Release): void {
   let lock = CL4RLock.load(
-    event.address.toHex() + event.params._lockingId.toString()
+    event.address.toHex() + event.params._lockingId.toString(),
   );
 
   if (lock ==  null) {
@@ -57,7 +56,7 @@ export function handleLockToken(event: LockToken): void {
 
 export function handleExtendLocking(event: ExtendLocking): void {
   let lock = CL4RLock.load(
-    event.address.toHex() + event.params._lockingId.toString()
+    event.address.toHex() + event.params._lockingId.toString(),
   );
 
   if (lock ==  null) {

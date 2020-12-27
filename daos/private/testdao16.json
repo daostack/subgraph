@@ -1,5 +1,5 @@
 {
-  "name": "Concomitant Nibblets",
+  "name": "Comely Carousel",
   "Avatar": "0xE7A2C59e134ee81D4035Ae6DB2254f79308e334f",
   "DAOToken": "0xcDbe8b52A6c60A5f101d4A0F1f049f19a9e1D35F",
   "Reputation": "0x93cdbf39fB9e13BD253CA5819247D52fbabf0F2f",
@@ -21,7 +21,7 @@
       "name": "ContinuousLocking4Reputation",
       "alias": "ContinuousLocking4Reputation",
       "address": "0xf19A2A01B70519f67ADb309a994Ec8c69A967E8b",
-      "arcVersion": "0.0.1-rc.51"
+      "arcVersion": "0.0.1-rc.55"
     }
   ],
   "StandAloneContracts": [

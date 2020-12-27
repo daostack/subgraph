@@ -2,7 +2,9 @@
 import {
   CL4RLock
 } from '../../types/schema';
-import { ExtendLocking, LockToken, Redeem, Release } from '../../types/ContinuousLocking4Reputation/ContinuousLocking4Reputation';
+import { ContinuousLocking4Reputation, ExtendLocking, LockToken, Redeem, Release } from '../../types/ContinuousLocking4Reputation/ContinuousLocking4Reputation';
+import { concat } from '../../utils';
+import { crypto } from '@graphprotocol/graph-ts';
 
 
 export function handleRedeem(event: Redeem): void {
@@ -36,10 +38,15 @@ export function handleRelease(event: Release): void {
 
 export function handleLockToken(event: LockToken): void {
   let lock = new CL4RLock(
-    event.address.toHex() + event.params._lockingId.toString()
+    event.address.toHex() + event.params._lockingId.toString(),
   );
+  let cl4r = ContinuousLocking4Reputation.bind(event.address);
 
+  let avatar = cl4r.avatar();
+  lock.dao = avatar.toHex();
+  lock.scheme = crypto.keccak256(concat(avatar, event.address)).toHex();
   lock.lockingId = event.params._lockingId;
+  lock.lockingTime = event.block.timestamp;
   lock.locker = event.params._locker;
   lock.amount = event.params._amount;
   lock.period = event.params._period;

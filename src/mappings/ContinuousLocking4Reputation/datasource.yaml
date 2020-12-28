@@ -1,0 +1,14 @@
+abis:
+  - ContinuousLocking4Reputation
+entities:
+  - Batch
+  - Lock
+eventHandlers:
+  - event: Redeem(indexed uint256,indexed address,uint256,uint256)
+    handler: handleRedeem
+  - event: Release(indexed uint256,indexed address,uint256)
+    handler: handleRelease
+  - event: LockToken(indexed address,indexed uint256,uint256,uint256)
+    handler: handleLockToken
+  - event: ExtendLocking(indexed address,indexed uint256,uint256)
+    handler: handleExtendLocking

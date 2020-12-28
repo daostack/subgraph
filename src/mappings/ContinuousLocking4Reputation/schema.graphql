@@ -1,0 +1,15 @@
+type CL4RLock @entity {
+    id: ID!
+    dao: DAO!
+    scheme: ControllerScheme!
+    lockingId: BigInt!
+    locker: Bytes!
+    amount: BigInt!
+    lockingTime: BigInt!
+    period: BigInt!
+    redeemed: Boolean!
+    redeemedAt: BigInt
+    released: Boolean!
+    releasedAt: BigInt
+    batchIndexRedeemed: BigInt
+}

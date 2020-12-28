@@ -1,11 +1,13 @@
 import { Address, BigDecimal, BigInt, ByteArray, Bytes, crypto } from '@graphprotocol/graph-ts';
-import { setContributionRewardExtParams,
+import { setContinuousLocking4ReputationParams,
+         setContributionRewardExtParams,
          setContributionRewardParams,
          setGenericSchemeMultiCallParams,
          setGenericSchemeParams,
          setSchemeRegistrarParams,
          setUGenericSchemeParams,
         } from '../mappings/Controller/mapping';
+import {ContinuousLocking4Reputation} from '../types/ContinuousLocking4Reputation/ContinuousLocking4Reputation';
 import {ContributionReward} from '../types/ContributionReward/ContributionReward';
 import { ContributionRewardExt } from '../types/ContributionRewardExt/ContributionRewardExt';
 import {GenericScheme} from '../types/GenericScheme/GenericScheme';
@@ -113,7 +115,16 @@ export function create(dao: Address,
                     genericSchemeMultiCall.voteParams(),
                     genericSchemeMultiCall.schemeConstraints());
     isGPQue = true;
-  }
+  } else if (equalStrings(contractInfo.name, 'ContinuousLocking4Reputation')) {
+    let continuousLocking4Reputation = ContinuousLocking4Reputation.bind(scheme);
+    setContinuousLocking4ReputationParams(
+      dao,
+      scheme,
+      continuousLocking4Reputation.startTime(),
+      continuousLocking4Reputation.redeemEnableTime(),
+      continuousLocking4Reputation.batchTime(),
+      continuousLocking4Reputation.token());
+   }
 
    if (isGPQue) {
       let bigOne = new ByteArray(6);

@@ -24,6 +24,11 @@
       "name": "GenericSchemeMultiCall",
       "mapping": "GenericSchemeMultiCall",
       "start_arcVersion": "0.0.1-rc.49"
+    },
+    {
+      "name": "ContinuousLocking4Reputation",
+      "mapping": "ContinuousLocking4Reputation",
+      "start_arcVersion": "0.0.1-rc.55"
     }
   ]
 }

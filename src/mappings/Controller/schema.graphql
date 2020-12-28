@@ -19,6 +19,7 @@ type ControllerScheme @entity {
 	name: String
 	version: String
 	alias: String
+	continuousLocking4ReputationParams: ContinuousLocking4ReputationParams
 	contributionRewardParams: ContributionRewardParam
 	contributionRewardExtParams: ContributionRewardExtParam
 	schemeRegistrarParams: SchemeRegistrarParam
@@ -80,6 +81,13 @@ type ControllerRemoveGlobalConstraint @entity {
 	isPre: Boolean
 }
 
+type ContinuousLocking4ReputationParams @entity {
+	id: ID!
+	startTime: BigInt!
+	redeemEnableTime: BigInt!
+	batchTime: BigInt!
+	token: Bytes!
+}
 
 type ContributionRewardParam @entity {
 	id: ID!

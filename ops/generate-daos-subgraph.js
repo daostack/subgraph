@@ -4,7 +4,7 @@ const { migrationFileLocation: defaultMigrationFileLocation, network, startBlock
 const {   subgraphLocation: defaultSubgraphLocation } = require('./graph-cli')
 const path = require("path");
 const currentDir = path.resolve(`${__dirname}`)
-const supportedSchemes = ['ContributionRewardExt', 'GenericScheme', 'GenericSchemeMultiCall']
+const supportedSchemes = ['ContinuousLocking4Reputation', 'ContributionRewardExt', 'GenericScheme', 'GenericSchemeMultiCall']
 const supportedStandAloneContracts = ['Competition', 'DxDaoSchemeConstraints']
 let ids = [];
 
@@ -44,6 +44,11 @@ function daoYaml(contract, contractAddress, arcVersion) {
           return {name: contractName,
             file: path.resolve(`./abis/0.0.1-rc.33/UGenericScheme.json`)
           };
+        }
+        if ((_arcVersion < 24) && (contractName === "ContinuousLocking4Reputation")) {
+          return {name: contractName,
+                  file: path.resolve(`./abis/0.0.1-rc.24/ContinuousLocking4Reputation.json`)
+                };
         }
         if ((_arcVersion < 24) && (contractName === "UGenericScheme")) {
           return {name: contractName,

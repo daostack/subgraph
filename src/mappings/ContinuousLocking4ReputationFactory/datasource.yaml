@@ -1,0 +1,8 @@
+abis:
+  - ContinuousLocking4ReputationFactory
+  - ContinuousLocking4Reputation
+entities:
+  - Dummy
+eventHandlers:
+  - event: NewCL4R(address)
+    handler: handleNewCL4R

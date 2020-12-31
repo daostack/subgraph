@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@daostack/arc": "0.0.1-rc.55",
-    "@daostack/migration": "0.0.1-rc.55-v0",
+    "@daostack/migration": "0.0.1-rc.55-v1",
     "@types/jest": "^23.3.7",
     "@types/mocha": "^5.2.5",
     "babel-eslint": "^10.0.1",

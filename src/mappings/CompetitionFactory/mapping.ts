@@ -1,6 +1,6 @@
 import { crypto } from '@graphprotocol/graph-ts';
-import { ContributionRewardExt } from '../../types/ContributionRewardExt/ContributionRewardExt';
 import { NewCompetition } from '../../types/CompetitionFactory/CompetitionFactory';
+import { ContributionRewardExt } from '../../types/ContributionRewardExt/ContributionRewardExt';
 import {
   ContractInfo, ControllerScheme,
 } from '../../types/schema';

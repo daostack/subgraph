@@ -366,7 +366,6 @@ describe('CompetitionFactory', () => {
             }
           }`;
 
-
         expect((await sendQuery(competitionSuggestionsQuery)).competitionSuggestions).toContainEqual({
             suggestionId: suggestionId1.toString(),
             proposal: {

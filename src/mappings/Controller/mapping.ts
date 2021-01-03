@@ -50,8 +50,8 @@ import {
   UpgradeController,
 } from '../../types/Controller/Controller';
 
+import { ContinuousLocking4Reputation } from '../../types/ContinuousLocking4Reputation/ContinuousLocking4Reputation';
 import { concat, equalsBytes, equalStrings, eventId } from '../../utils';
-import { ContinuousLocking4Reputation } from '../../types/templates/Controller_0_0_1_rc_55/ContinuousLocking4Reputation';
 
 function insertScheme(
   controllerAddress: Address,
@@ -358,7 +358,7 @@ export function setContinuousLocking4ReputationParams(
   let continuousLocking4ReputationParams = new ContinuousLocking4ReputationParams(
     scheme.toHex(),
   );
-  let tokenContract = DAOToken.bind(token)
+  let tokenContract = DAOToken.bind(token);
   continuousLocking4ReputationParams.startTime = startTime;
   continuousLocking4ReputationParams.redeemEnableTime = redeemEnableTime;
   continuousLocking4ReputationParams.batchTime = batchTime;
@@ -399,7 +399,7 @@ export function setContinuousLocking4ReputationParams(
   } else {
     continuousLocking4ReputationParams.repRewardConstB = cl4rCallResult.value;
   }
-  
+
   continuousLocking4ReputationParams.save();
   if (controllerScheme != null) {
     controllerScheme.continuousLocking4ReputationParams = continuousLocking4ReputationParams.id;

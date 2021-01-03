@@ -51,6 +51,7 @@ import {
 } from '../../types/Controller/Controller';
 
 import { concat, equalsBytes, equalStrings, eventId } from '../../utils';
+import { ContinuousLocking4Reputation } from '../../types/templates/Controller_0_0_1_rc_55/ContinuousLocking4Reputation';
 
 function insertScheme(
   controllerAddress: Address,
@@ -357,10 +358,48 @@ export function setContinuousLocking4ReputationParams(
   let continuousLocking4ReputationParams = new ContinuousLocking4ReputationParams(
     scheme.toHex(),
   );
+  let tokenContract = DAOToken.bind(token)
   continuousLocking4ReputationParams.startTime = startTime;
   continuousLocking4ReputationParams.redeemEnableTime = redeemEnableTime;
   continuousLocking4ReputationParams.batchTime = batchTime;
   continuousLocking4ReputationParams.token = token;
+  let tokenCallResult = tokenContract.try_name();
+  if (tokenCallResult.reverted) {
+    log.info('CL4R token try_name reverted', []);
+  } else {
+    continuousLocking4ReputationParams.tokenName = tokenCallResult.value;
+  }
+
+  tokenCallResult = tokenContract.try_symbol();
+  if (tokenCallResult.reverted) {
+    log.info('CL4R token try_symbol reverted', []);
+  } else {
+    continuousLocking4ReputationParams.tokenSymbol = tokenCallResult.value;
+  }
+
+  let cl4rContract = ContinuousLocking4Reputation.bind(scheme);
+
+  let cl4rCallResult = cl4rContract.try_maxLockingBatches();
+  if (cl4rCallResult.reverted) {
+    log.info('CL4R try_maxLockingBatches reverted', []);
+  } else {
+    continuousLocking4ReputationParams.maxLockingBatches = cl4rCallResult.value;
+  }
+
+  cl4rCallResult = cl4rContract.try_repRewardConstA();
+  if (cl4rCallResult.reverted) {
+    log.info('CL4R try_repRewardConstA reverted', []);
+  } else {
+    continuousLocking4ReputationParams.repRewardConstA = cl4rCallResult.value;
+  }
+
+  cl4rCallResult = cl4rContract.try_repRewardConstB();
+  if (cl4rCallResult.reverted) {
+    log.info('CL4R try_repRewardConstB reverted', []);
+  } else {
+    continuousLocking4ReputationParams.repRewardConstB = cl4rCallResult.value;
+  }
+  
   continuousLocking4ReputationParams.save();
   if (controllerScheme != null) {
     controllerScheme.continuousLocking4ReputationParams = continuousLocking4ReputationParams.id;

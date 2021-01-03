@@ -87,6 +87,11 @@ type ContinuousLocking4ReputationParams @entity {
 	redeemEnableTime: BigInt!
 	batchTime: BigInt!
 	token: Bytes!
+	tokenName: String!
+	tokenSymbol: String!
+	maxLockingBatches: BigInt!
+	repRewardConstA: BigInt!
+	repRewardConstB: BigInt!
 }
 
 type ContributionRewardParam @entity {

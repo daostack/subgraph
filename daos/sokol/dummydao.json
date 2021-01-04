@@ -1,66 +1,66 @@
 {
-  "name": "Gustatory Scenographer",
-  "Avatar": "0x3d9E3F230E8ad18fBE7A8f9131e30579Be01fCD1",
-  "DAOToken": "0x9ac1CE3fF16241B40F1B04AFFbede8dBAA3E3A57",
-  "Reputation": "0xF135846012087e68DaC55A4C11550A1306875478",
-  "Controller": "0x9363150ea59a9d317755973a201F14B9e6d1eC27",
+  "name": "Nefarious Woodworkers",
+  "Avatar": "0x353d169f3960c71339daea2F89260E26bAE398B3",
+  "DAOToken": "0xAbDcdea10404e2E6229F24D64c073cCE238010b1",
+  "Reputation": "0xa34b71e4706C41A48568Ae4838192d969BC2cE8B",
+  "Controller": "0x5133F60Cf16aB51dcCf29c31F83D891E0DCB9BDE",
   "Schemes": [
     {
       "name": "GenericScheme",
       "alias": "GenericSchemeAlias",
-      "address": "0xB614b1720e23936fFF2Be5588E1fb935F91161CC",
-      "arcVersion": "0.0.1-rc.47"
+      "address": "0x01Fc899fa5e73D59F3DE73BB21298d43d75749b3",
+      "arcVersion": "0.0.1-rc.55"
     },
     {
       "name": "ContributionRewardExt",
       "alias": "ContributionRewardExt",
-      "address": "0x248b2B6DDDc29D88fEC5a8C18153F4cCCe3CA2Fb",
+      "address": "0x54b27c2adC7Cc8C2BB1a2F2CE3920E755d03ab2e",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "GenericSchemeMultiCall",
       "alias": "GenericSchemeMultiCall",
-      "address": "0xa0514D0987b539498d07DBB8D6C75d4cA33Adc5f",
-      "arcVersion": "0.0.1-rc.47"
+      "address": "0xbe40c36fA171c06D4eD39179Bd2Df8d839d1830a",
+      "arcVersion": "0.0.1-rc.51"
     },
     {
       "name": "ContinuousLocking4Reputation",
       "alias": "ContinuousLocking4Reputation",
-      "address": "0xa0514D0987b539498d07DBB8D6C75d4cA33Adc5f",
+      "address": "0x65b52bcA12d6840f3AE32163E2A91fCb424edbE7",
       "arcVersion": "0.0.1-rc.55"
     }
   ],
   "StandAloneContracts": [
     {
       "name": "Wallet",
-      "address": "0x2b67199e1A34Db6892da2dA63628Be635F398eEb",
-      "arcVersion": "0.0.1-rc.47"
+      "address": "0x8dB34908fBA84F1c40E3A6C1cfEF70f45d3DEbdb",
+      "arcVersion": "0.0.1-rc.55"
     },
     {
       "name": "ContributionRewardExt",
-      "address": "0x248b2B6DDDc29D88fEC5a8C18153F4cCCe3CA2Fb",
+      "address": "0x54b27c2adC7Cc8C2BB1a2F2CE3920E755d03ab2e",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "Competition",
-      "address": "0xcE05e60546203Ab3ac82B42387C156103dc0E372",
+      "address": "0x5446f6d6B40Dbb2a7AFC135B974ec693Bf43D29e",
       "arcVersion": "0.0.1-rc.43"
     },
     {
       "name": "GenericSchemeMultiCall",
-      "address": "0xa0514D0987b539498d07DBB8D6C75d4cA33Adc5f",
-      "arcVersion": "0.0.1-rc.47"
+      "address": "0xbe40c36fA171c06D4eD39179Bd2Df8d839d1830a",
+      "arcVersion": "0.0.1-rc.51"
     },
     {
       "name": "ActionMock",
-      "address": "0x265ba47672C50e03c2C3DC756d625C3fde6D912c",
-      "arcVersion": "0.0.1-rc.47"
+      "address": "0x0944765A460b050E888782f9CFDcb13fB07428Ea",
+      "arcVersion": "0.0.1-rc.55"
     },
     {
       "name": "DxDaoSchemeConstraints",
-      "address": "0x9a56B2Fa2d204Ffe1419EC62BeAC31dddD760351",
-      "arcVersion": "0.0.1-rc.47"
+      "address": "0xe45eFAb753086BA36645f1850dbF535477E0f1e0",
+      "arcVersion": "0.0.1-rc.51"
     }
   ],
-  "arcVersion": "0.0.1-rc.47"
+  "arcVersion": "0.0.1-rc.55"
 }

@@ -29,6 +29,16 @@
       "name": "ContinuousLocking4Reputation",
       "mapping": "ContinuousLocking4Reputation",
       "start_arcVersion": "0.0.1-rc.55"
+    },
+    {
+      "name": "Competition",
+      "mapping": "Competition",
+      "start_arcVersion": "0.0.1-rc.55"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "mapping": "ContributionRewardExt",
+      "start_arcVersion": "0.0.1-rc.55"
     }
   ]
 }

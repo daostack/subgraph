@@ -1,0 +1,9 @@
+abis:
+  - CompetitionFactory
+  - Competition
+  - ContributionRewardExt
+entities:
+  - Dummy
+eventHandlers:
+  - event: NewCompetition(address,address)
+    handler: handleNewCompetition

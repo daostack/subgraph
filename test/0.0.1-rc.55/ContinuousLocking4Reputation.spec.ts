@@ -157,9 +157,16 @@ describe('ContinuousLocking4Reputation', () => {
                   batchTime
                   redeemEnableTime
                   token
+                  tokenName
+                  tokenSymbol
+                  maxLockingBatches
+                  repRewardConstA
+                  repRewardConstB
                 }
             }
           }`);
+
+      const daoToken = await new web3.eth.Contract(DAOToken.abi, addresses.NativeToken.toLowerCase(), opts);
 
       expect(controllerSchemes).toContainEqual({
             name: 'ContinuousLocking4Reputation',
@@ -179,10 +186,14 @@ describe('ContinuousLocking4Reputation', () => {
                 redeemEnableTime: redeemEnableTime.toString(),
                 startTime: startTime.toString(),
                 token: addresses.NativeToken.toLowerCase(),
+                tokenName: (await daoToken.methods.name().call()),
+                tokenSymbol: (await daoToken.methods.symbol().call()),
+                maxLockingBatches: (await continuousLocking4Reputation.methods.maxLockingBatches().call()),
+                repRewardConstA: (await continuousLocking4Reputation.methods.repRewardConstA().call()),
+                repRewardConstB: (await continuousLocking4Reputation.methods.repRewardConstB().call()),
             },
           });
 
-      const daoToken = await new web3.eth.Contract(DAOToken.abi, addresses.NativeToken.toLowerCase(), opts);
         // // console.log(await continuousLocking4Reputation.methods.agreementHash().call());
       await daoToken.methods.approve(continuousLocking4Reputation.options.address, 1).send();
 

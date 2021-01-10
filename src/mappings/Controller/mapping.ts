@@ -411,7 +411,7 @@ export function setContinuousLocking4ReputationParams(
   if (agreementHashCallResult.reverted) {
     log.info('CL4R getAgreementHash reverted', []);
   } else {
-    continuousLocking4ReputationParams.agreementHash = agreementHashCallResult.value;
+    continuousLocking4ReputationParams.agreementHash = agreementHashCallResult.value.toString();
   }
 
   continuousLocking4ReputationParams.save();

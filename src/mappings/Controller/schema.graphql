@@ -93,7 +93,7 @@ type ContinuousLocking4ReputationParams @entity {
 	repRewardConstA: BigInt
 	repRewardConstB: BigInt
 	batchesIndexCap: BigInt
-	agreementHash: Bytes
+	agreementHash: String
 }
 
 type ContributionRewardParam @entity {

@@ -162,6 +162,7 @@ describe('ContinuousLocking4Reputation', () => {
                   maxLockingBatches
                   repRewardConstA
                   repRewardConstB
+                  batchesIndexCap
                 }
             }
           }`);
@@ -191,6 +192,7 @@ describe('ContinuousLocking4Reputation', () => {
                 maxLockingBatches: (await continuousLocking4Reputation.methods.maxLockingBatches().call()),
                 repRewardConstA: (await continuousLocking4Reputation.methods.repRewardConstA().call()),
                 repRewardConstB: (await continuousLocking4Reputation.methods.repRewardConstB().call()),
+                batchesIndexCap: periodsCap.toString(),
             },
           });
 

@@ -92,6 +92,7 @@ type ContinuousLocking4ReputationParams @entity {
 	maxLockingBatches: BigInt
 	repRewardConstA: BigInt
 	repRewardConstB: BigInt
+	batchesIndexCap: BigInt
 }
 
 type ContributionRewardParam @entity {

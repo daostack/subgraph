@@ -400,6 +400,13 @@ export function setContinuousLocking4ReputationParams(
     continuousLocking4ReputationParams.repRewardConstB = cl4rCallResult.value;
   }
 
+  cl4rCallResult = cl4rContract.try_batchesIndexCap();
+  if (cl4rCallResult.reverted) {
+    log.info('CL4R batchesIndexCap reverted', []);
+  } else {
+    continuousLocking4ReputationParams.batchesIndexCap = cl4rCallResult.value;
+  }
+
   continuousLocking4ReputationParams.save();
   if (controllerScheme != null) {
     controllerScheme.continuousLocking4ReputationParams = continuousLocking4ReputationParams.id;

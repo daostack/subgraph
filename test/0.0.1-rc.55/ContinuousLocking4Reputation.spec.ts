@@ -5,6 +5,7 @@ import {
     getWeb3,
     increaseTime,
     nullParamsHash,
+    padZeros,
     sendQuery,
     waitUntilTrue,
     writeProposalIPFS,
@@ -195,7 +196,7 @@ describe('ContinuousLocking4Reputation', () => {
                 repRewardConstA: (await continuousLocking4Reputation.methods.repRewardConstA().call()),
                 repRewardConstB: (await continuousLocking4Reputation.methods.repRewardConstB().call()),
                 batchesIndexCap: periodsCap.toString(),
-                agreementHash,
+                agreementHash: padZeros(agreementHash, 64),
             },
           });
 

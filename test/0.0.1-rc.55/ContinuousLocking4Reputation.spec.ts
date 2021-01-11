@@ -5,6 +5,7 @@ import {
     getWeb3,
     increaseTime,
     nullParamsHash,
+    padZeros,
     sendQuery,
     waitUntilTrue,
     writeProposalIPFS,
@@ -56,6 +57,7 @@ describe('ContinuousLocking4Reputation', () => {
       let repRewardConstA = 85000;
       let repRewardConstB = 900;
       let periodsCap = 100;
+      let agreementHash = '0x0000000000000000000000000000000000000000000000000000000000000001';
       const continuousLocking4ReputationCreateTx =
       continuousLocking4ReputationFactory.methods.createCL4R(
         addresses.Avatar,
@@ -68,7 +70,7 @@ describe('ContinuousLocking4Reputation', () => {
         repRewardConstB,
         periodsCap,
         addresses.NativeToken,
-        '0x0000000000000000000000000000000000000001',
+        agreementHash,
       );
 
       const continuousLocking4ReputationAddress = await continuousLocking4ReputationCreateTx.call();
@@ -163,6 +165,7 @@ describe('ContinuousLocking4Reputation', () => {
                   repRewardConstA
                   repRewardConstB
                   batchesIndexCap
+                  agreementHash
                 }
             }
           }`);
@@ -193,13 +196,14 @@ describe('ContinuousLocking4Reputation', () => {
                 repRewardConstA: (await continuousLocking4Reputation.methods.repRewardConstA().call()),
                 repRewardConstB: (await continuousLocking4Reputation.methods.repRewardConstB().call()),
                 batchesIndexCap: periodsCap.toString(),
+                agreementHash,
             },
           });
 
         // // console.log(await continuousLocking4Reputation.methods.agreementHash().call());
       await daoToken.methods.approve(continuousLocking4Reputation.options.address, 1).send();
 
-      const { blockNumber } = await continuousLocking4Reputation.methods.lock(1, 12, 0, '0x0000000000000000000000000000000000000001').send();
+      const { blockNumber } = await continuousLocking4Reputation.methods.lock(1, 12, 0, agreementHash).send();
       const { timestamp } = await web3.eth.getBlock(blockNumber);
       const locksQuery = `{
           cl4Rlocks {

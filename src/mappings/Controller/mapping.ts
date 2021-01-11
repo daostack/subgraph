@@ -407,6 +407,13 @@ export function setContinuousLocking4ReputationParams(
     continuousLocking4ReputationParams.batchesIndexCap = cl4rCallResult.value;
   }
 
+  let agreementHashCallResult = cl4rContract.try_getAgreementHash();
+  if (agreementHashCallResult.reverted) {
+    log.info('CL4R getAgreementHash reverted', []);
+  } else {
+    continuousLocking4ReputationParams.agreementHash = agreementHashCallResult.value.toHex();
+  }
+
   continuousLocking4ReputationParams.save();
   if (controllerScheme != null) {
     controllerScheme.continuousLocking4ReputationParams = continuousLocking4ReputationParams.id;

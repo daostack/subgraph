@@ -57,7 +57,7 @@ describe('ContinuousLocking4Reputation', () => {
       let repRewardConstA = 85000;
       let repRewardConstB = 900;
       let periodsCap = 100;
-      let agreementHash = '0x0000000000000000000000000000000000000001';
+      let agreementHash = '0x00000000000000000000000000000000000000000000000000000000000001';
       const continuousLocking4ReputationCreateTx =
       continuousLocking4ReputationFactory.methods.createCL4R(
         addresses.Avatar,
@@ -196,7 +196,7 @@ describe('ContinuousLocking4Reputation', () => {
                 repRewardConstA: (await continuousLocking4Reputation.methods.repRewardConstA().call()),
                 repRewardConstB: (await continuousLocking4Reputation.methods.repRewardConstB().call()),
                 batchesIndexCap: periodsCap.toString(),
-                agreementHash: padZeros(agreementHash, 64),
+                agreementHash,
             },
           });
 

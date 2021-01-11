@@ -57,7 +57,7 @@ describe('ContinuousLocking4Reputation', () => {
       let repRewardConstA = 85000;
       let repRewardConstB = 900;
       let periodsCap = 100;
-      let agreementHash = '0x0000000000000000000000000000000000000001';
+      let agreementHash = '0x0000000000000000000000000000000000000000000000000000000000000001';
       const continuousLocking4ReputationCreateTx =
       continuousLocking4ReputationFactory.methods.createCL4R(
         addresses.Avatar,
@@ -203,7 +203,7 @@ describe('ContinuousLocking4Reputation', () => {
         // // console.log(await continuousLocking4Reputation.methods.agreementHash().call());
       await daoToken.methods.approve(continuousLocking4Reputation.options.address, 1).send();
 
-      const { blockNumber } = await continuousLocking4Reputation.methods.lock(1, 12, 0, '0x0000000000000000000000000000000000000001').send();
+      const { blockNumber } = await continuousLocking4Reputation.methods.lock(1, 12, 0, agreementHash).send();
       const { timestamp } = await web3.eth.getBlock(blockNumber);
       const locksQuery = `{
           cl4Rlocks {

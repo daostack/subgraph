@@ -262,11 +262,11 @@ describe('ContinuousLocking4Reputation', () => {
           lockingTime: timestamp.toString(),
           period: '12',
           redeemed: [
-            { 
+            {
               redeemedAt: redeemTimestamp.toString(),
               amount: '85000',
               batchIndex: '0',
-            }
+            },
           ],
           released: false,
           releasedAt: null,
@@ -292,11 +292,11 @@ describe('ContinuousLocking4Reputation', () => {
           lockingTime: timestamp.toString(),
           period: '12',
           redeemed: [
-            { 
+            {
               redeemedAt: redeemTimestamp.toString(),
               amount: '85000',
               batchIndex: '0',
-            }
+            },
           ],
           released: true,
           releasedAt: releaseTimestamp.toString(),

@@ -3,6 +3,7 @@ import { crypto } from '@graphprotocol/graph-ts';
 import { ContinuousLocking4Reputation, ExtendLocking, LockToken, Redeem, Release } from '../../types/ContinuousLocking4Reputation/ContinuousLocking4Reputation';
 import {
   CL4RLock,
+  CL4RRedeem,
 } from '../../types/schema';
 import { concat } from '../../utils';
 
@@ -15,9 +16,14 @@ export function handleRedeem(event: Redeem): void {
     return;
   }
 
-  lock.redeemed = true;
-  lock.redeemedAt = event.block.timestamp;
-  lock.batchIndexRedeemed = event.params._batchIndex;
+  let redeem = new CL4RRedeem(
+    event.address.toHex() + event.params._lockingId.toString() + event.params._batchIndex.toString(),
+  );
+  redeem.lock = event.address.toHex() + event.params._lockingId.toString();
+  redeem.amount = event.params._amount;
+  redeem.redeemedAt = event.block.timestamp;
+  redeem.batchIndex = event.params._batchIndex;
+  redeem.save();
   lock.save();
 }
 
@@ -49,7 +55,6 @@ export function handleLockToken(event: LockToken): void {
   lock.locker = event.params._locker;
   lock.amount = event.params._amount;
   lock.period = event.params._period;
-  lock.redeemed = false;
   lock.released = false;
   lock.save();
 }

@@ -8,14 +8,6 @@ import {
 import { concat } from '../../utils';
 
 export function handleRedeem(event: Redeem): void {
-  let lock = CL4RLock.load(
-    event.address.toHex() + event.params._lockingId.toString(),
-  );
-
-  if (lock ==  null) {
-    return;
-  }
-
   let redeem = new CL4RRedeem(
     event.address.toHex() + event.params._lockingId.toString() + event.params._batchIndex.toString(),
   );
@@ -24,7 +16,6 @@ export function handleRedeem(event: Redeem): void {
   redeem.redeemedAt = event.block.timestamp;
   redeem.batchIndex = event.params._batchIndex;
   redeem.save();
-  lock.save();
 }
 
 export function handleRelease(event: Release): void {

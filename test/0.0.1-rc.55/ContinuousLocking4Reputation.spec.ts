@@ -216,11 +216,13 @@ describe('ContinuousLocking4Reputation', () => {
               id
             }
             period
-            batchIndexRedeemed
             amount
-            redeemed
+            redeemed {
+              redeemedAt
+              amount
+              batchIndex
+            }
             released
-            redeemedAt
             releasedAt
           }
         }`;
@@ -229,15 +231,13 @@ describe('ContinuousLocking4Reputation', () => {
 
       expect(cl4Rlocks).toContainEqual({
           amount: '1',
-          batchIndexRedeemed: null,
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
           lockingId: '1',
           lockingTime: timestamp.toString(),
           period: '12',
-          redeemed: false,
-          redeemedAt: null,
+          redeemed: [],
           released: false,
           releasedAt: null,
           scheme: {
@@ -255,15 +255,19 @@ describe('ContinuousLocking4Reputation', () => {
 
       expect(cl4Rlocks).toContainEqual({
           amount: '1',
-          batchIndexRedeemed: '0',
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
           lockingId: '1',
           lockingTime: timestamp.toString(),
           period: '12',
-          redeemed: true,
-          redeemedAt: redeemTimestamp.toString(),
+          redeemed: [
+            {
+              redeemedAt: redeemTimestamp.toString(),
+              amount: '85000',
+              batchIndex: '0',
+            },
+          ],
           released: false,
           releasedAt: null,
           scheme: {
@@ -281,15 +285,19 @@ describe('ContinuousLocking4Reputation', () => {
 
       expect(cl4Rlocks).toContainEqual({
           amount: '1',
-          batchIndexRedeemed: '0',
           dao: {
             id: addresses.Avatar.toLowerCase(),
           },
           lockingId: '1',
           lockingTime: timestamp.toString(),
           period: '12',
-          redeemed: true,
-          redeemedAt: redeemTimestamp.toString(),
+          redeemed: [
+            {
+              redeemedAt: redeemTimestamp.toString(),
+              amount: '85000',
+              batchIndex: '0',
+            },
+          ],
           released: true,
           releasedAt: releaseTimestamp.toString(),
           scheme: {

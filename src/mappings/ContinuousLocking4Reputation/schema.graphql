@@ -7,9 +7,15 @@ type CL4RLock @entity {
     amount: BigInt!
     lockingTime: BigInt!
     period: BigInt!
-    redeemed: Boolean!
-    redeemedAt: BigInt
+    redeemed: [CL4RRedeem!] @derivedFrom(field: "lock")
     released: Boolean!
     releasedAt: BigInt
-    batchIndexRedeemed: BigInt
+}
+
+type CL4RRedeem @entity {
+    id: ID!
+    lock: CL4RLock!
+    amount: BigInt!
+    redeemedAt: BigInt!
+    batchIndex: BigInt!
 }

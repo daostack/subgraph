@@ -1,5 +1,51 @@
 {
-    "mainnet": [],
+    "mainnet": [
+        {
+            "name": "DXTokenRegistry",
+            "address": "0x93DB90445B76329e9ed96ECd74e76D8fbf2590d8",
+            "arcVersion": "none"
+        },
+        {
+            "name": "ENSRegistryWithFallback",
+            "address": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+            "arcVersion": "none"
+        },
+        {
+            "name": "BaseRegistrarImplementation",
+            "address": "0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85",
+            "arcVersion": "none"
+        },
+        {
+            "name": "PublicResolver",
+            "address": "0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41",
+            "arcVersion": "none"
+        },
+        {
+            "name": "GnosisProtocolRelayer",
+            "address": "0x30AAD48F5eA5e8b2277612eB2A375fC173bB049e",
+            "arcVersion": "none"
+        },
+        {
+            "name": "DXswapRelayer",
+            "address": "0x924a2917d43e037b724D585d434A5de9E7d701a6",
+            "arcVersion": "none"
+        },
+        {
+            "name": "DecentralizedAutonomousTrust",
+            "address": "0xa1d65E8fB6e87b60FECCBc582F7f97804B725521",
+            "arcVersion": "none"
+        },
+        {
+            "name": "DXswapFeeReceiver",
+            "address": "0xC6130400C1e3cD7b352Db75055dB9dD554E00Ef0",
+            "arcVersion": "none"
+        },
+        {
+            "name": "DXswapFeeSetter",
+            "address": "0x288879b3CaFA044dB6Ba18ee638BBC1a233F8548",
+            "arcVersion": "none"
+        }
+    ],
     "rinkeby": [
         {
             "name": "EIP20",

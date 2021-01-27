@@ -22,7 +22,6 @@ export class IPFSData {
   public title: string;
   public description: string;
   public url: string;
-  public fulltext: string[];
   public tags: JSONValue[];
 }
 
@@ -79,7 +78,6 @@ export function getProposalIPFSData(proposal: Proposal): Proposal {
     proposal.title = data.title;
     proposal.description = data.description;
     proposal.url = data.url;
-    proposal.fulltext = data.fulltext;
     let tagsObjects = data.tags;
     if (tagsObjects.length > 0) {
       let tags: string[] = [];
@@ -114,7 +112,6 @@ export function getIPFSData(descHash: string): IPFSData {
   result.title = '';
   result.description = '';
   result.url = '';
-  result.fulltext = [];
   result.tags = [];
 
   let ipfsData = ipfs.cat('/ipfs/' + descHash);
@@ -136,12 +133,10 @@ export function getIPFSData(descHash: string): IPFSData {
     }
     if (descJson.toObject().get('title') != null && descJson.toObject().get('title').kind === JSONValueKind.STRING) {
       result.title = descJson.toObject().get('title').toString();
-      result.fulltext = result.title.split(' ');
     }
     if (descJson.toObject().get('description') != null &&
     descJson.toObject().get('description').kind === JSONValueKind.STRING) {
       result.description = descJson.toObject().get('description').toString();
-      result.fulltext = result.fulltext.concat(result.description.split(' '));
     }
     if (descJson.toObject().get('url') != null &&
     descJson.toObject().get('url').kind === JSONValueKind.STRING) {

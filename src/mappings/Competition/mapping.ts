@@ -95,7 +95,6 @@ export function getSuggestionIPFSData(suggestion: CompetitionSuggestion): Compet
     suggestion.title = data.title;
     suggestion.description = data.description;
     suggestion.url = data.url;
-    suggestion.fulltext = data.fulltext;
     let tagsObjects = data.tags;
     if (tagsObjects.length > 0) {
       let tags: string[] = [];

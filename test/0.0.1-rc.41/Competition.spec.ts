@@ -260,7 +260,6 @@ describe('Competition', () => {
                 descriptionHash
                 title
                 description
-                fulltext
                 url
                 tags {
                     id
@@ -295,7 +294,6 @@ describe('Competition', () => {
             descriptionHash: descHash,
             title: proposalTitle,
             description: proposalDescription,
-            fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),
             url: proposalUrl,
             tags: tagsList,
             suggester: accounts[0].address.toLowerCase(),
@@ -327,7 +325,6 @@ describe('Competition', () => {
             descriptionHash: descHash,
             title: proposalTitle,
             description: proposalDescription,
-            fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),
             url: proposalUrl,
             tags: tagsList,
             suggester: accounts[0].address.toLowerCase(),

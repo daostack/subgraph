@@ -442,7 +442,6 @@ describe('Domain Layer', () => {
             descriptionHash
             title
             description
-            fulltext
             url
             tags {
               id
@@ -559,7 +558,6 @@ describe('Domain Layer', () => {
       descriptionHash: descHash,
       title: proposalTitle,
       description: proposalDescription,
-      fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),
       url: proposalUrl,
       tags: tagsList,
       stage: 'Queued',

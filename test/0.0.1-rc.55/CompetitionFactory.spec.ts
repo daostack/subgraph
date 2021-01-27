@@ -353,7 +353,6 @@ describe('CompetitionFactory', () => {
                 descriptionHash
                 title
                 description
-                fulltext
                 url
                 suggester
                 beneficiary
@@ -374,7 +373,6 @@ describe('CompetitionFactory', () => {
             descriptionHash: descHash,
             title: proposalTitle,
             description: proposalDescription,
-            fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),
             url: proposalUrl,
             suggester: accounts[0].address.toLowerCase(),
             beneficiary: accounts[1].address.toLowerCase(),
@@ -398,7 +396,6 @@ describe('CompetitionFactory', () => {
             descriptionHash: descHash,
             title: proposalTitle,
             description: proposalDescription,
-            fulltext: proposalTitle.split(' ').concat(proposalDescription.split(' ')),
             url: proposalUrl,
             suggester: accounts[0].address.toLowerCase(),
             beneficiary: accounts[0].address.toLowerCase(),

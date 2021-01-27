@@ -30,7 +30,6 @@ type CompetitionSuggestion @entity {
     title: String
 	description: String
 	url: String
-    fulltext: [String!]
     tags: [Tag!]
     suggester: Bytes!
     beneficiary: Bytes!

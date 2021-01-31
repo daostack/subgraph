@@ -15,6 +15,7 @@ import {
   GenericSchemeMultiCallProposal,
   GenericSchemeParam,
 } from '../../types/schema';
+import { CLOSING_AT_TIME_DECREASE_GSMC, CLOSING_AT_TIME_INCREASE } from '../../utils';
 
 function insertNewProposal(event: NewMultiCallProposal): void {
   let ent = new GenericSchemeMultiCallProposal(event.params._proposalId.toHex());
@@ -66,8 +67,6 @@ export function handleProposalExecuted(
   ) as GenericSchemeMultiCallProposal;
   if (ent != null) {
     ent.executed = true;
-    const CLOSING_AT_TIME_DECREASE_GSMC = 32000000;
-    const CLOSING_AT_TIME_INCREASE = 2147483647;
     let proposal = getProposal(event.params._proposalId.toHex());
     proposal.closingAt = (
       BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(

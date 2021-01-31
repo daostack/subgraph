@@ -434,8 +434,13 @@ export function updateProposalExecution(
   proposal.executedAt = timestamp;
   // Setting the closingAt field to a far away point in the future so it will be easy to
   // sort all proposal(open and executed) in ascending order by the closingAt field
+  const CLOSING_AT_TIME_DECREASE_GSMC = 32000000;
   const CLOSING_AT_TIME_INCREASE = 2147483647;
-  proposal.closingAt = (BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(timestamp)).times(BigInt.fromI32(100));
+  if (proposal.genericSchemeMultiCall) {
+    proposal.closingAt = timestamp.minus(BigInt.fromI32(CLOSING_AT_TIME_DECREASE_GSMC));
+  } else {
+    proposal.closingAt = (BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(timestamp)).times(BigInt.fromI32(100));
+  }
   if (totalReputation != null) {
     proposal.totalRepWhenExecuted = totalReputation;
   }

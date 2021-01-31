@@ -1,4 +1,4 @@
-import { Bytes, store } from '@graphprotocol/graph-ts';
+import { BigInt, Bytes, store } from '@graphprotocol/graph-ts';
 
 // Import event types from the Reputation contract ABI
 import {
@@ -10,6 +10,7 @@ import {
 import * as domain from '../../domain';
 
 // Import entity types generated from the GraphQL schema
+import { getProposal } from '../../domain/proposal';
 import {
   GenericSchemeMultiCallProposal,
   GenericSchemeParam,
@@ -65,6 +66,14 @@ export function handleProposalExecuted(
   ) as GenericSchemeMultiCallProposal;
   if (ent != null) {
     ent.executed = true;
+    const CLOSING_AT_TIME_DECREASE_GSMC = 32000000;
+    const CLOSING_AT_TIME_INCREASE = 2147483647;
+    let proposal = getProposal(event.params._proposalId.toHex());
+    proposal.closingAt = (
+      BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(
+        proposal.closingAt.plus(BigInt.fromI32(CLOSING_AT_TIME_DECREASE_GSMC)),
+      )
+    ).times(BigInt.fromI32(100));
   }
 
   store.set('GenericSchemeMultiCallProposal', event.params._proposalId.toHex(), ent);

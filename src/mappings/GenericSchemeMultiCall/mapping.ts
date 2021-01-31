@@ -74,6 +74,7 @@ export function handleProposalExecuted(
         proposal.closingAt.plus(BigInt.fromI32(CLOSING_AT_TIME_DECREASE_GSMC)),
       )
     ).times(BigInt.fromI32(100));
+    proposal.save();
   }
 
   store.set('GenericSchemeMultiCallProposal', event.params._proposalId.toHex(), ent);

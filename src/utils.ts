@@ -29,6 +29,9 @@ export function concat(a: ByteArray, b: ByteArray): ByteArray {
   return out as ByteArray;
 }
 
+export const CLOSING_AT_TIME_DECREASE_GSMC = 32000000;
+export const CLOSING_AT_TIME_INCREASE = 2147483647;
+
 export function eventId(event: ethereum.Event): string {
   return crypto
     .keccak256(

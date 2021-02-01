@@ -172,15 +172,43 @@ describe('GenericSchemeMultiCall', () => {
             voter: accounts[3].address,
         });
 
-        await genericSchemeMultiCall.methods.execute(p1).send();
-
         const executedIsIndexed = async () => {
             return (await sendQuery(getProposal)).proposal.executedAt != null;
         };
 
         await waitUntilTrue(executedIsIndexed);
 
-        proposal = (await sendQuery(getProposal)).proposal;
+        const getProposalWithClosingAt = `{
+            proposal(id: "${p1}") {
+                id
+                descriptionHash
+                stage
+                createdAt
+                executedAt
+                proposer
+                votingMachine
+                closingAt
+                genericSchemeMultiCall {
+                  id
+                  dao {
+                     id
+                  }
+                  contractsToCall
+                  callsData
+                  values
+                  executed
+                  returnValues
+                }
+                scheme {
+                  genericSchemeMultiCallParams {
+                    contractsWhiteList
+                    schemeConstraints
+                  }
+                }
+            }
+        }`;
+
+        proposal = (await sendQuery(getProposalWithClosingAt)).proposal;
         expect(proposal).toMatchObject({
             id: p1,
             descriptionHash,
@@ -189,7 +217,38 @@ describe('GenericSchemeMultiCall', () => {
             executedAt: executedAt + '',
             proposer: web3.eth.defaultAccount.toLowerCase(),
             votingMachine: genesisProtocol.options.address.toLowerCase(),
+            closingAt: (parseInt(executedAt, 10) - 32000000).toString(),
+            genericSchemeMultiCall: {
+                id: p1,
+                dao: {
+                    id: addresses.Avatar.toLowerCase(),
+                },
+                contractsToCall,
+                callsData,
+                values,
+                executed: false,
+                returnValues: null,
+            },
+        });
 
+        await genericSchemeMultiCall.methods.execute(p1).send();
+
+        const executedGSMCIsIndexed = async () => {
+            return (await sendQuery(getProposalWithClosingAt)).proposal.genericSchemeMultiCall.executed == true;
+        };
+
+        await waitUntilTrue(executedGSMCIsIndexed);
+
+        proposal = (await sendQuery(getProposalWithClosingAt)).proposal;
+        expect(proposal).toMatchObject({
+            id: p1,
+            descriptionHash,
+            stage: 'Executed',
+            createdAt: p1Creation.toString(),
+            executedAt: executedAt + '',
+            proposer: web3.eth.defaultAccount.toLowerCase(),
+            votingMachine: genesisProtocol.options.address.toLowerCase(),
+            closingAt: ((2147483647 - parseInt(executedAt, 10)) * 100).toString(),
             genericSchemeMultiCall: {
                 id: p1,
                 dao: {

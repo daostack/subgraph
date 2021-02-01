@@ -434,7 +434,7 @@ export function updateProposalExecution(
   proposal.executedAt = timestamp;
   // Setting the closingAt field to a far away point in the future so it will be easy to
   // sort all proposal(open and executed) in ascending order by the closingAt field
-  if (proposal.genericSchemeMultiCall) {
+  if (proposal.genericSchemeMultiCall !== null && equalStrings(proposal.winningOutcome, 'Pass')) {
     proposal.closingAt = timestamp.minus(BigInt.fromI32(CLOSING_AT_TIME_DECREASE_GSMC));
   } else {
     proposal.closingAt = (BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(timestamp)).times(BigInt.fromI32(100));

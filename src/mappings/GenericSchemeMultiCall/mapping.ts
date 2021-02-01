@@ -68,13 +68,11 @@ export function handleProposalExecuted(
   if (ent != null) {
     ent.executed = true;
     let proposal = getProposal(event.params._proposalId.toHex());
-    if (equalStrings(proposal.winningOutcome, 'Pass')) {
-      proposal.closingAt = (
-        BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(
-          proposal.closingAt.plus(BigInt.fromI32(CLOSING_AT_TIME_DECREASE_GSMC)),
-        )
-      ).times(BigInt.fromI32(100));
-    }
+    proposal.closingAt = (
+      BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(
+        proposal.closingAt.plus(BigInt.fromI32(CLOSING_AT_TIME_DECREASE_GSMC)),
+      )
+    ).times(BigInt.fromI32(100));
     proposal.save();
   }
 

@@ -15,7 +15,7 @@ import {
   GenericSchemeMultiCallProposal,
   GenericSchemeParam,
 } from '../../types/schema';
-import { CLOSING_AT_TIME_DECREASE_GSMC, CLOSING_AT_TIME_INCREASE } from '../../utils';
+import { CLOSING_AT_TIME_DECREASE_GSMC, CLOSING_AT_TIME_INCREASE, equalStrings } from '../../utils';
 
 function insertNewProposal(event: NewMultiCallProposal): void {
   let ent = new GenericSchemeMultiCallProposal(event.params._proposalId.toHex());
@@ -68,11 +68,13 @@ export function handleProposalExecuted(
   if (ent != null) {
     ent.executed = true;
     let proposal = getProposal(event.params._proposalId.toHex());
-    proposal.closingAt = (
-      BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(
-        proposal.closingAt.plus(BigInt.fromI32(CLOSING_AT_TIME_DECREASE_GSMC)),
-      )
-    ).times(BigInt.fromI32(100));
+    if (equalStrings(proposal.winningOutcome, 'Pass')) {
+      proposal.closingAt = (
+        BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(
+          proposal.closingAt.plus(BigInt.fromI32(CLOSING_AT_TIME_DECREASE_GSMC)),
+        )
+      ).times(BigInt.fromI32(100));
+    }
     proposal.save();
   }
 

@@ -28,6 +28,12 @@
       "alias": "Ens Registry",
       "address": "0xCbc03dc710737DE8C6CBb61d59203B69ea08aCde",
       "arcVersion": "0.0.1-rc.44"
+    },
+    {
+      "name": "LockingToken4Reputation",
+      "alias": "Locking for REP",
+      "address": "0xCF4eE5412eb92ADDcC4cf9d3b91c526CcE107ff4",
+      "arcVersion": "0.0.1-rc.44"
     }
   ],
   "StandAloneContracts": [],

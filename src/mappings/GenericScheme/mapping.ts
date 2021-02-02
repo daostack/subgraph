@@ -1,4 +1,5 @@
 import { store } from '@graphprotocol/graph-ts';
+import { debug } from '../../utils';
 
 // Import event types from the Reputation contract ABI
 import {

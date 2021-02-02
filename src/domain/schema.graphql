@@ -215,3 +215,8 @@ type Event @entity {
 	dao: DAO
 	timestamp: BigInt!
 }
+
+type Signal @entity{
+	id: ID!
+	data: String
+}

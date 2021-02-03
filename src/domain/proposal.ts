@@ -433,6 +433,7 @@ export function updateProposalExecution(
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.executedAt = timestamp;
+  proposal.winningOutcome = parseOutcome(decision);
   // Setting the closingAt field to a far away point in the future so it will be easy to
   // sort all proposal(open and executed) in ascending order by the closingAt field
   if (proposal.genericSchemeMultiCall !== null && decision.equals(BigInt.fromI32(1))) {

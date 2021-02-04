@@ -429,12 +429,14 @@ export function updateProposalExecution(
   proposalId: Bytes,
   totalReputation: BigInt,
   timestamp: BigInt,
+  decision: BigInt,
 ): void {
   let proposal = getProposal(proposalId.toHex());
   proposal.executedAt = timestamp;
+  proposal.winningOutcome = parseOutcome(decision);
   // Setting the closingAt field to a far away point in the future so it will be easy to
   // sort all proposal(open and executed) in ascending order by the closingAt field
-  if (proposal.genericSchemeMultiCall !== null && equalStrings(proposal.winningOutcome, 'Pass')) {
+  if (proposal.genericSchemeMultiCall !== null && decision.equals(BigInt.fromI32(1))) {
     proposal.closingAt = timestamp.minus(BigInt.fromI32(CLOSING_AT_TIME_DECREASE_GSMC));
   } else {
     proposal.closingAt = (BigInt.fromI32(CLOSING_AT_TIME_INCREASE).minus(timestamp)).times(BigInt.fromI32(100));

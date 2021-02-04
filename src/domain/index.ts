@@ -287,7 +287,12 @@ export function handleNativeTokenTransfer(event: Transfer): void {
 
 export function handleExecuteProposal(event: ExecuteProposal): void {
    if (isProposalValid(event.params._proposalId.toHex())) {
-       updateProposalExecution(event.params._proposalId, event.params._totalReputation, event.block.timestamp);
+      updateProposalExecution(
+        event.params._proposalId,
+        event.params._totalReputation,
+        event.block.timestamp,
+        event.params._decision,
+      );
     }
 }
 

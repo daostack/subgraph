@@ -1,0 +1,66 @@
+{
+  "name": "Inveterate Salad",
+  "Avatar": "0xf80dcF9bbF930694Dba31266A8d0D9e32B97D7b7",
+  "DAOToken": "0xf399128A4e2D0A4104d2333c7eaA63026ae307E2",
+  "Reputation": "0x10B8125296c5e1BD5a3f7378A42E6b64Fd19177a",
+  "Controller": "0xd7703Ef02456a05a88bB84C97f17DB7B5cdfeC1a",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0xcf0dD3ba720d82E1C42eA82899cedc84b8A70D83",
+      "arcVersion": "0.0.1-rc.56"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0xeA14E3bec52DBd611EDEd9d6cD0AEC6cB4141FA6",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0x3a24Ce8b944be56dE88235a68C0046446eBC8134",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ContinuousLocking4Reputation",
+      "alias": "ContinuousLocking4Reputation",
+      "address": "0x0CD6EaaA9E01981b2276cfbA233a4C8d405cBD6C",
+      "arcVersion": "0.0.1-rc.55"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0x1B12753039B36dc0e2A4121D6a6ACC8910A21276",
+      "arcVersion": "0.0.1-rc.56"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0xeA14E3bec52DBd611EDEd9d6cD0AEC6cB4141FA6",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "Competition",
+      "address": "0xe042F8Dfb96040620F3028e3e35F59ED3Fe2F19b",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "address": "0x3a24Ce8b944be56dE88235a68C0046446eBC8134",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ActionMock",
+      "address": "0x4483E23417416Cc67b3E61088B014BB3fFBAED22",
+      "arcVersion": "0.0.1-rc.56"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0x6E0F3d6a75FE372d3696Bf721206E6C8332b0921",
+      "arcVersion": "0.0.1-rc.51"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.56"
+}

@@ -63,6 +63,7 @@ describe('GenericSchemeMultiCallFactory', () => {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             '0x0000000000000000000000000000000000000000',
             [actionMock.options.address],
+            true,
             '0x0000000000000000000000000000000000000000',
         );
 

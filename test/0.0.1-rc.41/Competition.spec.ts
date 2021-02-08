@@ -487,7 +487,7 @@ describe('Competition', () => {
         .toContainEqual({ suggestionId: suggestionId2.toString() });
 
         let suggestionVotesVotesQuery = `{
-            competitionSuggestions(where: {suggestionId: "${suggestionId1}"}) {
+            competitionSuggestions(where: {suggestionId: "${suggestionId1}", proposal: "${proposalId}"}) {
                 votes {
                     createdAt
                 }

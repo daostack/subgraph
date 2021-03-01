@@ -1,3 +1,4 @@
+***DEVELOPMENT OF THIS PACKAGE HAS MOVED TO: https://github.com/daostack/alchemy-monorepo/tree/dev/packages/subgraph***
 # DAOstack Subgraph
 
 DAOstack subgraph for [TheGraph](https://thegraph.com/) project. A feature article is available [here](https://thegraph.com/blog/daostack-alchemy). 

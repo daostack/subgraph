@@ -966,6 +966,160 @@
         "dao": "base",
         "mapping": "Redeemer",
         "arcVersion": "0.0.1-rc.56"
+      },
+      {
+        "name": "GEN",
+        "contractName": "GEN",
+        "dao": "base",
+        "mapping": "DAOToken",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "GenesisProtocol",
+        "contractName": "GenesisProtocol",
+        "dao": "base",
+        "mapping": "GenesisProtocol",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "ContributionReward",
+        "contractName": "ContributionReward",
+        "dao": "base",
+        "mapping": "ContributionReward",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "SchemeRegistrar",
+        "contractName": "SchemeRegistrar",
+        "dao": "base",
+        "mapping": "SchemeRegistrar",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "DAORegistry",
+        "contractName": "DAORegistry",
+        "dao": "base",
+        "mapping": "DAORegistry",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Avatar",
+        "contractName": "Avatar",
+        "dao": "dao",
+        "mapping": "Avatar",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "DAOToken",
+        "contractName": "DAOToken",
+        "dao": "dao",
+        "mapping": "DAOToken",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Reputation",
+        "contractName": "Reputation",
+        "dao": "dao",
+        "mapping": "Reputation",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Controller",
+        "contractName": "Controller",
+        "dao": "dao",
+        "mapping": "Controller",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Controller",
+        "contractName": "Controller",
+        "dao": "test",
+        "mapping": "Controller",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Avatar",
+        "contractName": "Avatar",
+        "dao": "test",
+        "mapping": "Avatar",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "DAOToken",
+        "contractName": "DAOToken",
+        "dao": "test",
+        "mapping": "DAOToken",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Reputation",
+        "contractName": "Reputation",
+        "dao": "test",
+        "mapping": "Reputation",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Reputation",
+        "contractName": "DemoReputation",
+        "dao": "organs",
+        "mapping": "Reputation",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "DAOToken",
+        "contractName": "DemoDAOToken",
+        "dao": "organs",
+        "mapping": "DAOToken",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Avatar",
+        "contractName": "DemoAvatar",
+        "dao": "organs",
+        "mapping": "Avatar",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "DAOTracker",
+        "contractName": "DAOTracker",
+        "dao": "base",
+        "mapping": "DAOTracker",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "GenericSchemeMultiCallFactory",
+        "contractName": "GenericSchemeMultiCallFactory",
+        "dao": "base",
+        "mapping": "GenericSchemeMultiCallFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "CompetitionFactory",
+        "contractName": "CompetitionFactory",
+        "dao": "base",
+        "mapping": "CompetitionFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "ContinuousLocking4ReputationFactory",
+        "contractName": "ContinuousLocking4ReputationFactory",
+        "dao": "base",
+        "mapping": "ContinuousLocking4ReputationFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.57"
       }
     ]
   },
@@ -1187,6 +1341,62 @@
         "dao": "base",
         "mapping": "GenericSchemeMultiCallFactory",
         "arcVersion": "0.0.1-rc.56"
+      },
+      {
+        "name": "ContributionReward",
+        "contractName": "ContributionReward",
+        "dao": "base",
+        "mapping": "ContributionReward",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "SchemeRegistrar",
+        "contractName": "SchemeRegistrar",
+        "dao": "base",
+        "mapping": "SchemeRegistrar",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "DAOTracker",
+        "contractName": "DAOTracker",
+        "dao": "base",
+        "mapping": "DAOTracker",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "GenericSchemeMultiCallFactory",
+        "contractName": "GenericSchemeMultiCallFactory",
+        "dao": "base",
+        "mapping": "GenericSchemeMultiCallFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "CompetitionFactory",
+        "contractName": "CompetitionFactory",
+        "dao": "base",
+        "mapping": "CompetitionFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "ContinuousLocking4ReputationFactory",
+        "contractName": "ContinuousLocking4ReputationFactory",
+        "dao": "base",
+        "mapping": "ContinuousLocking4ReputationFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.57"
       }
     ]
   },
@@ -1570,6 +1780,62 @@
         "dao": "base",
         "mapping": "GenericSchemeMultiCallFactory",
         "arcVersion": "0.0.1-rc.56"
+      },
+      {
+        "name": "ContributionReward",
+        "contractName": "ContributionReward",
+        "dao": "base",
+        "mapping": "ContributionReward",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "SchemeRegistrar",
+        "contractName": "SchemeRegistrar",
+        "dao": "base",
+        "mapping": "SchemeRegistrar",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "DAOTracker",
+        "contractName": "DAOTracker",
+        "dao": "base",
+        "mapping": "DAOTracker",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "GenericSchemeMultiCallFactory",
+        "contractName": "GenericSchemeMultiCallFactory",
+        "dao": "base",
+        "mapping": "GenericSchemeMultiCallFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "CompetitionFactory",
+        "contractName": "CompetitionFactory",
+        "dao": "base",
+        "mapping": "CompetitionFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "ContinuousLocking4ReputationFactory",
+        "contractName": "ContinuousLocking4ReputationFactory",
+        "dao": "base",
+        "mapping": "ContinuousLocking4ReputationFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.57"
       }
     ]
   },
@@ -2162,6 +2428,13 @@
         "dao": "base",
         "mapping": "GenericSchemeMultiCallFactory",
         "arcVersion": "0.0.1-rc.56"
+      },
+      {
+        "name": "GenericSchemeMultiCallFactory",
+        "contractName": "GenericSchemeMultiCallFactory",
+        "dao": "base",
+        "mapping": "GenericSchemeMultiCallFactory",
+        "arcVersion": "0.0.1-rc.57"
       }
     ]
   },
@@ -2328,6 +2601,62 @@
         "dao": "base",
         "mapping": "GenericSchemeMultiCallFactory",
         "arcVersion": "0.0.1-rc.56"
+      },
+      {
+        "name": "ContributionReward",
+        "contractName": "ContributionReward",
+        "dao": "base",
+        "mapping": "ContributionReward",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "SchemeRegistrar",
+        "contractName": "SchemeRegistrar",
+        "dao": "base",
+        "mapping": "SchemeRegistrar",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "DAOTracker",
+        "contractName": "DAOTracker",
+        "dao": "base",
+        "mapping": "DAOTracker",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "GenericSchemeMultiCallFactory",
+        "contractName": "GenericSchemeMultiCallFactory",
+        "dao": "base",
+        "mapping": "GenericSchemeMultiCallFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "CompetitionFactory",
+        "contractName": "CompetitionFactory",
+        "dao": "base",
+        "mapping": "CompetitionFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "ContinuousLocking4ReputationFactory",
+        "contractName": "ContinuousLocking4ReputationFactory",
+        "dao": "base",
+        "mapping": "ContinuousLocking4ReputationFactory",
+        "arcVersion": "0.0.1-rc.57"
+      },
+      {
+        "name": "Redeemer",
+        "contractName": "Redeemer",
+        "dao": "base",
+        "mapping": "Redeemer",
+        "arcVersion": "0.0.1-rc.57"
       }
     ]
   },

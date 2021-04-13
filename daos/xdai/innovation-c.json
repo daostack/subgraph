@@ -1,0 +1,34 @@
+{
+    "name": "Innovation Ç",
+    "Avatar": "0x0ECeB6Ef4A666ae6Ce6d93C0433697c5D7DDdC85",
+    "DAOToken": "0x445310473962Dc181d661E06D20C76026c2EcbCE",
+    "Reputation": "0xAef60828A3E3b5E6d093B4d273e7aC239494E88b",
+    "Controller": "0x56A81bD76715F17A2e9D8eFE1D002c9FFf655C07",
+    "Schemes": [
+      {
+        "name": "GenericScheme",
+        "alias": "GenericSchemeAlias",
+        "address": "0x3117b2892BBed93E75D4999Ad7D4717f16498565",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "ContributionRewardExt",
+        "alias": "ContributionRewardExt",
+        "address": "0x9c4143d6d388C0A87D5E2D6Cb37C97F57dB710a0",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "StandAloneContracts": [
+      {
+        "name": "ContributionRewardExt",
+        "address": "0x9c4143d6d388C0A87D5E2D6Cb37C97F57dB710a0",
+        "arcVersion": "0.0.1-rc.41"
+      },
+      {
+        "name": "Competition",
+        "address": "0x644D8B76E50B251eB18fD755889803C9466a0ee6",
+        "arcVersion": "0.0.1-rc.41"
+      }
+    ],
+    "arcVersion": "0.0.1-rc.41"
+  }

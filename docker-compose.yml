@@ -18,7 +18,7 @@ services:
       ipfs: 'ipfs:5001'
       ethereum: 'private:http://ganache:8545'
       GRAPH_IPFS_TIMEOUT: '2'
-      GRAPH_MAX_IPFS_FILE_BYTES: '600000'
+      GRAPH_MAX_IPFS_FILE_BYTES: '800000'
       GRAPH_GRAPHQL_MAX_FIRST: '1000'
   ipfs:
     image: 'ipfs/go-ipfs:v0.4.23'

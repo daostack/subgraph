@@ -1,0 +1,66 @@
+{
+  "name": "Voluble Bunny",
+  "Avatar": "0x1AE13112cE0D101f3FA82c19b2988803420a8E27",
+  "DAOToken": "0x8D74F9E3Aa1742cFaEDce7C2D065B6e263ABF6a4",
+  "Reputation": "0xefeDD6430b8c2aE431383274643B3ed1DAAc3fe4",
+  "Controller": "0xF5F20707F85499d7CA2107d402e5A463318A82BE",
+  "Schemes": [
+    {
+      "name": "GenericScheme",
+      "alias": "GenericSchemeAlias",
+      "address": "0xFCfA502aFF7A6bF375c9ac81163ec310f8D45e56",
+      "arcVersion": "0.0.1-rc.57"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "alias": "ContributionRewardExt",
+      "address": "0x239d0ef91DaFa573D762c80a5862cb869c659ecb",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "alias": "GenericSchemeMultiCall",
+      "address": "0x63eD50B0D8315eA0d71F0F8F87ed265C2069FF48",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ContinuousLocking4Reputation",
+      "alias": "ContinuousLocking4Reputation",
+      "address": "0x0BC0b48713B918caAaE52E6d96152ACd84d57a55",
+      "arcVersion": "0.0.1-rc.55"
+    }
+  ],
+  "StandAloneContracts": [
+    {
+      "name": "Wallet",
+      "address": "0x68Ecf21379Cda76fF2f87B8d1D627f8d9743A717",
+      "arcVersion": "0.0.1-rc.57"
+    },
+    {
+      "name": "ContributionRewardExt",
+      "address": "0x239d0ef91DaFa573D762c80a5862cb869c659ecb",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "Competition",
+      "address": "0x3d0e3ff8DFb1a13B92965cC1793d76AbCa7C10CE",
+      "arcVersion": "0.0.1-rc.43"
+    },
+    {
+      "name": "GenericSchemeMultiCall",
+      "address": "0x63eD50B0D8315eA0d71F0F8F87ed265C2069FF48",
+      "arcVersion": "0.0.1-rc.51"
+    },
+    {
+      "name": "ActionMock",
+      "address": "0x935AFa76129C209a38b35c26f8Cdd418e6163bF0",
+      "arcVersion": "0.0.1-rc.57"
+    },
+    {
+      "name": "DxDaoSchemeConstraints",
+      "address": "0xcE5b6268A6024b1a6647de0179c2b3845A01AAaf",
+      "arcVersion": "0.0.1-rc.51"
+    }
+  ],
+  "arcVersion": "0.0.1-rc.57"
+}

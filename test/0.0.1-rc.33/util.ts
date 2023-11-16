@@ -22,7 +22,7 @@ const Web3 = require('web3');
 const { node_ws, node_http, ethereum, ipfs, test_mnemonic } = process.env;
 
 export async function sendQuery(q: string, maxDelay = 1000, url = node_http) {
-  await new Promise((res, rej) => setTimeout(res, maxDelay));
+  await new Promise((res) => setTimeout(res, maxDelay));
   const {
     data: { data },
   } = await axios.post(url, {
